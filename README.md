@@ -1,2 +1,5 @@
 # cle-spec
 Specification of Closure Language Extensions for C/C++
+This project includes a specification document that describes the CLOSURE Language Extensions for C/C++, which a developer can to annotate a program with different security levels and cross-domain restrictions for a GAPS MLS system. The CLOSURE tools will make use of these annotations to partition and compile the code into separate executables for each level, and insert IPCs and guard functions to enforce security policy for the cross-domain interactions. Companion documents are planned for the Global Security Policy Specification and Hardware Configuration Specification that will be used by the CLOSURE tools in conjunction with the annotated source code. Additional documents are planned to specify CLE mappings for other programming languages such as Golang.
+
+This specification document is provided for review/feedback, and will undergo revisions. Not all CLE features described in this document will be supported in the initial version of the CLOSURE tools, and the feature selection for the initial version is being discussed.
