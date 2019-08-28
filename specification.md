@@ -79,7 +79,7 @@ A CLOSURE pre-processor for clang does the following:
 2. Inserts an attribute into the code in a manner clang can handle  
  `int * __attribute__(type_annotate("HIGHONE")) secretvar = 0;`  
   Note:  `type_annotate` is a new feature which will allow user defined annotations via the attribute mechanism, this requires some clang modification
-3. Creates a companion file with mappings, e.g., `HIGHONE` to the `CLE-JSON`, some of which may be derived from file   
+3. Creates a companion file with mappings, e.g., `HIGHONE` to the `CLE-JSON`, some of which may be derived from GSPS file   
 
 Ideally we should not have to modify clang at all; unfortunately since user-defined attributes are not part of clang by default and existing attributes do not meet our needs, we will minimally modify clang (in the style of Quala, see https://github.com/sampsyo/quala) to pass the type and function annotations we care about into the LLVM IR.
 This clang mod is done infrequently, but CLE and CAPO can evolve rapidly.
