@@ -4,10 +4,10 @@
    ```
    #pragma cle def JLABEL CLE-JSON // assign a label to a CLE JSON object  
    #pragma cle JLABEL|CLE-JSON  // apply either the label or the inline CLE JSON object to next statement  
-   #pragma cle begin LABEL JLABEL|CLE-JSON // start a block and apply to the block  
-   #pragma cle end LABEL  
+   #pragma cle begin LABEL JLABEL|CLE-JSON // open a block and apply to the block  
+   #pragma cle end LABEL  // close the block
    ```
-3.	`LABEL` and `JLABEL` are arbitrary user-declared symbols using alphabetic ASCII characters `[a-z][A-Za-z0-9_]*` 
+3.	`LABEL` and `JLABEL` are arbitrary user-declared symbols using ASCII characters with pattern `[a-z][A-Za-z0-9_]*` 
 4.	`CLE-JSON` is a JSON document with syntax described later
 5.	User may optionally define a `CLE-JSON` document and assign it a user-friendly label using `def` 
 6.	Directives can be top-level, on-function, on-statement, on-struct, on-field, and on-block
