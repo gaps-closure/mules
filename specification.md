@@ -70,7 +70,7 @@ The CLE is defined for C/C++ in a compiler neutral way.  It is also designed (se
 **Insert diagram of workflow here from source, CLE to annotated IR for CAPO**  
 Consider the following toy example:
 ```
-#pragma def HIGHONE { //CLE-JSON with whole bunch of constraints } 
+#pragma cle def HIGHONE { //CLE-JSON with whole bunch of constraints } 
 #pragma cle HIGHONE
 int * secretvar = 0;
 ```  
