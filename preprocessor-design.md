@@ -33,4 +33,8 @@ Rather than use a custom grammar/parser, I recommend we use libclang which is we
 * Doing it in Python+libclang [python+clang](https://eli.thegreenplace.net/2011/07/03/parsing-c-in-python-with-clang)
 * Doing it in C++ using cppast+libclang [CPPAST](https://github.com/foonathan/cppast)
 
-The pythonic route may be quicker for an initial prototype of the pre-processor. Along those lines, please see this [code generator example](http://szelei.me/code-generator).
+The pythonic route may be quicker for an initial prototype of the pre-processor. Along those lines, please see this [code generator example](http://szelei.me/code-generator).  However, the python bindings are somewhat limited and C/C++ route may be necessary.
+
+This [link](https://blog.quarkslab.com/implementing-a-custom-directive-handler-in-clang.html) describes how to implement a custom pragma directive and annotations in clang.
+
+
