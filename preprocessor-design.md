@@ -37,4 +37,14 @@ The pythonic route may be quicker for an initial prototype of the pre-processor.
 
 This [link](https://blog.quarkslab.com/implementing-a-custom-directive-handler-in-clang.html) describes how to implement a custom pragma directive and annotations in clang.
 
+For most of the features, we need, the problem could be greatly simplified by leveraging [pragma clang attribute](https://clang.llvm.org/docs/LanguageExtensions.html#specifying-an-attribute-for-multiple-declarations-pragma-clang-attribute)
+
+This pragma already supports blocks with push/pop, has powerful subject match rules applying selectively to functions, variables, fields, etc.  Looks like many of the things I had spec'd in CLE as useful features could be readily mapped to "#pragma clang attribute" avoiding tedious parsing and understanding of C/C++ AST.
+
+We will still keep "#pragma cle" to keep our work toolchain-neutral, but we could more closely align the CLE spec to pragma clang attribute to save implementation effort massively! So we will still need the pre-processor, which will
+  * Snarf the CLE label to JSON mappings and write to companion file
+  * Rewrite the pragma cle to pragma clang directives for most of the functionality we need
+
+
+
 
