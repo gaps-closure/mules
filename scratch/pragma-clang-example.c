@@ -10,7 +10,7 @@ typedef struct precise_coords {
 
 int main()
 {
-  #pragma clang attribute push (__attribute__((annotate("HIGH1"))), apply_to = any(function,type_alias,record,enum,variable,field))
+  #pragma clang attribute push (__attribute__((type_annotate("HIGH1"))), apply_to = any(function,type_alias,record,enum,variable,field))
   PreciseLocation loc1;
   PreciseLocation loc2;
   #pragma clang attribute pop
