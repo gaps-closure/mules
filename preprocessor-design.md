@@ -45,6 +45,7 @@ We will still keep "#pragma cle" to keep our work toolchain-neutral, but we coul
   * Snarf the CLE label to JSON mappings and write to companion file
   * Rewrite the pragma cle to pragma clang directives for most of the functionality we need
 
+Now that we have reduced the problem to the above two, we can set up a Lark grammar for CLE and use python clang bindings to do the tokenizing of the C/C++ program.
 
-
+Another interesting alternative is to write a m4 program, after all, m4 is designed for pre-preprocessing tasks.
 
