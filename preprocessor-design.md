@@ -41,6 +41,8 @@ For most of the features, we need, the problem could be greatly simplified by le
 
 This pragma already supports blocks with push/pop, has powerful subject match rules applying selectively to functions, variables, fields, etc.  Looks like many of the things I had spec'd in CLE as useful features could be readily mapped to "#pragma clang attribute" avoiding tedious parsing and understanding of C/C++ AST.
 
+Note that pragma clang attribute does not have a apply-only-to-next line mode, it requires a separate push/pop for each attribute, and does not currently support type_annotate (we will have to add that support). 
+
 We will still keep "#pragma cle" to keep our work toolchain-neutral, but we could more closely align the CLE spec to pragma clang attribute to save implementation effort massively! So we will still need the pre-processor, which will
   * Snarf the CLE label to JSON mappings and write to companion file
   * Rewrite the pragma cle to pragma clang directives for most of the functionality we need
