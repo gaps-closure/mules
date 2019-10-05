@@ -7,17 +7,17 @@ using namespace std;
   "cdf": [\
     {"remotelevel":">=SECRET", \
      "direction": "egress", \
-     {"guardhint": { "oneway": true}}},\
+     "guardhint": { "oneway": "true"}},\
     {"remotelevel":"<SECRET", \
      "direction": "egress", \
-     {"guardhint": { "downgrade": "user-defined"}}}\
-  ]\
-}
+     "guardhint": { "downgrade": "user-defined"}}\
+  ] }
 
 string prt() 
 {
-  #pragma cle HIGH_1
+  #pragma cle begin HIGH_1
   string str = "Hello World, Mars!";
+  #pragma cle end HIGH_1
   return str;
 }
 

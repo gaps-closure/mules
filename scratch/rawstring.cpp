@@ -17,8 +17,9 @@ using namespace std;
 
 string prt() 
 {
-  #pragma cle HIGH_1
+  #pragma cle begin HIGH_1
   string str = "Hello World, Mars!";
+  #pragma cle end HIGH_1
   return str;
 }
 
