@@ -134,6 +134,11 @@ def source_transform(infile,ttree,astyle):
           while curline < x[1]: 
             ouf.write(inf.readline())
             curline += 1
+          # XXX: Ought to get extent of next statement from AST
+          # and wrap pragma clang push/pop around it, but it is
+          # tricky. For example, what should we do if nwhat follows
+          # is a namespace, assignment or aribtrary statement vs. 
+          # a typedef/class/struct/variable declaration? 
           print('cleappnl not implemented:', x)
         else:
           pass
