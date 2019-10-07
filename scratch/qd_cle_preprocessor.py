@@ -74,6 +74,9 @@ def cle_parser():
     %declare PUNCT COMMENT KWD LITERAL IDENT HASH PRAGMA CLE DEF BEGIN END
   """, start='acode', parser='lalr', lexer=TypeLexer)
 
+def deraw(s):
+  return s.replace('R"JSON(','').replace(')JSON"','').replace('\n','')
+
 # Tranform parsed tree to extract relevant CLE information
 class CLETransformer(Transformer):
   def _hlp(self, items):
@@ -85,14 +88,14 @@ class CLETransformer(Transformer):
   def deff(self, items):     return []
   def pfx(self, items):      return items[0].value.extent.start.line
   def label(self, items):    return self._hlp(items)
-  def clejson(self, items):  return json.loads(self._hlp(items))
+  def clejson(self, items):  return json.loads(deraw(self._hlp(items)))
   def cledef(self, items):   return [['cledef'] + items]
   def clebegin(self, items): return [['clebegin'] + items]
   def cleend(self, items):   return [['cleend'] + items]
   def cleappnl(self, items): return [['cleappnl'] + items]
 
 # Based on transformed tree create modified source and mappings file
-def source_transform(infile,ttree):
+def source_transform(infile,ttree,astyle):
   # Collect cledefs and dump
   defs = [{"cle-label": x[3], "cle-json": x[4]} for x in ttree if x[0] == 'cledef']
   with open(infile + ".clemap.json", 'w') as mapf:
@@ -104,20 +107,29 @@ def source_transform(infile,ttree):
     with open(fn + '.mod' + fe,'w') as ouf:
       for x in sorted(ttree, key=lambda x: x[1]):
         if x[0] == 'clebegin':
-          while curline < x[1]: 
-            ouf.write(inf.readline())
-            curline += 1
-          ouf.write('#pragma clang attribute push (__attribute__((annotate("')
-          ouf.write(x[3])
-          ouf.write('"))), apply_to = any(function,type_alias,record,enum,variable,field))')
-          ouf.write('\n')
-        elif x[0] == 'cleend':
           while curline < x[1] - 1: 
             ouf.write(inf.readline())
             curline += 1
-          ouf.write('#pragma clang attribute pop\n')
+          if astyle == 'naive' or astyle == 'both':
+            ouf.write('#pragma clang attribute push (__attribute__((annotate("')
+            ouf.write(x[3])
+            ouf.write('"))), apply_to = any(function,type_alias,record,enum,variable,field))')
+            ouf.write('\n')
+          if astyle == 'type' or astyle == 'both':
+            ouf.write('#pragma clang attribute push (__attribute__((type_annotate("')
+            ouf.write(x[3])
+            ouf.write('"))), apply_to = any(function,type_alias,record,enum,variable,field))')
+            ouf.write('\n')
           ouf.write(inf.readline())
-          curline +=1
+          curline += 1
+        elif x[0] == 'cleend':
+          while curline < x[1]: 
+            ouf.write(inf.readline())
+            curline += 1
+          if astyle == 'naive' or astyle == 'both':
+            ouf.write('#pragma clang attribute pop\n')
+          if astyle == 'type' or astyle == 'both':
+            ouf.write('#pragma clang attribute pop\n')
         elif x[0] == 'cleappnl':
           while curline < x[1]: 
             ouf.write(inf.readline())
@@ -137,7 +149,7 @@ def get_args():
   p.add_argument('-c', '--clang_args', required=False, type=str, 
                  default='-x,c++,-stdlib=libc++', help='Arguments for clang')
   p.add_argument('-a', '--annotation_style', required=False, type=str, 
-                 default='both', help='Annotation style (naive, type, or both)')
+                 default='naive', help='Annotation style (naive, type, or both)')
   p.add_argument('-t', '--tool_chain', required=False, type=str, 
                  default='clang', help='Toolchain (clang)')
   return p.parse_args()
@@ -147,6 +159,9 @@ def main():
   args   = get_args()
   print('Options selected:')
   for x in vars(args).items(): print('  %s: %s' % x)
+  
+  if(args.tool_chain != 'clang'):
+    sys.exit('Exiting on unsupported toolchain: ' + args.tool_chain)
 
   toks   = cindex_tokenizer(args.file, args.clang_args.split(','))
   tree   = cle_parser().parser.parse(toks)
@@ -156,7 +171,7 @@ def main():
   ttree  = CLETransformer().transform(tree)
   for x in ttree: print(x)
 
-  source_transform(args.file, ttree)
+  source_transform(args.file, ttree, args.annotation_style)
   print('Writing transformed file and cle mappings file')
 
 if __name__ == '__main__':
