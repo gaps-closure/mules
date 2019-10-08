@@ -63,20 +63,29 @@ The CLE is defined for C/C++ in a compiler neutral way.  It is also designed (se
 
 Consider the following toy example:
 ```
-#pragma cle def HIGHONE { //CLE-JSON with whole bunch of constraints } 
-#pragma cle HIGHONE
+#pragma cle def HIGHONE {\
+  "level":"SECRET", \
+  "cdf": [\
+    {"remotelevel":">=SECRET", \
+     "direction": "egress", \
+     "guardhint": { "oneway": "true"}},\
+    {"remotelevel":"<SECRET", \
+     "direction": "egress", \
+     "guardhint": { "downgrade": "user-defined"}}\
+  ] }
+
 int * secretvar = 0;
 ```  
 A CLOSURE pre-processor for clang does the following:  
 1. Handles the `#pragma cle ...` directives
 2. Inserts an attribute into the code in a manner clang can handle  
  `int * __attribute__(type_annotate("HIGHONE")) secretvar = 0;`  
-  Note:  `type_annotate` is a new feature which will allow user defined annotations via the attribute mechanism, this requires some clang modification; teh fallback is to use `annotate` instead of `type_annotate`
+  Note:  `type_annotate` is a new feature which will allow user defined annotations via the attribute mechanism, this requires some clang modification; the fallback is to use `annotate` instead of `type_annotate`
 3. Creates a companion file with mappings, e.g., `HIGHONE` to the `CLE-JSON`
 
-Ideally we should not have to modify clang at all; however since custom type annotations allow considerable source level type checking, we will minimally modify clang (in the style of Quala, see https://github.com/sampsyo/quala) to pass the type and function annotations we care about into the LLVM IR. This clang mod is done infrequently, but CLE and CAPO can evolve rapidly.
+Ideally we should not have to modify clang at all; however since custom type annotations allow considerable source level type checking, we will minimally modify clang (in the style of Quala, see https://github.com/sampsyo/quala) to pass the type and function annotations we care about into the LLVM IR. This clang mod is done infrequently, but CLE and downstream Compiler, and Partitioner Optimizer (CAPO) tools can evolve rapidly.
 
-Since CLE is toolchain-neutral, a similar gcc based solution can be created later if absolutely necessary. CLE shall stay the same, but the manner in which annotations are passed to gcc IR will be different. Most of CLE-JSON can carry over to other source languages. Downstream Compiler, and Partitioner Optimizer (CAPO) tools then takes as input the annotated LLVM IR code and the companion file and perform further analysis, partitioning, and optimization, and the resulting programs are fed to the standard LLVM linker and target-specific backends.
+Since CLE is toolchain-neutral, a similar gcc based solution can be created later if absolutely necessary. CLE shall stay the same, but the manner in which annotations are passed to gcc IR will be different. Most of CLE-JSON can carry over to other source languages. Downstream CAPO tools then takes as input the annotated LLVM IR code and the companion file and perform further analysis, partitioning, and optimization, and the resulting programs are fed to the standard LLVM linker and target-specific backends.
 
 # CLE Annotation Examples
 See the [CLE Preprocessor](https://github.com/gaps-closure/cle-preprocessor) for some examples.
