@@ -1,5 +1,5 @@
 #include <iostream>
-// #define type_annotate(X) annotate(X)
+#define type_annotate(X) annotate(X)
 
 using namespace std;
 

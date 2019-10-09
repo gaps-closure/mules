@@ -2,6 +2,7 @@
 
 using namespace std;
 
+// Developer defines a CLE label
 // Supporting JSON in \-escaped lines
 #pragma cle def HIGH_1 {\
   "level":"SECRET", \
@@ -30,6 +31,7 @@ using namespace std;
 
 string prt() 
 {
+  // Developer wraps code within a pragma cle block with applicable CLE label
   #pragma cle begin HIGH_1
   string str = "Hello World, Mars!";
   #pragma cle end HIGH_1
