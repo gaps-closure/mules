@@ -37,7 +37,7 @@ llvm-as helloworldmars-cle.mod.ll
 ```
 * Generate PSU Program Dependency Graph to generate `pdgragh.main.dot`
 ```
-opt -load ~/closure/llvm-project/pdg/build/libpdg.so -dot-pdg helloworldmars-cle.mod.bc
+opt -load ~/closure/project/pdg/build/libpdg.so -dot-pdg helloworldmars-cle.mod.bc
 ```
 * View the PDG
 ```
