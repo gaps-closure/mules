@@ -175,9 +175,10 @@ if [[ $CLEAN ]]; then
     clean_quala
     clean_partitioner
 else
-    git submodule add https://github.com/gaps-closure/partitioner.git
-    git submodule add https://github.com/gaps-closure/pdg.git
-    git submodule add https://github.com/gaps-closure/cle-preprocessor.git
+    if [ "$(ls -A pdq)" ]; then
+        git submodule init
+        git submodule update
+    fi
 exit
     mkdir -p $BUILD
     install_llvm
