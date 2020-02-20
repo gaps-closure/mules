@@ -106,7 +106,7 @@ build_pdg () {
   TMP_DIR=$(pwd)
   cd pdg
   make
-  mv build/libpdg.so $BUILD
+  #mv build/libpdg.so $BUILD
   cd $TMP_DIR
 }
 
@@ -116,7 +116,6 @@ clean_pdg () {
   TMP_DIR=$(pwd)
   cd pdg
   make clean
-  mv build/libpdg.so $BUILD
   cd $TMP_DIR
 }
 
@@ -129,7 +128,6 @@ build_quala () {
 
   cd ../nullness
   make
-  #mv build/libpdg.so $BUILD
   cd $TMP_DIR
 }
 
