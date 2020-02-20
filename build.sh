@@ -170,16 +170,22 @@ handle_opts "$@"
 echo "BUILD=${BUILD}"
 
 if [[ $CLEAN ]]; then
-    rm -rf $BUILD
+    rm -rf $BUILD cle
     clean_pdg
     clean_quala
     clean_partitioner
 else
-    if [ "$(ls -A pdq)" ]; then
+    if [ ! "$(ls -A pdg)" ]; then
         git submodule init
         git submodule update
     fi
-exit
+
+    rm -rf cle
+    mkdir -p cle
+    cd cle
+    ln -s ../cle-preprocessor preprocessor
+    cd ..
+
     mkdir -p $BUILD
     install_llvm
     install_vscode
