@@ -4,12 +4,13 @@ This repository hosts the open source components of MULES. The `master` branch c
 This repository is maintained by Perspecta Labs.
 
 ## Contents
-- [Build](https://github.com/gaps-closure/mules/blob/develop/README.md#building
-- [Installing VS Code Extensions](https://github.com/gaps-closure/mules/blob/develop/README.md#install_extensions
-- [Runing the Partitioner](https://github.com/gaps-closure/mules/blob/develop/README.md#running_the_partitioner
-- [Troubleshooting](https://github.com/gaps-closure/mules/blob/develop/README.md#troubleshooting
+- [Build](#build)
+- [Installing VS Code Extensions](#installing-vs-code-extensions)
+- [Syntax Highlighting for CLE](#syntax-highlighting-for-cle)
+- [Runing the Partitioner](#runing-the-partitioner)
+- [Troubleshooting](#troubleshooting)
 
-## Installation
+## Build
 MULES has been developed, deployed, and tested using Ubuntu 19.10 x86_64 Linux. We recommend this distribution to simplify installation of external dependencies. Upon cloning the MULES repository, follow these steps to install required packages (assumes sudo permissions enabled for calling `apt`):
 
 ```
@@ -48,7 +49,7 @@ Locally built extensions have to be sideloaded as follows.
 * Locate the CLE-Highlighter-0.0.1.vsix file in the $MULES/build directory and click "Install".
 * Locate the CLE-themes-0.0.1.vsix file in the $MULES/build directory and click "Install".
 
-** Syntax Highlighting for CLE
+## Syntax Highlighting for CLE
 MULES' syntax highlighter are derived from Reloaded-cpp and Reloaded-themese. To see that it is functioning correctly, start VS Code as follows, if it is not already running.
 
 ```
@@ -61,7 +62,7 @@ code .
 * Double click on the ex1.c file to open it in the editor panel.
 * Look for lines starting with #pragma cle, each of the two words should be highlighted with a different color.
 
-** Runing the Partitioner
+## Runing the Partitioner
 Start VS Code as follows, if it is not already running.
 
 ```
@@ -85,7 +86,7 @@ To run a task,
 * Select the desired task from the list.
 * Select 'Continue with scanning the task output'
 
-** Troubleshooting
+## Troubleshooting
 Do the following if the backspace key is not working in vnc.
 * File>Preferences>Settings
 * Type Keyboard into the search box.
