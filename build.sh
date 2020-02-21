@@ -1,11 +1,18 @@
 #!/bin/bash
 
 BUILD="$(pwd)/build"
+PACKAGE_DIR="packages"
+LLVM_DEB="LLVM-10.0.0svn-Linux.deb"
+CODE_DEB="code_1.40.2-1574694120_amd64.deb"
+PRE_DOWNLOADED_DEBS=($LLVM_DEB $CODE_DEB)
+PY_MODULES=(clang lark-parser pydot decorator)
+DEB_PACKAGES=(xdot)
 
 usage_exit() {
   [[ -n "$1" ]] && echo $1
   echo "Usage: $0 [ -d ] \\"
   echo "-h        Help"
+  echo "-c        Clean up"
   echo "-d        Dry run"
   exit 1
 }
@@ -23,16 +30,25 @@ handle_opts() {
   done
 }
 
-install_llvm () {
-  LLVM_URL="packages"
-  LLVM_DEB="packages/LLVM-10.0.0svn-Linux.deb"
- 
-  echo "Installing Qualatype LLVM"
-  # wget $LLVM_URL/$LLVM_DEB
-  sudo dpkg $DRY_RUN -i $LLVM_DEB
-  if ! [[ $DRY_RUN ]]; then
-      rm -f $LLVM_DEB
+install_deb() {
+  message=$1
+  PKG=$2
+
+  if [ ! -f $PKG ]; then
+      echo "*** package not found: $PKG"
+      if [[ $DRY_RUN ]]; then
+          return
+      else
+          exit 1
+      fi
   fi
+
+  echo "Installing $message"
+  sudo dpkg $DRY_RUN -i $PKG
+}    
+
+install_llvm () {
+  install_deb "Qualatype LLVM" "$PACKAGE_DIR/$LLVM_DEB"
 }
 
 install_vscode () {
@@ -44,15 +60,7 @@ install_vscode () {
       fi
   fi
 
-  CODE_URL="packages"
-  CODE_DEB="packages/code_1.40.2-1574694120_amd64.deb"
- 
-  echo "Installing Visual Studio Code"
-  # wget $CODE_URL/$CODE_DEB
-  sudo dpkg $DRY_RUN -i $CODE_DEB
-  if ! [[ $DRY_RUN ]]; then
-      rm -f $CODE_DEB
-  fi
+  install_deb "Qualatype Visual Studio Code" "$PACKAGE_DIR/$CODE_DEB"
 }
 
 install_vsce () {
@@ -153,14 +161,40 @@ build_partitioner () {
   cd $TMP_DIR
 }
 
-clean_partitioner () {
-  echo "Cleaning partitioner"
+check_py_module () {
+    for m in "${PY_MODULES[@]}"
+    do
+        pip3 list | grep $m
+        if [ $? -eq 0 ]; then
+            echo "$m is already installed"
+        else
+            echo "$m not installed; installing it"
+            sudo pip3 install $m
+        fi
+    done
+}
 
-  TMP_DIR=$(pwd)
-  cd partitioner/src
-  make clean
+check_packages () {
+    for m in "${DEB_PACKAGES[@]}"
+    do
+        apt list | grep -w $m
+        if [ $? -eq 0 ]; then
+            echo "$m is already installed"
+        else
+            echo "$m not installed; installing it"
+            sudo apt-get install -y $m
+        fi
+    done
+}
 
-  cd $TMP_DIR
+download_packages () {
+    rm -rf packages
+    mkdir -p packages
+    
+    for m in "${PRE_DOWNLOADED_DEBS[@]}"
+    do
+        echo "Downloading $m"
+    done
 }
 
 handle_opts "$@"
@@ -178,6 +212,10 @@ else
         git submodule update
     fi
 
+    check_py_module
+    check_packages
+    download_packages
+
     rm -rf cle
     mkdir -p cle
     cd cle
@@ -185,6 +223,7 @@ else
     cd ..
 
     mkdir -p $BUILD
+
     install_llvm
     install_vscode
     install_vsce

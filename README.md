@@ -8,6 +8,7 @@ This repository is maintained by Perspecta Labs.
 - [Installing VS Code Extensions](#installing-vs-code-extensions)
 - [Syntax Highlighting for CLE](#syntax-highlighting-for-cle)
 - [Running the Partitioner](#running-the-partitioner)
+- [Viewing the Dependency Graph](#viewing-the-dependency-graph)
 - [Troubleshooting](#troubleshooting)
 
 ## Build
@@ -59,7 +60,7 @@ code .
 
 * Select the top icon (two pieces of paper) on the left task bar.
 * Expand the example directory
-* Double click on the ex1.c file to open it in the editor panel.
+* Click on the ex1.c file to open it in the editor panel.
 * Look for lines starting with #pragma cle, each of the two words should be highlighted with a different color.
 
 ## Running the Partitioner
@@ -70,11 +71,12 @@ cd $MULES/partitioner
 code .
 ```
 The following tasks, listed in order of dependency, are defined in the partitioner project.
-        Partitioner Compile - build partitioner library src/libxdcomms.a
-        Partitioner Clang - Run a simple example ex1.c with CLE markings through the CLE preprocessor to generate annotations (ex1.mod.c) and an annotation map file (ex1.c.clemap.json). Then compile them using clang.
-        Partitioner LLVM IR and Bitcode Gen - Run the ex1.mod.c through LLVM IR and bytecode generation, resulting ex1.mod.bc and ex1.mod.ll.
-        Partitioner Dependency Graph - Build the program dependency graph. Serveral .dot files are generated. Only pdgraph.main.dot is actually used at this time.
-        Partitioner Partition - Finally, run the partitioner and display the analysis of the program and the actions needed to be undertaken to partition it into independent security enclaves.
+* Partitioner Compile - build partitioner library src/libxdcomms.a
+* Partitioner Clang - Run a simple example ex1.c with CLE markings through the CLE preprocessor to generate annotations (ex1.mod.c) and an annotation map file (ex1.c.clemap.json). Then compile them using clang.
+* Partitioner LLVM IR and Bitcode Gen - Run the ex1.mod.c through LLVM IR and bytecode generation, resulting ex1.mod.bc and ex1.mod.ll.
+* Partitioner Dependency Graph - Build the program dependency graph. Serveral .dot files are generated. Only pdgraph.main.dot is actually used at this time.
+* Partitioner Partition - Finally, run the partitioner and display the analysis of the program and the actions needed to be undertaken to partition it into independent security enclaves.
+
 Each task depends on its immediate predecessor. All predecessors of a task will be run before the task itself is run.
 To run all tasks, choose the Partiion task. The "Partitioner Clean" task cleans up all intermediate files.
 
@@ -84,10 +86,24 @@ To run a task,
 * Select the desired task from the list.
 * Select 'Continue with scanning the task output'
 
-See [Partitioner](./partitioner/README.md) for detailed description of the tasks.
+## Viewing the Dependency Graph
+Start VS Code as follows, if it is not already running.
+
+```
+cd $MULES/partitioner
+code .
+```
+* Run the Partitioner Partition task as described above.
+* Select the top icon (two pieces of paper) on the left task bar.
+* Expand the example directory
+* Click on the pdgraph.main.dot file to open it in the editor panel.
+* Click on the ... button in the upper right corner and select Open Preview ti the Side.
+* Expand the panel that appears on the right to see the graph. Use the buttons at the bottom to zoom or pan the graph.
+
+Use the same procedure on the enclaves.dot file to see a colored graph.
 
 ## Troubleshooting
-Do the following if the backspace key is not working in vnc.
+If you are running VS Code through VNC and the backspace key is not working, do the following.
 * File>Preferences>Settings
 * Type Keyboard into the search box.
 * Select keyboard
