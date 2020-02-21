@@ -7,7 +7,7 @@ This repository is maintained by Perspecta Labs.
 - [Build](#build)
 - [Installing VS Code Extensions](#installing-vs-code-extensions)
 - [Syntax Highlighting for CLE](#syntax-highlighting-for-cle)
-- [Runing the Partitioner](#runing-the-partitioner)
+- [Running the Partitioner](#running-the-partitioner)
 - [Troubleshooting](#troubleshooting)
 
 ## Build
@@ -62,21 +62,19 @@ code .
 * Double click on the ex1.c file to open it in the editor panel.
 * Look for lines starting with #pragma cle, each of the two words should be highlighted with a different color.
 
-## Runing the Partitioner
+## Running the Partitioner
 Start VS Code as follows, if it is not already running.
 
 ```
 cd $MULES/partitioner
 code .
 ```
-
-The following tasks are defined in the partitioner project.
-        Partitioner Compile,
-        Partitioner Example Clang Build,
-        Partitioner Preprocess,
-        Partitioner LLVM IR and Bitcode Gen,
-        Partitioner Create Dependency Graph,
-        Partitioner Partition,
+The following tasks, listed in order of dependency, are defined in the partitioner project.
+        Partitioner Compile - build partitioner library src/libxdcomms.a
+        Partitioner Clang - Run a simple example ex1.c with CLE markings through the CLE preprocessor to generate annotations (ex1.mod.c) and an annotation map file (ex1.c.clemap.json). Then compile them using clang.
+        Partitioner LLVM IR and Bitcode Gen - Run the ex1.mod.c through LLVM IR and bytecode generation, resulting ex1.mod.bc and ex1.mod.ll.
+        Partitioner Dependency Graph - Build the program dependency graph. Serveral .dot files are generated. Only pdgraph.main.dot is actually used at this time.
+        Partitioner Partition - Finally, run the partitioner and display the analysis of the program and the actions needed to be undertaken to partition it into independent security enclaves.
 Each task depends on its immediate predecessor. All predecessors of a task will be run before the task itself is run.
 To run all tasks, choose the Partiion task. The "Partitioner Clean" task cleans up all intermediate files.
 
@@ -85,6 +83,8 @@ To run a task,
 * A list of Partitioner tasks will be displayed.
 * Select the desired task from the list.
 * Select 'Continue with scanning the task output'
+
+See [Partitioner](./partitioner/README.md) for detailed description of the tasks.
 
 ## Troubleshooting
 Do the following if the backspace key is not working in vnc.
