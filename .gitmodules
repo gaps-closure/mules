@@ -7,3 +7,6 @@
 [submodule "cle-preprocessor"]
 	path = cle-preprocessor
 	url = https://github.com/gaps-closure/cle-preprocessor.git
+[submodule "cle-spec"]
+	path = cle-spec
+	url = https://github.com/gaps-closure/cle-spec.git
