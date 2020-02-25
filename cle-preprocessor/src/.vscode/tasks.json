@@ -1,0 +1,78 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "CLE Python Preprocess",
+        "type": "shell",
+        "command": "./qd_cle_preprocessor.py",
+        "args": [
+          "-f",
+          "helloworldmars-cle.cpp"
+        ],
+        "group": {
+          "kind": "build",
+          "isDefault": true
+        }
+      },
+      {
+        "label": "CLE Compile",
+        "type": "shell",
+        "command": "clang++",
+        "args": [
+          "-stdlib=libc++",
+          "helloworldmars-cle.mod.cpp"
+        ],
+        "group": {
+          "kind": "build",
+          "isDefault": true
+        },
+        "dependsOn":["CLE Python Preprocess"]
+      },
+      {
+        "label": "CLE Generate IR",
+        "type": "shell",
+        "command": "clang++",
+        "args": [
+          "-stdlib=libc++",
+          "-S",
+          "-emit-llvm",
+          "helloworldmars-cle.mod.cpp"
+        ],
+        "group": {
+          "kind": "build",
+          "isDefault": true
+        },
+        "dependsOn":["CLE Python Preprocess"]
+      },
+      {
+        "label": "CLE Generate IR Bitcode",
+        "type": "shell",
+        "command": "llvm-as",
+        "args": [
+          "helloworldmars-cle.mod.ll"
+        ],
+        "group": {
+          "kind": "build",
+          "isDefault": true
+        },
+        "dependsOn":["CLE Python Preprocess"]
+      },
+      {
+        "label": "CLE Clean",
+        "type": "shell",
+        "command": "rm",
+        "args": [
+          "-f",
+          "a.out",
+          "helloworldmars-cle.cpp.clemap.json",
+          "helloworldmars-cle.mod.bc",
+          "helloworldmars-cle.mod.cpp",
+          "helloworldmars-cle.mod.ll"
+        ],
+        "group": {
+          "kind": "build",
+          "isDefault": true
+        },
+      }
+    ]
+  }
