@@ -1,0 +1,9 @@
+{
+    "cdf": [
+        {
+            "remotelevel":"purple", 
+            "direction": "egress", 
+            "guardhint": { "operation": "allow"}
+        }
+    ]
+}

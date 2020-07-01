@@ -1,0 +1,25 @@
+{
+    "$schema": "../cle-schema.json",
+    "$comment": "This test validates a wide range of the json verification, and not intended as a cle policy",
+    "level": "purple",
+    "cdf": [
+        {
+            "remotelevel": "orange",
+            "direction": "egress",
+            "guardhint": { "operation": "redact"}
+        },
+        {
+            "remotelevel": "green",
+            "guardhint": { "operation": "block"},
+            "direction": "ingress"
+        },
+        {
+        	"remotelevel": "yellow",
+        	"direction": "egress",
+        	"guardhint": { "operation": "allow"},
+        	"argtaints": [["ORANGE"], ["ORANGE"]],
+        	"codtaints": ["ORANGE"],
+        	"rettaints": ["ORANGE_SHAREABLE"]
+       	}
+    ]
+}

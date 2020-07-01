@@ -1,0 +1,127 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "com.perspectalabs.gaps-closure.cle",
+    "$comment": "JSON schema for GAPS-Closure CLE json definition",
+
+    "definitions": {
+        "guardhintOperationTypes": {
+            "$comment": "the guardhint type enum",
+            "description": "[ENUM] Guard Hint",
+            "enum": [
+                "allow",
+                "block",
+                "redact"
+            ]
+        },
+        "directionTypes": {
+            "$comment": "the direction type enum",
+            "description": "[ENUM] traffic direction",
+            "type": "string",
+            "enum": [
+                "egress",
+                "ingress"
+            ]
+        },
+        
+        "guardhintTypes":{
+            "description": "Guard parameters",
+            "type": "object",
+            "properties": {
+                "operation":{
+                    "$ref": "#/definitions/guardhintOperationTypes"
+                }
+            }
+        },
+        
+        "argtaintsTypes":{
+            "description": "argument taints",
+            "type": "array",
+            "default": [],
+            "uniqueItems": false,
+            "items": {
+                "description": "Taint levels of each argument",
+                "type": "array",
+                "default": [],
+                "items":{
+                    "type": "string",
+                    "description": "CLE Definition Name"
+                }
+            }
+        },
+        
+        "cdfType": {
+            "description": "Cross Domain Flow",
+            "type": "object",
+            "properties": {
+                "remotelevel":{
+                    "description": "The remote side's Enclave",
+                    "type": "string"
+                },
+                "direction":{
+                    "$ref": "#/definitions/directionTypes"
+                },
+                "guardhint":{
+                    "$ref": "#/definitions/guardhintTypes"
+                },
+                "argtaints":{
+                    "$ref": "#/definitions/argtaintsTypes"
+                },
+                "codtaints":{
+                    "description": "Taint level",
+                    "type": "array",
+                    "default": [],
+                    "items":{
+                        "type": "string",
+                        "description": "CLE Definition Name"
+                    }
+                },
+                "rettaints":{
+                    "description": "Return level",
+                    "type": "array",
+                    "default": [],
+                    "items":{
+                        "type": "string",
+                        "description": "CLE Definition Name"
+                    }
+                }
+            },
+            "dependencies": {
+                "argtaints": {
+                    "required": ["argtaints", "codtaints", "rettaints"]
+                },
+                "codtaints": {
+                    "required": ["argtaints", "codtaints", "rettaints"]
+                },
+                "rettaints": {
+                    "required": ["argtaints", "codtaints", "rettaints"]
+                }
+            },
+            "required": ["remotelevel", "direction", "guardhint"]
+        }
+    },
+    "type": "object",
+    "required": ["level"],
+    "description": "CLE Definition",
+    "additionalProperties": false,
+    "properties": {
+        "$schema":{
+            "description": "The cle-schema reference (for standalone json files)",
+            "type": "string"
+        },
+        "$comment":{
+            "description": "Optional comment entry",
+            "type": "string"
+        },
+        "level":{
+            "description": "The enclave level",
+            "type":"string"
+        },
+        "cdf": {
+            "description": "List of cross domain flows",
+            "type": "array",
+            "uniqueItems": true,
+            "default": [],
+            "items": { "$ref": "#/definitions/cdfType" }
+        }
+    }
+}
