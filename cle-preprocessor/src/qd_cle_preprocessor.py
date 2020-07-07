@@ -110,8 +110,11 @@ def validate_cle(tree_entry, schema):
 # Based on transformed tree create modified source and mappings file
 def source_transform(infile,ttree,astyle, schema):
   # Collect cledefs and dump
-  #defs = [{"cle-label": x[3], "cle-json": x[4]} for x in ttree if x[0] == 'cledef']
-  defs = [{"cle-label": x[3], "cle-json": validate_cle(x,schema)} for x in ttree if x[0] == 'cledef']
+  if(schema is None):
+    #schema check is disabled
+    defs = [{"cle-label": x[3], "cle-json": x[4]} for x in ttree if x[0] == 'cledef']
+  else:
+    defs = [{"cle-label": x[3], "cle-json": validate_cle(x,schema)} for x in ttree if x[0] == 'cledef']
   
   with open(infile + ".clemap.json", 'w') as mapf:
     json.dump(defs,mapf,indent=2)
@@ -175,6 +178,8 @@ def get_args():
   p.add_argument('-s', '--schema', required=False, type=str,
                  default='../../cle-spec/schema/cle-schema.json',
                  help='override the location of the of the schema if required')
+  p.add_argument('-L', '--liberal',help="Liberal mode: disable cle schema check",
+                 default=False, action='store_true') 
   return p.parse_args()
 
 def get_cle_schema(schema_location):
@@ -213,8 +218,13 @@ def main():
   if(args.tool_chain != 'clang'):
     sys.exit('Exiting on unsupported toolchain: ' + args.tool_chain)
 
-  check_jsonschema_version()
-  schema = get_cle_schema(args.schema)
+  #load json schema if required
+  if(not args.liberal):
+    check_jsonschema_version()
+    schema = get_cle_schema(args.schema)
+  else:
+    schema = None
+    print("Skipping CLE schema verification")
   
   toks   = cindex_tokenizer(args.file, args.clang_args.split(','))
   tree   = cle_parser().parser.parse(toks)
