@@ -12,6 +12,12 @@ python lark-parser package as follows.
 sudo -H pip3 install lark-parser
 ```
 
+Also required is the jsonschema python module (3.2.0 or newer) in order to
+validate the CLE with the json schema
+```
+sudo -H pip3 install jsonschema -U
+```
+
 A typical flow of how the CLE preprocessor will be used by a developer
 is as follows:
 * Developer creates a C/C++ program `helloworldmars.cpp`
