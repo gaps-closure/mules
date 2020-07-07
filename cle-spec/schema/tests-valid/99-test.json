@@ -20,6 +20,14 @@
         	"argtaints": [["ORANGE"], ["ORANGE"]],
         	"codtaints": ["ORANGE"],
         	"rettaints": ["ORANGE_SHAREABLE"]
-       	}
+       	},
+        {
+            "remotelevel": "yellow-alt",
+            "direction": "egress",
+            "guardhint": { "operation": "allow"},
+            "argtaints": [],
+            "codtaints": ["ORANGE"],
+            "rettaints": ["ORANGE_SHAREABLE"]
+            }
     ]
 }
