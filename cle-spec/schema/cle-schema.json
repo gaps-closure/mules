@@ -2,6 +2,18 @@
     "$schema": "http://json-schema.org/draft-07/schema#",
     "$id": "com.perspectalabs.gaps-closure.cle",
     "$comment": "JSON schema for GAPS-Closure CLE json definition",
+    
+    "oneOf":[
+        {
+            "description": "List of CLE entries",
+            "type": "array",
+            "default": [],
+            "items": { "$ref": "#/definitions/cleLabel" }
+        },
+        {
+          "$ref": "#/definitions/rootNode"
+        }
+    ],
 
     "definitions": {
         "guardhintOperationTypes": {
@@ -97,31 +109,51 @@
                 }
             },
             "required": ["remotelevel", "direction", "guardhint"]
-        }
-    },
-    "type": "object",
-    "required": ["level"],
-    "description": "CLE Definition",
-    "additionalProperties": false,
-    "properties": {
-        "$schema":{
-            "description": "The cle-schema reference (for standalone json files)",
-            "type": "string"
         },
-        "$comment":{
-            "description": "Optional comment entry",
-            "type": "string"
+        
+        "cleLabel":{
+            "type": "object",
+            "required": ["cle-label", "cle-json"],
+            "description": "CLE Lable (in full clemap.json)",
+            "additionalProperties": false,
+            
+            "properties": {
+                "cle-label": {
+                    "description": "Name of the CLE label",
+                    "type": "string"
+                },
+                "cle-json":{
+                    "$ref": "#/definitions/rootNode"
+                }
+            }
         },
-        "level":{
-            "description": "The enclave level",
-            "type":"string"
-        },
-        "cdf": {
-            "description": "List of cross domain flows",
-            "type": "array",
-            "uniqueItems": true,
-            "default": [],
-            "items": { "$ref": "#/definitions/cdfType" }
+        
+        "rootNode":{
+            "type": "object",
+            "required": ["level"],
+            "description": "CLE Definition",
+            "additionalProperties": false,
+            "properties": {
+                "$schema":{
+                    "description": "The cle-schema reference (for standalone json files)",
+                    "type": "string"
+                },
+                "$comment":{
+                    "description": "Optional comment entry",
+                    "type": "string"
+                },
+                "level":{
+                    "description": "The enclave level",
+                    "type":"string"
+                },
+                "cdf": {
+                    "description": "List of cross domain flows",
+                    "type": "array",
+                    "uniqueItems": true,
+                    "default": [],
+                    "items": { "$ref": "#/definitions/cdfType" }
+                }
+            }
         }
     }
 }
