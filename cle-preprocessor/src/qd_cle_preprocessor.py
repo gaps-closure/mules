@@ -9,6 +9,8 @@ from   lark.visitors import Transformer
 import json
 import sys
 import os
+import os.path
+import jsonschema
 
 # Invoke libclang tokenizer
 def cindex_tokenizer(f,a):
@@ -94,10 +96,23 @@ class CLETransformer(Transformer):
   def cleend(self, items):   return [['cleend'] + items]
   def cleappnl(self, items): return [['cleappnl'] + items]
 
+def validate_cle(tree_entry, schema):
+  """validate the CLE entry is valid against the shcema"""
+  try:
+    jsonschema.validate(tree_entry[4],schema)
+  except Exception as e:
+    print("")
+    print("Error parsing CLE on line %d for %s"%(tree_entry[1],tree_entry[3]))
+    raise
+  print("CLE line %d (%s) is valid"%(tree_entry[1],tree_entry[3]))
+  return(tree_entry[4])
+
 # Based on transformed tree create modified source and mappings file
-def source_transform(infile,ttree,astyle):
+def source_transform(infile,ttree,astyle, schema):
   # Collect cledefs and dump
-  defs = [{"cle-label": x[3], "cle-json": x[4]} for x in ttree if x[0] == 'cledef']
+  #defs = [{"cle-label": x[3], "cle-json": x[4]} for x in ttree if x[0] == 'cledef']
+  defs = [{"cle-label": x[3], "cle-json": validate_cle(x,schema)} for x in ttree if x[0] == 'cledef']
+  
   with open(infile + ".clemap.json", 'w') as mapf:
     json.dump(defs,mapf,indent=2)
 
@@ -157,7 +172,37 @@ def get_args():
                  default='naive', help='Annotation style (naive, type, or both)')
   p.add_argument('-t', '--tool_chain', required=False, type=str, 
                  default='clang', help='Toolchain (clang)')
+  p.add_argument('-s', '--schema', required=False, type=str,
+                 default='../../cle-spec/schema/cle-schema.json',
+                 help='override the location of the of the schema if required')
   return p.parse_args()
+
+def get_cle_schema(schema_location):
+  basepath = ""
+  
+  #get the module paths to help find the schema in a relitive to ourself
+  if(len(sys.path) > 1):
+    basepath = sys.path[0]
+  path = os.path.join(basepath,schema_location)
+  
+  if(not os.path.exists(path)):
+    #schema not found relitive to the python enviroment, check a local path
+    path = schema_location
+    if(not os.path.exists(path)):
+      #Unable to get python schema
+      raise(IOError("Unable to fild cle schema (expected at): " + path))
+  
+  #we found the schema load it into ram
+  print("Using CLE schema: " + path)
+  with open(path,"r",encoding="UTF-8") as schemafile:
+    return(json.loads(schemafile.read()))
+
+def check_jsonschema_version():
+  """validate the json schema version is new enogh to process
+     Draft 7 schemas"""
+  if(jsonschema.__version__ < "3.2.0"):
+    raise(ModuleNotFoundError("Newer version of jsonschema module required"
+      " (>= 3.2.0)"))
 
 # Create and invoke tokenizer, parser, tree transformer, and source transformer
 def main():
@@ -168,6 +213,9 @@ def main():
   if(args.tool_chain != 'clang'):
     sys.exit('Exiting on unsupported toolchain: ' + args.tool_chain)
 
+  check_jsonschema_version()
+  schema = get_cle_schema(args.schema)
+  
   toks   = cindex_tokenizer(args.file, args.clang_args.split(','))
   tree   = cle_parser().parser.parse(toks)
   print(tree.pretty())
@@ -176,7 +224,11 @@ def main():
   ttree  = CLETransformer().transform(tree)
   for x in ttree: print(x)
 
-  source_transform(args.file, ttree, args.annotation_style)
+  try:
+    source_transform(args.file, ttree, args.annotation_style, schema)
+  except jsonschema.exceptions.ValidationError as schemaerr:
+    print(schemaerr)
+    sys.exit(-1)
   print('Writing transformed file and cle mappings file')
 
 if __name__ == '__main__':
