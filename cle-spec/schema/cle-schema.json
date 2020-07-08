@@ -31,7 +31,8 @@
             "type": "string",
             "enum": [
                 "egress",
-                "ingress"
+                "ingress",
+		"bidirectional"
             ]
         },
         

@@ -1,0 +1,10 @@
+{"level":"orange",
+  "cdf": [
+    {"remotelevel":"purple",
+     "direction": "bidirectional",
+     "guardhint": { "operation": "allow"},
+     "argtaints": [],
+     "codtaints": ["ORANGE"],
+     "rettaints": ["TAG_RESPONSE_GET_A"]
+    }
+  ] }
