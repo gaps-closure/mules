@@ -16,9 +16,9 @@
     ],
 
     "definitions": {
-        "guardhintOperationTypes": {
-            "$comment": "the guardhint type enum",
-            "description": "[ENUM] Guard Hint",
+        "guarddirectiveOperationTypes": {
+            "$comment": "the guarddirective type enum",
+            "description": "[ENUM] Guard Directive",
             "enum": [
                 "allow",
                 "block",
@@ -32,16 +32,45 @@
             "enum": [
                 "egress",
                 "ingress",
-		"bidirectional"
+                "bidirectional"
             ]
         },
         
-        "guardhintTypes":{
-            "description": "Guard parameters",
+        "guarddirectiveTypes":{
+            "description": "Guard Directive parameters",
             "type": "object",
             "properties": {
                 "operation":{
-                    "$ref": "#/definitions/guardhintOperationTypes"
+                    "$ref": "#/definitions/guarddirectiveOperationTypes"
+                },
+                "oneway": {
+                    "description": "Communication only in one direction",
+                    "type": "boolean",
+                    "default": false
+                    
+                },
+                "gapstag": {
+                    "description": "Gaps tag to link remote CLE data [mux,sec,type]",
+                    "type": "array",
+                    "maxLength": 3,
+                    "minLength": 3,
+                    "items":[
+                        {
+                            "type": "number",
+                            "minimum": 0,
+                            "description": "mux value"
+                        },
+                        {
+                            "type": "number",
+                            "minimum": 0,
+                            "description": "sec value"
+                        },
+                        {
+                            "type": "number",
+                            "minimum": 0,
+                            "description": "type value"
+                        }
+                    ]
                 }
             }
         },
@@ -73,8 +102,13 @@
                 "direction":{
                     "$ref": "#/definitions/directionTypes"
                 },
+                "guarddirective":{
+                    "$comment": "active version guarddirective",
+                    "$ref": "#/definitions/guarddirectiveTypes"
+                },
                 "guardhint":{
-                    "$ref": "#/definitions/guardhintTypes"
+                    "$comment": "deprecated version of guarddirective",
+                    "$ref": "#/definitions/guarddirectiveTypes"
                 },
                 "argtaints":{
                     "$ref": "#/definitions/argtaintsTypes"
@@ -109,7 +143,14 @@
                     "required": ["argtaints", "codtaints", "rettaints"]
                 }
             },
-            "required": ["remotelevel", "direction", "guardhint"]
+            "oneOf":[
+                {
+                    "required": ["remotelevel", "direction", "guarddirective"]
+                },
+                {
+                    "required": ["remotelevel", "direction", "guardhint"]
+                }
+            ]
         },
         
         "cleLabel":{
