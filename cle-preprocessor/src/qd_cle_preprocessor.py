@@ -228,7 +228,7 @@ def main():
   
   toks   = cindex_tokenizer(args.file, args.clang_args.split(','))
   tree   = cle_parser().parser.parse(toks)
-  print(tree.pretty())
+  #print(tree.pretty())
   print('Transformed Tree:')
 
   ttree  = CLETransformer().transform(tree)
