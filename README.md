@@ -7,3 +7,4 @@ This repository is maintained by Perspecta Labs.
 ## Contents
 - [CLE-Preprocessor](cle-preprocessor/README.md)
 - [CLE-Specification](cle-spec/README.md)
+- [CLE-Shcema](cle-spec/schema/README.md)

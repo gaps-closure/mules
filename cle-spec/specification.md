@@ -22,36 +22,39 @@
 10.	The `CLE-JSON` at the beginning of a block applies to the entire block unless overridden by an inner block
 11.	`CLE-JSON` is a JSON document with the following structure:
 <pre><code>{
- <b>“level”:</b>  &ltstring>,                        // any one of multiple security levels specified in GSPS file with total ordering
- <b>“markcode”:</b> &ltBoolean>,                     // annotation applies to code/computation if True, else only to data optional, useful if function/algorithm is classified at specified level
- <b>“types”:</b> &lt[string]>,                       // top-level annotation applies to all variables with specified user-defined types or classes 
- <b>“target”:</b> &lttarget-spec>,                   // optionally a target architecture can be specified for a block or function  
- <b>“threads”:</b> &ltint>,                          // maximum number of threads, block or function can be split, 1 to prevent
- <b>“procs”:</b> &ltint>,                            // maximum number of processes, block or function can be split, 1 to prevent
- <b>“optimize”:</b> &ltoptimize-parameters>,         // minimize cross-domain flow by caching/memoization or proactive pub/sub on change of a variable
- <b>“cdf”:</b>                                     // cross domain flow restrictions 
-  [ // can specify restrictions relative to a set of peer levels, can have multiple such blocks separate blocks for ingress and egress         
+ <b>“level”:</b>  &ltstring>,       // [Required] any one of multiple security levels specified in GSPS file with total ordering
+ <b>"$schema":</b> $lturl>,     // [Optional] URL to the schema (if used by external tools)
+ <b>"$comment":</b> $ltstring>,     // [Optional] A comment to be included in the CLE (including final CLEMap)
+ <b>“cdf”:</b>      // [Optional] cross domain flow restrictions
+  [ // can specify restrictions relative to a set of peer levels, can have multiple such blocks separate blocks for ingress and egress
     {
-    <b>“remotelevel”:</b> [>|<|>=|<=|==] &ltstring>, // any security level specified in GSPS file
-    <b>“ratelimit”:</b> &ltrate-spec>,               // maximum datarate
-    <b>“direction”:</b> “ingress” | “egress”,
-    <b>“ipcstyle”:</b> &lt[string]>,                 // any available IPC style specified in GSPS file
-    <b>“bus”:</b> &lt[string]>,                      // any type of interconnection specified in GSPS file 
-    <b>“guardhint”:</b>  
+    <b>“remotelevel”:</b>  &ltstring>,       // the remote (target) level, must be defind in a seperate cle entries
+    <b>"direction":</b> &ltenum>,       //The direction of the data flow: one of ["egress", "ingress", "bidirectional"]
+    <b>“guarddirective”:</b>        //guard rules, previously known as "guardhint"
       {
-      <b>“oneway”:</b> &ltBoolean>,
-      <b>“downgrade”:</b> &ltdowngrade-params>,
-      <b>“upgrade”:</b> &ltupgrade-params>,
-      <b>“crypto”:</b> &ltcrypt-params>,
-      <b>“encode”:</b> &ltencode-params>             // encoding including compression            
+      <b>"operation":</b> &ltenum>,   // [Option] one of "allow", "block", "redact"
+      <b>“oneway”:</b> &ltBoolean>,   //[Option]If the data is sent one way (true/false)
+      <b>“gapstag”:</b> &ltArray>    //[Option]must be an array of 3 integers
+        [ <b>mux</b>, <b>sec</b>, <b>type</b> ] &ltintegers> //3 integers >=0 representing mux, sec, type
       }
     }
+    <b>“argtaints”:</b> // [Optional*] For functions, indicates function argument taints (input cle tags)
+        [       //list representing one entry for each function argument (empty list is valid)
+            [cle-entry, cle-entry, ...]      //list of zero or more taints (cle definitions) related to each argement
+        ]
+    <b>“codtaints”:</b> // [Optional*] For functions, incudes any taints (cle tags) to bless inside the block of code
+        [cle-entry, cle-entry, ...]      //list of zero or more taints (cle definitions) used in the code block
+    <b>“rettaints”:</b> // [Optional*] For functions, includes the returned taint (output cle tags)
+        [cle-entry, cle-entry, ...]      //list of zero or more taints (cle definitions) needed by the returned value
   ]
 }
+
+* If argtaints, codtaints, or rettaints are included, all three must be incuded
+
 </code></pre>
 12.	The Global Security Policy Specification (GSPS) format will be specified in a separate document.  For the purposes of this document,  we treat that a fixed set of pre-defined allowed values and defaults are made available by the GSPS.
 13. The only mandatory field is `level`, rest are optional. For convenience, a beginner could use a minimal `CLE-JSON` that includes only the `level` parameter, with all other parameters can be determined by downstream CLOSURE tools based on defaults from the GSPS; an expert could specify more constraints and preferences.  For example, if `guardhint` is provided, the tool can automatically pull in functions from a library, else stub functions may be created for the developer to populate. 
-14.	Downgrade parameters `<downgrade-params>` include:  
+//14.	Downgrade parameters `<downgrade-params>` include:  
   `{trunc: True | round: True | precision: <int> | scrub: [<string>]}`  
 15.	Other parameters are being defined, and semantics of each of these will be specified in more details
 
@@ -61,35 +64,24 @@ The features that will be supported in the initial steel thread version will be 
 # CLE Pre-processor Reference Implementation
 The CLE is defined for C/C++ in a compiler neutral way.  It is also designed (separable CLE-JSON) so that much of the definitions can carry over to other source languages. See the [CLE Preprocessor](https://github.com/gaps-closure/cle-preprocessor) for more information on this implementation. 
 
-Consider the following toy example:
+Example CLE definition:
 ```
-#pragma cle def HIGHONE {\
-  "level":"SECRET", \
+#pragma cle def XDLINKAGE_GET_A {"level":"orange",\
   "cdf": [\
-    {"remotelevel":">=SECRET", \
-     "direction": "egress", \
-     "guardhint": { "oneway": "true"}},\
-    {"remotelevel":"<SECRET", \
-     "direction": "egress", \
-     "guardhint": { "downgrade": "user-defined"}}\
+    {"remotelevel":"purple", \
+     "direction": "bidirectional", \
+     "guarddirective": { "operation": "allow"}, \
+     "argtaints": [], \
+     "codtaints": ["ORANGE"], \
+     "rettaints": ["TAG_RESPONSE_GET_A"] \
+    } \
   ] }
-
-int * secretvar = 0;
-```  
-A CLOSURE pre-processor for clang does the following:  
-1. Handles the `#pragma cle ...` directives
-2. Inserts an attribute into the code in a manner clang can handle  
- `int * __attribute__(type_annotate("HIGHONE")) secretvar = 0;`  
-  Note:  `type_annotate` is a new feature which will allow user defined annotations via the attribute mechanism, this requires some clang modification; the fallback is to use `annotate` instead of `type_annotate`
-3. Creates a companion file with mappings, e.g., `HIGHONE` to the `CLE-JSON`
-
-Ideally we should not have to modify clang at all; however since custom type annotations allow considerable source level type checking, we will minimally modify clang (in the style of Quala, see https://github.com/sampsyo/quala) to pass the type and function annotations we care about into the LLVM IR. This clang mod is done infrequently, but CLE and downstream Compiler, and Partitioner Optimizer (CAPO) tools can evolve rapidly.
-
-Since CLE is toolchain-neutral, a similar gcc based solution can be created later if absolutely necessary. CLE shall stay the same, but the manner in which annotations are passed to gcc IR will be different. Most of CLE-JSON can carry over to other source languages. Downstream CAPO tools then takes as input the annotated LLVM IR code and the companion file and perform further analysis, partitioning, and optimization, and the resulting programs are fed to the standard LLVM linker and target-specific backends.
-
-# CLE Annotation Examples
-See the [CLE Preprocessor](https://github.com/gaps-closure/cle-preprocessor) for some examples.
+  
+```
 
 # CLE Formal Grammar
-To be specified. Meanwhile, a Python Lark grammar can be found with the [CLE Preprocessor](https://github.com/gaps-closure/cle-preprocessor).
+A Python Lark grammar can be found with the [CLE Preprocessor](https://github.com/gaps-closure/cle-preprocessor).
+describing the grammar of the Preproceser's interpritation of the CLE tags and definitions.
+
+While the CLE json its self is defined by the [JSON Schema](schema/cle-schema.json).
 
