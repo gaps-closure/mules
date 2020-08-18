@@ -62,7 +62,7 @@
 The features that will be supported in the initial steel thread version will be identified and documented here. For example, in early versions, only block-style directives are supported, only `annotate` (not `type_annotate`) is supported, and a subset of the CLE-JSON fields are supported. 
 
 # CLE Pre-processor Reference Implementation
-The CLE is defined for C/C++ in a compiler neutral way.  It is also designed (separable CLE-JSON) so that much of the definitions can carry over to other source languages. See the [CLE Preprocessor](https://github.com/gaps-closure/cle-preprocessor) for more information on this implementation. 
+The CLE is defined for C/C++ in a compiler neutral way.  It is also designed (separable CLE-JSON) so that much of the definitions can carry over to other source languages. See the [CLE Preprocessor](https://github.com/gaps-closure/mules/cle-preprocessor) for more information on this implementation. 
 
 Example CLE definition:
 ```
@@ -80,7 +80,7 @@ Example CLE definition:
 ```
 
 # CLE Formal Grammar
-A Python Lark grammar can be found with the [CLE Preprocessor](https://github.com/gaps-closure/cle-preprocessor).
+A Python Lark grammar can be found with the [CLE Preprocessor](https://github.com/gaps-closure/mules/cle-preprocessor).
 describing the grammar of the Preproceser's interpritation of the CLE tags and definitions.
 
 While the CLE json its self is defined by the [JSON Schema](schema/cle-schema.json).
