@@ -59,7 +59,7 @@ def cle_parser():
     deff:        DEF
     label:       IDENT
     clejson:     LITERAL
-                 | PUNCT (PUNCT | LITERAL)+
+                 | PUNCT (PUNCT | LITERAL | KWD)+
     other:       COMMENT
                  | nonhash+
                  | HASH (PRAGMA | IDENT | KWD)
@@ -115,7 +115,9 @@ def source_transform(infile,ttree,astyle, schema):
     defs = [{"cle-label": x[3], "cle-json": x[4]} for x in ttree if x[0] == 'cledef']
   else:
     defs = [{"cle-label": x[3], "cle-json": validate_cle(x,schema)} for x in ttree if x[0] == 'cledef']
-  
+
+  with open(infile + ".clemap.json", 'w') as mapf:
+    json.dump(defs,mapf,indent=2)
 
   curline = 0
   with open(infile) as inf:
@@ -123,8 +125,6 @@ def source_transform(infile,ttree,astyle, schema):
     with open(fn + '.mod' + fe,'w') as ouf:
       for x in sorted(ttree, key=lambda x: x[1]):
         if x[0] == 'clebegin':
-          if not x[3] in [o["cle-label"] for o in defs]:
-              defs.append({"cle-label" : x[3]})
           while curline < x[1] - 1: 
             ouf.write(inf.readline())
             curline += 1
@@ -141,8 +141,6 @@ def source_transform(infile,ttree,astyle, schema):
           ouf.write(inf.readline())
           curline += 1
         elif x[0] == 'cleend':
-          if not x[3] in [o["cle-label"] for o in defs]:
-              defs.append({"cle-label" : x[3]})
           while curline < x[1]: 
             ouf.write(inf.readline())
             curline += 1
@@ -166,9 +164,6 @@ def source_transform(infile,ttree,astyle, schema):
       for line in inf: 
         ouf.write(line)
         curline += 1
-        
-  with open(infile + ".clemap.json", 'w') as mapf:
-    json.dump(defs,mapf,indent=2)
     
 # Parse command line argumets
 def get_args():
