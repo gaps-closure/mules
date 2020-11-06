@@ -15,19 +15,10 @@ using json = nlohmann::json;
 #include "util.h"
 #include "gen_echo.h"
 #include "gen_egress.h"
-#include "MessageDef.h"
 #include "Config.h"
 #include "XdccFlow.h"
 
 Config config(".", ".", ".", "xdcc_flow.json");
-
-void from_json(const json& j, MessageDef& p)
-{                                                                                         
-    j.at("message").get_to(p.message);
-    j.at("schema").get_to(p.schema);
-    j.at("local").get_to(p.local);
-    j.at("topic").get_to(p.topic);
-}                                                                                         
 
 void from_json(const json& j, Config& config)
 {
@@ -113,7 +104,7 @@ int main(int argc, char **argv)
     genEcho.generate(xdccFlow);
     genEcho.close();
 
-    GenEgress genIngress(config.getIngressDir(), "Ingress_xdcc.c", "");
+    GenEgress genIngress(config.getIngressDir(), "ingress_xdcc.c", "");
     config.setEnclave("orange");
     genIngress.open(xdccFlow);
     genIngress.generate(xdccFlow);

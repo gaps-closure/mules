@@ -12,7 +12,7 @@ OBJ = \
 TEST_OBJ = \
 	run.o
 
-EXEC = code_gen
+EXEC = xdcc_gen
 
 TEST_EXEC = test_code_gen
 TEST_INCLUDE = \

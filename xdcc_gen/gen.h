@@ -11,7 +11,6 @@
 #include <boost/filesystem/operations.hpp>
 #include <boost/algorithm/string.hpp>
 
-#include "MessageDef.h"
 #include "Config.h"
 #include "XdccFlow.h"
 #include "util.h"

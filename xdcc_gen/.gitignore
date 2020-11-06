@@ -1,4 +1,4 @@
 echo.cpp
-code_gen
+xdcc_gen
 test_code_gen
 *.o
