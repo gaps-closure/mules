@@ -1,0 +1,139 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://example.com/gaps-closure-xdcc/xdcc_flow.json",
+    
+    "components":{
+        "MPU": "ORANGE",
+        "EOIR": "ORANGE",
+        "ISRM": "ORANGE",
+        "MPX": "ORANGE",
+        "RDR": "PURPLE"
+    },
+    "messages":{
+        "component_heartbeats_ORANGE": {
+            "name": "component_heartbeats",
+            "comment": "optional comment",
+            "flows": [
+                {
+                    "source": "MPU",
+                    "destination": "EOIR"
+                },
+                {
+                    "source": "MPU",
+                    "destination": "ISRM"
+                },
+                {
+                    "source": "MPU",
+                    "destination": "MPX"
+                },
+                {
+                    "source": "MPU",
+                    "destination": "RDR"
+                },
+                
+                {
+                    "source": "ISRM",
+                    "destination": "MPU"
+                },
+                {
+                    "source": "ISRM",
+                    "destination": "EOIR"
+                },
+                {
+                    "source": "ISRM",
+                    "destination": "MPX"
+                },
+                {
+                    "source": "ISRM",
+                    "destination": "RDR"
+                },
+                
+                {
+                    "source": "MPX",
+                    "destination": "MPU"
+                },
+                {
+                    "source": "MPX",
+                    "destination": "EOIR"
+                },
+                {
+                    "source": "MPX",
+                    "destination": "ISRM"
+                },
+                {
+                    "source": "MPX",
+                    "destination": "RDR"
+                }
+            ],
+            "schema": "schema/component_heartbeats.schema",
+            "cle": "COMPONENT_HEARTBEATS_ORANGE"
+        },
+        "component_heartbeats_PURPLE": {
+            "name": "component_heartbeats",
+            "comment": "optional comment",
+            "flows": [
+                {
+                    "source": "RDR",
+                    "destination": "MPU"
+                },
+                {
+                    "source": "RDR",
+                    "destination": "EOIR"
+                },
+                {
+                    "source": "RDR",
+                    "destination": "ISRM"
+                },
+                {
+                    "source": "RDR",
+                    "destination": "MPX"
+                }
+            ],
+            "schema": "schema/component_heartbeats.schema",
+            "cle": "COMPONENT_HEARTBEATS_PURPLE",
+            "local": false,
+            "topic": true
+        }
+    },
+    "schemas":{
+        "schema_heartbeats":{
+            "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "schema_missionPlan":{
+            "$schema": "http://json-schema.org/draft-07/schema#"
+        }
+    },
+    "samples":{
+        "schema_heartbeats":{
+            "ss": "MPU",
+            "st": "ready"
+        },
+        "schema_missionPlan":{
+        }
+    },
+    "cles":{
+        "COMPONENT_HEARTBEATS_ORANGE":{
+            "level": "orange",
+            "cdf": [
+                {
+                    "remotelevel": "purple",
+                    "direction": "egress",
+                    "guarddirective":{ "operation": "allow"}
+                }
+            ]
+        },
+        "COMPONENT_HEARTBEATS_PURPLE":{
+            "level": "purple",
+            "cdf": [
+                {
+                    "remotelevel": "orange",
+                    "direction": "ingress",
+                    "guarddirective":{ "oneway": true, "operation": "allow"},
+                    "argtaints": [["TAG_REQUEST_ECHO_COMPONENT_HEARTBEATS"]],
+                    "codtaints": ["PURPLE"],
+                    "rettaints": []
+                }
+            ]
+        }
+    }
+}

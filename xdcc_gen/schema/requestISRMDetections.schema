@@ -1,0 +1,22 @@
+{
+	"definitions": {},
+	"$schema": "http://json-schema.org/draft-07/schema#", 
+	"$id": "https://example.com/object1601910457.json", 
+	"title": "Root", 
+	"type": "object",
+	"required": [
+		"phase"
+	],
+	"properties": {
+		"phase": {
+			"$id": "#root/phase", 
+			"title": "Phase", 
+			"type": "string",
+			"default": "",
+			"examples": [
+				"find"
+			],
+			"pattern": "^.*$"
+		}
+	}
+}

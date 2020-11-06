@@ -1,0 +1,61 @@
+{
+	"definitions": {},
+	"$schema": "http://json-schema.org/draft-07/schema#", 
+	"$id": "https://example.com/object1601910324.json", 
+	"title": "Root", 
+	"type": "object",
+	"required": [
+		"bearing",
+		"lat",
+		"lon",
+		"speed",
+		"vehicleID"
+	],
+	"properties": {
+		"bearing": {
+			"$id": "#root/bearing", 
+			"title": "Bearing", 
+			"type": "number",
+			"examples": [
+				144.379
+			],
+			"default": 0.0
+		},
+		"lat": {
+			"$id": "#root/lat", 
+			"title": "Lat", 
+			"type": "number",
+			"examples": [
+				32.7157
+			],
+			"default": 0.0
+		},
+		"lon": {
+			"$id": "#root/lon", 
+			"title": "Lon", 
+			"type": "number",
+			"examples": [
+				-117.161
+			],
+			"default": 0.0
+		},
+		"speed": {
+			"$id": "#root/speed", 
+			"title": "Speed", 
+			"type": "number",
+			"examples": [
+				71.1611
+			],
+			"default": 0.0
+		},
+		"vehicleID": {
+			"$id": "#root/vehicleID:", 
+			"title": "Vehicleid:", 
+			"type": "integer",
+			"examples": [
+				234717
+			],
+			"default": 0
+		}
+	}
+}

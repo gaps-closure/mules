@@ -1,0 +1,89 @@
+{
+	"definitions": {},
+	"$schema": "http://json-schema.org/draft-07/schema#", 
+	"$id": "https://example.com/object1601910091.json", 
+	"title": "Root", 
+	"type": "array",
+	"default": [],
+	"items":{
+		"$id": "#root/items", 
+		"title": "Items", 
+		"type": "object",
+		"required": [
+			"TGT_ISRM_ID",
+			"bearing",
+			"classification",
+			"confidence",
+			"speed",
+			"x",
+			"y"
+		],
+		"properties": {
+			"TGT_ISRM_ID": {
+				"$id": "#root/items/TGT_ISRM_ID", 
+				"title": "Tgt_isrm_id", 
+				"type": "integer",
+				"examples": [
+					1
+				],
+				"default": 0
+			},
+			"bearing": {
+				"$id": "#root/items/bearing", 
+				"title": "Bearing", 
+				"type": "number",
+				"examples": [
+					-1
+				],
+				"default": 0
+			},
+			"classification": {
+				"$id": "#root/items/classification", 
+				"title": "Classification", 
+				"type": "string",
+				"default": "",
+				"examples": [
+					"Military_Vehicle"
+				],
+				"pattern": "^.*$"
+			},
+			"confidence": {
+				"$id": "#root/items/confidence", 
+				"title": "Confidence", 
+				"type": "integer",
+				"examples": [
+					60
+				],
+				"default": 0
+			},
+			"speed": {
+				"$id": "#root/items/speed", 
+				"title": "Speed", 
+				"type": "number",
+				"examples": [
+					-1
+				],
+				"default": 0
+			},
+			"x": {
+				"$id": "#root/items/x", 
+				"title": "X", 
+				"type": "number",
+				"examples": [
+					-4.7
+				],
+				"default": 0.0
+			},
+			"y": {
+				"$id": "#root/items/y", 
+				"title": "Y", 
+				"type": "number",
+				"examples": [
+					-69.4
+				],
+				"default": 0.0
+			}
+		}
+	}
+
+}
