@@ -1,7 +1,6 @@
 {"level":"orange",
   "cdf": [
     {"remotelevel":"purple",
-     "direction": "egress",
      "guarddirective": { "operation": "allow"},
      "argtaints": [["ORANGE"], ["ORANGE"]],
      "codtaints": ["ORANGE"],

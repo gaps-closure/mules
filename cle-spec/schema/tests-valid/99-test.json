@@ -24,7 +24,11 @@
         {
             "remotelevel": "yellow-alt",
             "direction": "egress",
-            "guardhint": { "operation": "allow"},
+            "guardhint": {
+		"operation": "allow",
+	    	"oneway": true,
+		"gapstag": [1,2,3]
+	    },
             "argtaints": [],
             "codtaints": ["ORANGE"],
             "rettaints": ["ORANGE_SHAREABLE"]

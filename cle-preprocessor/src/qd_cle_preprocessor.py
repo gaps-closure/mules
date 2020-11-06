@@ -35,7 +35,9 @@ class TypeLexer(Lexer):
       elif x.kind == TokenKind.COMMENT:
         yield Token('COMMENT', x)
       elif x.kind == TokenKind.KEYWORD:
-        yield Token('KWD', x)
+        if   x.spelling == 'true':   yield Token('TRUE', x)
+        elif x.spelling == 'false':  yield Token('FALSE', x)
+        else:                        yield Token('KWD', x)
       else:
         raise TypeError(x)
 
@@ -59,7 +61,7 @@ def cle_parser():
     deff:        DEF
     label:       IDENT
     clejson:     LITERAL
-                 | PUNCT (PUNCT | LITERAL)+
+                 | PUNCT (PUNCT | LITERAL | TRUE | FALSE)+
     other:       COMMENT
                  | nonhash+
                  | HASH (PRAGMA | IDENT | KWD)
@@ -73,7 +75,9 @@ def cle_parser():
                  | DEF
                  | BEGIN
                  | END
-    %declare PUNCT COMMENT KWD LITERAL IDENT HASH PRAGMA CLE DEF BEGIN END
+                 | TRUE
+                 | FALSE
+    %declare PUNCT COMMENT KWD LITERAL IDENT HASH PRAGMA CLE DEF BEGIN END TRUE FALSE
   """, start='acode', parser='lalr', lexer=TypeLexer)
 
 def deraw(s):
@@ -115,7 +119,7 @@ def source_transform(infile,ttree,astyle, schema):
     defs = [{"cle-label": x[3], "cle-json": x[4]} for x in ttree if x[0] == 'cledef']
   else:
     defs = [{"cle-label": x[3], "cle-json": validate_cle(x,schema)} for x in ttree if x[0] == 'cledef']
-  
+
   with open(infile + ".clemap.json", 'w') as mapf:
     json.dump(defs,mapf,indent=2)
 
