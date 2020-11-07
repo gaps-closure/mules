@@ -54,22 +54,23 @@ void GenEcho::gen_echo_array(Message *message, string arrayName, json j, vector<
                 gen_echo_obj(message, j["properties"], path, assignments, in_args, out_args);
             }
             else {
-                string arg, out_arg = var;
+                string in_arg;
+                string out_arg = var;
                 if (type == "string") {
-                    arg = "    const char *" + var + "[]";
+                    in_arg = "    const char *" + var + "[]";
                     out_arg = var + "_";
                     stmt = "        ele[\"" + key + "\"] = string(" + var + "[i]);";
                 }
                 else if (type == "integer") {
-                    arg = "    int " + var + "[]";
+                    in_arg = "    int " + var + "[]";
                 }
                 else if (type == "number") {
-                    arg = "    double " + var + "[]";
+                    in_arg = "    double " + var + "[]";
                 }
                 else {
                     throw DataException("unsupported type " + type + " for " + gen_path(path));
                 }
-                in_args.push_back(arg);
+                in_args.push_back(in_arg);
                 out_args.push_back(out_arg);
                 assignments.push_back(stmt);
             }
@@ -103,23 +104,22 @@ void GenEcho::gen_echo_obj(Message *message, json j, vector<string> path, vector
                 gen_echo_obj(message, val["properties"], path, assignments, in_args, out_args);
             }
             else {
-                string arg;
-                string out_arg;
+                string in_arg;
                 bool isString = false;
                 if (type == "string") {
-                    arg = "    const char *" + var;
+                    in_arg = "    const char *" + var;
                     isString = true;
                 }
                 else if (type == "integer") {
-                    arg = "    int " + var;
+                    in_arg = "    int " + var;
                 }
                 else if (type == "number") {
-                    arg = "    double " + var;
+                    in_arg = "    double " + var;
                 }
                 else {
                     throw DataException("unsupported type " + type + " for " + gen_path(path));
                 }
-                in_args.push_back(arg);
+                in_args.push_back(in_arg);
 
                 gen_leaf(path, var, assignments, isString);
             }

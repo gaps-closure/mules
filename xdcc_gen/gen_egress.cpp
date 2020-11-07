@@ -100,12 +100,11 @@ void GenEgress::gen_xdcc_array(Message *message, json j, vector<string> path, ve
                 gen_xdcc_obj(message, j["properties"], path, assignments, in_args, out_args);
             }
             else {
-                string stmt;
-                string arg;
+                string in_arg;
                 string out_arg = var;
 
                 if (type == "string") {
-                    arg = "const char *" + var + "[]";
+                    in_arg = "const char *" + var + "[]";
 
                     string maxLength = get_field(val, "maxLength", message, path);
                     assignments.push_back("    char " + var + "_cpp[" + countVar + "][" + maxLength + "];");
@@ -115,15 +114,15 @@ void GenEgress::gen_xdcc_array(Message *message, json j, vector<string> path, ve
                     out_arg = var + "_cpp";
                 }
                 else if (type == "integer") {
-                    arg = "int " + var + "[]";
+                    in_arg = "int " + var + "[]";
                 }
                 else if (type == "number") {
-                    arg = "double " + var + "[]";
+                    in_arg = "double " + var + "[]";
                 }
                 else {
                     throw DataException("unsupported type " + type + " for " + gen_path(path));
                 }
-                in_args.push_back(arg);
+                in_args.push_back(in_arg);
                 out_args.push_back(out_arg);
             }
         }
@@ -158,15 +157,14 @@ void GenEgress::gen_xdcc_obj(Message *message, json j, vector<string> path, vect
                 gen_xdcc_obj(message, val["properties"], path, assignments, in_args, out_args);
             }
             else {
-                string arg;
+                string in_arg;
                 string out_arg = var;
-                string stmt;
                 if (type == "string") {
-                    arg = "const char *" + var;
+                    in_arg = "const char *" + var;
 
                     string maxLength = get_field(val, "maxLength", message, path);
 
-                    stmt = "    char " + var + "_cpp[" + maxLength + "];";
+                    string stmt = "    char " + var + "_cpp[" + maxLength + "];";
                     assignments.push_back(stmt);
 
                     stmt = "    memcpy(" + var + "_cpp, " + var + ", " + maxLength + ");\n";
@@ -175,15 +173,15 @@ void GenEgress::gen_xdcc_obj(Message *message, json j, vector<string> path, vect
                     out_arg = var + "_cpp";
                 }
                 else if (type == "integer") {
-                    arg = "int " + var;
+                    in_arg = "int " + var;
                 }
                 else if (type == "number") {
-                    arg = "double " + var;
+                    in_arg = "double " + var;
                 }
                 else {
                     throw DataException("unsupported type " + type + " for " + gen_path(path));
                 }
-                in_args.push_back(arg);
+                in_args.push_back(in_arg);
                 out_args.push_back(out_arg);
             }
         }
@@ -196,7 +194,7 @@ void GenEgress::gen_xdcc_obj(Message *message, json j, vector<string> path, vect
 
 void GenEgress::gen_xdcc(Message *message)
 {
-   string topic = message->getName();
+   string msg_name = message->getName();
 
    std::ifstream schemaStream(message->getSchema());
    json schemaJson;
@@ -219,10 +217,10 @@ void GenEgress::gen_xdcc(Message *message)
            throw DataException("unsupported type: " + type + " for " + message->getName());
        }
 
-       string upper_topic = topic;
-       boost::to_upper(upper_topic);
-       genfile << "#pragma cle begin XDLINKAGE_ECHO_" << upper_topic << endl
-               << "int echo_" << topic << "(";
+       string msg_name_u = msg_name;
+       boost::to_upper(msg_name_u);
+       genfile << "#pragma cle begin XDLINKAGE_ECHO_" << msg_name_u << endl
+               << "int echo_" << msg_name << "(";
 
        bool first = true;
        for (std::vector<string>::iterator it = in_args.begin(); it != in_args.end(); ++it) {
@@ -236,16 +234,16 @@ void GenEgress::gen_xdcc(Message *message)
        }
        genfile << endl
                << ")" << endl
-               << "#pragma cle end XDLINKAGE_ECHO_" << upper_topic << endl
+               << "#pragma cle end XDLINKAGE_ECHO_" << msg_name_u << endl
                << "{" << endl;
 
        for (std::vector<string>::iterator it = assignments.begin(); it != assignments.end(); ++it) {
            genfile << *it << endl;
        }
 
-       genfile << "    echo_" + topic + "_cpp(\n"
+       genfile << "    echo_" + msg_name + "_cpp(\n"
                << "        amq(),\n"
-               << "        _topic_" + topic;
+               << "        _topic_" + msg_name;
        for (std::vector<string>::iterator it = out_args.begin(); it != out_args.end(); ++it) {
            genfile << ",";
            genfile << "\n        " << *it;
@@ -388,7 +386,7 @@ void GenEgress::gen_egress_obj(Message *message, json j, vector<string> path, ve
 
 void GenEgress::gen_egress(Message *message)
 {
-   string topic = message->getName();
+   string msg_name = message->getName();
 
    std::ifstream schemaStream(message->getSchema());
    json schemaJson;
@@ -411,12 +409,12 @@ void GenEgress::gen_egress(Message *message)
            throw DataException("Unsupported type: " + type);
        }
 
-       genfile << "int egress_" + topic + "(const char *jstr)" << endl
+       genfile << "int egress_" + msg_name + "(const char *jstr)" << endl
                << "{" << endl
                << "    int fromRemote;" << endl;
 
        string share = "";
-       map<string, string>::iterator it = shares.find(topic);
+       map<string, string>::iterator it = shares.find(msg_name);
        if (it != shares.end()) {
            share = it->second;
        }
@@ -431,11 +429,11 @@ void GenEgress::gen_egress(Message *message)
        }
 
        genfile << endl
-               << "    if (_local_" + topic + ")" << endl
+               << "    if (_local_" + msg_name + ")" << endl
                << "        return;" << endl
                << endl;
 
-       genfile << "    unmarshal_" + topic + "(" << endl
+       genfile << "    unmarshal_" + msg_name + "(" << endl
                << "        jstr," << endl
                << "        &fromRemote";
        for (std::vector<string>::iterator it = in_args.begin(); it != in_args.end(); ++it) {
@@ -445,7 +443,7 @@ void GenEgress::gen_egress(Message *message)
                << "    );" << endl;
 
        genfile << "    if (fromRemote == 0)" << endl
-               << "        echo_" + topic + "(" << endl;
+               << "        echo_" + msg_name + "(" << endl;
        bool first = true;
        for (std::vector<string>::iterator it = out_args.begin(); it != out_args.end(); ++it) {
            if (!first)
@@ -487,26 +485,26 @@ void GenEgress::annotations(const XdccFlow &xdccFlow)
 {
     shares.clear();
 
-    string myEnclave = config.getEnclave();
+    string my_enclave = config.getEnclave();
 
-    string upper_my_enclave = myEnclave;
-    boost::to_upper(upper_my_enclave);
+    string my_enclave_u = my_enclave;
+    boost::to_upper(my_enclave_u);
 
-    genfile << "#pragma cle def " + upper_my_enclave + " {\"level\":\"" + myEnclave + "\"}" << endl << endl;
+    genfile << "#pragma cle def " + my_enclave_u + " {\"level\":\"" + my_enclave + "\"}" << endl << endl;
 
     // generate shareables
     map<string, string> components = xdccFlow.getComponents();
     set<string> remote_enclaves;
     for (auto const& x : xdccFlow.getMessages()) {
         // interested only in messages flows from this enclave
-        if (!is_interested(x.first, myEnclave))
+        if (!is_interested(x.first, my_enclave))
             continue;
 
         Message *message = (Message *) x.second;
         // find remote enclaves the message is to be shared, to prepare to generate the SHAREABLEs
         for (auto &flow : message->getFlows()) {
             map<string, string>::iterator it = components.find(flow.getDestination());
-            if (it != components.end() && it->second.compare(upper_my_enclave)) {
+            if (it != components.end() && it->second.compare(my_enclave_u)) {
                 remote_enclaves.insert(it->second);
                 shares[message->getName()] = it->second;
             }
@@ -515,9 +513,9 @@ void GenEgress::annotations(const XdccFlow &xdccFlow)
 
     map<string, Cle *> cles = xdccFlow.getCles();
     for (auto const& x : remote_enclaves) {
-        Cdf *cdf = xdccFlow.find_cle(x, myEnclave);
+        Cdf *cdf = xdccFlow.find_cle(x, my_enclave);
         if (cdf == NULL) {
-            cout << "SHAREABLE: Could not find CDF for level/remote : " << x << "/" << myEnclave << endl;
+            cout << "SHAREABLE: Could not find CDF for level/remote : " << x << "/" << my_enclave << endl;
             continue;
         }
 
@@ -535,7 +533,7 @@ void GenEgress::annotations(const XdccFlow &xdccFlow)
     // generate xdlinkages
     set<string> gened;
     for (auto const& x : xdccFlow.getMessages()) {
-        if (!is_interested(x.first, myEnclave))
+        if (!is_interested(x.first, my_enclave))
             continue;
 
         Message *message = (Message *) x.second;
@@ -556,18 +554,18 @@ void GenEgress::annotations(const XdccFlow &xdccFlow)
             }
             string remote = it->second;
             boost::to_lower(remote);
-            if (gened.find(remote) != gened.end() || !remote.compare(myEnclave)) {
+            if (gened.find(remote) != gened.end() || !remote.compare(my_enclave)) {
                 continue;
             }
             gened.insert(remote);
 
-            Cdf *cdf = cle->find_cdf(myEnclave, remote, true);
+            Cdf *cdf = cle->find_cdf(my_enclave, remote, true);
             if (cdf == NULL) {
-                cout << "XDLINKAGE: Could not find CDF for level/remote: " << myEnclave << "/" << remote << endl;
+                cout << "XDLINKAGE: Could not find CDF for level/remote: " << my_enclave << "/" << remote << endl;
                 continue;
             }
 
-            Cle tmpCle(myEnclave, cdf);
+            Cle tmpCle(my_enclave, cdf);
             json clejson;
             to_json(clejson, tmpCle);
 
@@ -627,7 +625,7 @@ int GenEgress::open(const XdccFlow &xdccFlow)
     }
     genfile << endl << endl;
 
-    genfile << "/* _topic_X is 1 if X is a topic, else 0 */\n";
+    genfile << "/* _topic_X is 1 if X is a msg_name, else 0 */\n";
     for (std::vector<string>::iterator it = destinations.begin(); it != destinations.end(); ++it) {
         genfile << *it << endl;
     }
