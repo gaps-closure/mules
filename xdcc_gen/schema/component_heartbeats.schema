@@ -13,6 +13,7 @@
 			"$id": "#root/ss", 
 			"title": "Ss", 
 			"type": "string",
+			"maxLength": 32,
 			"default": "",
 			"examples": [
 				"EOIR"
@@ -23,6 +24,7 @@
 			"$id": "#root/st", 
 			"title": "St", 
 			"type": "string",
+			"maxLength": 64,
 			"default": "",
 			"examples": [
 				"ready"

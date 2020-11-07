@@ -216,8 +216,9 @@ void GenEcho::gen_unmarshal_array(string arrayName, json j, vector<string> path,
             string out_arg;
 
             if (type == "string") {
+                string maxLength = to_string(val["maxLength"]);
                 in_arg  = "    char * " + var + "[]";
-                stmt    = "        strncpy(" + var + "[i], ele[\"" + key + "\"]" + ".get<string>().c_str(), MAXSTR_SIZE);";
+                stmt    = "        strncpy(" + var + "[i], ele[\"" + key + "\"]" + ".get<string>().c_str(), " + maxLength + ");";
             }
             else if (type == "integer") {
                 in_arg  = "    int " + var + "[]";
@@ -268,7 +269,8 @@ void GenEcho::gen_unmarshal_obj(json j, vector<string> path, vector<string> &ass
             if (type == "string") {
                 in_arg  = "    char *" + var;
                 stmt    = "    string " + var + "_cpp = js" +  indices + ".get<string>();";
-                out_arg = "    strncpy(" + var + ", " + var + "_cpp.c_str(), MAXSTR_SIZE);";
+                string maxLength = to_string(val["maxLength"]);
+                out_arg = "    strncpy(" + var + ", " + var + "_cpp.c_str(), " + maxLength + ");";
             }
             else if (type == "integer") {
                 in_arg  = "    int *" + var;
@@ -386,7 +388,6 @@ int GenEcho::open(const XdccFlow &xdccFlow)
                << "extern \"C\" {\n"
                << "#endif /*__cplusplus */\n"
                << endl
-               << "#define MAXSTR_SIZE 16 /* XXX: should not be hardcoded, use per-field size from schema */\n"
                << endl;
     
     return 0;

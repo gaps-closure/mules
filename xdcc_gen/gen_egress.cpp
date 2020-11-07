@@ -103,12 +103,15 @@ void GenEgress::gen_xdcc_array(string arrayName, json j, vector<string> path, ve
             string arg;
             string out_arg = var;
 
+            int maxLength = val["maxLength"].get<int>();
+
             if (type == "string") {
                 arg = "const char *" + var + "[]";
 
-                assignments.push_back("    char " + var + "_cpp[" + countVar + "][MAXSTR_SIZE];");
+                string maxLength = to_string(val["maxLength"]);
+                assignments.push_back("    char " + var + "_cpp[" + countVar + "][" + maxLength + "];");
                 assignments.push_back("    for (int j = 0; j < " + countVar + "; j++)");
-                assignments.push_back("        memcpy(" + var + "_cpp[j], " + var + "[j], MAXSTR_SIZE);\n");
+                assignments.push_back("        memcpy(" + var + "_cpp[j], " + var + "[j], " + maxLength + ");\n");
 
                 out_arg = var + "_cpp";
 
@@ -158,10 +161,12 @@ void GenEgress::gen_xdcc_obj(json j, vector<string> path, vector<string> &assign
             if (type == "string") {
                 arg = "const char *" + var;
 
-                stmt = "    char " + var + "_cpp[MAXSTR_SIZE];";
+                string maxLength =  to_string(val["maxLength"]);
+
+                stmt = "    char " + var + "_cpp[" + maxLength + "];";
                 assignments.push_back(stmt);
 
-                stmt = "    memcpy(" + var + "_cpp, " + var + ", MAXSTR_SIZE);\n";
+                stmt = "    memcpy(" + var + "_cpp, " + var + ", " + maxLength + ");\n";
                 assignments.push_back(stmt);
 
                 out_arg = var + "_cpp";
@@ -281,7 +286,9 @@ void GenEgress::gen_egress_array(string arrayName, json j, vector<string> path,
             string out_arg;
 
             if (type == "string") {
-                stmt    = "    char " + var + "[" + countVar + "][MAXSTR_SIZE];";
+                string maxLength =  to_string(val["maxLength"]);
+
+                stmt    = "    char " + var + "[" + countVar + "][" + maxLength + "];";
                 in_arg  = "        " + var;
                 out_arg = "            " + var;
             }
@@ -335,7 +342,8 @@ void GenEgress::gen_egress_obj(json j, vector<string> path, vector<string> &assi
             gen_path(path, indices);
 
             if (type == "string") {
-                stmt    = "    char " + var + "[MAXSTR_SIZE];";
+                string maxLength = to_string(val["maxLength"]);
+                stmt    = "    char " + var + "[" + maxLength + "];";
                 in_arg  = "        " + var;
                 out_arg = "            " + var;
             }
