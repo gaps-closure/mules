@@ -107,8 +107,13 @@ public:
             string err = "missing '" + field + "' field in schema of " + message->getName() + gen_path(path);
             throw DataException(err);
         }
-        string val = to_string(js[field]);
-        findAndReplaceAll(val, "\"", "");
+        string val;
+        try {
+            val = js[field];
+        }
+        catch (nlohmann::detail::type_error e) {
+            val = to_string(js[field]);
+        }
 
         return val;
     }

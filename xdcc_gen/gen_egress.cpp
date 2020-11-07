@@ -21,7 +21,6 @@ using json = nlohmann::json;
 #include "XdccException.h"
 
 extern Config config;
-Cdf badCdf;
 
 void to_json(json& j, const GuardDirective& p) {
     string x = p.getOperation();
@@ -205,11 +204,11 @@ void GenEgress::gen_xdcc(Message *message)
 
    try {
        vector<string> path;
-       string type = get_field(schemaJson, "type", message, path);
        vector<string> assignments;
        vector<string> in_args;
        vector<string> out_args;
 
+       string type = get_field(schemaJson, "type", message, path);
        if (type == "array") {
            gen_xdcc_array(message, schemaJson["items"]["properties"], path, assignments, in_args, out_args);
        }
@@ -397,11 +396,11 @@ void GenEgress::gen_egress(Message *message)
 
    try {
        vector<string> path;
-       string type = get_field(schemaJson, "type", message, path);
        vector<string> assignments;
        vector<string> in_args;
        vector<string> out_args;
 
+       string type = get_field(schemaJson, "type", message, path);
        if (type == "array") {
            gen_egress_array(message, schemaJson["items"]["properties"], path, assignments, in_args, out_args);
        }

@@ -21,8 +21,8 @@ using json = nlohmann::json;
 /******************************
  * echo
  */
-void GenEcho::gen_echo_array(Message *message, string arrayName, json j, vector<string> path, vector<string> &assignments,
-                      vector<string> &in_args, vector<string> &out_args)
+void GenEcho::gen_echo_array(Message *message, string arrayName, json j, vector<string> path,
+        vector<string> &assignments, vector<string> &in_args, vector<string> &out_args)
 {
     string count = "count_" + arrayName;
     in_args.push_back("    int " + count);
@@ -62,14 +62,12 @@ void GenEcho::gen_echo_array(Message *message, string arrayName, json j, vector<
                 }
                 else if (type == "integer") {
                     arg = "    int " + var + "[]";
-
                 }
                 else if (type == "number") {
                     arg = "    double " + var + "[]";
                 }
                 else {
-                    cout << "unsupported type: " << type << endl;
-                    exit(1);
+                    throw DataException("unsupported type " + type + " for " + gen_path(path));
                 }
                 in_args.push_back(arg);
                 out_args.push_back(out_arg);
@@ -86,7 +84,7 @@ void GenEcho::gen_echo_array(Message *message, string arrayName, json j, vector<
 }
 
 void GenEcho::gen_echo_obj(Message *message, json j, vector<string> path, vector<string> &assignments,
-                    vector<string> &in_args, vector<string> &out_args)
+        vector<string> &in_args, vector<string> &out_args)
 {
     for (auto& el : j.items()) {
         string key = el.key();
@@ -119,8 +117,7 @@ void GenEcho::gen_echo_obj(Message *message, json j, vector<string> path, vector
                     arg = "    double " + var;
                 }
                 else {
-                    cout << "unsupported type: " << type << endl;
-                    exit(1);
+                    throw DataException("unsupported type " + type + " for " + gen_path(path));
                 }
                 in_args.push_back(arg);
 
@@ -144,16 +141,19 @@ void GenEcho::gen_echo(Message *message)
 
    try {
        vector<string> path;
-       string type = get_field(schemaJson, "type", message, path);
        vector<string> assignments;
        vector<string> in_args;
        vector<string> out_args;
 
+       string type = get_field(schemaJson, "type", message, path);
        if (type == "array") {
            gen_echo_array(message, "", schemaJson["items"]["properties"], path, assignments, in_args, out_args);
        }
        else if (type == "object") {
            gen_echo_obj(message, schemaJson["properties"], path, assignments, in_args, out_args);
+       }
+       else {
+           throw DataException("unsupported type: " + type + " for " + message->getName());
        }
 
        string signature;
@@ -228,7 +228,8 @@ void GenEcho::gen_unmarshal_array(Message *message, string arrayName, json j, ve
                 if (type == "string") {
                     string maxLength = to_string(val["maxLength"]);
                     in_arg  = "    char * " + var + "[]";
-                    stmt    = "        strncpy(" + var + "[i], ele[\"" + key + "\"]" + ".get<string>().c_str(), " + maxLength + ");";
+                    stmt    = "        strncpy(" + var + "[i], ele[\"" + key + "\"]"
+                            + ".get<string>().c_str(), " + maxLength + ");";
                 }
                 else if (type == "integer") {
                     in_arg  = "    int " + var + "[]";
@@ -239,8 +240,7 @@ void GenEcho::gen_unmarshal_array(Message *message, string arrayName, json j, ve
                     stmt = "        " + var + "[i] = ele[\"" + key + "\"]" + ".get<double>();";
                 }
                 else {
-                    cout << "unsupported type: " << type << endl;
-                    exit(1);
+                    throw DataException("unsupported type " + type + " for " + gen_path(path));
                 }
                 assignments.push_back(stmt);
                 in_args.push_back(in_arg);
@@ -297,8 +297,7 @@ void GenEcho::gen_unmarshal_obj(Message *message, json j, vector<string> path, v
                     out_arg = "    *" + var + " = " + var + "_cpp;";
                 }
                 else {
-                    cout << "unsupported type: " << type << endl;
-                    exit(1);
+                    throw DataException("unsupported type " + type + " for " + gen_path(path));
                 }
                 in_args.push_back(in_arg);
                 assignments.push_back(stmt);
@@ -321,16 +320,19 @@ void GenEcho::gen_unmarshal(Message *message)
 
    try {
        vector<string> path;
-       string type = get_field(schemaJson, "type", message, path);
        vector<string> assignments;
        vector<string> in_args;
        vector<string> out_args;
 
+       string type = get_field(schemaJson, "type", message, path);
        if (type == "array") {
            gen_unmarshal_array(message, "", schemaJson["items"]["properties"], path, assignments, in_args, out_args);
        }
        else if (type == "object") {
            gen_unmarshal_obj(message, schemaJson["properties"], path, assignments, in_args, out_args);
+       }
+       else {
+           throw DataException("unsupported type: " + type + " for " + message->getName());
        }
 
        string signature;
