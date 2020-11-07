@@ -334,6 +334,13 @@ public:
         return NULL;
     }
 
+    Cle *find_cle(const Message *message) const {
+        std::map<string, Cle *>::const_iterator it = cles.find(message->getCle());
+        if (it == cles.end()) {
+            return NULL;
+        }
+        return it->second;
+    }
 
     void put(const string &key, nlohmann::basic_json<> value) {
         if (!key.compare("components")) {

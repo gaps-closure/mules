@@ -10,7 +10,7 @@ public:
     GenEcho(const string& path, const string& filename, const string& header) : Gen(path, filename, header) {
     }
 
-    int generate(XdccFlow& xdccFlow);
+    int gen(XdccFlow& xdccFlow);
     int open(const XdccFlow &xdccFlow);
     int close();
 

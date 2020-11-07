@@ -29,9 +29,10 @@ protected:
     ofstream headerfile;
     std::set<string> varSet;
     int var_count;
+    set<const Message *> myMessages;
 
 public:
-    virtual int generate(XdccFlow& xdccFlow) = 0;
+    virtual int gen(XdccFlow& xdccFlow) = 0;
     virtual int open(const XdccFlow &xdccFlow) = 0;
     virtual int close() = 0;
 
@@ -54,6 +55,38 @@ public:
 
         if (!header.empty()) {
             headerfile.open(hname);
+        }
+    }
+
+    void generate(XdccFlow& xdccFlow) {
+        get_my_messages(xdccFlow);
+
+        if (myMessages.empty()) {
+            return;
+        }
+        open(xdccFlow);
+        gen(xdccFlow);
+        close();
+    }
+
+    void get_my_messages(XdccFlow& xdccFlow) {
+        myMessages.clear();
+        string enclave = config.getEnclave();
+
+        for (auto const& flow : xdccFlow.getMessages()) {
+            const Message *message = flow.second;
+            Cle *cle = xdccFlow.find_cle(message);
+            if (cle == NULL) {
+                cerr << "open: no CLE for " + flow.first;
+                continue;
+            }
+            if (cle->getLevel().empty()) {
+                cerr << "no level defined for CLE " + message->getCle();
+                continue;
+            }
+            if (!cle->getLevel().compare(enclave)) {
+                myMessages.insert(message);
+            }
         }
     }
 

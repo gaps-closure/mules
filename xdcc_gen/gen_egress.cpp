@@ -463,19 +463,14 @@ void GenEgress::gen_egress(Message *message)
    }
 }
 
-int GenEgress::generate(XdccFlow& xdccFlow)
+int GenEgress::gen(XdccFlow& xdccFlow)
 {
     string enclave = config.getEnclave();
-    for (auto const& x : xdccFlow.getMessages()) {
-        if (!is_interested(x.first, enclave))
-            continue;
-
-        Message *message = (Message *)x.second;
-
-        gen_xdcc(message);
+    for (auto const& message : myMessages) {
+        gen_xdcc((Message *)message);
         endOfFunc();
 
-        gen_egress(message);
+        gen_egress((Message *)message);
         endOfFunc();
     }
     return 0;
@@ -495,12 +490,7 @@ void GenEgress::annotations(const XdccFlow &xdccFlow)
     // generate shareables
     map<string, string> components = xdccFlow.getComponents();
     set<string> remote_enclaves;
-    for (auto const& x : xdccFlow.getMessages()) {
-        // interested only in messages flows from this enclave
-        if (!is_interested(x.first, my_enclave))
-            continue;
-
-        Message *message = (Message *) x.second;
+    for (auto const& message : myMessages) {
         // find remote enclaves the message is to be shared, to prepare to generate the SHAREABLEs
         for (auto &flow : message->getFlows()) {
             map<string, string>::iterator it = components.find(flow.getDestination());
@@ -532,11 +522,7 @@ void GenEgress::annotations(const XdccFlow &xdccFlow)
 
     // generate xdlinkages
     set<string> gened;
-    for (auto const& x : xdccFlow.getMessages()) {
-        if (!is_interested(x.first, my_enclave))
-            continue;
-
-        Message *message = (Message *) x.second;
+    for (auto const& message : myMessages) {
         std::map<string, Cle *>::iterator it = cles.find(message->getCle());
         if (it == cles.end()) {
             cout << "CLE " + message->getCle() << " not found for " << message->getName() << endl;
@@ -594,40 +580,24 @@ int GenEgress::open(const XdccFlow &xdccFlow)
 
     annotations(xdccFlow);
 
-    std::vector<string> msgs;
-    std::vector<string> locals;
-    std::vector<string> destinations;
-
-    string enclave = config.getEnclave();
-    for (auto const& x : xdccFlow.getMessages()) {
-        if (!is_interested(x.first, enclave))
-            continue;
-
-        Message *message = (Message *) x.second;
+    genfile << "/* Messages in system */" << endl;
+    genfile << "#define ALL_MSGS_LIST";
+    for (auto const& message : myMessages) {
         string msgName = message->name;
 
-        msgs.push_back(msgName);
-        locals.push_back("#define _local_" + msgName + " " + (message->isLocal() ? "1" : "0"));
-        destinations.push_back("#define _topic_" + msgName + " " + (message->isTopic() ? "1" : "0"));
-    }
-
-    genfile << "/* Messages in system */" << endl;
-
-    genfile << "#define ALL_MSGS_LIST";
-    for (std::vector<string>::iterator it = msgs.begin(); it != msgs.end(); ++it) {
-        genfile << ", \\\n    " << *it;
+        genfile << ", \\\n    " << msgName;
     }
     genfile << endl << endl;
 
     genfile << "/* _local_X is 1 if X is local, else 0 */\n";
-    for (std::vector<string>::iterator it = locals.begin(); it != locals.end(); ++it) {
-        genfile << *it << endl;
+    for (auto const& message : myMessages) {
+        genfile << "#define _local_" + message->name + " " + (message->isLocal() ? "1" : "0") << endl;
     }
     genfile << endl << endl;
 
     genfile << "/* _topic_X is 1 if X is a msg_name, else 0 */\n";
-    for (std::vector<string>::iterator it = destinations.begin(); it != destinations.end(); ++it) {
-        genfile << *it << endl;
+    for (auto const& message : myMessages) {
+        genfile << "#define _topic_" + message->name + " " + (message->isTopic() ? "1" : "0") << endl;
     }
     genfile << endl;
 

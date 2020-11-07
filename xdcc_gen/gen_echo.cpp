@@ -372,19 +372,13 @@ void GenEcho::gen_unmarshal(Message *message)
    }
 }
 
-int GenEcho::generate(XdccFlow& xdccFlow)
+int GenEcho::gen(XdccFlow& xdccFlow)
 {
-    string enclave = config.getEnclave();
-    for (auto const& x : xdccFlow.getMessages()) {
-        if (!is_interested(x.first, enclave))
-            continue;
-
-        Message *message = (Message *)x.second;
-
-        gen_echo(message);
+    for (auto const& message : myMessages) {
+        gen_echo((Message *) message);
         endOfFunc();
 
-        gen_unmarshal(message);
+        gen_unmarshal((Message *) message);
         endOfFunc();
     }
     return 0;

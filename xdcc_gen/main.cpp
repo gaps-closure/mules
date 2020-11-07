@@ -95,18 +95,12 @@ int main(int argc, char **argv)
     XdccFlow xdccFlow(config.getXdccFlow());
 
     GenEgress genEgress(config.getEgressDir(), "egress_xdcc.c", "");
-    genEgress.open(xdccFlow);
     genEgress.generate(xdccFlow);
-    genEgress.close();
 
     GenEcho genEcho(config.getEchoDir(), "xdcc_echo.cpp", "xdcc_echo.h");
-    genEcho.open(xdccFlow);
     genEcho.generate(xdccFlow);
-    genEcho.close();
 
     GenEgress genIngress(config.getIngressDir(), "ingress_xdcc.c", "");
     config.setEnclave("orange");
-    genIngress.open(xdccFlow);
     genIngress.generate(xdccFlow);
-    genIngress.close();
 }
