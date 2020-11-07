@@ -489,20 +489,19 @@ void GenEgress::annotations(const XdccFlow &xdccFlow)
 
     // generate shareables
     map<string, string> components = xdccFlow.getComponents();
-    set<string> remote_enclaves;
     for (auto const& message : myMessages) {
         // find remote enclaves the message is to be shared, to prepare to generate the SHAREABLEs
         for (auto &flow : message->getFlows()) {
             map<string, string>::iterator it = components.find(flow.getDestination());
             if (it != components.end() && it->second.compare(my_enclave_u)) {
-                remote_enclaves.insert(it->second);
+                remoteEnclaves.insert(it->second);
                 shares[message->getName()] = it->second;
             }
         }
     }
 
     map<string, Cle *> cles = xdccFlow.getCles();
-    for (auto const& x : remote_enclaves) {
+    for (auto const& x : remoteEnclaves) {
         Cdf *cdf = xdccFlow.find_cle(x, my_enclave);
         if (cdf == NULL) {
             cout << "SHAREABLE: Could not find CDF for level/remote : " << x << "/" << my_enclave << endl;

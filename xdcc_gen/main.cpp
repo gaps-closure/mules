@@ -101,6 +101,12 @@ int main(int argc, char **argv)
     genEcho.generate(xdccFlow);
 
     GenEgress genIngress(config.getIngressDir(), "ingress_xdcc.c", "");
-    config.setEnclave("orange");
-    genIngress.generate(xdccFlow);
+    set<string> remote_enclaves = genEgress.getRemoteEnclaves();
+    for (auto e : remote_enclaves) { // TODO: this will only work if there is just one remote enclave
+        string enclave = e;
+        boost::to_lower(enclave);
+
+        config.setEnclave(enclave);
+        genIngress.generate(xdccFlow);
+    }
 }

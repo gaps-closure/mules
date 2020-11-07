@@ -9,6 +9,7 @@ class GenEgress : public Gen
 {
 private:
     map<string, string> shares;
+    set<string> remoteEnclaves;
 
 public:
     GenEgress(const string& path, const string& filename, const string& header) : Gen(path, filename, header) {
@@ -17,6 +18,10 @@ public:
     int gen(XdccFlow& xdccFlow);
     int open(const XdccFlow &xdccFlow);
     int close();
+
+    set<string> & getRemoteEnclaves() {
+        return remoteEnclaves;
+    }
 
 protected:
     void annotations(const XdccFlow &xdccFlow);

@@ -90,13 +90,6 @@ public:
         }
     }
 
-    bool is_interested(string message_key, string enclave) {
-        string upper_enclave = enclave;
-        boost::to_upper(upper_enclave);
-
-        return endsWith(message_key, upper_enclave);
-    }
-
     void endOfFunc() {
         varSet.clear();
         var_count = 1;
