@@ -82,12 +82,6 @@ public:
         }
     }
 
-    void gen_path(vector<string> &path, string &indices) {
-        for (std::vector<string>::iterator it = path.begin(); it != path.end(); ++it) {
-            indices += "[\"" + *it + "\"]";
-        }
-    }
-
     string gen_path(vector<string> &path) {
         string pathStr;
         for (std::vector<string>::iterator it = path.begin(); it != path.end(); ++it) {
@@ -98,14 +92,12 @@ public:
     }
 
     void gen_leaf(vector<string> path, string leaf, vector<string> &assignments, bool isString) {
-       string val;
-
        string left = isString ? "string(" : "";
        string right = isString ? ")" : "";
 
-       gen_path(path, val);
+       ;
 
-       string assign = "    js" + val + " = " + left + leaf + right + ";";
+       string assign = "    js" + gen_path(path) + " = " + left + leaf + right + ";";
 
        assignments.push_back(assign);
     }
@@ -115,6 +107,9 @@ public:
             string err = "missing '" + field + "' field in schema of " + message->getName() + gen_path(path);
             throw DataException(err);
         }
-        return to_string(js[field]);
+        string val = to_string(js[field]);
+        findAndReplaceAll(val, "\"", "");
+
+        return val;
     }
 };

@@ -16,14 +16,14 @@ public:
 
 private:
     void gen_echo(Message *message);
-    void gen_echo_obj(json j, vector<string> path, vector<string> &assignments,
+    void gen_echo_obj(Message *message, json j, vector<string> path, vector<string> &assignments,
                         vector<string> &in_args, vector<string> &out_args);
-    void gen_echo_array(string arrayName, json j, vector<string> path, vector<string> &assignments,
+    void gen_echo_array(Message *message, string arrayName, json j, vector<string> path, vector<string> &assignments,
                           vector<string> &in_args, vector<string> &out_args);
 
-    void gen_unmarshal_array(string arrayName, json j, vector<string> path,
+    void gen_unmarshal_array(Message *message, string arrayName, json j, vector<string> path,
             vector<string> &assignments, vector<string> &in_args, vector<string> &out_args);
-    void gen_unmarshal_obj(json j, vector<string> path, vector<string> &assignments,
+    void gen_unmarshal_obj(Message *message, json j, vector<string> path, vector<string> &assignments,
             vector<string> &in_args, vector<string> &out_args);
     void gen_unmarshal(Message *message);
 };

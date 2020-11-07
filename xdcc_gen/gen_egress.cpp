@@ -93,7 +93,7 @@ void GenEgress::gen_xdcc_array(Message *message, json j, vector<string> path, ve
         path.push_back(key);
 
         try {
-            string type = val["type"];
+            string type = get_field(val, "type", message, path);
             if (type == "array") {
                 gen_xdcc_array(message, val["items"]["properties"], path, assignments, in_args, out_args);
             }
@@ -105,8 +105,6 @@ void GenEgress::gen_xdcc_array(Message *message, json j, vector<string> path, ve
                 string arg;
                 string out_arg = var;
 
-                int maxLength = val["maxLength"].get<int>();
-
                 if (type == "string") {
                     arg = "const char *" + var + "[]";
 
@@ -116,7 +114,6 @@ void GenEgress::gen_xdcc_array(Message *message, json j, vector<string> path, ve
                     assignments.push_back("        memcpy(" + var + "_cpp[j], " + var + "[j], " + maxLength + ");\n");
 
                     out_arg = var + "_cpp";
-
                 }
                 else if (type == "integer") {
                     arg = "int " + var + "[]";
@@ -125,8 +122,7 @@ void GenEgress::gen_xdcc_array(Message *message, json j, vector<string> path, ve
                     arg = "double " + var + "[]";
                 }
                 else {
-                    cout << "unsupported type: " << type << endl;
-                    exit(1);
+                    throw DataException("unsupported type " + type + " for " + gen_path(path));
                 }
                 in_args.push_back(arg);
                 out_args.push_back(out_arg);
@@ -155,7 +151,7 @@ void GenEgress::gen_xdcc_obj(Message *message, json j, vector<string> path, vect
             string var(key);
             gen_var(var);
 
-            string type = val["type"];
+            string type = get_field(val, "type", message, path);
             if (type == "array") {
                 gen_xdcc_array(message, val["items"]["properties"], path, assignments, in_args, out_args);
             }
@@ -186,8 +182,7 @@ void GenEgress::gen_xdcc_obj(Message *message, json j, vector<string> path, vect
                     arg = "double " + var;
                 }
                 else {
-                    cout << "unsupported type: " << type << endl;
-                    exit(1);
+                    throw DataException("unsupported type " + type + " for " + gen_path(path));
                 }
                 in_args.push_back(arg);
                 out_args.push_back(out_arg);
@@ -208,56 +203,63 @@ void GenEgress::gen_xdcc(Message *message)
    json schemaJson;
    schemaStream >> schemaJson;
 
-   vector<string> path;
+   try {
+       vector<string> path;
+       string type = get_field(schemaJson, "type", message, path);
+       vector<string> assignments;
+       vector<string> in_args;
+       vector<string> out_args;
 
-   string type = schemaJson["type"];
-   vector<string> assignments;
-   vector<string> in_args;
-   vector<string> out_args;
-
-   if (type == "array") {
-      gen_xdcc_array(message, schemaJson["items"]["properties"], path, assignments, in_args, out_args);
-   }
-   else if (type == "object") {
-      gen_xdcc_obj(message, schemaJson["properties"], path, assignments, in_args, out_args);
-   }
-
-   string upper_topic = topic;
-   boost::to_upper(upper_topic);
-   genfile << "#pragma cle begin XDLINKAGE_ECHO_" << upper_topic << endl
-           << "int echo_" << topic << "(";
-
-   bool first = true;
-   for (std::vector<string>::iterator it = in_args.begin(); it != in_args.end(); ++it) {
-       if (!first) {
-           genfile << ",";
+       if (type == "array") {
+           gen_xdcc_array(message, schemaJson["items"]["properties"], path, assignments, in_args, out_args);
+       }
+       else if (type == "object") {
+           gen_xdcc_obj(message, schemaJson["properties"], path, assignments, in_args, out_args);
        }
        else {
-           first = false;
+           throw DataException("unsupported type: " + type + " for " + message->getName());
        }
-       genfile << "\n    " << *it;
-   }
-   genfile << endl
-           << ")" << endl
-           << "#pragma cle end XDLINKAGE_ECHO_" << upper_topic << endl
-           << "{" << endl;
 
-   for (std::vector<string>::iterator it = assignments.begin(); it != assignments.end(); ++it) {
-       genfile << *it << endl;
-   }
+       string upper_topic = topic;
+       boost::to_upper(upper_topic);
+       genfile << "#pragma cle begin XDLINKAGE_ECHO_" << upper_topic << endl
+               << "int echo_" << topic << "(";
 
-   genfile << "    echo_" + topic + "_cpp(\n"
-           << "        amq(),\n"
-           << "        _topic_" + topic;
-   for (std::vector<string>::iterator it = out_args.begin(); it != out_args.end(); ++it) {
-       genfile << ",";
-       genfile << "\n        " << *it;
-   }
-   genfile << "\n    );\n";
+       bool first = true;
+       for (std::vector<string>::iterator it = in_args.begin(); it != in_args.end(); ++it) {
+           if (!first) {
+               genfile << ",";
+           }
+           else {
+               first = false;
+           }
+           genfile << "\n    " << *it;
+       }
+       genfile << endl
+               << ")" << endl
+               << "#pragma cle end XDLINKAGE_ECHO_" << upper_topic << endl
+               << "{" << endl;
 
-   genfile << "    return 0;" << endl
-           << "}" << endl
-           << endl;
+       for (std::vector<string>::iterator it = assignments.begin(); it != assignments.end(); ++it) {
+           genfile << *it << endl;
+       }
+
+       genfile << "    echo_" + topic + "_cpp(\n"
+               << "        amq(),\n"
+               << "        _topic_" + topic;
+       for (std::vector<string>::iterator it = out_args.begin(); it != out_args.end(); ++it) {
+           genfile << ",";
+           genfile << "\n        " << *it;
+       }
+       genfile << "\n    );\n";
+
+       genfile << "    return 0;" << endl
+               << "}" << endl
+               << endl;
+   }
+   catch (DataException e) {
+       e.print();
+   }
 }
 
 /******************************
@@ -272,9 +274,6 @@ void GenEgress::gen_egress_array(Message *message, json j, vector<string> path,
 
     assignments.push_back("    int " + countVar + " = 1; // TODO: get json array length");
 
-    string indices;
-    gen_path(path, indices);
-
     int i = 0;
     for (auto& el : j.items()) {
         string key = el.key();
@@ -285,7 +284,7 @@ void GenEgress::gen_egress_array(Message *message, json j, vector<string> path,
 
         path.push_back(key);
         try {
-            string type = val["type"];
+            string type = get_field(val, "type", message, path);
             if (type == "array") {
                 gen_egress_array(message, val["items"]["properties"], path, assignments, in_args, out_args);
             }
@@ -342,7 +341,7 @@ void GenEgress::gen_egress_obj(Message *message, json j, vector<string> path, ve
             string var(key);
             gen_var(var);
 
-            string type = val["type"];
+            string type = get_field(val, "type", message, path);
             if (type == "array") {
                 gen_egress_array(message, val["items"]["properties"], path,
                         assignments, in_args, out_args);
@@ -355,9 +354,6 @@ void GenEgress::gen_egress_obj(Message *message, json j, vector<string> path, ve
                 string in_arg;
                 string stmt;
                 string out_arg;
-
-                string indices;
-                gen_path(path, indices);
 
                 if (type == "string") {
                     string maxLength = get_field(val, "maxLength", message, path);
@@ -399,68 +395,75 @@ void GenEgress::gen_egress(Message *message)
    json schemaJson;
    schemaStream >> schemaJson;
 
-   vector<string> path;
+   try {
+       vector<string> path;
+       string type = get_field(schemaJson, "type", message, path);
+       vector<string> assignments;
+       vector<string> in_args;
+       vector<string> out_args;
 
-   string type = schemaJson["type"];
-   vector<string> assignments;
-   vector<string> in_args;
-   vector<string> out_args;
+       if (type == "array") {
+           gen_egress_array(message, schemaJson["items"]["properties"], path, assignments, in_args, out_args);
+       }
+       else if (type == "object") {
+           gen_egress_obj(message, schemaJson["properties"], path, assignments, in_args, out_args);
+       }
+       else {
+           throw DataException("Unsupported type: " + type);
+       }
 
-   if (type == "array") {
-      gen_egress_array(message, schemaJson["items"]["properties"], path, assignments, in_args, out_args);
-   }
-   else if (type == "object") {
-      gen_egress_obj(message, schemaJson["properties"], path, assignments, in_args, out_args);
-   }
+       genfile << "int egress_" + topic + "(const char *jstr)" << endl
+               << "{" << endl
+               << "    int fromRemote;" << endl;
 
-   genfile << "int egress_" + topic + "(const char *jstr)" << endl
-           << "{" << endl
-           << "    int fromRemote;" << endl;
+       string share = "";
+       map<string, string>::iterator it = shares.find(topic);
+       if (it != shares.end()) {
+           share = it->second;
+       }
+       if (!share.empty()) {
+           genfile << "#pragma cle def begin " + share + "_SHAREABLE" << endl;
+       }
+       for (std::vector<string>::iterator it = assignments.begin(); it != assignments.end(); ++it) {
+           genfile << *it << endl;
+       }
+       if (!share.empty()) {
+           genfile << "#pragma cle def end " + share + "_SHAREABLE" << endl;
+       }
 
-   string share = "";
-   map<string, string>::iterator it = shares.find(topic);
-   if (it != shares.end()) {
-       share = it->second;
-   }
-   if (!share.empty()) {
-       genfile << "#pragma cle def begin " + share + "_SHAREABLE" << endl;
-   }
-   for (std::vector<string>::iterator it = assignments.begin(); it != assignments.end(); ++it) {
-       genfile << *it << endl;
-   }
-   if (!share.empty()) {
-       genfile << "#pragma cle def end " + share + "_SHAREABLE" << endl;
-   }
+       genfile << endl
+               << "    if (_local_" + topic + ")" << endl
+               << "        return;" << endl
+               << endl;
 
-   genfile << endl
-           << "    if (_local_" + topic + ")" << endl
-           << "        return;" << endl
-           << endl;
+       genfile << "    unmarshal_" + topic + "(" << endl
+               << "        jstr," << endl
+               << "        &fromRemote";
+       for (std::vector<string>::iterator it = in_args.begin(); it != in_args.end(); ++it) {
+           genfile << ",\n" << *it;
+       }
+       genfile << endl
+               << "    );" << endl;
 
-   genfile << "    unmarshal_" + topic + "(" << endl
-           << "        jstr," << endl
-           << "        &fromRemote";
-   for (std::vector<string>::iterator it = in_args.begin(); it != in_args.end(); ++it) {
-       genfile << ",\n" << *it;
+       genfile << "    if (fromRemote == 0)" << endl
+               << "        echo_" + topic + "(" << endl;
+       bool first = true;
+       for (std::vector<string>::iterator it = out_args.begin(); it != out_args.end(); ++it) {
+           if (!first)
+               genfile << ",\n";
+           genfile << *it;
+           first = false;
+       }
+       genfile << endl
+               << "        );" << endl;
+
+       genfile << "    return 0;" << endl
+               << "}" << endl
+               << endl;
    }
-   genfile << endl
-           << "    );" << endl;
-
-   genfile << "    if (fromRemote == 0)" << endl
-           << "        echo_" + topic + "(" << endl;
-   bool first = true;
-   for (std::vector<string>::iterator it = out_args.begin(); it != out_args.end(); ++it) {
-       if (!first)
-           genfile << ",\n";
-       genfile << *it;
-       first = false;
+   catch (DataException e) {
+       e.print();
    }
-   genfile << endl
-           << "        );" << endl;
-
-   genfile << "    return 0;" << endl
-           << "}" << endl
-           << endl;
 }
 
 int GenEgress::generate(XdccFlow& xdccFlow)

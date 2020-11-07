@@ -16,19 +16,19 @@ using json = nlohmann::json;
 
 #include "util.h"
 #include "gen_echo.h"
+#include "XdccException.h"
 
 /******************************
  * echo
  */
-void GenEcho::gen_echo_array(string arrayName, json j, vector<string> path, vector<string> &assignments,
+void GenEcho::gen_echo_array(Message *message, string arrayName, json j, vector<string> path, vector<string> &assignments,
                       vector<string> &in_args, vector<string> &out_args)
 {
     string count = "count_" + arrayName;
     in_args.push_back("    int " + count);
     out_args.push_back(count);
 
-    string indices;
-    gen_path(path, indices);
+    string indices = gen_path(path);
 
     assignments.push_back("\n    for (int i = 0; i < " + count + "; i++) {");
     assignments.push_back("        json ele = js" + indices + "[i];\n");
@@ -43,36 +43,41 @@ void GenEcho::gen_echo_array(string arrayName, json j, vector<string> path, vect
 
         path.push_back(key);
 
-        string stmt = "        ele[\"" + key + "\"] = " + var + "[i];";
+        try {
+            string stmt = "        ele[\"" + key + "\"] = " + var + "[i];";
 
-        string type = val["type"];
-        if (type == "array") {
-            gen_echo_array(key, val["items"]["properties"], path, assignments, in_args, out_args);
-        }
-        else if (type == "object") {
-            gen_echo_obj(j["properties"], path, assignments, in_args, out_args);
-        }
-        else {
-            string arg, out_arg = var;
-            if (type == "string") {
-                arg = "    const char *" + var + "[]";
-                out_arg = var + "_";
-                stmt = "        ele[\"" + key + "\"] = string(" + var + "[i]);";
+            string type = get_field(val, "type", message, path);
+            if (type == "array") {
+                gen_echo_array(message, key, val["items"]["properties"], path, assignments, in_args, out_args);
             }
-            else if (type == "integer") {
-                arg = "    int " + var + "[]";
-
-            }
-            else if (type == "number") {
-                arg = "    double " + var + "[]";
+            else if (type == "object") {
+                gen_echo_obj(message, j["properties"], path, assignments, in_args, out_args);
             }
             else {
-                cout << "unsupported type: " << type << endl;
-                exit(1);
+                string arg, out_arg = var;
+                if (type == "string") {
+                    arg = "    const char *" + var + "[]";
+                    out_arg = var + "_";
+                    stmt = "        ele[\"" + key + "\"] = string(" + var + "[i]);";
+                }
+                else if (type == "integer") {
+                    arg = "    int " + var + "[]";
+
+                }
+                else if (type == "number") {
+                    arg = "    double " + var + "[]";
+                }
+                else {
+                    cout << "unsupported type: " << type << endl;
+                    exit(1);
+                }
+                in_args.push_back(arg);
+                out_args.push_back(out_arg);
+                assignments.push_back(stmt);
             }
-            in_args.push_back(arg);
-            out_args.push_back(out_arg);
-            assignments.push_back(stmt);
+        }
+        catch (DataException e) {
+            e.print();
         }
         path.pop_back();
     }
@@ -80,7 +85,7 @@ void GenEcho::gen_echo_array(string arrayName, json j, vector<string> path, vect
     assignments.push_back("    }\n");
 }
 
-void GenEcho::gen_echo_obj(json j, vector<string> path, vector<string> &assignments,
+void GenEcho::gen_echo_obj(Message *message, json j, vector<string> path, vector<string> &assignments,
                     vector<string> &in_args, vector<string> &out_args)
 {
     for (auto& el : j.items()) {
@@ -88,38 +93,42 @@ void GenEcho::gen_echo_obj(json j, vector<string> path, vector<string> &assignme
         json val = el.value();
 
         path.push_back(key);
+        try {
+            string var(key);
+            gen_var(var);
 
-        string var(key);
-        gen_var(var);
-
-        string type = val["type"];
-        if (type == "array") {
-            gen_echo_array(key, val["items"]["properties"], path, assignments, in_args, out_args);
-        }
-        else if (type == "object") {
-            gen_echo_obj(val["properties"], path, assignments, in_args, out_args);
-        }
-        else {
-            string arg;
-            string out_arg;
-            bool isString = false;
-            if (type == "string") {
-                arg = "    const char *" + var;
-                isString = true;
+            string type = get_field(val, "type", message, path);
+            if (type == "array") {
+                gen_echo_array(message, key, val["items"]["properties"], path, assignments, in_args, out_args);
             }
-            else if (type == "integer") {
-                arg = "    int " + var;
-            }
-            else if (type == "number") {
-                arg = "    double " + var;
+            else if (type == "object") {
+                gen_echo_obj(message, val["properties"], path, assignments, in_args, out_args);
             }
             else {
-                cout << "unsupported type: " << type << endl;
-                exit(1);
-            }
-            in_args.push_back(arg);
+                string arg;
+                string out_arg;
+                bool isString = false;
+                if (type == "string") {
+                    arg = "    const char *" + var;
+                    isString = true;
+                }
+                else if (type == "integer") {
+                    arg = "    int " + var;
+                }
+                else if (type == "number") {
+                    arg = "    double " + var;
+                }
+                else {
+                    cout << "unsupported type: " << type << endl;
+                    exit(1);
+                }
+                in_args.push_back(arg);
 
-            gen_leaf(path, var, assignments, isString);
+                gen_leaf(path, var, assignments, isString);
+            }
+        }
+        catch (DataException e) {
+            e.print();
         }
         path.pop_back();
     }
@@ -133,61 +142,64 @@ void GenEcho::gen_echo(Message *message)
    json schemaJson;
    schemaStream >> schemaJson;
 
-   vector<string> path;
+   try {
+       vector<string> path;
+       string type = get_field(schemaJson, "type", message, path);
+       vector<string> assignments;
+       vector<string> in_args;
+       vector<string> out_args;
 
-   string type = schemaJson["type"];
-   vector<string> assignments;
-   vector<string> in_args;
-   vector<string> out_args;
+       if (type == "array") {
+           gen_echo_array(message, "", schemaJson["items"]["properties"], path, assignments, in_args, out_args);
+       }
+       else if (type == "object") {
+           gen_echo_obj(message, schemaJson["properties"], path, assignments, in_args, out_args);
+       }
 
-   if (type == "array") {
-      gen_echo_array("", schemaJson["items"]["properties"], path, assignments, in_args, out_args);
+       string signature;
+       signature = "void echo_" + topic + "_cpp(\n"
+               + "    amqlib_t *__amqlib,\n"
+               + "    bool __is_topic";
+
+       for (std::vector<string>::iterator it = in_args.begin(); it != in_args.end(); ++it) {
+           signature += ",\n" + *it;
+       }
+
+       headerfile << signature
+               << ");" << endl;
+
+       genfile << signature
+               << "\n)" << endl
+               << "{" << endl
+               << "    json js;" << endl
+               << "    js[\"fromRemote\"] = 1;" << endl;
+
+       for (std::vector<string>::iterator it = assignments.begin(); it != assignments.end(); ++it) {
+           genfile << *it << endl;
+       }
+
+       genfile << endl
+               << "    AMQManager *amq = static_cast<AMQManager *>(__amqlib->obj);" << endl
+               << "    amq->publish(\"" + topic + "\", js.dump(), __is_topic == 0 ? false : true);" << endl
+               << "}" << endl
+               << endl;
    }
-   else if (type == "object") {
-      gen_echo_obj(schemaJson["properties"], path, assignments, in_args, out_args);
+   catch (DataException e) {
+       e.print();
    }
-
-   string signature;
-   signature = "void echo_" + topic + "_cpp(\n"
-             + "    amqlib_t *__amqlib,\n"
-             + "    bool __is_topic";
-
-   for (std::vector<string>::iterator it = in_args.begin(); it != in_args.end(); ++it) {
-       signature += ",\n" + *it;
-   }
-
-   headerfile << signature
-              << ");" << endl;
-
-   genfile << signature
-           << "\n)" << endl
-           << "{" << endl
-           << "    json js;" << endl
-           << "    js[\"fromRemote\"] = 1;" << endl;
-
-   for (std::vector<string>::iterator it = assignments.begin(); it != assignments.end(); ++it) {
-      genfile << *it << endl;
-   }
-
-   genfile << endl
-           << "    AMQManager *amq = static_cast<AMQManager *>(__amqlib->obj);" << endl
-           << "    amq->publish(\"" + topic + "\", js.dump(), __is_topic == 0 ? false : true);" << endl
-           << "}" << endl
-           << endl;
 }
 
 /******************************
  * unmarshaling
  */
-void GenEcho::gen_unmarshal_array(string arrayName, json j, vector<string> path,
+void GenEcho::gen_unmarshal_array(Message *message, string arrayName, json j, vector<string> path,
         vector<string> &assignments, vector<string> &in_args, vector<string> &out_args)
 {
     string countVar = "count";
     gen_var(countVar);
     in_args.push_back("    int " + countVar);
 
-    string indices;
-    gen_path(path, indices);
+    string indices = gen_path(path);
 
     assignments.push_back("\n    for (int i = 0; i < " + countVar +"; i++) {");
     assignments.push_back("        json ele = js" + indices + "[i];");
@@ -199,97 +211,103 @@ void GenEcho::gen_unmarshal_array(string arrayName, json j, vector<string> path,
         string var(key);
         gen_var(var);
 
-        //string var = vars[i++];
-
         path.push_back(key);
-
-        string type = val["type"];
-        if (type == "array") {
-            gen_unmarshal_array(key, val["items"]["properties"], path, assignments, in_args, out_args);
-        }
-        else if (type == "object") {
-            gen_unmarshal_obj(val["properties"], path, assignments, in_args, out_args);
-        }
-        else {
-            string in_arg;
-            string stmt;
-            string out_arg;
-
-            if (type == "string") {
-                string maxLength = to_string(val["maxLength"]);
-                in_arg  = "    char * " + var + "[]";
-                stmt    = "        strncpy(" + var + "[i], ele[\"" + key + "\"]" + ".get<string>().c_str(), " + maxLength + ");";
+        try {
+            string type = get_field(val, "type", message, path);
+            if (type == "array") {
+                gen_unmarshal_array(message, key, val["items"]["properties"], path, assignments, in_args, out_args);
             }
-            else if (type == "integer") {
-                in_arg  = "    int " + var + "[]";
-                stmt = "        " + var + "[i] = ele[\"" + key + "\"]" + ".get<int>();";
-            }
-            else if (type == "number") {
-                in_arg  = "    double " + var + "[]";
-                stmt = "        " + var + "[i] = ele[\"" + key + "\"]" + ".get<double>();";
+            else if (type == "object") {
+                gen_unmarshal_obj(message, val["properties"], path, assignments, in_args, out_args);
             }
             else {
-                cout << "unsupported type: " << type << endl;
-                exit(1);
+                string in_arg;
+                string stmt;
+                string out_arg;
+
+                if (type == "string") {
+                    string maxLength = to_string(val["maxLength"]);
+                    in_arg  = "    char * " + var + "[]";
+                    stmt    = "        strncpy(" + var + "[i], ele[\"" + key + "\"]" + ".get<string>().c_str(), " + maxLength + ");";
+                }
+                else if (type == "integer") {
+                    in_arg  = "    int " + var + "[]";
+                    stmt = "        " + var + "[i] = ele[\"" + key + "\"]" + ".get<int>();";
+                }
+                else if (type == "number") {
+                    in_arg  = "    double " + var + "[]";
+                    stmt = "        " + var + "[i] = ele[\"" + key + "\"]" + ".get<double>();";
+                }
+                else {
+                    cout << "unsupported type: " << type << endl;
+                    exit(1);
+                }
+                assignments.push_back(stmt);
+                in_args.push_back(in_arg);
             }
-            assignments.push_back(stmt);
-            in_args.push_back(in_arg);
+        }
+        catch (DataException e) {
+            e.print();
         }
         path.pop_back();
     }
     assignments.push_back("    }");
 }
 
-void GenEcho::gen_unmarshal_obj(json j, vector<string> path, vector<string> &assignments, vector<string> &in_args, vector<string> &out_args)
+void GenEcho::gen_unmarshal_obj(Message *message, json j, vector<string> path, vector<string> &assignments,
+        vector<string> &in_args, vector<string> &out_args)
 {
     for (auto& el : j.items()) {
         string key = el.key();
         json val = el.value();
 
         path.push_back(key);
+        try {
+            string var(key);
+            gen_var(var);
 
-        string var(key);
-        gen_var(var);
-
-        string type = val["type"];
-        if (type == "array") {
-            gen_unmarshal_array(key, val["items"]["properties"], path, assignments, in_args, out_args);
-        }
-        else if (type == "object") {
-            gen_unmarshal_obj(val["properties"], path, assignments, in_args, out_args);
-        }
-        else {
-            string in_arg;
-            string stmt;
-            string out_arg;
-
-            string indices;
-            gen_path(path, indices);
-
-            if (type == "string") {
-                in_arg  = "    char *" + var;
-                stmt    = "    string " + var + "_cpp = js" +  indices + ".get<string>();";
-                string maxLength = to_string(val["maxLength"]);
-                out_arg = "    strncpy(" + var + ", " + var + "_cpp.c_str(), " + maxLength + ");";
+            string type = get_field(val, "type", message, path);
+            if (type == "array") {
+                gen_unmarshal_array(message, key, val["items"]["properties"], path, assignments, in_args, out_args);
             }
-            else if (type == "integer") {
-                in_arg  = "    int *" + var;
-                stmt    = "    int " + var + "_cpp = js" + indices + ".get<int>();";
-                out_arg = "    *" + var + " = " + var + "_cpp;";
-            }
-            else if (type == "number") {
-                in_arg  = "    double *" + var;
-                stmt    = "    double " + var + "_cpp = js" + indices + ".get<double>();";
-                out_arg = "    *" + var + " = " + var + "_cpp;";
+            else if (type == "object") {
+                gen_unmarshal_obj(message, val["properties"], path, assignments, in_args, out_args);
             }
             else {
-                cout << "unsupported type: " << type << endl;
-                exit(1);
-            }
-            in_args.push_back(in_arg);
-            assignments.push_back(stmt);
-            out_args.push_back(out_arg);
+                string in_arg;
+                string stmt;
+                string out_arg;
 
+                string indices = gen_path(path);
+
+                if (type == "string") {
+                    in_arg  = "    char *" + var;
+                    stmt    = "    string " + var + "_cpp = js" +  indices + ".get<string>();";
+                    string maxLength = to_string(val["maxLength"]);
+                    out_arg = "    strncpy(" + var + ", " + var + "_cpp.c_str(), " + maxLength + ");";
+                }
+                else if (type == "integer") {
+                    in_arg  = "    int *" + var;
+                    stmt    = "    int " + var + "_cpp = js" + indices + ".get<int>();";
+                    out_arg = "    *" + var + " = " + var + "_cpp;";
+                }
+                else if (type == "number") {
+                    in_arg  = "    double *" + var;
+                    stmt    = "    double " + var + "_cpp = js" + indices + ".get<double>();";
+                    out_arg = "    *" + var + " = " + var + "_cpp;";
+                }
+                else {
+                    cout << "unsupported type: " << type << endl;
+                    exit(1);
+                }
+                in_args.push_back(in_arg);
+                assignments.push_back(stmt);
+                out_args.push_back(out_arg);
+
+            }
+        }
+        catch (DataException e) {
+            e.print();
         }
         path.pop_back();
     }
@@ -301,51 +319,55 @@ void GenEcho::gen_unmarshal(Message *message)
    json schemaJson;
    schemaStream >> schemaJson;
 
-   vector<string> path;
+   try {
+       vector<string> path;
+       string type = get_field(schemaJson, "type", message, path);
+       vector<string> assignments;
+       vector<string> in_args;
+       vector<string> out_args;
 
-   string type = schemaJson["type"];
-   vector<string> assignments;
-   vector<string> in_args;
-   vector<string> out_args;
+       if (type == "array") {
+           gen_unmarshal_array(message, "", schemaJson["items"]["properties"], path, assignments, in_args, out_args);
+       }
+       else if (type == "object") {
+           gen_unmarshal_obj(message, schemaJson["properties"], path, assignments, in_args, out_args);
+       }
 
-   if (type == "array") {
-      gen_unmarshal_array("", schemaJson["items"]["properties"], path, assignments, in_args, out_args);
+       string signature;
+       signature = "void unmarshal_" + message->getName() + "(\n"
+               + "    const char *jstr,\n"
+               + "    int *fromRemote";
+
+       for (std::vector<string>::iterator it = in_args.begin(); it != in_args.end(); ++it) {
+           signature += ",\n" + *it;
+       }
+
+       headerfile << signature
+               << ");" << endl;
+
+       genfile << signature << endl
+               << ")" << endl
+               << "{" << endl
+               << "    json js = json::parse(jstr);" << endl
+               << "    int fromRemote_cpp = js.contains(\"fromRemote\") ? js[\"fromRemote\"].get<int>() : 0;" << endl
+               << endl;
+
+       for (std::vector<string>::iterator it = assignments.begin(); it != assignments.end(); ++it) {
+           genfile << *it << endl;
+       }
+
+       genfile << endl
+               << "    *fromRemote = fromRemote_cpp;" << endl;
+       for (std::vector<string>::iterator it = out_args.begin(); it != out_args.end(); ++it) {
+           genfile << *it << endl;
+       }
+
+       genfile << "}" << endl
+               << endl;
    }
-   else if (type == "object") {
-      gen_unmarshal_obj(schemaJson["properties"], path, assignments, in_args, out_args);
+   catch (DataException e) {
+       e.print();
    }
-
-   string signature;
-   signature = "void unmarshal_" + message->getName() + "(\n"
-             + "    const char *jstr,\n"
-             + "    int *fromRemote";
-
-   for (std::vector<string>::iterator it = in_args.begin(); it != in_args.end(); ++it) {
-       signature += ",\n" + *it;
-   }
-
-   headerfile << signature
-              << ");" << endl;
-
-   genfile << signature << endl
-           << ")" << endl
-           << "{" << endl
-           << "    json js = json::parse(jstr);" << endl
-           << "    int fromRemote_cpp = js.contains(\"fromRemote\") ? js[\"fromRemote\"].get<int>() : 0;" << endl
-           << endl;
-
-   for (std::vector<string>::iterator it = assignments.begin(); it != assignments.end(); ++it) {
-       genfile << *it << endl;
-   }
-
-   genfile << endl
-           << "    *fromRemote = fromRemote_cpp;" << endl;
-   for (std::vector<string>::iterator it = out_args.begin(); it != out_args.end(); ++it) {
-       genfile << *it << endl;
-   }
-
-   genfile << "}" << endl
-           << endl;
 }
 
 int GenEcho::generate(XdccFlow& xdccFlow)
