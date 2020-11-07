@@ -21,15 +21,15 @@ public:
 protected:
     void annotations(const XdccFlow &xdccFlow);
 
-    void gen_egress(Message *def);
-    void gen_egress_array(string arrayName, json j, vector<string> path,
+    void gen_egress(Message *message);
+    void gen_egress_array(Message *message, json j, vector<string> path,
                           vector<string> &assignments, vector<string> &in_args, vector<string> &out_args);
-    void gen_egress_obj(json j, vector<string> path, vector<string> &assignments,
+    void gen_egress_obj(Message *message, json j, vector<string> path, vector<string> &assignments,
             vector<string> &in_args, vector<string> &out_args);
 
-    void gen_xdcc(Message *def);
-    void gen_xdcc_array(string arrayName, json j, vector<string> path, vector<string> &assignments,
+    void gen_xdcc(Message *message);
+    void gen_xdcc_array(Message *message, json j, vector<string> path, vector<string> &assignments,
                         vector<string> &in_args, vector<string> &out_args);
-    void gen_xdcc_obj(json j, vector<string> path, vector<string> &assignments,
+    void gen_xdcc_obj(Message *message, json j, vector<string> path, vector<string> &assignments,
                       vector<string> &in_args, vector<string> &out_args);
 };

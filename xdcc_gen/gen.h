@@ -14,6 +14,7 @@
 #include "Config.h"
 #include "XdccFlow.h"
 #include "util.h"
+#include "XdccException.h"
 
 namespace fs = boost::filesystem;
 
@@ -87,6 +88,15 @@ public:
         }
     }
 
+    string gen_path(vector<string> &path) {
+        string pathStr;
+        for (std::vector<string>::iterator it = path.begin(); it != path.end(); ++it) {
+            pathStr += "[\"" + *it + "\"]";
+        }
+
+        return pathStr;
+    }
+
     void gen_leaf(vector<string> path, string leaf, vector<string> &assignments, bool isString) {
        string val;
 
@@ -98,5 +108,13 @@ public:
        string assign = "    js" + val + " = " + left + leaf + right + ";";
 
        assignments.push_back(assign);
+    }
+
+    string get_field(json js, string field, Message *message, vector<string> path) {
+        if (js.find(field) == js.end()) {
+            string err = "missing '" + field + "' field in schema of " + message->getName() + gen_path(path);
+            throw DataException(err);
+        }
+        return to_string(js[field]);
     }
 };

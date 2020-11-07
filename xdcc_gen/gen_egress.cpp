@@ -18,6 +18,7 @@ using json = nlohmann::json;
 #include "util.h"
 #include "gen_egress.h"
 #include "Config.h"
+#include "XdccException.h"
 
 extern Config config;
 Cdf badCdf;
@@ -74,7 +75,7 @@ void to_json(json& j, Cle& p)
 /******************************
  * XDCC
  */
-void GenEgress::gen_xdcc_array(string arrayName, json j, vector<string> path, vector<string> &assignments,
+void GenEgress::gen_xdcc_array(Message *message, json j, vector<string> path, vector<string> &assignments,
                       vector<string> &in_args, vector<string> &out_args)
 {
     string countVar = "count";
@@ -91,51 +92,57 @@ void GenEgress::gen_xdcc_array(string arrayName, json j, vector<string> path, ve
 
         path.push_back(key);
 
-        string type = val["type"];
-        if (type == "array") {
-            gen_xdcc_array(key, val["items"]["properties"], path, assignments, in_args, out_args);
-        }
-        else if (type == "object") {
-            gen_xdcc_obj(j["properties"], path, assignments, in_args, out_args);
-        }
-        else {
-            string stmt;
-            string arg;
-            string out_arg = var;
-
-            int maxLength = val["maxLength"].get<int>();
-
-            if (type == "string") {
-                arg = "const char *" + var + "[]";
-
-                string maxLength = to_string(val["maxLength"]);
-                assignments.push_back("    char " + var + "_cpp[" + countVar + "][" + maxLength + "];");
-                assignments.push_back("    for (int j = 0; j < " + countVar + "; j++)");
-                assignments.push_back("        memcpy(" + var + "_cpp[j], " + var + "[j], " + maxLength + ");\n");
-
-                out_arg = var + "_cpp";
-
+        try {
+            string type = val["type"];
+            if (type == "array") {
+                gen_xdcc_array(message, val["items"]["properties"], path, assignments, in_args, out_args);
             }
-            else if (type == "integer") {
-                arg = "int " + var + "[]";
-            }
-            else if (type == "number") {
-                arg = "double " + var + "[]";
+            else if (type == "object") {
+                gen_xdcc_obj(message, j["properties"], path, assignments, in_args, out_args);
             }
             else {
-                cout << "unsupported type: " << type << endl;
-                exit(1);
+                string stmt;
+                string arg;
+                string out_arg = var;
+
+                int maxLength = val["maxLength"].get<int>();
+
+                if (type == "string") {
+                    arg = "const char *" + var + "[]";
+
+                    string maxLength = get_field(val, "maxLength", message, path);
+                    assignments.push_back("    char " + var + "_cpp[" + countVar + "][" + maxLength + "];");
+                    assignments.push_back("    for (int j = 0; j < " + countVar + "; j++)");
+                    assignments.push_back("        memcpy(" + var + "_cpp[j], " + var + "[j], " + maxLength + ");\n");
+
+                    out_arg = var + "_cpp";
+
+                }
+                else if (type == "integer") {
+                    arg = "int " + var + "[]";
+                }
+                else if (type == "number") {
+                    arg = "double " + var + "[]";
+                }
+                else {
+                    cout << "unsupported type: " << type << endl;
+                    exit(1);
+                }
+                in_args.push_back(arg);
+                out_args.push_back(out_arg);
             }
-            in_args.push_back(arg);
-            out_args.push_back(out_arg);
         }
+        catch (DataException e) {
+            e.print();
+        }
+
         path.pop_back();
         var_count -= inc;
         varSet.erase(key);
     }
 }
 
-void GenEgress::gen_xdcc_obj(json j, vector<string> path, vector<string> &assignments,
+void GenEgress::gen_xdcc_obj(Message *message, json j, vector<string> path, vector<string> &assignments,
                     vector<string> &in_args, vector<string> &out_args)
 {
     for (auto& el : j.items()) {
@@ -144,45 +151,50 @@ void GenEgress::gen_xdcc_obj(json j, vector<string> path, vector<string> &assign
 
         path.push_back(key);
 
-        string var(key);
-        gen_var(var);
+        try {
+            string var(key);
+            gen_var(var);
 
-        string type = val["type"];
-        if (type == "array") {
-            gen_xdcc_array(key, val["items"]["properties"], path, assignments, in_args, out_args);
-        }
-        else if (type == "object") {
-            gen_xdcc_obj(val["properties"], path, assignments, in_args, out_args);
-        }
-        else {
-            string arg;
-            string out_arg = var;
-            string stmt;
-            if (type == "string") {
-                arg = "const char *" + var;
-
-                string maxLength =  to_string(val["maxLength"]);
-
-                stmt = "    char " + var + "_cpp[" + maxLength + "];";
-                assignments.push_back(stmt);
-
-                stmt = "    memcpy(" + var + "_cpp, " + var + ", " + maxLength + ");\n";
-                assignments.push_back(stmt);
-
-                out_arg = var + "_cpp";
+            string type = val["type"];
+            if (type == "array") {
+                gen_xdcc_array(message, val["items"]["properties"], path, assignments, in_args, out_args);
             }
-            else if (type == "integer") {
-                arg = "int " + var;
-            }
-            else if (type == "number") {
-                arg = "double " + var;
+            else if (type == "object") {
+                gen_xdcc_obj(message, val["properties"], path, assignments, in_args, out_args);
             }
             else {
-                cout << "unsupported type: " << type << endl;
-                exit(1);
+                string arg;
+                string out_arg = var;
+                string stmt;
+                if (type == "string") {
+                    arg = "const char *" + var;
+
+                    string maxLength = get_field(val, "maxLength", message, path);
+
+                    stmt = "    char " + var + "_cpp[" + maxLength + "];";
+                    assignments.push_back(stmt);
+
+                    stmt = "    memcpy(" + var + "_cpp, " + var + ", " + maxLength + ");\n";
+                    assignments.push_back(stmt);
+
+                    out_arg = var + "_cpp";
+                }
+                else if (type == "integer") {
+                    arg = "int " + var;
+                }
+                else if (type == "number") {
+                    arg = "double " + var;
+                }
+                else {
+                    cout << "unsupported type: " << type << endl;
+                    exit(1);
+                }
+                in_args.push_back(arg);
+                out_args.push_back(out_arg);
             }
-            in_args.push_back(arg);
-            out_args.push_back(out_arg);
+        }
+        catch (DataException e) {
+            e.print();
         }
         path.pop_back();
     }
@@ -204,10 +216,10 @@ void GenEgress::gen_xdcc(Message *message)
    vector<string> out_args;
 
    if (type == "array") {
-      gen_xdcc_array("", schemaJson["items"]["properties"], path, assignments, in_args, out_args);
+      gen_xdcc_array(message, schemaJson["items"]["properties"], path, assignments, in_args, out_args);
    }
    else if (type == "object") {
-      gen_xdcc_obj(schemaJson["properties"], path, assignments, in_args, out_args);
+      gen_xdcc_obj(message, schemaJson["properties"], path, assignments, in_args, out_args);
    }
 
    string upper_topic = topic;
@@ -251,7 +263,7 @@ void GenEgress::gen_xdcc(Message *message)
 /******************************
  * egress
  */
-void GenEgress::gen_egress_array(string arrayName, json j, vector<string> path,
+void GenEgress::gen_egress_array(Message *message, json j, vector<string> path,
         vector<string> &assignments, vector<string> &in_args, vector<string> &out_args)
 {
     string countVar = "count";
@@ -272,49 +284,53 @@ void GenEgress::gen_egress_array(string arrayName, json j, vector<string> path,
         gen_var(var);
 
         path.push_back(key);
-
-        string type = val["type"];
-        if (type == "array") {
-            gen_egress_array(key, val["items"]["properties"], path, assignments, in_args, out_args);
-        }
-        else if (type == "object") {
-            gen_egress_obj(val["properties"], path, assignments, in_args, out_args);
-        }
-        else {
-            string in_arg;
-            string stmt;
-            string out_arg;
-
-            if (type == "string") {
-                string maxLength =  to_string(val["maxLength"]);
-
-                stmt    = "    char " + var + "[" + countVar + "][" + maxLength + "];";
-                in_arg  = "        " + var;
-                out_arg = "            " + var;
+        try {
+            string type = val["type"];
+            if (type == "array") {
+                gen_egress_array(message, val["items"]["properties"], path, assignments, in_args, out_args);
             }
-            else if (type == "integer") {
-                stmt    = "    int " + var + "[" + countVar + "];";
-                in_arg  = "        " + var;
-                out_arg = "            " + var;
-            }
-            else if (type == "number") {
-                stmt    = "    double " + var + "[" + countVar + "];";
-                in_arg  = "        " + var;
-                out_arg = "            " + var;
+            else if (type == "object") {
+                gen_egress_obj(message, val["properties"], path, assignments, in_args, out_args);
             }
             else {
-                cout << "unsupported type: " << type << endl;
-                exit(1);
+                string in_arg;
+                string stmt;
+                string out_arg;
+
+                if (type == "string") {
+                    string maxLength = get_field(val, "maxLength", message, path);
+
+                    stmt    = "    char " + var + "[" + countVar + "][" + maxLength + "];";
+                    in_arg  = "        " + var;
+                    out_arg = "            " + var;
+                }
+                else if (type == "integer") {
+                    stmt    = "    int " + var + "[" + countVar + "];";
+                    in_arg  = "        " + var;
+                    out_arg = "            " + var;
+                }
+                else if (type == "number") {
+                    stmt    = "    double " + var + "[" + countVar + "];";
+                    in_arg  = "        " + var;
+                    out_arg = "            " + var;
+                }
+                else {
+                    cout << "unsupported type: " << type << endl;
+                    exit(1);
+                }
+                in_args.push_back(in_arg);
+                assignments.push_back(stmt);
+                out_args.push_back(out_arg);
             }
-            in_args.push_back(in_arg);
-            assignments.push_back(stmt);
-            out_args.push_back(out_arg);
+        }
+        catch (DataException e) {
+            e.print();
         }
         path.pop_back();
     }
 }
 
-void GenEgress::gen_egress_obj(json j, vector<string> path, vector<string> &assignments,
+void GenEgress::gen_egress_obj(Message *message, json j, vector<string> path, vector<string> &assignments,
         vector<string> &in_args, vector<string> &out_args)
 {
     for (auto& el : j.items()) {
@@ -322,49 +338,54 @@ void GenEgress::gen_egress_obj(json j, vector<string> path, vector<string> &assi
         json val = el.value();
 
         path.push_back(key);
+        try {
+            string var(key);
+            gen_var(var);
 
-        string var(key);
-        gen_var(var);
-
-        string type = val["type"];
-        if (type == "array") {
-            gen_egress_array(key, val["items"]["properties"], path, assignments, in_args, out_args);
-        }
-        else if (type == "object") {
-            gen_egress_obj(val["properties"], path, assignments, in_args, out_args);
-        }
-        else {
-            string in_arg;
-            string stmt;
-            string out_arg;
-
-            string indices;
-            gen_path(path, indices);
-
-            if (type == "string") {
-                string maxLength = to_string(val["maxLength"]);
-                stmt    = "    char " + var + "[" + maxLength + "];";
-                in_arg  = "        " + var;
-                out_arg = "            " + var;
+            string type = val["type"];
+            if (type == "array") {
+                gen_egress_array(message, val["items"]["properties"], path,
+                        assignments, in_args, out_args);
             }
-            else if (type == "integer") {
-                stmt    = "    int " + var + ";";
-                in_arg  = "        &" + var;
-                out_arg = "            " + var;
-            }
-            else if (type == "number") {
-                stmt    = "    double " + var + ";";
-                in_arg  = "        &" + var;
-                out_arg = "            " + var;
+            else if (type == "object") {
+                gen_egress_obj(message, val["properties"], path, assignments,
+                        in_args, out_args);
             }
             else {
-                cout << "unsupported type: " << type << endl;
-                exit(1);
-            }
-            in_args.push_back(in_arg);
-            assignments.push_back(stmt);
-            out_args.push_back(out_arg);
+                string in_arg;
+                string stmt;
+                string out_arg;
 
+                string indices;
+                gen_path(path, indices);
+
+                if (type == "string") {
+                    string maxLength = get_field(val, "maxLength", message, path);
+                    stmt = "    char " + var + "[" + maxLength + "];";
+                    in_arg = "        " + var;
+                    out_arg = "            " + var;
+                }
+                else if (type == "integer") {
+                    stmt = "    int " + var + ";";
+                    in_arg = "        &" + var;
+                    out_arg = "            " + var;
+                }
+                else if (type == "number") {
+                    stmt = "    double " + var + ";";
+                    in_arg = "        &" + var;
+                    out_arg = "            " + var;
+                }
+                else {
+                    cout << "unsupported type: " << type << endl;
+                    exit(1);
+                }
+                in_args.push_back(in_arg);
+                assignments.push_back(stmt);
+                out_args.push_back(out_arg);
+            }
+        }
+        catch (DataException e) {
+            e.print();
         }
         path.pop_back();
     }
@@ -386,10 +407,10 @@ void GenEgress::gen_egress(Message *message)
    vector<string> out_args;
 
    if (type == "array") {
-      gen_egress_array("", schemaJson["items"]["properties"], path, assignments, in_args, out_args);
+      gen_egress_array(message, schemaJson["items"]["properties"], path, assignments, in_args, out_args);
    }
    else if (type == "object") {
-      gen_egress_obj(schemaJson["properties"], path, assignments, in_args, out_args);
+      gen_egress_obj(message, schemaJson["properties"], path, assignments, in_args, out_args);
    }
 
    genfile << "int egress_" + topic + "(const char *jstr)" << endl
