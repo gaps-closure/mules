@@ -8,7 +8,7 @@ void gen_xdcc(string topic, string filename);
 class GenEgress : public Gen
 {
 private:
-    map<string, string> shares;
+    map<string, string> shares;   // from message names to enclave names
     set<string> remoteEnclaves;
 
 public:

@@ -69,27 +69,6 @@ public:
         close();
     }
 
-    void get_my_messages(XdccFlow& xdccFlow) {
-        myMessages.clear();
-        string enclave = config.getEnclave();
-
-        for (auto const& flow : xdccFlow.getMessages()) {
-            const Message *message = flow.second;
-            Cle *cle = xdccFlow.find_cle(message);
-            if (cle == NULL) {
-                cerr << "open: no CLE for " + flow.first;
-                continue;
-            }
-            if (cle->getLevel().empty()) {
-                cerr << "no level defined for CLE " + message->getCle();
-                continue;
-            }
-            if (!cle->getLevel().compare(enclave)) {
-                myMessages.insert(message);
-            }
-        }
-    }
-
     void endOfFunc() {
         varSet.clear();
         var_count = 1;
@@ -121,8 +100,6 @@ public:
        string left = isString ? "string(" : "";
        string right = isString ? ")" : "";
 
-       ;
-
        string assign = "    js" + gen_path(path) + " = " + left + leaf + right + ";";
 
        assignments.push_back(assign);
@@ -142,5 +119,45 @@ public:
         }
 
         return val;
+    }
+
+private:
+
+    void get_my_messages(XdccFlow& xdccFlow) {
+        myMessages.clear();
+        string enclave = config.getEnclave();
+
+        map<string, string> components = xdccFlow.getComponents();
+
+        for (auto const& msg_map : xdccFlow.getMessages()) {
+            Message *message = msg_map.second;
+
+            Cle *cle = xdccFlow.find_cle(message);
+            if (cle == NULL) {
+                cerr << __FUNCTION__ << ": no CLE for " << msg_map.first;
+                continue;
+            }
+            if (cle->getLevel().empty()) {
+                cerr << __FUNCTION__ << ": no level defined for CLE " << message->getCle();
+                continue;
+            }
+            if (!cle->getLevel().compare(enclave)) {
+                myMessages.insert(message);
+            }
+
+            bool local = true;
+            for (auto &flow : message->getFlows()) {
+                map<string, string>::iterator it = components.find(flow.getDestination());
+                if (it != components.end()) {
+                    string dst_enclave = it->second;
+                    boost::to_lower(dst_enclave);
+
+                    if (dst_enclave.compare(enclave)) {
+                        local = false;
+                    }
+                }
+            }
+            message->setLocal(local);
+        }
     }
 };

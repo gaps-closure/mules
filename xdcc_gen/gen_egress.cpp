@@ -413,19 +413,15 @@ void GenEgress::gen_egress(Message *message)
                << "{" << endl
                << "    int fromRemote;" << endl;
 
-       string share = "";
-       map<string, string>::iterator it = shares.find(msg_name);
-       if (it != shares.end()) {
-           share = it->second;
-       }
-       if (!share.empty()) {
-           genfile << "#pragma cle def begin " + share + "_SHAREABLE" << endl;
+       map<string, string>::iterator share_it = shares.find(msg_name);
+       if (share_it != shares.end()) {
+           genfile << "#pragma cle def begin " + share_it->second + "_SHAREABLE" << endl;
        }
        for (std::vector<string>::iterator it = assignments.begin(); it != assignments.end(); ++it) {
            genfile << *it << endl;
        }
-       if (!share.empty()) {
-           genfile << "#pragma cle def end " + share + "_SHAREABLE" << endl;
+       if (share_it != shares.end()) {
+           genfile << "#pragma cle def end " + share_it->second + "_SHAREABLE" << endl;
        }
 
        genfile << endl
@@ -495,7 +491,7 @@ void GenEgress::annotations(const XdccFlow &xdccFlow)
             map<string, string>::iterator it = components.find(flow.getDestination());
             if (it != components.end() && it->second.compare(my_enclave_u)) {
                 remoteEnclaves.insert(it->second);
-                shares[message->getName()] = it->second;
+                shares[message->getName()] = it->second;  // e.g. ORANGE or PURPLE
             }
         }
     }
@@ -611,12 +607,21 @@ int GenEgress::close()
       << "{" << endl
       ;
 
+   set<string> gened;
    for (auto const& x : shares) {
+       if (gened.find(x.second) != gened.end()) {
+           continue;
+       }
+       gened.insert(x.second);
        genfile << "#pragma cle def begin " + x.second + "_SHAREABLE" << endl;
    }
-
    genfile << "    int i = 100;" << endl;
+   gened.clear();
    for (auto const& x : shares) {
+       if (gened.find(x.second) != gened.end()) {
+           continue;
+       }
+       gened.insert(x.second);
        genfile << "#pragma cle end begin " + x.second + "_SHAREABLE" << endl;
    }
 

@@ -107,6 +107,10 @@ public:
     bool isTopic() const {
         return topic;
     }
+
+    void setLocal(bool local) {
+        this->local = local;
+    }
 };
 
 class GuardDirective
@@ -312,7 +316,24 @@ public:
         jStream >> js;
 
         for (auto& el : js.items()) {
-            put(el.key(), el.value());
+            string key = el.key();
+            nlohmann::basic_json<> value = el.value();
+
+            if (!key.compare("components")) {
+                for (auto& el : value.items()) {
+                    components[el.key()] = el.value().get<string>();
+                }
+            }
+            else if (!key.compare("messages")) {
+                for (auto& el : value.items()) {
+                    messages[el.key()] = new Message(el.value());
+                }
+            }
+            else if (!key.compare("cles")) {
+                for (auto& el : value.items()) {
+                    cles[el.key()] = new Cle(el.value());
+                }
+            }
         }
     }
 
@@ -340,24 +361,6 @@ public:
             return NULL;
         }
         return it->second;
-    }
-
-    void put(const string &key, nlohmann::basic_json<> value) {
-        if (!key.compare("components")) {
-            for (auto& el : value.items()) {
-                components[el.key()] = el.value().get<string>();
-            }
-        }
-        else if (!key.compare("messages")) {
-            for (auto& el : value.items()) {
-                messages[el.key()] = new Message(el.value());
-            }
-        }
-        else if (!key.compare("cles")) {
-            for (auto& el : value.items()) {
-                cles[el.key()] = new Cle(el.value());
-            }
-        }
     }
 
     map<string, Cle*> getCles() const {

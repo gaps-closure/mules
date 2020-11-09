@@ -91,9 +91,32 @@
             ],
             "schema": "schema/component_heartbeats.schema",
             "cle": "COMPONENT_HEARTBEATS_PURPLE",
-            "local": false,
             "topic": true
-        }
+        },
+        "pnt_ORANGE": {
+            "name": "pnt",
+            "comment": "optional comment",
+            "flows": [
+                {
+                    "source": "MPX",
+                    "destination": "EOIR"
+                },
+                {
+                    "source": "MPX",
+                    "destination": "ISRM"
+                },
+                {
+                    "source": "MPX",
+                    "destination": "MPU"
+                },
+                {
+                    "source": "MPX",
+                    "destination": "RDR"
+                }
+            ],
+            "schema": "schema/pnt.schema",
+            "cle": "PNT_ORANGE"
+        }        
     },
     "schemas":{
         "schema_heartbeats":{
@@ -132,6 +155,16 @@
                     "argtaints": [["TAG_REQUEST_ECHO_COMPONENT_HEARTBEATS"]],
                     "codtaints": ["PURPLE"],
                     "rettaints": []
+                }
+            ]
+        },
+        "PNT_ORANGE":{
+            "level": "orange",
+            "cdf": [
+                {
+                    "remotelevel": "purple",
+                    "direction": "egress",
+                    "guarddirective":{ "operation": "allow"}
                 }
             ]
         }
