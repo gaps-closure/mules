@@ -116,7 +116,107 @@
             ],
             "schema": "schema/pnt.schema",
             "cle": "PNT_ORANGE"
-        }        
+        },
+        "pnt_PURPLE": {
+            "name": "pnt",
+            "comment": "optional comment",
+            "flows": [
+            ],
+            "schema": "schema/pnt.schema",
+            "cle": "PNT_PURPLE"
+        },
+        "requestISRMDetections_ORANGE": {
+            "name": "requestISRMDetections",
+            "comment": "optional comment",
+            "flows": [
+                {
+                    "source": "MPX",
+                    "destination": "ISRM"
+                }
+            ],
+            "schema": "schema/requestISRMDetections.schema",
+            "cle": "REQUESTISRMDETECTION_ORANGE"
+        },
+        "requestISRMDetections_PURPLE": {
+            "name": "requestISRMDetections",
+            "comment": "optional comment",
+            "flows": [
+            ],
+            "schema": "schema/requestISRMDetections.schema",
+            "cle": "REQUESTISRMDETECTION_PURPLE"
+        },
+        "groundMovers_ORANGE": {
+            "name": "groundMovers",
+            "comment": "optional comment",
+            "flows": [
+                {
+                    "source": "ISRM",
+                    "destination": "EOIR"
+                }
+            ],
+            "schema": "schema/groundMovers.schema",
+            "cle": "GROUNDMOVERS_ORANGE"
+        },
+        "groundMovers_PURPLE": {
+            "name": "groundMovers",
+            "comment": "optional comment",
+            "flows": [
+            ],
+            "schema": "schema/groundMovers.schema",
+            "cle": "GROUNDMOVERS_PURPLE"
+        },
+        "recieveISRMDetections_ORANGE": {
+            "name": "recieveISRMDetections",
+            "comment": "optional comment",
+            "flows": [
+                {
+                    "source": "ISRM",
+                    "destination": "MPX"
+                }
+            ],
+            "schema": "schema/recieveISRMDetections.schema",
+            "cle": "RECEIVEISRMDECTION_ORANGE"
+        },
+        "recieveISRMDetections_PURPLE": {
+            "name": "recieveISRMDetections",
+            "comment": "optional comment",
+            "flows": [
+            ],
+            "schema": "schema/recieveISRMDetections.schema",
+            "cle": "RECEIVEISRMDECTION_PURPLE"
+        },
+        "updateMissionPlan_ORANGE": {
+            "name": "updateMissionPlan",
+            "comment": "optional comment",
+            "flows": [
+                {
+                    "source": "MPU",
+                    "destination": "EOIR"
+                },
+                {
+                    "source": "MPU",
+                    "destination": "ISRM"
+                },
+                {
+                    "source": "MPU",
+                    "destination": "MPX"
+                },
+                {
+                    "source": "MPU",
+                    "destination": "RDR"
+                }
+            ],
+            "schema": "schema/updateMissionPlan.schema",
+            "cle": "UPDATEMISSIONPLAN_ORANGE"
+        },
+        "updateMissionPlan_PURPLE": {
+            "name": "updateMissionPlan",
+            "comment": "optional comment",
+            "flows": [
+            ],
+            "schema": "schema/updateMissionPlan.schema",
+            "cle": "UPDATEMISSIONPLAN_PURPLE"
+        }          
     },
     "schemas":{
         "schema_heartbeats":{
@@ -163,6 +263,96 @@
             "cdf": [
                 {
                     "remotelevel": "purple",
+                    "direction": "egress",
+                    "guarddirective":{ "operation": "allow"}
+                }
+            ]
+        },
+        "PNT_PURPLE":{
+            "level": "purple",
+            "cdf": [
+                {
+                    "remotelevel": "orange",
+                    "direction": "egress",
+                    "guarddirective":{ "operation": "allow"}
+                }
+            ]
+        },
+        "REQUESTISRMDETECTION_ORANGE":{
+            "level": "orange",
+            "cdf": [
+                {
+                    "remotelevel": "purple",
+                    "direction": "egress",
+                    "guarddirective":{ "operation": "allow"}
+                }
+            ]
+        },
+        "REQUESTISRMDETECTION_PURPLE":{
+            "level": "purple",
+            "cdf": [
+                {
+                    "remotelevel": "orange",
+                    "direction": "egress",
+                    "guarddirective":{ "operation": "allow"}
+                }
+            ]
+        },
+        "GROUNDMOVERS_ORANGE":{
+            "level": "orange",
+            "cdf": [
+                {
+                    "remotelevel": "purple",
+                    "direction": "egress",
+                    "guarddirective":{ "operation": "allow"}
+                }
+            ]
+        },
+        "GROUNDMOVERS_PURPLE":{
+            "level": "purple",
+            "cdf": [
+                {
+                    "remotelevel": "orange",
+                    "direction": "egress",
+                    "guarddirective":{ "operation": "allow"}
+                }
+            ]
+        },
+        "RECEIVEISRMDECTION_ORANGE":{
+            "level": "orange",
+            "cdf": [
+                {
+                    "remotelevel": "purple",
+                    "direction": "egress",
+                    "guarddirective":{ "operation": "allow"}
+                }
+            ]
+        },
+        "RECEIVEISRMDECTION_PURPLE":{
+            "level": "purple",
+            "cdf": [
+                {
+                    "remotelevel": "orange",
+                    "direction": "egress",
+                    "guarddirective":{ "operation": "allow"}
+                }
+            ]
+        },
+        "UPDATEMISSIONPLAN_ORANGE":{
+            "level": "orange",
+            "cdf": [
+                {
+                    "remotelevel": "purple",
+                    "direction": "egress",
+                    "guarddirective":{ "operation": "allow"}
+                }
+            ]
+        },
+        "UPDATEMISSIONPLAN_PURPLE":{
+            "level": "purple",
+            "cdf": [
+                {
+                    "remotelevel": "orange",
                     "direction": "egress",
                     "guarddirective":{ "operation": "allow"}
                 }

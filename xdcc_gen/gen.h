@@ -144,6 +144,9 @@ private:
             if (!cle->getLevel().compare(enclave)) {
                 myMessages.insert(message);
             }
+            else {
+                continue;
+            }
 
             bool local = true;
             for (auto &flow : message->getFlows()) {
@@ -151,13 +154,15 @@ private:
                 if (it != components.end()) {
                     string dst_enclave = it->second;
                     boost::to_lower(dst_enclave);
-
                     if (dst_enclave.compare(enclave)) {
                         local = false;
                     }
+                    cout << enclave << " -> " << dst_enclave  << " " << local << endl;
                 }
             }
             message->setLocal(local);
+            cout << msg_map.first << " " << message->isLocal() << " "  << enclave << endl << endl;
         }
+        cout << "XXXXXXXXXXXX " << endl;
     }
 };
