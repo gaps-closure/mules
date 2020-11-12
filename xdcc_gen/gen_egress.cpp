@@ -126,7 +126,7 @@ void GenEgress::gen_xdcc_array(Message *message, json j, vector<string> path, ve
                 out_args.push_back(out_arg);
             }
         }
-        catch (DataException e) {
+        catch (DataException &e) {
             e.print();
         }
 
@@ -185,7 +185,7 @@ void GenEgress::gen_xdcc_obj(Message *message, json j, vector<string> path, vect
                 out_args.push_back(out_arg);
             }
         }
-        catch (DataException e) {
+        catch (DataException &e) {
             e.print();
         }
         path.pop_back();
@@ -254,7 +254,7 @@ void GenEgress::gen_xdcc(Message *message)
                << "}" << endl
                << endl;
    }
-   catch (DataException e) {
+   catch (DataException &e) {
        e.print();
    }
 }
@@ -319,7 +319,7 @@ void GenEgress::gen_egress_array(Message *message, json j, vector<string> path,
                 out_args.push_back(out_arg);
             }
         }
-        catch (DataException e) {
+        catch (DataException &e) {
             e.print();
         }
         path.pop_back();
@@ -377,7 +377,7 @@ void GenEgress::gen_egress_obj(Message *message, json j, vector<string> path, ve
                 out_args.push_back(out_arg);
             }
         }
-        catch (DataException e) {
+        catch (DataException &e) {
             e.print();
         }
         path.pop_back();
@@ -454,7 +454,7 @@ void GenEgress::gen_egress(Message *message)
                << "}" << endl
                << endl;
    }
-   catch (DataException e) {
+   catch (DataException &e) {
        e.print();
    }
 }

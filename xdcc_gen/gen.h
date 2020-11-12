@@ -114,7 +114,7 @@ public:
         try {
             val = js[field];
         }
-        catch (nlohmann::detail::type_error e) {
+        catch (nlohmann::detail::type_error &e) {
             val = to_string(js[field]);
         }
 
@@ -157,12 +157,11 @@ private:
                     if (dst_enclave.compare(enclave)) {
                         local = false;
                     }
-                    cout << enclave << " -> " << dst_enclave  << " " << local << endl;
+                    // cout << enclave << " -> " << dst_enclave  << " " << local << endl;
                 }
             }
             message->setLocal(local);
-            cout << msg_map.first << " " << message->isLocal() << " "  << enclave << endl << endl;
+            // cout << msg_map.first << " " << message->isLocal() << " "  << enclave << endl << endl;
         }
-        cout << "XXXXXXXXXXXX " << endl;
     }
 };

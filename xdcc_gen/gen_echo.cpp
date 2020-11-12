@@ -75,7 +75,7 @@ void GenEcho::gen_echo_array(Message *message, string arrayName, json j, vector<
                 assignments.push_back(stmt);
             }
         }
-        catch (DataException e) {
+        catch (DataException &e) {
             e.print();
         }
         path.pop_back();
@@ -124,7 +124,7 @@ void GenEcho::gen_echo_obj(Message *message, json j, vector<string> path, vector
                 gen_leaf(path, var, assignments, isString);
             }
         }
-        catch (DataException e) {
+        catch (DataException &e) {
             e.print();
         }
         path.pop_back();
@@ -184,7 +184,7 @@ void GenEcho::gen_echo(Message *message)
                << "}" << endl
                << endl;
    }
-   catch (DataException e) {
+   catch (DataException &e) {
        e.print();
    }
 }
@@ -246,7 +246,7 @@ void GenEcho::gen_unmarshal_array(Message *message, string arrayName, json j, ve
                 in_args.push_back(in_arg);
             }
         }
-        catch (DataException e) {
+        catch (DataException &e) {
             e.print();
         }
         path.pop_back();
@@ -305,7 +305,7 @@ void GenEcho::gen_unmarshal_obj(Message *message, json j, vector<string> path, v
 
             }
         }
-        catch (DataException e) {
+        catch (DataException &e) {
             e.print();
         }
         path.pop_back();
@@ -367,7 +367,7 @@ void GenEcho::gen_unmarshal(Message *message)
        genfile << "}" << endl
                << endl;
    }
-   catch (DataException e) {
+   catch (DataException &e) {
        e.print();
    }
 }
