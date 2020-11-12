@@ -3,49 +3,55 @@
     "$id": "https://example.com/gaps-closure-xdcc/xdcc_flow.json",
     
     "components":{
-        "MPU": "ORANGE",
-        "EOIR": "ORANGE",
-        "ISRM": "ORANGE",
-        "MPX": "ORANGE",
-        "RDR": "PURPLE"
+        "MPU": "ORANGE_MPU",
+        "EOIR": "ORANGE_EOIR",
+        "ISRM": "GREEN_ISRM",
+        "MPX": "ORANGE_MPX",
+        "RDR": "ORANGE_RDR"
     },
     "messages":{
         "component_heartbeats_ORANGE": {
             "name": "component_heartbeats",
+            "schema": "schema_heartbeats",
+            "cle": "COMPONENT_HEARTBEATS_ORANGE",
             "comment": "optional comment",
             "flows": [
                 {
+                    "id": 1003,
                     "source": "MPU",
                     "destination": "EOIR"
                 },
                 {
+                    "id": 1002,
                     "source": "MPU",
                     "destination": "ISRM"
                 },
                 {
+                    "id": 1001,
                     "source": "MPU",
                     "destination": "MPX"
                 },
                 {
+                    "id": 1004,
                     "source": "MPU",
                     "destination": "RDR"
                 },
-                
+            
                 {
-                    "source": "ISRM",
+                    "source": "RDR",
                     "destination": "MPU"
                 },
                 {
-                    "source": "ISRM",
+                    "source": "RDR",
                     "destination": "EOIR"
                 },
                 {
-                    "source": "ISRM",
-                    "destination": "MPX"
+                    "source": "RDR",
+                    "destination": "ISRM"
                 },
                 {
-                    "source": "ISRM",
-                    "destination": "RDR"
+                    "source": "RDR",
+                    "destination": "MPX"
                 },
                 
                 {
@@ -64,166 +70,186 @@
                     "source": "MPX",
                     "destination": "RDR"
                 }
-            ],
-            "schema": "schema/component_heartbeats.schema",
-            "cle": "COMPONENT_HEARTBEATS_ORANGE"
+            ]
         },
-        "component_heartbeats_PURPLE": {
+        "component_heartbeats_GREEN": {
             "name": "component_heartbeats",
+            "schema": "schema_heartbeat",
+            "cle": "COMPONENT_HEARTBEATS_GREEN",
+            "topic": true,
             "comment": "optional comment",
             "flows": [
                 {
-                    "source": "RDR",
+                    "source": "ISRM",
                     "destination": "MPU"
                 },
                 {
-                    "source": "RDR",
+                    "source": "ISRM",
                     "destination": "EOIR"
                 },
                 {
-                    "source": "RDR",
-                    "destination": "ISRM"
+                    "source": "ISRM",
+                    "destination": "MPX"
                 },
                 {
-                    "source": "RDR",
-                    "destination": "MPX"
+                    "source": "ISRM",
+                    "destination": "RDR"
                 }
-            ],
-            "schema": "schema/component_heartbeats.schema",
-            "cle": "COMPONENT_HEARTBEATS_PURPLE",
-            "topic": true
+            ]
         },
         "pnt_ORANGE": {
             "name": "pnt",
             "comment": "optional comment",
+            "schema": "schema_pnt",
+            "cle": "PNT_ORANGE",
             "flows": [
                 {
+                    "id": 2003,
                     "source": "MPX",
                     "destination": "EOIR"
                 },
                 {
+                    "id": 2002,
                     "source": "MPX",
                     "destination": "ISRM"
                 },
                 {
+                    "id": 2001,
                     "source": "MPX",
                     "destination": "MPU"
                 },
                 {
+                    "id": 2004,
                     "source": "MPX",
                     "destination": "RDR"
                 }
-            ],
-            "schema": "schema/pnt.schema",
-            "cle": "PNT_ORANGE"
+            ]
         },
-        "pnt_PURPLE": {
+        "pnt_GREEN": {
             "name": "pnt",
-            "comment": "optional comment",
+            "schema": "schema_pnt",
+            "cle": "PNT_GREEN",
+            "comment": "No PNT flows from green",
             "flows": [
-            ],
-            "schema": "schema/pnt.schema",
-            "cle": "PNT_PURPLE"
+            ]
         },
         "requestISRMDetections_ORANGE": {
             "name": "requestISRMDetections",
             "comment": "optional comment",
+            "schema": "schema_requestISRMDetectionsn",
+            "cle": "REQUESTISRMDETECTION_ORANGE",
             "flows": [
                 {
+                    "id": 2005,
                     "source": "MPX",
                     "destination": "ISRM"
                 }
-            ],
-            "schema": "schema/requestISRMDetections.schema",
-            "cle": "REQUESTISRMDETECTION_ORANGE"
+            ]
         },
-        "requestISRMDetections_PURPLE": {
+        "requestISRMDetections_GREEN": {
             "name": "requestISRMDetections",
-            "comment": "optional comment",
+            "schema": "schema_requestISRMDetectionsn",
+            "cle": "REQUESTISRMDETECTION_GREEN",
+            "comment": "no requestISRMDections flows from green ",
             "flows": [
-            ],
-            "schema": "schema/requestISRMDetections.schema",
-            "cle": "REQUESTISRMDETECTION_PURPLE"
+            ]
         },
-        "groundMovers_ORANGE": {
+        "groundMovers_GREEN": {
             "name": "groundMovers",
+            "schema": "schema_groundMovers",
+            "cle": "GROUNDMOVERS_GREEN",
             "comment": "optional comment",
             "flows": [
                 {
                     "source": "ISRM",
                     "destination": "EOIR"
                 }
-            ],
-            "schema": "schema/groundMovers.schema",
-            "cle": "GROUNDMOVERS_ORANGE"
+            ]
         },
-        "groundMovers_PURPLE": {
+        "groundMovers_ORANGE": {
             "name": "groundMovers",
-            "comment": "optional comment",
+            "schema": "schema_groundMovers",
+            "cle": "GROUNDMOVERS_GREEN",
+            "comment": "no groundMovers flows from green",
             "flows": [
-            ],
-            "schema": "schema/groundMovers.schema",
-            "cle": "GROUNDMOVERS_PURPLE"
+            ]
         },
-        "recieveISRMDetections_ORANGE": {
-            "name": "recieveISRMDetections",
+        "receiveISRMDetections_GREEN": {
+            "name": "receiveISRMDetections",
+            "schema": "schema_receiveISRMDetectionsma",
+            "cle": "RECEIVEISRMDECTION_GREEN",
             "comment": "optional comment",
             "flows": [
                 {
+                    "id": 3003,
                     "source": "ISRM",
                     "destination": "MPX"
                 }
-            ],
-            "schema": "schema/recieveISRMDetections.schema",
-            "cle": "RECEIVEISRMDECTION_ORANGE"
+            ]
         },
-        "recieveISRMDetections_PURPLE": {
-            "name": "recieveISRMDetections",
-            "comment": "optional comment",
+        "receiveISRMDetections_ORANGE": {
+            "name": "receiveISRMDetections",
+            "schema": "schema_receiveISRMDetections",
+            "cle": "RECEIVEISRMDECTION_ORANGE",
+            "comment": "no receiveISRMDetections flows from orange",
             "flows": [
-            ],
-            "schema": "schema/recieveISRMDetections.schema",
-            "cle": "RECEIVEISRMDECTION_PURPLE"
+            ]
         },
         "updateMissionPlan_ORANGE": {
             "name": "updateMissionPlan",
+            "schema": "schema_missionPlan",
+            "cle": "UPDATEMISSIONPLAN_ORANGE",
             "comment": "optional comment",
             "flows": [
                 {
+                    "id": 1007,
                     "source": "MPU",
                     "destination": "EOIR"
                 },
                 {
+                    "id": 1006,
                     "source": "MPU",
                     "destination": "ISRM"
                 },
                 {
+                    "id": 1005,
                     "source": "MPU",
                     "destination": "MPX"
                 },
                 {
+                    "id": 1008,
                     "source": "MPU",
                     "destination": "RDR"
                 }
-            ],
-            "schema": "schema/updateMissionPlan.schema",
-            "cle": "UPDATEMISSIONPLAN_ORANGE"
+            ]
         },
-        "updateMissionPlan_PURPLE": {
+        "updateMissionPlan_GREEN": {
             "name": "updateMissionPlan",
-            "comment": "optional comment",
+            "schema": "schema_missionPlan",
+            "cle": "UPDATEMISSIONPLAN_GREEN",
+            "comment": "no updateMissionPlan flows from green",
             "flows": [
-            ],
-            "schema": "schema/updateMissionPlan.schema",
-            "cle": "UPDATEMISSIONPLAN_PURPLE"
+            ]
         }          
     },
     "schemas":{
         "schema_heartbeats":{
-            "$schema": "http://json-schema.org/draft-07/schema#"
+            "$schema": "schema/component_heartbeats.schema"
         },
         "schema_missionPlan":{
-            "$schema": "http://json-schema.org/draft-07/schema#"
+            "$schema": "schema/updateMissionPlan.schema"
+        },
+        "schema_receiveISRMDetections":{
+            "$schema": "schema/receiveISRMDetections.schema"
+        },
+        "schema_groundMovers":{
+            "$schema": "schema/groundMovers.schema"
+        },
+        "schema_requestISRMDetectionsn":{
+            "$schema": "schema/requestISRMDetections.schema"
+        },
+        "schema_pnt":{
+            "$schema": "schema/pnt.schema"
         }
     },
     "samples":{
@@ -235,25 +261,71 @@
         }
     },
     "cles":{
+        "ORANGE_MPU": {
+            "level": "orange",
+            "cdf": [
+                {
+                }
+            ]
+        },
+        "ORANGE_EOIR": {
+            "level": "orange",
+            "cdf": [
+                {
+                }
+            ]        
+        },
+        "GREEN_ISRM": {
+            "level": "green",
+            "cdf": [
+                {
+                }
+            ]        
+         },
+        "ORANGE_MPX": {
+            "level": "orange",
+            "cdf": [
+                {
+                }
+            ]        
+         },
+        "ORANGE_RDR": {
+            "level": "orange",
+            "cdf": [
+                {
+                }
+            ]        
+         },
         "COMPONENT_HEARTBEATS_ORANGE":{
             "level": "orange",
             "cdf": [
                 {
-                    "remotelevel": "purple",
-                    "direction": "egress",
-                    "guarddirective":{ "operation": "allow"}
-                }
+                    "remotelevel": "green",
+                    "direction": "ingress",
+                    "guarddirective":{ "oneway": true, "operation": "allow"},
+                    "argtaints": [["TAG_REQUEST_ECHO_COMPONENT_HEARTBEATS"]],
+                    "codtaints": ["ORANGE"],
+                    "rettaints": []
+                },
+                {
+                    "remotelevel": "orange",
+                    "direction": "ingress",
+                    "guarddirective":{ "oneway": true, "operation": "allow"},
+                    "argtaints": [["TAG_REQUEST_ECHO_COMPONENT_HEARTBEATS"]],
+                    "codtaints": ["ORANGE"],
+                    "rettaints": []
+                }                
             ]
         },
-        "COMPONENT_HEARTBEATS_PURPLE":{
-            "level": "purple",
+        "COMPONENT_HEARTBEATS_GREEN":{
+            "level": "green",
             "cdf": [
                 {
                     "remotelevel": "orange",
                     "direction": "ingress",
                     "guarddirective":{ "oneway": true, "operation": "allow"},
                     "argtaints": [["TAG_REQUEST_ECHO_COMPONENT_HEARTBEATS"]],
-                    "codtaints": ["PURPLE"],
+                    "codtaints": ["GREEN"],
                     "rettaints": []
                 }
             ]
@@ -262,19 +334,24 @@
             "level": "orange",
             "cdf": [
                 {
-                    "remotelevel": "purple",
+                    "remotelevel": "green",
                     "direction": "egress",
                     "guarddirective":{ "operation": "allow"}
-                }
-            ]
-        },
-        "PNT_PURPLE":{
-            "level": "purple",
-            "cdf": [
+                },
                 {
                     "remotelevel": "orange",
                     "direction": "egress",
                     "guarddirective":{ "operation": "allow"}
+                }                
+            ]
+        },
+        "PNT_GREEN":{
+            "level": "green",
+            "cdf": [
+                {
+                    "remotelevel": "orange",
+                    "direction": "egress",
+                    "guarddirective":{ "operation": "reject"}
                 }
             ]
         },
@@ -282,19 +359,19 @@
             "level": "orange",
             "cdf": [
                 {
-                    "remotelevel": "purple",
+                    "remotelevel": "green",
                     "direction": "egress",
                     "guarddirective":{ "operation": "allow"}
                 }
             ]
         },
-        "REQUESTISRMDETECTION_PURPLE":{
-            "level": "purple",
+        "REQUESTISRMDETECTION_GREEN":{
+            "level": "green",
             "cdf": [
                 {
                     "remotelevel": "orange",
                     "direction": "egress",
-                    "guarddirective":{ "operation": "allow"}
+                    "guarddirective":{ "operation": "reject"}
                 }
             ]
         },
@@ -302,14 +379,14 @@
             "level": "orange",
             "cdf": [
                 {
-                    "remotelevel": "purple",
+                    "remotelevel": "green",
                     "direction": "egress",
-                    "guarddirective":{ "operation": "allow"}
+                    "guarddirective":{ "operation": "reject"}
                 }
             ]
         },
-        "GROUNDMOVERS_PURPLE":{
-            "level": "purple",
+        "GROUNDMOVERS_GREEN":{
+            "level": "green",
             "cdf": [
                 {
                     "remotelevel": "orange",
@@ -322,14 +399,14 @@
             "level": "orange",
             "cdf": [
                 {
-                    "remotelevel": "purple",
+                    "remotelevel": "green",
                     "direction": "egress",
-                    "guarddirective":{ "operation": "allow"}
+                    "guarddirective":{ "operation": "reject"}
                 }
             ]
         },
-        "RECEIVEISRMDECTION_PURPLE":{
-            "level": "purple",
+        "RECEIVEISRMDECTION_GREEN":{
+            "level": "green",
             "cdf": [
                 {
                     "remotelevel": "orange",
@@ -342,19 +419,24 @@
             "level": "orange",
             "cdf": [
                 {
-                    "remotelevel": "purple",
+                    "remotelevel": "green",
                     "direction": "egress",
                     "guarddirective":{ "operation": "allow"}
-                }
-            ]
-        },
-        "UPDATEMISSIONPLAN_PURPLE":{
-            "level": "purple",
-            "cdf": [
+                },
                 {
                     "remotelevel": "orange",
                     "direction": "egress",
                     "guarddirective":{ "operation": "allow"}
+                }                
+            ]
+        },
+        "UPDATEMISSIONPLAN_GREEN":{
+            "level": "green",
+            "cdf": [
+                {
+                    "remotelevel": "orange",
+                    "direction": "egress",
+                    "guarddirective":{ "operation": "reject"}
                 }
             ]
         }
