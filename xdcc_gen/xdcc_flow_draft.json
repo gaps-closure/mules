@@ -1,1293 +1,1291 @@
 {
-	"topology": [
-		{
-			"component": "MPU",
-			"label": "MPU_CLE_LABEL",
-			"inMessages": [
-				{
-					"message": "component_heartbeats",
-					"label": "COMPONENT_HEARTBEATS_MPX",
-					"isTopic": true,
-					"fromComponent": "MPX",
-					"dataId": 2001
-				},
-				{
-					"message": "component_heartbeats",
-					"label": "COMPONENT_HEARTBEATS_ISRM",
-					"isTopic": true,
-					"fromComponent": "ISRM",
-					"dataId": 3999
-				},
-				{
-					"message": "component_heartbeats",
-					"label": "COMPONENT_HEARTBEATS_EOIR",
-					"isTopic": true,
-					"fromComponent": "EOIR",
-					"dataId": 4999
-				},
-				{
-					"message": "component_heartbeats",
-					"label": "COMPONENT_HEARTBEATS_RDR",
-					"isTopic": true,
-					"fromComponent": "RDR",
-					"dataId": 5001
-				},
-				{
-					"message": "pnt",
-					"label": "PNT_MPX",
-					"isTopic": true,
-					"fromComponent": "MPX",
-					"dataId": 2001
-				}
-			],
-			"outMessages": [
-				{
-					"message": "component_heartbeats",
-					"label": "COMPONENT_HEARTBEATS_MPU",
-					"isTopic": true,
-					"toComponent": "MPX",
-					"dataId": 1001
-				},
-				{
-					"message": "component_heartbeats",
-					"label": "COMPONENT_HEARTBEATS_MPU",
-					"isTopic": true,
-					"toComponent": "ISRM",
-					"dataId": 1002
-				},
-				{
-					"message": "component_heartbeats",
-					"label": "COMPONENT_HEARTBEATS_MPU",
-					"isTopic": true,
-					"toComponent": "EOIR",
-					"dataId": 1003
-				},
-				{
-					"message": "component_heartbeats",
-					"label": "COMPONENT_HEARTBEATS_MPU",
-					"isTopic": true,
-					"toComponent": "RDR",
-					"dataId": 1004
-				},			
-				{
-					"message": "updateMissionPlan",
-					"label": "UPDATE_MISSION_PLAN_MPU",
-					"isTopic": true,
-					"toComponent": "MPX",
-					"dataId": 1005
-				},
-				{
-					"message": "updateMissionPlan",
-					"label": "UPDATE_MISSION_PLAN_MPU",
-					"isTopic": true,
-					"toComponent": "ISRM",
-					"dataId": 1006
-				},
-				{
-					"message": "updateMissionPlan",
-					"label": "UPDATE_MISSION_PLAN_MPU",
-					"isTopic": true,
-					"toComponent": "EOIR",
-					"dataId": 1007
-				},
-				{
-					"message": "updateMissionPlan",
-					"label": "UPDATE_MISSION_PLAN_MPU",
-					"isTopic": true,
-					"toComponent": "RDR",
-					"dataId": 1008
-				},
-				{
-					"message": "status",
-					"label": "STATUS_MPU",
-					"isTopic": true,
-					"toComponent": "RDR",
-					"dataId": 1009
-				}
-			]
-		},	
-		{
-			"component": "MPX",
-			"label": "MPX_CLE_LABEL",
-			"inMessages": [
-				{
-					"message": "component_heartbeats",
-					"label": "COMPONENT_HEARTBEATS_MPU",
-					"isTopic": true,
-					"fromComponent": "MPU",
-					"dataId": 1001
-				},
-				{
-					"message": "component_heartbeats",
-					"label": "COMPONENT_HEARTBEATS_ISRM",
-					"isTopic": true,
-					"fromComponent": "ISRM",
-					"dataId": 3999
-				},
-				{
-					"message": "component_heartbeats",
-					"label": "COMPONENT_HEARTBEATS_EOIR",
-					"isTopic": true,
-					"fromComponent": "EOIR",
-					"dataId": 4999
-				},
-				{
-					"message": "component_heartbeats",
-					"label": "COMPONENT_HEARTBEATS_RDR",
-					"isTopic": true,
-					"fromComponent": "RDR",
-					"dataId": 5999
-				},
-				{
-					"message": "updateMissionPlan",
-					"label": "UPDATE_MISSION_PLAN_MPU",
-					"isTopic": true,
-					"fromComponent": "MPU",
-					"dataId": 1005
-				},
-				{
-					"message": "receiveISRMDetections",
-					"label": "COMPONENT_HEARTBEATS_ISRM",
-					"isTopic": true,
-					"fromComponent": "ISRM",
-					"dataId": 3003
-				}
-			],
-			"outMessages": [
-				{
-					"message": "component_heartbeats",
-					"label": "COMPONENT_HEARTBEATS_MPX",
-					"isTopic": true,
-					"toComponent": "MPU",
-					"dataId": 2999
-				},
-				{
-					"message": "component_heartbeats",
-					"label": "COMPONENT_HEARTBEATS_MPX",
-					"isTopic": true,
-					"toComponent": "ISRM",
-					"dataId": 2999
-				},
-				{
-					"message": "component_heartbeats",
-					"label": "COMPONENT_HEARTBEATS_MPX",
-					"isTopic": true,
-					"toComponent": "EOIR",
-					"dataId": 2999
-				},
-				{
-					"message": "component_heartbeats",
-					"label": "COMPONENT_HEARTBEATS_MPX",
-					"isTopic": true,
-					"toComponent": "RDR",
-					"dataId": 2999
-				},			
-				{
-					"message": "pnt",
-					"label": "PNT_MPX",
-					"isTopic": true,
-					"toComponent": "MPU",
-					"dataId": 2001
-				},
-				{
-					"message": "pnt",
-					"label": "PNT_MPX",
-					"isTopic": true,
-					"toComponent": "ISRM",
-					"dataId": 2002
-				},
-				{
-					"message": "pnt",
-					"label": "PNT_MPX",
-					"isTopic": true,
-					"toComponent": "EOIR",
-					"dataId": 2003
-				},
-				{
-					"message": "pnt",
-					"label": "PNT_MPX",
-					"isTopic": true,
-					"toComponent": "RDR",
-					"dataId": 2004
-				},
-				{
-					"message": "requestISRMDetection",
-					"label": "REQUEST_ISRM_DETECTION_MPX",
-					"isTopic": true,
-					"toComponent": "ISRM",
-					"dataId": 2005
-				}
-			]
-		},	
-		{
-			"component": "ISRM",
-			"label": "ISRM_CLE_LABEL",
-			"inMessages": [
-				{
-					"message": "component_heartbeats",
-					"label": "COMPONENT_HEARTBEATS_MPU",
-					"isTopic": true,
-					"fromComponent": "MPU",
-					"dataId": 1002
-				},
-				{
-					"message": "component_heartbeats",
-					"label": "COMPONENT_HEARTBEATS_MPX",
-					"isTopic": true,
-					"fromComponent": "MPX",
-					"dataId": 2999
-				},
-				{
-					"message": "component_heartbeats",
-					"label": "COMPONENT_HEARTBEATS_EOIR",
-					"isTopic": true,
-					"fromComponent": "EOIR",
-					"dataId": 4999
-				},
-				{
-					"message": "component_heartbeats",
-					"label": "COMPONENT_HEARTBEATS_RDR",
-					"isTopic": true,
-					"fromComponent": "RDR",
-					"dataId": 5999
-				},
-				{
-					"message": "updateMissionPlan",
-					"label": "UPDATE_MISSION_PLAN_MPU",
-					"isTopic": true,
-					"fromComponent": "MPU",
-					"dataId": 1006
-				},
-				{
-					"message": "pnt",
-					"label": "PNT_MPX",
-					"isTopic": true,
-					"fromComponent": "MPX",
-					"dataId": 2002
-				},
-				{
-					"message": "requestISRMDetections",
-					"label": "REQUEST_ISRM_DETECTION_MPX",
-					"isTopic": true,
-					"fromComponent": "MPX",
-					"dataId": 2005
-				},
-				{
-					"message": "receiveEOIRDetection",
-					"label": "RECEIVE_EOIR_DETECTION_EOIR",
-					"isTopic": true,
-					"fromComponent": "EOIR",
-					"dataId": 4001
-				},
-				{
-					"message": "targets",
-					"label": "TARGETS_EOIR",
-					"isTopic": true,
-					"fromComponent": "EOIR",
-					"dataId": 4002
-				},
-				{
-					"message": "detectObjects",
-					"label": "DETECT_OBJECTS_EOIR",
-					"isTopic": true,
-					"fromComponent": "EOIR",
-					"dataId": 4003
-				}
-,
-				{
-					"message": "receiveRDRDetections",
-					"label": "RECEIVE_RDR_DETECTIONS",
-					"isTopic": true,
-					"fromComponent": "RDR",
-					"dataId": 5002
-				},
-				{
-					"message": "MTI",
-					"label": "MTI_EOIR",
-					"isTopic": true,
-					"fromComponent": "RDR",
-					"dataId": 5003
-				}
-			],
-			"outMessages": [
-				{
-					"message": "component_heartbeats",
-					"label": "COMPONENT_HEARTBEATS_ISRM",
-					"isTopic": true,
-					"toComponent": "MPU",
-					"dataId": 3999
-				},
-				{
-					"message": "component_heartbeats",
-					"label": "COMPONENT_HEARTBEATS_ISRM",
-					"isTopic": true,
-					"toComponent": "MPX",
-					"dataId": 3999
-				},
-				{
-					"message": "component_heartbeats",
-					"label": "COMPONENT_HEARTBEATS_ISRM",
-					"isTopic": true,
-					"toComponent": "EOIR",
-					"dataId": 3999
-				},
-				{
-					"message": "component_heartbeats",
-					"label": "COMPONENT_HEARTBEATS_ISRM",
-					"isTopic": true,
-					"toComponent": "RDR",
-					"dataId": 3999
-				},			
-				{
-					"message": "receiveISRMDetections",
-					"label": "RECEIVE_ISRM_DETECTIONS_ISRM",
-					"isTopic": true,
-					"toComponent": "MPX",
-					"dataId": 3003
-				},
-				{
-					"message": "requestEOIRDetection",
-					"label": "REQUEST_EOIR_DETECTION_ISRM",
-					"isTopic": true,
-					"toComponent": "EOIR",
-					"dataId": 3001
-				},
-				{
-					"message": "requestRDRDetections",
-					"label": "REQUEST_RDR_DETECTIONS_ISRM",
-					"isTopic": true,
-					"toComponent": "RDR",
-					"dataId": 3002
-				}
-			]
-		},	
-		{
-			"component": "EOIR",
-			"label": "EOIR_CLE_LABEL",
-			"inMessages": [
-				{
-					"message": "component_heartbeats",
-					"label": "COMPONENT_HEARTBEATS_MPU",
-					"isTopic": true,
-					"fromComponent": "MPU",
-					"dataId": 1003
-				},
-				{
-					"message": "component_heartbeats",
-					"label": "COMPONENT_HEARTBEATS_MPX",
-					"isTopic": true,
-					"fromComponent": "MPX",
-					"dataId": 2999
-				},
-				{
-					"message": "component_heartbeats",
-					"label": "COMPONENT_HEARTBEATS_ISRM",
-					"isTopic": true,
-					"fromComponent": "ISRM",
-					"dataId": 3999
-				},
-				{
-					"message": "component_heartbeats",
-					"label": "COMPONENT_HEARTBEATS_RDR",
-					"isTopic": true,
-					"fromComponent": "RDR",
-					"dataId": 5999
-				},
-				{
-					"message": "updateMissionPlan",
-					"label": "UPDATE_MISSION_PLAN_MPU",
-					"isTopic": true,
-					"fromComponent": "MPU",
-					"dataId": 1007
-				},
-				{
-					"message": "pnt",
-					"label": "PNT_MPX",
-					"isTopic": true,
-					"fromComponent": "MPX",
-					"dataId": 2003
-				},
-				{
-					"message": "requestEOIRDetection",
-					"label": "REQUEST_EOIR_DETECTION_ISRM",
-					"isTopic": true,
-					"fromComponent": "ISRM",
-					"dataId": 3001
-				}
-			],
-			"outMessages": [
-				{
-					"message": "component_heartbeats",
-					"label": "COMPONENT_HEARTBEATS_EOIR",
-					"isTopic": true,
-					"toComponent": "MPU",
-					"dataId": 4999
-				},
-				{
-					"message": "component_heartbeats",
-					"label": "COMPONENT_HEARTBEATS_EOIR",
-					"isTopic": true,
-					"toComponent": "MPX",
-					"dataId": 4999
-				},
-				{
-					"message": "component_heartbeats",
-					"label": "COMPONENT_HEARTBEATS_EOIR",
-					"isTopic": true,
-					"toComponent": "ISRM",
-					"dataId": 4999
-				},
-				{
-					"message": "component_heartbeats",
-					"label": "COMPONENT_HEARTBEATS_EOIR",
-					"isTopic": true,
-					"toComponent": "RDR",
-					"dataId": 4999
-				},			
-				{
-					"message": "receiveEOIRDetections",
-					"label": "RECEIVE_EOIR_DETECTIONS_EOIR",
-					"isTopic": true,
-					"toComponent": "ISRM",
-					"dataId": 4001
-				},
-				{
-					"message": "targets",
-					"label": "TARGETS_EOIR",
-					"isTopic": true,
-					"toComponent": "ISRM",
-					"dataId": 4002
-				},
-				{
-					"message": "detectObjects",
-					"label": "DETECTION_OBJECTS_EOIR",
-					"isTopic": true,
-					"toComponent": "ISRM",
-					"dataId": 4003
-				}
-			]
-		},	
-		{
-			"component": "RDR",
-			"label": "RDR_CLE_LABEL",
-			"inMessages": [
-				{
-					"message": "component_heartbeats",
-					"label": "COMPONENT_HEARTBEATS_MPU",
-					"isTopic": true,
-					"fromComponent": "MPU",
-					"dataId": 1004
-				},
-				{
-					"message": "component_heartbeats",
-					"label": "COMPONENT_HEARTBEATS_MPX",
-					"isTopic": true,
-					"fromComponent": "MPX",
-					"dataId": 2999
-				},
-				{
-					"message": "component_heartbeats",
-					"label": "COMPONENT_HEARTBEATS_ISRM",
-					"isTopic": true,
-					"fromComponent": "ISRM",
-					"dataId": 3999
-				},
-				{
-					"message": "component_heartbeats",
-					"label": "COMPONENT_HEARTBEATS_EOIR",
-					"isTopic": true,
-					"fromComponent": "EOIR",
-					"dataId": 4999
-				},
-				{
-					"message": "updateMissionPlan",
-					"label": "UPDATE_MISSION_PLAN_MPU",
-					"isTopic": true,
-					"fromComponent": "MPU",
-					"dataId": 1008
-				},
-				{
-					"message": "status",
-					"label": "STATUS_MPU",
-					"isTopic": true,
-					"fromComponent": "MPU",
-					"dataId": 1009
-				},
-				{
-					"message": "pnt",
-					"label": "PNT_MPX",
-					"isTopic": true,
-					"fromComponent": "MPX",
-					"dataId": 2004
-				},
-				{
-					"message": "requestRDRDetection",
-					"label": "REQUEST_RDR_DETECTION_ISRM",
-					"isTopic": true,
-					"fromComponent": "ISRM",
-					"dataId": 3002
-				}
-			],
-			"outMessages": [
-				{
-					"message": "component_heartbeats",
-					"label": "COMPONENT_HEARTBEATS_RDR",
-					"isTopic": true,
-					"toComponent": "MPU",
-					"dataId": 5001
-				},
-				{
-					"message": "component_heartbeats",
-					"label": "COMPONENT_HEARTBEATS_RDR",
-					"isTopic": true,
-					"toComponent": "MPX",
-					"dataId": 5999
-				},
-				{
-					"message": "component_heartbeats",
-					"label": "COMPONENT_HEARTBEATS_RDR",
-					"isTopic": true,
-					"toComponent": "ISRM",
-					"dataId": 5999
-				},
-				{
-					"message": "component_heartbeats",
-					"label": "COMPONENT_HEARTBEATS_RDR",
-					"isTopic": true,
-					"toComponent": "EOIR",
-					"dataId": 5999
-				},			
-				{
-					"message": "receiveRDRDetections",
-					"label": "RECEIVE_RDR_DETECTIONS_RDR",
-					"isTopic": true,
-					"toComponent": "ISRM",
-					"dataId": 5002
-				},
-				{
-					"message": "MTI",
-					"label": "MTI_RDR",
-					"isTopic": true,
-					"toComponent": "ISRM",
-					"dataId": 5003
-				}
-			]
-		}
-	],
-    "components":{
-        "MPU": "ORANGE_MPU",
-        "EOIR": "ORANGE_EOIR",
-        "ISRM": "GREEN_ISRM",
-        "MPX": "ORANGE_MPX",
-        "RDR": "ORANGE_RDR"
-    },
-    "messages":{
-        "component_heartbeats": {
-            "schema": "schema_heartbeats",
-            "comment": "optional comment",
-            "flows": [
+    "topology": [
+        {
+            "component": "MPU",
+            "label": "MPU_CLE_LABEL",
+            "inMessages": [
                 {
-                    "source": "MPU",
-                    "cle": "COMPONENT_HEARTBEATS_ORANGE_MPU",
-                    "destinations": [
-                        {
-                            "id": 1001,
-                    		"destination": "MPX"
-                		},
-                        {
-                            "id": 1002,
-                    		"destination": "ISRM"
-                		},
-                        {
-                            "id": 1003,
-                    		"destination": "EOIR"
-                		},
-                        {
-                            "id": 1004,
-                    		"destination": "RDR"
-                		}              		
-                     ]
+                    "message": "component_heartbeats",
+                    "label": "COMPONENT_HEARTBEATS_MPX",
+                    "isTopic": true,
+                    "fromComponent": "MPX",
+                    "dataId": 2001
                 },
                 {
-                    "source": "RDR",
-                    "cle": "COMPONENT_HEARTBEATS_ORANGE_RDR",
-                    "destinations": [
-                        {
-                            "id": 5001,
-                    		"destination": "MPU"
-                		},
-                        {
-                            "id": 9999,
-                    		"destination": "EOIR"
-                		},
-                        {
-                            "id": 9999,
-                    		"destination": "ISRM"
-                		},
-                        {
-                            "id": 9999,
-                    		"destination": "MPX"
-                		}              		
-                     ]
-                },  
+                    "message": "component_heartbeats",
+                    "label": "COMPONENT_HEARTBEATS_ISRM",
+                    "isTopic": true,
+                    "fromComponent": "ISRM",
+                    "dataId": 3999
+                },
                 {
-                    "source": "MPX",
-                    "cle": "COMPONENT_HEARTBEATS_ORANGE_MPX",
-                    "destinations": [
-                        {
-                            "id": 9999,
-                    		"destination": "MPU"
-                		},
-                        {
-                            "id": 9999,
-                    		"destination": "EOIR"
-                		},
-                        {
-                            "id": 9999,
-                    		"destination": "ISRM"
-                		},
-                        {
-                            "id": 9999,
-                    		"destination": "RDR"
-                		}              		
-                     ]
-                },           
+                    "message": "component_heartbeats",
+                    "label": "COMPONENT_HEARTBEATS_EOIR",
+                    "isTopic": true,
+                    "fromComponent": "EOIR",
+                    "dataId": 4999
+                },
                 {
-                    "source": "EOIR",
-                    "cle": "COMPONENT_HEARTBEATS_ORANGE_EOIR",
-                    "destinations": [
-                        {
-                            "id": 9999,
-                    		"destination": "MPU"
-                		},
-                        {
-                            "id": 9999,
-                    		"destination": "MPX"
-                		},
-                        {
-                            "id": 9999,
-                    		"destination": "ISRM"
-                		},
-                        {
-                            "id": 9999,
-                    		"destination": "RDR"
-                		}              		
-                     ]
-                }, 
+                    "message": "component_heartbeats",
+                    "label": "COMPONENT_HEARTBEATS_RDR",
+                    "isTopic": true,
+                    "fromComponent": "RDR",
+                    "dataId": 5001
+                },
                 {
-                    "source": "ISRM",
-                    "cle": "COMPONENT_HEARTBEATS_GREEN_ISRM",
-                    "destinations": [
-                        {
-                            "id": 9999,
-                    		"destination": "MPU"
-                		},
-                        {
-                            "id": 9999,
-                    		"destination": "EOIR"
-                		},
-                        {
-                            "id": 9999,
-                    		"destination": "MPX"
-                		},
-                        {
-                            "id": 9999,
-                    		"destination": "RDR"
-                		}              		
-                     ]
-                }            
-            ]
-        },
-        "pnt": {
-            "schema": "schema_pnt",
-            "comment": "optional comment",
-            "flows": [
+                    "message": "pnt",
+                    "label": "PNT_MPX",
+                    "isTopic": true,
+                    "fromComponent": "MPX",
+                    "dataId": 2001
+                }
+            ],
+            "outMessages": [
                 {
-                    "source": "MPX",
-                    "cle": "PNT_ORANGE_MPX",
-                    "destinations": [
-                        {
-                            "id": 2001,
-                    		"destination": "MPU"
-                		},
-                        {
-                            "id": 2002,
-                    		"destination": "ISRM"
-                		},
-                        {
-                            "id": 2003,
-                    		"destination": "EOIR"
-                		},
-                        {
-                            "id": 2004,
-                    		"destination": "RDR"
-                		}              		
-                     ]
+                    "message": "component_heartbeats",
+                    "label": "COMPONENT_HEARTBEATS_MPU",
+                    "isTopic": true,
+                    "toComponent": "MPX",
+                    "dataId": 1001
+                },
+                {
+                    "message": "component_heartbeats",
+                    "label": "COMPONENT_HEARTBEATS_MPU",
+                    "isTopic": true,
+                    "toComponent": "ISRM",
+                    "dataId": 1002
+                },
+                {
+                    "message": "component_heartbeats",
+                    "label": "COMPONENT_HEARTBEATS_MPU",
+                    "isTopic": true,
+                    "toComponent": "EOIR",
+                    "dataId": 1003
+                },
+                {
+                    "message": "component_heartbeats",
+                    "label": "COMPONENT_HEARTBEATS_MPU",
+                    "isTopic": true,
+                    "toComponent": "RDR",
+                    "dataId": 1004
+                },
+                {
+                    "message": "updateMissionPlan",
+                    "label": "UPDATE_MISSION_PLAN_MPU",
+                    "isTopic": true,
+                    "toComponent": "MPX",
+                    "dataId": 1005
+                },
+                {
+                    "message": "updateMissionPlan",
+                    "label": "UPDATE_MISSION_PLAN_MPU",
+                    "isTopic": true,
+                    "toComponent": "ISRM",
+                    "dataId": 1006
+                },
+                {
+                    "message": "updateMissionPlan",
+                    "label": "UPDATE_MISSION_PLAN_MPU",
+                    "isTopic": true,
+                    "toComponent": "EOIR",
+                    "dataId": 1007
+                },
+                {
+                    "message": "updateMissionPlan",
+                    "label": "UPDATE_MISSION_PLAN_MPU",
+                    "isTopic": true,
+                    "toComponent": "RDR",
+                    "dataId": 1008
+                },
+                {
+                    "message": "status",
+                    "label": "STATUS_MPU",
+                    "isTopic": true,
+                    "toComponent": "RDR",
+                    "dataId": 1009
                 }
             ]
         },
-        "requestISRMDetections": {
-            "schema": "schema_requestISRMDetectionsn",
-            "comment": "optional comment",
-            "flows": [
+        {
+            "component": "MPX",
+            "label": "MPX_CLE_LABEL",
+            "inMessages": [
                 {
-                    "source": "MPX",
-                    "cle": "REQUEST_ISRM_DETECTION_ORANGE_MPX",
-                    "destinations": [
-                        {
-                            "id": 2005,
-                    		"destination": "ISRM"
-                		}              		
-                     ]
-                }            
+                    "message": "component_heartbeats",
+                    "label": "COMPONENT_HEARTBEATS_MPU",
+                    "isTopic": true,
+                    "fromComponent": "MPU",
+                    "dataId": 1001
+                },
+                {
+                    "message": "component_heartbeats",
+                    "label": "COMPONENT_HEARTBEATS_ISRM",
+                    "isTopic": true,
+                    "fromComponent": "ISRM",
+                    "dataId": 3999
+                },
+                {
+                    "message": "component_heartbeats",
+                    "label": "COMPONENT_HEARTBEATS_EOIR",
+                    "isTopic": true,
+                    "fromComponent": "EOIR",
+                    "dataId": 4999
+                },
+                {
+                    "message": "component_heartbeats",
+                    "label": "COMPONENT_HEARTBEATS_RDR",
+                    "isTopic": true,
+                    "fromComponent": "RDR",
+                    "dataId": 5999
+                },
+                {
+                    "message": "updateMissionPlan",
+                    "label": "UPDATE_MISSION_PLAN_MPU",
+                    "isTopic": true,
+                    "fromComponent": "MPU",
+                    "dataId": 1005
+                },
+                {
+                    "message": "receiveISRMDetections",
+                    "label": "RECEIVE_ISRM_DETECTIONS_ISRM",
+                    "isTopic": true,
+                    "fromComponent": "ISRM",
+                    "dataId": 3003
+                }
+            ],
+            "outMessages": [
+                {
+                    "message": "component_heartbeats",
+                    "label": "COMPONENT_HEARTBEATS_MPX",
+                    "isTopic": true,
+                    "toComponent": "MPU",
+                    "dataId": 2999
+                },
+                {
+                    "message": "component_heartbeats",
+                    "label": "COMPONENT_HEARTBEATS_MPX",
+                    "isTopic": true,
+                    "toComponent": "ISRM",
+                    "dataId": 2999
+                },
+                {
+                    "message": "component_heartbeats",
+                    "label": "COMPONENT_HEARTBEATS_MPX",
+                    "isTopic": true,
+                    "toComponent": "EOIR",
+                    "dataId": 2999
+                },
+                {
+                    "message": "component_heartbeats",
+                    "label": "COMPONENT_HEARTBEATS_MPX",
+                    "isTopic": true,
+                    "toComponent": "RDR",
+                    "dataId": 2999
+                },
+                {
+                    "message": "pnt",
+                    "label": "PNT_MPX",
+                    "isTopic": true,
+                    "toComponent": "MPU",
+                    "dataId": 2001
+                },
+                {
+                    "message": "pnt",
+                    "label": "PNT_MPX",
+                    "isTopic": true,
+                    "toComponent": "ISRM",
+                    "dataId": 2002
+                },
+                {
+                    "message": "pnt",
+                    "label": "PNT_MPX",
+                    "isTopic": true,
+                    "toComponent": "EOIR",
+                    "dataId": 2003
+                },
+                {
+                    "message": "pnt",
+                    "label": "PNT_MPX",
+                    "isTopic": true,
+                    "toComponent": "RDR",
+                    "dataId": 2004
+                },
+                {
+                    "message": "requestISRMDetection",
+                    "label": "REQUEST_ISRM_DETECTION_MPX",
+                    "isTopic": true,
+                    "toComponent": "ISRM",
+                    "dataId": 2005
+                }
             ]
         },
-        "groundMovers": {
-            "schema": "schema_groundMovers",
-            "comment": "optional comment",
-            "flows": [
+        {
+            "component": "ISRM",
+            "label": "ISRM_CLE_LABEL",
+            "inMessages": [
                 {
-                    "source": "ISRM",
-                    "cle": "GROUND_MOVERS_GREEN_ISRM",
-                    "destinations": [
-                        {
-                            "id": 9999,
-                    		"destination": "EOIR"
-                		}              		
-                     ]
-                }             
+                    "message": "component_heartbeats",
+                    "label": "COMPONENT_HEARTBEATS_MPU",
+                    "isTopic": true,
+                    "fromComponent": "MPU",
+                    "dataId": 1002
+                },
+                {
+                    "message": "component_heartbeats",
+                    "label": "COMPONENT_HEARTBEATS_MPX",
+                    "isTopic": true,
+                    "fromComponent": "MPX",
+                    "dataId": 2999
+                },
+                {
+                    "message": "component_heartbeats",
+                    "label": "COMPONENT_HEARTBEATS_EOIR",
+                    "isTopic": true,
+                    "fromComponent": "EOIR",
+                    "dataId": 4999
+                },
+                {
+                    "message": "component_heartbeats",
+                    "label": "COMPONENT_HEARTBEATS_RDR",
+                    "isTopic": true,
+                    "fromComponent": "RDR",
+                    "dataId": 5999
+                },
+                {
+                    "message": "updateMissionPlan",
+                    "label": "UPDATE_MISSION_PLAN_MPU",
+                    "isTopic": true,
+                    "fromComponent": "MPU",
+                    "dataId": 1006
+                },
+                {
+                    "message": "pnt",
+                    "label": "PNT_MPX",
+                    "isTopic": true,
+                    "fromComponent": "MPX",
+                    "dataId": 2002
+                },
+                {
+                    "message": "requestISRMDetections",
+                    "label": "REQUEST_ISRM_DETECTION_MPX",
+                    "isTopic": true,
+                    "fromComponent": "MPX",
+                    "dataId": 2005
+                },
+                {
+                    "message": "receiveEOIRDetections",
+                    "label": "RECEIVE_EOIR_DETECTIONS_EOIR",
+                    "isTopic": true,
+                    "fromComponent": "EOIR",
+                    "dataId": 4001
+                },
+                {
+                    "message": "targets",
+                    "label": "TARGETS_EOIR",
+                    "isTopic": true,
+                    "fromComponent": "EOIR",
+                    "dataId": 4002
+                },
+                {
+                    "message": "detectObjects",
+                    "label": "DETECT_OBJECTS_EOIR",
+                    "isTopic": true,
+                    "fromComponent": "EOIR",
+                    "dataId": 4003
+                },
+                {
+                    "message": "receiveRDRDetections",
+                    "label": "RECEIVE_RDR_DETECTIONS_RDR",
+                    "isTopic": true,
+                    "fromComponent": "RDR",
+                    "dataId": 5002
+                },
+                {
+                    "message": "MTI",
+                    "label": "MTI_RDR",
+                    "isTopic": true,
+                    "fromComponent": "RDR",
+                    "dataId": 5003
+                }
+            ],
+            "outMessages": [
+                {
+                    "message": "component_heartbeats",
+                    "label": "COMPONENT_HEARTBEATS_ISRM",
+                    "isTopic": true,
+                    "toComponent": "MPU",
+                    "dataId": 3999
+                },
+                {
+                    "message": "component_heartbeats",
+                    "label": "COMPONENT_HEARTBEATS_ISRM",
+                    "isTopic": true,
+                    "toComponent": "MPX",
+                    "dataId": 3999
+                },
+                {
+                    "message": "component_heartbeats",
+                    "label": "COMPONENT_HEARTBEATS_ISRM",
+                    "isTopic": true,
+                    "toComponent": "EOIR",
+                    "dataId": 3999
+                },
+                {
+                    "message": "component_heartbeats",
+                    "label": "COMPONENT_HEARTBEATS_ISRM",
+                    "isTopic": true,
+                    "toComponent": "RDR",
+                    "dataId": 3999
+                },
+                {
+                    "message": "receiveISRMDetections",
+                    "label": "RECEIVE_ISRM_DETECTIONS_ISRM",
+                    "isTopic": true,
+                    "toComponent": "MPX",
+                    "dataId": 3003
+                },
+                {
+                    "message": "requestEOIRDetection",
+                    "label": "REQUEST_EOIR_DETECTION_ISRM",
+                    "isTopic": true,
+                    "toComponent": "EOIR",
+                    "dataId": 3001
+                },
+                {
+                    "message": "requestRDRDetections",
+                    "label": "REQUEST_RDR_DETECTIONS_ISRM",
+                    "isTopic": true,
+                    "toComponent": "RDR",
+                    "dataId": 3002
+                }
             ]
         },
-        "receiveISRMDetections": {
-            "schema": "schema_receiveISRMDetectionsma",
-            "comment": "optional comment",
-            "flows": [
+        {
+            "component": "EOIR",
+            "label": "EOIR_CLE_LABEL",
+            "inMessages": [
                 {
-                    "source": "ISRM",
-                    "cle": "RECEIVE_ISRM_DECTION_GREEN_ISRM",
-                    "destinations": [
-                        {
-                            "id": 3003,
-                    		"destination": "MPX"
-                		}              		
-                     ]
-                }             
+                    "message": "component_heartbeats",
+                    "label": "COMPONENT_HEARTBEATS_MPU",
+                    "isTopic": true,
+                    "fromComponent": "MPU",
+                    "dataId": 1003
+                },
+                {
+                    "message": "component_heartbeats",
+                    "label": "COMPONENT_HEARTBEATS_MPX",
+                    "isTopic": true,
+                    "fromComponent": "MPX",
+                    "dataId": 2999
+                },
+                {
+                    "message": "component_heartbeats",
+                    "label": "COMPONENT_HEARTBEATS_ISRM",
+                    "isTopic": true,
+                    "fromComponent": "ISRM",
+                    "dataId": 3999
+                },
+                {
+                    "message": "component_heartbeats",
+                    "label": "COMPONENT_HEARTBEATS_RDR",
+                    "isTopic": true,
+                    "fromComponent": "RDR",
+                    "dataId": 5999
+                },
+                {
+                    "message": "updateMissionPlan",
+                    "label": "UPDATE_MISSION_PLAN_MPU",
+                    "isTopic": true,
+                    "fromComponent": "MPU",
+                    "dataId": 1007
+                },
+                {
+                    "message": "pnt",
+                    "label": "PNT_MPX",
+                    "isTopic": true,
+                    "fromComponent": "MPX",
+                    "dataId": 2003
+                },
+                {
+                    "message": "requestEOIRDetection",
+                    "label": "REQUEST_EOIR_DETECTION_ISRM",
+                    "isTopic": true,
+                    "fromComponent": "ISRM",
+                    "dataId": 3001
+                }
+            ],
+            "outMessages": [
+                {
+                    "message": "component_heartbeats",
+                    "label": "COMPONENT_HEARTBEATS_EOIR",
+                    "isTopic": true,
+                    "toComponent": "MPU",
+                    "dataId": 4999
+                },
+                {
+                    "message": "component_heartbeats",
+                    "label": "COMPONENT_HEARTBEATS_EOIR",
+                    "isTopic": true,
+                    "toComponent": "MPX",
+                    "dataId": 4999
+                },
+                {
+                    "message": "component_heartbeats",
+                    "label": "COMPONENT_HEARTBEATS_EOIR",
+                    "isTopic": true,
+                    "toComponent": "ISRM",
+                    "dataId": 4999
+                },
+                {
+                    "message": "component_heartbeats",
+                    "label": "COMPONENT_HEARTBEATS_EOIR",
+                    "isTopic": true,
+                    "toComponent": "RDR",
+                    "dataId": 4999
+                },
+                {
+                    "message": "receiveEOIRDetections",
+                    "label": "RECEIVE_EOIR_DETECTIONS_EOIR",
+                    "isTopic": true,
+                    "toComponent": "ISRM",
+                    "dataId": 4001
+                },
+                {
+                    "message": "targets",
+                    "label": "TARGETS_EOIR",
+                    "isTopic": true,
+                    "toComponent": "ISRM",
+                    "dataId": 4002
+                },
+                {
+                    "message": "detectObjects",
+                    "label": "DETECT_OBJECTS_EOIR",
+                    "isTopic": true,
+                    "toComponent": "ISRM",
+                    "dataId": 4003
+                }
             ]
         },
-        "updateMissionPlan": {
-            "schema": "schema_missionPlan",
-            "comment": "optional comment",
-            "flows": [
+        {
+            "component": "RDR",
+            "label": "RDR_CLE_LABEL",
+            "inMessages": [
                 {
-                    "source": "MPU",
-                    "cle": "UPDATE_MISSION_PLAN_ORANGE_MPU",
-                    "destinations": [
-                        {
-                            "id": 1005,
-                    		"destination": "MPU"
-                		},
-                        {
-                            "id": 1006,
-                    		"destination": "ISRM"
-                		},
-                        {
-                            "id": 1007,
-                    		"destination": "EOIR"
-                		},
-                        {
-                            "id": 1008,
-                    		"destination": "RDR"
-                		}              		
-                     ]
-                }            
-            ]
-        },
-        "status": {
-            "schema": "schema_status",
-            "comment": "optional comment",
-            "flows": [
+                    "message": "component_heartbeats",
+                    "label": "COMPONENT_HEARTBEATS_MPU",
+                    "isTopic": true,
+                    "fromComponent": "MPU",
+                    "dataId": 1004
+                },
                 {
-                    "source": "MPU",
-                    "cle": "STATUS_ORANGE_MPU",
-                    "destinations": [
-                        {
-                            "id": 1009,
-                    		"destination": "RDR"
-                		}              		
-                     ]
-                }            
-            ]
-        },
-        "requestEOIRDetection": {
-            "schema": "schema_requestEOIRDetection",
-            "comment": "optional comment",
-            "flows": [
+                    "message": "component_heartbeats",
+                    "label": "COMPONENT_HEARTBEATS_MPX",
+                    "isTopic": true,
+                    "fromComponent": "MPX",
+                    "dataId": 2999
+                },
                 {
-                    "source": "ISRM",
-                    "cle": "REQUEST_EOIR_DETECTION_GREEN_ISRM",
-                    "destinations": [
-                        {
-                            "id": 3001,
-                    		"destination": "EOIR"
-                		}              		
-                     ]
-                }            
-            ]
-        },
-        "requestRDRDetection": {
-            "schema": "schema_requestRDRDetection",
-            "comment": "optional comment",
-            "flows": [
+                    "message": "component_heartbeats",
+                    "label": "COMPONENT_HEARTBEATS_ISRM",
+                    "isTopic": true,
+                    "fromComponent": "ISRM",
+                    "dataId": 3999
+                },
                 {
-                    "source": "ISRM",
-                    "cle": "REQUEST_RDR_DETECTION_GREEN_ISRM",
-                    "destinations": [
-                        {
-                            "id": 3002,
-                    		"destination": "RDR"
-                		}              		
-                     ]
-                }            
-            ]
-        },
-        "identified": {
-            "schema": "schema_identified",
-            "comment": "optional comment",
-            "flows": [
+                    "message": "component_heartbeats",
+                    "label": "COMPONENT_HEARTBEATS_EOIR",
+                    "isTopic": true,
+                    "fromComponent": "EOIR",
+                    "dataId": 4999
+                },
                 {
-                    "source": "ISRM",
-                    "cle": "IDENTIFIED_GREEN_ISRM",
-                    "destinations": [
-                        {
-                            "id": 3004,
-                    		"destination": "?"
-                		}              		
-                     ]
-                }            
-            ]
-        },
-        "receiveEOIRDetections": {
-            "schema": "schema_receiveEOIRDetections",
-            "comment": "optional comment",
-            "flows": [
+                    "message": "updateMissionPlan",
+                    "label": "UPDATE_MISSION_PLAN_MPU",
+                    "isTopic": true,
+                    "fromComponent": "MPU",
+                    "dataId": 1008
+                },
                 {
-                    "source": "EOIR",
-                    "cle": "RECEIVE_EOIR_DECTION_ORANGE_EOIR",
-                    "destinations": [
-                        {
-                            "id": 4001,
-                    		"destination": "ISRM"
-                		}              		
-                     ]
-                }            
-            ]
-        },
-        "targets": {
-            "schema": "schema_targets",
-            "comment": "optional comment",
-            "flows": [
+                    "message": "status",
+                    "label": "STATUS_MPU",
+                    "isTopic": true,
+                    "fromComponent": "MPU",
+                    "dataId": 1009
+                },
                 {
-                    "source": "EOIR",
-                    "cle": "TARGETS_ORANGE_EOIR",
-                    "destinations": [
-                        {
-                            "id": 4002,
-                    		"destination": "ISRM"
-                		}              		
-                     ]
-                }            
-            ]
-        },
-        "detectObjects": {
-            "schema": "schema_detectObjects",
-            "comment": "optional comment",
-            "flows": [
+                    "message": "pnt",
+                    "label": "PNT_MPX",
+                    "isTopic": true,
+                    "fromComponent": "MPX",
+                    "dataId": 2004
+                },
                 {
-                    "source": "EOIR",
-                    "cle": "DETECT_OBJECTS_ORANGE_EOIR",
-                    "destinations": [
-                        {
-                            "id": 4003,
-                    		"destination": "ISRM"
-                		}              		
-                     ]
-                }            
-            ]
-        },
-        "receiveRDRDetections": {
-            "schema": "schema_receiveRDRDetections",
-            "comment": "optional comment",
-            "flows": [
+                    "message": "requestRDRDetections",
+                    "label": "REQUEST_RDR_DETECTIONS_ISRM",
+                    "isTopic": true,
+                    "fromComponent": "ISRM",
+                    "dataId": 3002
+                }
+            ],
+            "outMessages": [
                 {
-                    "source": "RDR",
-                    "cle": "RECEIVE_RDR_DECTION_ORANGE_RDR",
-                    "destinations": [
-                        {
-                            "id": 5002,
-                    		"destination": "ISRM"
-                		}              		
-                     ]
-                }            
-            ]
-        },
-        "MTI": {
-            "schema": "schema_MTI",
-            "comment": "optional comment",
-            "flows": [
+                    "message": "component_heartbeats",
+                    "label": "COMPONENT_HEARTBEATS_RDR",
+                    "isTopic": true,
+                    "toComponent": "MPU",
+                    "dataId": 5001
+                },
                 {
-                    "source": "RDR",
-                    "cle": "MTI_ORANGE_RDR",
-                    "destinations": [
-                        {
-                            "id": 5003,
-                    		"destination": "ISRM"
-                		}              		
-                     ]
-                }            
+                    "message": "component_heartbeats",
+                    "label": "COMPONENT_HEARTBEATS_RDR",
+                    "isTopic": true,
+                    "toComponent": "MPX",
+                    "dataId": 5999
+                },
+                {
+                    "message": "component_heartbeats",
+                    "label": "COMPONENT_HEARTBEATS_RDR",
+                    "isTopic": true,
+                    "toComponent": "ISRM",
+                    "dataId": 5999
+                },
+                {
+                    "message": "component_heartbeats",
+                    "label": "COMPONENT_HEARTBEATS_RDR",
+                    "isTopic": true,
+                    "toComponent": "EOIR",
+                    "dataId": 5999
+                },
+                {
+                    "message": "receiveRDRDetections",
+                    "label": "RECEIVE_RDR_DETECTIONS_RDR",
+                    "isTopic": true,
+                    "toComponent": "ISRM",
+                    "dataId": 5002
+                },
+                {
+                    "message": "MTI",
+                    "label": "MTI_RDR",
+                    "isTopic": true,
+                    "toComponent": "ISRM",
+                    "dataId": 5003
+                }
             ]
         }
-    },
-    "cles":{
-        "ORANGE_MPU": {
-            "level": "orange",
-            "cdf": [
-                {
-                }
-            ]
-        },
-        "ORANGE_EOIR": {
-            "level": "orange",
-            "cdf": [
-                {
-                }
-            ]        
-        },
-        "GREEN_ISRM": {
-            "level": "green",
-            "cdf": [
-                {
-                }
-            ]        
-         },
-        "ORANGE_MPX": {
-            "level": "orange",
-            "cdf": [
-                {
-                }
-            ]        
-         },
-        "ORANGE_RDR": {
-            "level": "orange",
-            "cdf": [
-                {
-                }
-            ]        
-         },
-        "COMPONENT_HEARTBEATS_ORANGE_MPU":{
-            "level": "orange",
-            "cdf": [
-                {
-                    "remotelevel": "green",
-                    "direction": "ingress",
-                    "guarddirective":{ "oneway": true, "operation": "allow"},
-                    "argtaints": [["TAG_REQUEST_ECHO_COMPONENT_HEARTBEATS"]],
-                    "codtaints": ["ORANGE"],
-                    "rettaints": []
-                },
-                {
-                    "remotelevel": "orange",
-                    "direction": "ingress",
-                    "guarddirective":{ "oneway": true, "operation": "allow"}
-                }                
-            ]
-        },
-        "COMPONENT_HEARTBEATS_ORANGE_RDR":{
-            "level": "orange",
-            "cdf": [
-                {
-                    "remotelevel": "green",
-                    "direction": "ingress",
-                    "guarddirective":{ "oneway": true, "operation": "allow"}
-                },
-                {
-                    "remotelevel": "orange",
-                    "direction": "ingress",
-                    "guarddirective":{ "oneway": true, "operation": "allow"}
-                }                
-            ]
-        },
-        "COMPONENT_HEARTBEATS_ORANGE_MPX":{
-            "level": "orange",
-            "cdf": [
-                {
-                    "remotelevel": "green",
-                    "direction": "ingress",
-                    "guarddirective":{ "oneway": true, "operation": "allow"}
-                },
-                {
-                    "remotelevel": "orange",
-                    "direction": "ingress",
-                    "guarddirective":{ "oneway": true, "operation": "allow"}
-                }                
-            ]
-        },   
-        "COMPONENT_HEARTBEATS_ORANGE_EOIR":{
-            "level": "orange",
-            "cdf": [
-                {
-                    "remotelevel": "green",
-                    "direction": "ingress",
-                    "guarddirective":{ "oneway": true, "operation": "allow"}
-                },
-                {
-                    "remotelevel": "orange",
-                    "direction": "ingress",
-                    "guarddirective":{ "oneway": true, "operation": "allow"}
-                }                
-            ]
-        },         
-        "COMPONENT_HEARTBEATS_GREEN_ISRM":{
-            "level": "green",
-            "cdf": [
-                {
-                    "remotelevel": "orange",
-                    "direction": "ingress",
-                    "guarddirective":{ "oneway": true, "operation": "allow"},
-                    "argtaints": [["TAG_REQUEST_ECHO_COMPONENT_HEARTBEATS"]],
-                    "codtaints": ["GREEN"],
-                    "rettaints": []
-                }
-            ]
-        },
-        "PNT_ORANGE_MPX":{
-            "level": "orange",
-            "cdf": [
-                {
-                    "remotelevel": "green",
-                    "direction": "egress",
-                    "guarddirective":{ "operation": "allow"}
-                },
-                {
-                    "remotelevel": "orange",
-                    "direction": "egress",
-                    "guarddirective":{ "operation": "allow"}
-                }                
-            ]
-        },
-        "REQUEST_ISRM_DETECTION_ORANGE_MPX":{
-            "level": "orange",
-            "cdf": [
-                {
-                    "remotelevel": "green",
-                    "direction": "egress",
-                    "guarddirective":{ "operation": "allow"}
-                }
-            ]
-        },
-        "GROUND_MOVERS_GREEN_ISRM":{
-            "level": "green",
-            "cdf": [
-                {
-                    "remotelevel": "orange",
-                    "direction": "egress",
-                    "guarddirective":{ "operation": "allow"}
-                }
-            ]
-        },
-        "RECEIVE_ISRM_DECTION_GREEN_ISRM":{
-            "level": "green",
-            "cdf": [
-                {
-                    "remotelevel": "orange",
-                    "direction": "egress",
-                    "guarddirective":{ "operation": "allow"}
-                }
-            ]
-        },
-        "UPDATE_MISSION_PLAN_ORANGE_MPU":{
-            "level": "orange",
-            "cdf": [
-                {
-                    "remotelevel": "green",
-                    "direction": "egress",
-                    "guarddirective":{ "operation": "allow"}
-                },
-                {
-                    "remotelevel": "orange",
-                    "direction": "egress",
-                    "guarddirective":{ "operation": "allow"}
-                }                
-            ]
-        },
-        "STATUS_ORANGE_MPU":{
-            "level": "orange",
-            "cdf": [
-                {
-                    "remotelevel": "orange",
-                    "direction": "egress",
-                    "guarddirective":{ "operation": "allow"}
-                }                
-            ]
-        },
-        "REQUEST_EOIR_DETECTION_GREEN_ISRM":{
-            "level": "green",
-            "cdf": [
-                {
-                    "remotelevel": "orange",
-                    "direction": "egress",
-                    "guarddirective":{ "operation": "allow"}
-                }                
-            ]
-        },
-        "REQUEST_RDR_DETECTION_GREEN_ISRM":{
-            "level": "green",
-            "cdf": [
-                {
-                    "remotelevel": "orange",
-                    "direction": "egress",
-                    "guarddirective":{ "operation": "allow"}
-                }                
-            ]
-        },
-        "IDENTIFIED_GREEN_ISRM":{
-            "level": "green",
-            "cdf": [
-                {
-                    "remotelevel": "orange",
-                    "direction": "egress",
-                    "guarddirective":{ "operation": "allow"}
-                }                
-            ]
-        },
-        "RECEIVE_EOIR_DECTION_ORANGE_EOIR":{
-            "level": "orange",
-            "cdf": [
-                {
-                    "remotelevel": "green",
-                    "direction": "egress",
-                    "guarddirective":{ "operation": "allow"}
-                }
-            ]
-        },
-        "TARGETS_ORANGE_EOIR":{
-            "level": "orange",
-            "cdf": [
-                {
-                    "remotelevel": "green",
-                    "direction": "egress",
-                    "guarddirective":{ "operation": "allow"}
-                }
-            ]
-        },                 
-        "DETECT_OBJECTS_ORANGE_EOIR":{
-            "level": "orange",
-            "cdf": [
-                {
-                    "remotelevel": "green",
-                    "direction": "egress",
-                    "guarddirective":{ "operation": "allow"}
-                }
-            ]
-        },        
-        "RECEIVE_RDR_DETECTIONS_ORANGE_RDR":{
-            "level": "orange",
-            "cdf": [
-                {
-                    "remotelevel": "green",
-                    "direction": "egress",
-                    "guarddirective":{ "operation": "allow"}
-                }
-            ]
-        },        
-        "MTI_ORANGE_RDR":{
-            "level": "orange",
-            "cdf": [
-                {
-                    "remotelevel": "green",
-                    "direction": "egress",
-                    "guarddirective":{ "operation": "allow"}
-                }
-            ]
-        }  
-    },
-    
-    "schemas": [
-      { 
-        "message":      "component_heartbeats",
-        "schemaType":   "JSONSchema",
-        "schemaFile":   "schema/component_heartbeats_schema.json" 
-      },
-      { 
-        "message":      "missionPlan",
-        "schemaType":   "JSONSchema",
-        "schemaFile":   "schema/missionPlan_schema.json" 
-      },
-      { 
-        "message":      "receiveISRMDetections",
-        "schemaType":   "JSONSchema",
-        "schemaFile":   "schema/receiveISRMDetections_schema.json" 
-      },
-      { 
-        "message":      "groundMovers",
-        "schemaType":   "JSONSchema",
-        "schemaFile":   "schema/groundMovers_schema.json" 
-      },
-      { 
-        "message":      "requestISRMDetectionsn",
-        "schemaType":   "JSONSchema",
-        "schemaFile":   "schema/requestISRMDetectionsn_schema.json" 
-      },
-      { 
-        "message":      "pnt",
-        "schemaType":   "JSONSchema",
-        "schemaFile":   "schema/pnt_schema.json" 
-      },
-      { 
-        "message":      "status",
-        "schemaType":   "JSONSchema",
-        "schemaFile":   "schema/status_schema.json" 
-      },
-      { 
-        "message":      "requestEOIRDetections",
-        "schemaType":   "JSONSchema",
-        "schemaFile":   "schema/requestEOIRDetections_schema.json" 
-      },
-      { 
-        "message":      "requestRDRDetections",
-        "schemaType":   "JSONSchema",
-        "schemaFile":   "schema/requestRDRDetections_schema.json" 
-      },
-      { 
-        "message":      "identified",
-        "schemaType":   "JSONSchema",
-        "schemaFile":   "schema/identified_schema.json" 
-      },
-      { 
-        "message":      "receiveEOIRDetections",
-        "schemaType":   "JSONSchema",
-        "schemaFile":   "schema/receiveEOIRDetections_schema.json" 
-      },
-      { 
-        "message":      "targets",
-        "schemaType":   "JSONSchema",
-        "schemaFile":   "schema/targets_schema.json" 
-      },
-      { 
-        "message":      "detectObjects",
-        "schemaType":   "JSONSchema",
-        "schemaFile":   "schema/detectObjects_schema.json" 
-      },
-      { 
-        "message":      "receiveRDRDetections",
-        "schemaType":   "JSONSchema",
-        "schemaFile":   "schema/receiveRDRDetections_schema.json" 
-      },
-      { 
-        "message":      "MTI",
-        "schemaType":   "JSONSchema",
-        "schemaFile":   "schema/MTI_schema.json" 
-      }                       
     ],
-    "samples":{
-    }    
+    "cle": [
+        {
+            "cle-label": "EOIR_CLE_LABEL",
+            "cle-json": {
+                "level": "orange",
+                "cdf": [
+                    {
+                        "remotelevel": "orange",
+                        "direction": "bidirectional",
+                        "guardhint": {
+                            "operation": "allow"
+                        },
+                        "argtaints": [
+                            [
+                                "COMPONENT_HEARTBEATS_MPU",
+                                "COMPONENT_HEARTBEATS_MPX",
+                                "COMPONENT_HEARTBEATS_ISRM",
+                                "COMPONENT_HEARTBEATS_RDR",
+                                "UPDATE_MISSION_PLAN_MPU",
+                                "PNT_MPX",
+                                "REQUEST_EOIR_DETECTION_ISRM"
+                            ],
+                            [
+                                "COMPONENT_HEARTBEATS_EOIR",
+                                "COMPONENT_HEARTBEATS_EOIR",
+                                "COMPONENT_HEARTBEATS_EOIR",
+                                "COMPONENT_HEARTBEATS_EOIR",
+                                "RECEIVE_EOIR_DETECTIONS_EOIR",
+                                "TARGETS_EOIR",
+                                "DETECT_OBJECTS_EOIR"
+                            ]
+                        ],
+                        "codtaints": [
+                        ],
+                        "rettaints": [
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "cle-label": "ISRM_CLE_LABEL",
+            "cle-json": {
+                "level": "green",
+                "cdf": [
+                    {
+                        "remotelevel": "orange",
+                        "direction": "bidirectional",
+                        "guardhint": {
+                            "operation": "allow"
+                        },
+                        "argtaints": [
+                            [
+                                "COMPONENT_HEARTBEATS_MPU",
+                                "COMPONENT_HEARTBEATS_MPX",
+                                "COMPONENT_HEARTBEATS_EOIR",
+                                "COMPONENT_HEARTBEATS_RDR",
+                                "UPDATE_MISSION_PLAN_MPU",
+                                "PNT_MPX",
+                                "REQUEST_ISRM_DETECTION_MPX",
+                                "RECEIVE_EOIR_DETECTIONS_EOIR",
+                                "TARGETS_EOIR",
+                                "DETECT_OBJECTS_EOIR",
+                                "RECEIVE_RDR_DETECTIONS_RDR",
+                                "MTI_RDR"
+                            ],
+                            [
+                                "COMPONENT_HEARTBEATS_ISRM",
+                                "COMPONENT_HEARTBEATS_ISRM",
+                                "COMPONENT_HEARTBEATS_ISRM",
+                                "COMPONENT_HEARTBEATS_ISRM",
+                                "RECEIVE_ISRM_DETECTIONS_ISRM",
+                                "REQUEST_EOIR_DETECTION_ISRM",
+                                "REQUEST_RDR_DETECTIONS_ISRM"
+                            ]
+                        ],
+                        "codtaints": [
+                        ],
+                        "rettaints": [
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "cle-label": "MPU_CLE_LABEL",
+            "cle-json": {
+                "level": "orange",
+                "cdf": [
+                    {
+                        "remotelevel": "orange",
+                        "direction": "bidirectional",
+                        "guardhint": {
+                            "operation": "allow"
+                        },
+                        "argtaints": [
+                            [
+                                "COMPONENT_HEARTBEATS_MPX",
+                                "COMPONENT_HEARTBEATS_ISRM",
+                                "COMPONENT_HEARTBEATS_EOIR",
+                                "COMPONENT_HEARTBEATS_RDR",
+                                "PNT_MPX"
+                            ],
+                            [
+                                "COMPONENT_HEARTBEATS_MPU",
+                                "COMPONENT_HEARTBEATS_MPU",
+                                "COMPONENT_HEARTBEATS_MPU",
+                                "COMPONENT_HEARTBEATS_MPU",
+                                "UPDATE_MISSION_PLAN_MPU",
+                                "UPDATE_MISSION_PLAN_MPU",
+                                "UPDATE_MISSION_PLAN_MPU",
+                                "UPDATE_MISSION_PLAN_MPU",
+                                "STATUS_MPU"
+                            ]
+                        ],
+                        "codtaints": [
+                        ],
+                        "rettaints": [
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "cle-label": "MPX_CLE_LABEL",
+            "cle-json": {
+                "level": "orange",
+                "cdf": [
+                    {
+                        "remotelevel": "orange",
+                        "direction": "bidirectional",
+                        "guardhint": {
+                            "operation": "allow"
+                        },
+                        "argtaints": [
+                            [
+                                "COMPONENT_HEARTBEATS_MPU",
+                                "COMPONENT_HEARTBEATS_ISRM",
+                                "COMPONENT_HEARTBEATS_EOIR",
+                                "COMPONENT_HEARTBEATS_RDR",
+                                "UPDATE_MISSION_PLAN_MPU",
+                                "RECEIVE_ISRM_DETECTIONS_ISRM"
+                            ],
+                            [
+                                "COMPONENT_HEARTBEATS_MPX",
+                                "COMPONENT_HEARTBEATS_MPX",
+                                "COMPONENT_HEARTBEATS_MPX",
+                                "COMPONENT_HEARTBEATS_MPX",
+                                "PNT_MPX",
+                                "PNT_MPX",
+                                "PNT_MPX",
+                                "PNT_MPX",
+                                "REQUEST_ISRM_DETECTION_MPX"
+                            ]
+                        ],
+                        "codtaints": [
+                        ],
+                        "rettaints": [
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "cle-label": "RDR_CLE_LABEL",
+            "cle-json": {
+                "level": "orange",
+                "cdf": [
+                    {
+                        "remotelevel": "orange",
+                        "direction": "bidirectional",
+                        "guardhint": {
+                            "operation": "allow"
+                        },
+                        "argtaints": [
+                            [
+                                "COMPONENT_HEARTBEATS_MPU",
+                                "COMPONENT_HEARTBEATS_MPX",
+                                "COMPONENT_HEARTBEATS_ISRM",
+                                "COMPONENT_HEARTBEATS_EOIR",
+                                "UPDATE_MISSION_PLAN_MPU",
+                                "STATUS_MPU",
+                                "PNT_MPX",
+                                "REQUEST_RDR_DETECTIONS_ISRM"
+                            ],
+                            [
+                                "COMPONENT_HEARTBEATS_RDR",
+                                "COMPONENT_HEARTBEATS_RDR",
+                                "COMPONENT_HEARTBEATS_RDR",
+                                "COMPONENT_HEARTBEATS_RDR",
+                                "RECEIVE_RDR_DETECTIONS_RDR",
+                                "MTI_RDR"
+                            ]
+                        ],
+                        "codtaints": [
+                        ],
+                        "rettaints": [
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "cle-label": "COMPONENT_HEARTBEATS_EOIR",
+            "cle-json": {
+                "level": "orange",
+                "cdf": [
+                    {
+                        "remotelevel": "orange",
+                        "direction": "egress",
+                        "guardhint": {
+                            "operation": "allow"
+                        },
+                        "argtaints": [
+                        ],
+                        "codtaints": [
+                        ],
+                        "rettaints": [
+                        ]
+                    },
+                    {
+                        "remotelevel": "green",
+                        "direction": "egress",
+                        "guardhint": {
+                            "operation": "allow"
+                        },
+                        "argtaints": [
+                        ],
+                        "codtaints": [
+                        ],
+                        "rettaints": [
+                        ]
+                    }                    
+                ]
+            }
+        },
+        {
+            "cle-label": "COMPONENT_HEARTBEATS_ISRM",
+            "cle-json": {
+                "level": "green",
+                "cdf": [
+                    {
+                        "remotelevel": "orange",
+                        "direction": "egress",
+                        "guardhint": {
+                            "operation": "allow"
+                        },
+                        "argtaints": [
+                        ],
+                        "codtaints": [
+                        ],
+                        "rettaints": [
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "cle-label": "COMPONENT_HEARTBEATS_MPU",
+            "cle-json": {
+                "level": "orange",
+                "cdf": [
+                    {
+                        "remotelevel": "orange",
+                        "direction": "egress",
+                        "guardhint": {
+                            "operation": "allow"
+                        },
+                        "argtaints": [
+                        ],
+                        "codtaints": [
+                        ],
+                        "rettaints": [
+                        ]
+                    },
+                    {
+                        "remotelevel": "green",
+                        "direction": "egress",
+                        "guardhint": {
+                            "operation": "allow"
+                        },
+                        "argtaints": [
+                        ],
+                        "codtaints": [
+                        ],
+                        "rettaints": [
+                        ]
+                    }                    
+                ]
+            }
+        },
+        {
+            "cle-label": "COMPONENT_HEARTBEATS_MPX",
+            "cle-json": {
+                "level": "orange",
+                "cdf": [
+                    {
+                        "remotelevel": "orange",
+                        "direction": "egress",
+                        "guardhint": {
+                            "operation": "allow"
+                        },
+                        "argtaints": [
+                        ],
+                        "codtaints": [
+                        ],
+                        "rettaints": [
+                        ]
+                    },
+                    {
+                        "remotelevel": "green",
+                        "direction": "egress",
+                        "guardhint": {
+                            "operation": "allow"
+                        },
+                        "argtaints": [
+                        ],
+                        "codtaints": [
+                        ],
+                        "rettaints": [
+                        ]
+                    }                    
+                ]
+            }
+        },
+        {
+            "cle-label": "COMPONENT_HEARTBEATS_RDR",
+            "cle-json": {
+                "level": "orange",
+                "cdf": [
+                    {
+                        "remotelevel": "orange",
+                        "direction": "egress",
+                        "guardhint": {
+                            "operation": "allow"
+                        },
+                        "argtaints": [
+                        ],
+                        "codtaints": [
+                        ],
+                        "rettaints": [
+                        ]
+                    },
+                    {
+                        "remotelevel": "green",
+                        "direction": "egress",
+                        "guardhint": {
+                            "operation": "allow"
+                        },
+                        "argtaints": [
+                        ],
+                        "codtaints": [
+                        ],
+                        "rettaints": [
+                        ]
+                    }                    
+                ]
+            }
+        },
+        {
+            "cle-label": "DETECT_OBJECTS_EOIR",
+            "cle-json": {
+                "level": "orange",
+                "cdf": [
+                    {
+                        "remotelevel": "green",
+                        "direction": "egress",
+                        "guardhint": {
+                            "operation": "allow"
+                        },
+                        "argtaints": [
+                        ],
+                        "codtaints": [
+                        ],
+                        "rettaints": [
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "cle-label": "MTI_RDR",
+            "cle-json": {
+                "level": "orange",
+                "cdf": [
+                    {
+                        "remotelevel": "green",
+                        "direction": "egress",
+                        "guardhint": {
+                            "operation": "allow"
+                        },
+                        "argtaints": [
+                        ],
+                        "codtaints": [
+                        ],
+                        "rettaints": [
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "cle-label": "PNT_MPX",
+            "cle-json": {
+                "level": "orange",
+                "cdf": [
+                    {
+                        "remotelevel": "orange",
+                        "direction": "egress",
+                        "guardhint": {
+                            "operation": "allow"
+                        },
+                        "argtaints": [
+                        ],
+                        "codtaints": [
+                        ],
+                        "rettaints": [
+                        ]
+                    },
+                    {
+                        "remotelevel": "green",
+                        "direction": "egress",
+                        "guardhint": {
+                            "operation": "allow"
+                        },
+                        "argtaints": [
+                        ],
+                        "codtaints": [
+                        ],
+                        "rettaints": [
+                        ]
+                    }                    
+                ]
+            }
+        },
+        {
+            "cle-label": "RECEIVE_EOIR_DETECTIONS_EOIR",
+            "cle-json": {
+                "level": "orange",
+                "cdf": [
+                    {
+                        "remotelevel": "green",
+                        "direction": "egress",
+                        "guardhint": {
+                            "operation": "allow"
+                        },
+                        "argtaints": [
+                        ],
+                        "codtaints": [
+                        ],
+                        "rettaints": [
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "cle-label": "RECEIVE_ISRM_DETECTIONS_ISRM",
+            "cle-json": {
+                "level": "green",
+                "cdf": [
+                    {
+                        "remotelevel": "orange",
+                        "direction": "egress",
+                        "guardhint": {
+                            "operation": "allow"
+                        },
+                        "argtaints": [
+                        ],
+                        "codtaints": [
+                        ],
+                        "rettaints": [
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "cle-label": "RECEIVE_RDR_DETECTIONS_RDR",
+            "cle-json": {
+                "level": "orange",
+                "cdf": [
+                    {
+                        "remotelevel": "green",
+                        "direction": "egress",
+                        "guardhint": {
+                            "operation": "allow"
+                        },
+                        "argtaints": [
+                        ],
+                        "codtaints": [
+                        ],
+                        "rettaints": [
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "cle-label": "REQUEST_EOIR_DETECTION_ISRM",
+            "cle-json": {
+                "level": "green",
+                "cdf": [
+                    {
+                        "remotelevel": "orange",
+                        "direction": "egress",
+                        "guardhint": {
+                            "operation": "allow"
+                        },
+                        "argtaints": [
+                        ],
+                        "codtaints": [
+                        ],
+                        "rettaints": [
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "cle-label": "REQUEST_ISRM_DETECTION_MPX",
+            "cle-json": {
+                "level": "orange",
+                "cdf": [
+                    {
+                        "remotelevel": "orange",
+                        "direction": "egress",
+                        "guardhint": {
+                            "operation": "allow"
+                        },
+                        "argtaints": [
+                        ],
+                        "codtaints": [
+                        ],
+                        "rettaints": [
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "cle-label": "REQUEST_RDR_DETECTIONS_ISRM",
+            "cle-json": {
+                "level": "green",
+                "cdf": [
+                    {
+                        "remotelevel": "orange",
+                        "direction": "egress",
+                        "guardhint": {
+                            "operation": "allow"
+                        },
+                        "argtaints": [
+                        ],
+                        "codtaints": [
+                        ],
+                        "rettaints": [
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "cle-label": "STATUS_MPU",
+            "cle-json": {
+                "level": "orange",
+                "cdf": [
+                    {
+                        "remotelevel": "orange",
+                        "direction": "egress",
+                        "guardhint": {
+                            "operation": "allow"
+                        },
+                        "argtaints": [
+                        ],
+                        "codtaints": [
+                        ],
+                        "rettaints": [
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "cle-label": "TARGETS_EOIR",
+            "cle-json": {
+                "level": "orange",
+                "cdf": [
+                    {
+                        "remotelevel": "green",
+                        "direction": "egress",
+                        "guardhint": {
+                            "operation": "allow"
+                        },
+                        "argtaints": [
+                        ],
+                        "codtaints": [
+                        ],
+                        "rettaints": [
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "cle-label": "UPDATE_MISSION_PLAN_MPU",
+            "cle-json": {
+                "level": "orange",
+                "cdf": [
+                    {
+                        "remotelevel": "orange",
+                        "direction": "egress",
+                        "guardhint": {
+                            "operation": "allow"
+                        },
+                        "argtaints": [
+                        ],
+                        "codtaints": [
+                        ],
+                        "rettaints": [
+                        ]
+                    },
+                    {
+                        "remotelevel": "green",
+                        "direction": "egress",
+                        "guardhint": {
+                            "operation": "allow"
+                        },
+                        "argtaints": [
+                        ],
+                        "codtaints": [
+                        ],
+                        "rettaints": [
+                        ]
+                    }                    
+                ]
+            }
+        }
+    ],
+    "schemas": [
+        {
+            "message": "component_heartbeats",
+            "schemaType": "JSONSchema",
+            "schemaFile": "schema/component_heartbeats_schema.json"
+        },
+        {
+            "message": "missionPlan",
+            "schemaType": "JSONSchema",
+            "schemaFile": "schema/missionPlan_schema.json"
+        },
+        {
+            "message": "receiveISRMDetections",
+            "schemaType": "JSONSchema",
+            "schemaFile": "schema/receiveISRMDetections_schema.json"
+        },
+        {
+            "message": "groundMovers",
+            "schemaType": "JSONSchema",
+            "schemaFile": "schema/groundMovers_schema.json"
+        },
+        {
+            "message": "requestISRMDetectionsn",
+            "schemaType": "JSONSchema",
+            "schemaFile": "schema/requestISRMDetectionsn_schema.json"
+        },
+        {
+            "message": "pnt",
+            "schemaType": "JSONSchema",
+            "schemaFile": "schema/pnt_schema.json"
+        },
+        {
+            "message": "status",
+            "schemaType": "JSONSchema",
+            "schemaFile": "schema/status_schema.json"
+        },
+        {
+            "message": "requestEOIRDetections",
+            "schemaType": "JSONSchema",
+            "schemaFile": "schema/requestEOIRDetections_schema.json"
+        },
+        {
+            "message": "requestRDRDetections",
+            "schemaType": "JSONSchema",
+            "schemaFile": "schema/requestRDRDetections_schema.json"
+        },
+        {
+            "message": "identified",
+            "schemaType": "JSONSchema",
+            "schemaFile": "schema/identified_schema.json"
+        },
+        {
+            "message": "receiveEOIRDetections",
+            "schemaType": "JSONSchema",
+            "schemaFile": "schema/receiveEOIRDetections_schema.json"
+        },
+        {
+            "message": "targets",
+            "schemaType": "JSONSchema",
+            "schemaFile": "schema/targets_schema.json"
+        },
+        {
+            "message": "detectObjects",
+            "schemaType": "JSONSchema",
+            "schemaFile": "schema/detectObjects_schema.json"
+        },
+        {
+            "message": "receiveRDRDetections",
+            "schemaType": "JSONSchema",
+            "schemaFile": "schema/receiveRDRDetections_schema.json"
+        },
+        {
+            "message": "MTI",
+            "schemaType": "JSONSchema",
+            "schemaFile": "schema/MTI_schema.json"
+        }
+    ]
 }
