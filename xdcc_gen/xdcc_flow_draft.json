@@ -268,7 +268,7 @@
             "label": "RECEIVE_RDR_DETECTIONS_RDR",
             "fromComponent": "RDR",
             "toComponent": "ISRM",
-            "dataId": 5003
+            "dataId": 5002
         },
         {
             "message": "MTI",
@@ -393,96 +393,13 @@
     ],    
     "cle": [
         {
-            "cle-label": "EOIR_CLE_LABEL",
-            "cle-json": {
-                "level": "orange",
-                "cdf": [
-                    {
-                        "remotelevel": "orange",
-                        "direction": "bidirectional",
-                        "guardhint": {
-                            "operation": "allow"
-                        },
-                        "argtaints": [
-                            [
-                                "COMPONENT_HEARTBEATS_MPU",
-                                "UPDATE_MISSION_PLAN_MPU",
-                                "PNT_MPX",
-                                "COMPONENT_HEARTBEATS_MPX",
-                                "REQUEST_EOIR_DETECTION_ISRM",
-                                "COMPONENT_HEARTBEATS_ISRM",
-                                "COMPONENT_HEARTBEATS_RDR"
-                            ],
-                            [
-                                "RECEIVE_EOIR_DETECTIONS_EOIR",
-                                "TARGETS_EOIR",
-                                "DETECT_OBJECTS_EOIR",
-                                "COMPONENT_HEARTBEATS_EOIR",
-                                "COMPONENT_HEARTBEATS_EOIR",
-                                "COMPONENT_HEARTBEATS_EOIR",
-                                "COMPONENT_HEARTBEATS_EOIR"
-                            ]
-                        ],
-                        "codtaints": [
-                        ],
-                        "rettaints": [
-                        ]
-                    }
-                ]
-            }
-        },
-        {
-            "cle-label": "ISRM_CLE_LABEL",
-            "cle-json": {
-                "level": "green",
-                "cdf": [
-                    {
-                        "remotelevel": "orange",
-                        "direction": "bidirectional",
-                        "guardhint": {
-                            "operation": "allow"
-                        },
-                        "argtaints": [
-                            [
-                                "COMPONENT_HEARTBEATS_MPU",
-                                "UPDATE_MISSION_PLAN_MPU",
-                                "PNT_MPX",
-                                "REQUEST_ISRM_DETECTION_MPX",
-                                "COMPONENT_HEARTBEATS_MPX",
-                                "RECEIVE_EOIR_DETECTIONS_EOIR",
-                                "TARGETS_EOIR",
-                                "DETECT_OBJECTS_EOIR",
-                                "COMPONENT_HEARTBEATS_EOIR",
-                                "RECEIVE_RDR_DETECTIONS_RDR",
-                                "MTI_RDR",
-                                "COMPONENT_HEARTBEATS_RDR"
-                            ],
-                            [
-                                "REQUEST_EOIR_DETECTION_ISRM",
-                                "REQUEST_RDR_DETECTIONS_ISRM",
-                                "RECEIVE_ISRM_DETECTIONS_ISRM",
-                                "COMPONENT_HEARTBEATS_ISRM",
-                                "COMPONENT_HEARTBEATS_ISRM",
-                                "COMPONENT_HEARTBEATS_ISRM",
-                                "COMPONENT_HEARTBEATS_ISRM"
-                            ]
-                        ],
-                        "codtaints": [
-                        ],
-                        "rettaints": [
-                        ]
-                    }
-                ]
-            }
-        },
-        {
             "cle-label": "MPU_CLE_LABEL",
             "cle-json": {
                 "level": "orange",
                 "cdf": [
                     {
                         "remotelevel": "orange",
-                        "direction": "bidirectional",
+                        "direction": "egress",
                         "guardhint": {
                             "operation": "allow"
                         },
@@ -521,7 +438,7 @@
                 "cdf": [
                     {
                         "remotelevel": "orange",
-                        "direction": "bidirectional",
+                        "direction": "egress",
                         "guardhint": {
                             "operation": "allow"
                         },
@@ -555,13 +472,96 @@
             }
         },
         {
+            "cle-label": "ISRM_CLE_LABEL",
+            "cle-json": {
+                "level": "green",
+                "cdf": [
+                    {
+                        "remotelevel": "orange",
+                        "direction": "egress",
+                        "guardhint": {
+                            "operation": "allow"
+                        },
+                        "argtaints": [
+                            [
+                                "COMPONENT_HEARTBEATS_MPU",
+                                "UPDATE_MISSION_PLAN_MPU",
+                                "PNT_MPX",
+                                "REQUEST_ISRM_DETECTION_MPX",
+                                "COMPONENT_HEARTBEATS_MPX",
+                                "RECEIVE_EOIR_DETECTIONS_EOIR",
+                                "TARGETS_EOIR",
+                                "DETECT_OBJECTS_EOIR",
+                                "COMPONENT_HEARTBEATS_EOIR",
+                                "RECEIVE_RDR_DETECTIONS_RDR",
+                                "MTI_RDR",
+                                "COMPONENT_HEARTBEATS_RDR"
+                            ],
+                            [
+                                "REQUEST_EOIR_DETECTION_ISRM",
+                                "REQUEST_RDR_DETECTIONS_ISRM",
+                                "RECEIVE_ISRM_DETECTIONS_ISRM",
+                                "COMPONENT_HEARTBEATS_ISRM",
+                                "COMPONENT_HEARTBEATS_ISRM",
+                                "COMPONENT_HEARTBEATS_ISRM",
+                                "COMPONENT_HEARTBEATS_ISRM"
+                            ]
+                        ],
+                        "codtaints": [
+                        ],
+                        "rettaints": [
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "cle-label": "EOIR_CLE_LABEL",
+            "cle-json": {
+                "level": "orange",
+                "cdf": [
+                    {
+                        "remotelevel": "orange",
+                        "direction": "egress",
+                        "guardhint": {
+                            "operation": "allow"
+                        },
+                        "argtaints": [
+                            [
+                                "COMPONENT_HEARTBEATS_MPU",
+                                "UPDATE_MISSION_PLAN_MPU",
+                                "PNT_MPX",
+                                "COMPONENT_HEARTBEATS_MPX",
+                                "REQUEST_EOIR_DETECTION_ISRM",
+                                "COMPONENT_HEARTBEATS_ISRM",
+                                "COMPONENT_HEARTBEATS_RDR"
+                            ],
+                            [
+                                "RECEIVE_EOIR_DETECTIONS_EOIR",
+                                "TARGETS_EOIR",
+                                "DETECT_OBJECTS_EOIR",
+                                "COMPONENT_HEARTBEATS_EOIR",
+                                "COMPONENT_HEARTBEATS_EOIR",
+                                "COMPONENT_HEARTBEATS_EOIR",
+                                "COMPONENT_HEARTBEATS_EOIR"
+                            ]
+                        ],
+                        "codtaints": [
+                        ],
+                        "rettaints": [
+                        ]
+                    }
+                ]
+            }
+        },
+        {
             "cle-label": "RDR_CLE_LABEL",
             "cle-json": {
                 "level": "orange",
                 "cdf": [
                     {
                         "remotelevel": "orange",
-                        "direction": "bidirectional",
+                        "direction": "egress",
                         "guardhint": {
                             "operation": "allow"
                         },
