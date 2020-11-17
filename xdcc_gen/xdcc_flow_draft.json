@@ -15,13 +15,13 @@
         {
             "component": "ISRM",
             "label": "ISRM_CLE_LABEL",
-            "inMessages": [ 1002, 1006, 2002, 2005, 2993, 4001, 4002, 4003, 4993, 5993, 5002, 5003], 
+            "inMessages": [ 1002, 1006, 2002, 2005, 2993, 4001, 4002, 4003, 4993, 5002, 5003, 5993 ], 
             "outMessages": [ 3001, 3002, 3003, 3991, 3992, 3994, 3995 ]
         },
         {
             "component": "EOIR",
             "label": "EOIR_CLE_LABEL",
-            "inMessages": [ 1003, 2003, 2994, 3001, 3994, 5994 ],
+            "inMessages": [ 1003, 1007, 2003, 2994, 3001, 3994, 5994 ],
             "outMessages": [ 4001, 4002, 4003, 4991, 4992, 4993, 4995 ]
         },
         {
@@ -406,21 +406,21 @@
                         "argtaints": [
                             [
                                 "COMPONENT_HEARTBEATS_MPU",
-                                "COMPONENT_HEARTBEATS_MPX",
-                                "COMPONENT_HEARTBEATS_ISRM",
-                                "COMPONENT_HEARTBEATS_RDR",
                                 "UPDATE_MISSION_PLAN_MPU",
                                 "PNT_MPX",
-                                "REQUEST_EOIR_DETECTION_ISRM"
+                                "COMPONENT_HEARTBEATS_MPX",
+                                "REQUEST_EOIR_DETECTION_ISRM",
+                                "COMPONENT_HEARTBEATS_ISRM",
+                                "COMPONENT_HEARTBEATS_RDR"
                             ],
                             [
-                                "COMPONENT_HEARTBEATS_EOIR",
-                                "COMPONENT_HEARTBEATS_EOIR",
-                                "COMPONENT_HEARTBEATS_EOIR",
-                                "COMPONENT_HEARTBEATS_EOIR",
                                 "RECEIVE_EOIR_DETECTIONS_EOIR",
                                 "TARGETS_EOIR",
-                                "DETECT_OBJECTS_EOIR"
+                                "DETECT_OBJECTS_EOIR",
+                                "COMPONENT_HEARTBEATS_EOIR",
+                                "COMPONENT_HEARTBEATS_EOIR",
+                                "COMPONENT_HEARTBEATS_EOIR",
+                                "COMPONENT_HEARTBEATS_EOIR"
                             ]
                         ],
                         "codtaints": [
@@ -445,26 +445,26 @@
                         "argtaints": [
                             [
                                 "COMPONENT_HEARTBEATS_MPU",
-                                "COMPONENT_HEARTBEATS_MPX",
-                                "COMPONENT_HEARTBEATS_EOIR",
-                                "COMPONENT_HEARTBEATS_RDR",
                                 "UPDATE_MISSION_PLAN_MPU",
                                 "PNT_MPX",
                                 "REQUEST_ISRM_DETECTION_MPX",
+                                "COMPONENT_HEARTBEATS_MPX",
                                 "RECEIVE_EOIR_DETECTIONS_EOIR",
                                 "TARGETS_EOIR",
                                 "DETECT_OBJECTS_EOIR",
+                                "COMPONENT_HEARTBEATS_EOIR",
                                 "RECEIVE_RDR_DETECTIONS_RDR",
-                                "MTI_RDR"
+                                "MTI_RDR",
+                                "COMPONENT_HEARTBEATS_RDR"
                             ],
                             [
-                                "COMPONENT_HEARTBEATS_ISRM",
-                                "COMPONENT_HEARTBEATS_ISRM",
-                                "COMPONENT_HEARTBEATS_ISRM",
-                                "COMPONENT_HEARTBEATS_ISRM",
-                                "RECEIVE_ISRM_DETECTIONS_ISRM",
                                 "REQUEST_EOIR_DETECTION_ISRM",
-                                "REQUEST_RDR_DETECTIONS_ISRM"
+                                "REQUEST_RDR_DETECTIONS_ISRM",
+                                "RECEIVE_ISRM_DETECTIONS_ISRM",
+                                "COMPONENT_HEARTBEATS_ISRM",
+                                "COMPONENT_HEARTBEATS_ISRM",
+                                "COMPONENT_HEARTBEATS_ISRM",
+                                "COMPONENT_HEARTBEATS_ISRM"
                             ]
                         ],
                         "codtaints": [
@@ -488,11 +488,11 @@
                         },
                         "argtaints": [
                             [
+                                "PNT_MPX",
                                 "COMPONENT_HEARTBEATS_MPX",
                                 "COMPONENT_HEARTBEATS_ISRM",
                                 "COMPONENT_HEARTBEATS_EOIR",
-                                "COMPONENT_HEARTBEATS_RDR",
-                                "PNT_MPX"
+                                "COMPONENT_HEARTBEATS_RDR"
                             ],
                             [
                                 "COMPONENT_HEARTBEATS_MPU",
@@ -528,22 +528,22 @@
                         "argtaints": [
                             [
                                 "COMPONENT_HEARTBEATS_MPU",
+                                "UPDATE_MISSION_PLAN_MPU",
+                                "RECEIVE_ISRM_DETECTIONS_ISRM",
                                 "COMPONENT_HEARTBEATS_ISRM",
                                 "COMPONENT_HEARTBEATS_EOIR",
-                                "COMPONENT_HEARTBEATS_RDR",
-                                "UPDATE_MISSION_PLAN_MPU",
-                                "RECEIVE_ISRM_DETECTIONS_ISRM"
+                                "COMPONENT_HEARTBEATS_RDR"
                             ],
                             [
-                                "COMPONENT_HEARTBEATS_MPX",
-                                "COMPONENT_HEARTBEATS_MPX",
-                                "COMPONENT_HEARTBEATS_MPX",
-                                "COMPONENT_HEARTBEATS_MPX",
                                 "PNT_MPX",
                                 "PNT_MPX",
                                 "PNT_MPX",
                                 "PNT_MPX",
-                                "REQUEST_ISRM_DETECTION_MPX"
+                                "REQUEST_ISRM_DETECTION_MPX",
+                                "COMPONENT_HEARTBEATS_MPX",
+                                "COMPONENT_HEARTBEATS_MPX",
+                                "COMPONENT_HEARTBEATS_MPX",
+                                "COMPONENT_HEARTBEATS_MPX"
                             ]
                         ],
                         "codtaints": [
@@ -568,21 +568,21 @@
                         "argtaints": [
                             [
                                 "COMPONENT_HEARTBEATS_MPU",
-                                "COMPONENT_HEARTBEATS_MPX",
-                                "COMPONENT_HEARTBEATS_ISRM",
-                                "COMPONENT_HEARTBEATS_EOIR",
                                 "UPDATE_MISSION_PLAN_MPU",
                                 "STATUS_MPU",
                                 "PNT_MPX",
-                                "REQUEST_RDR_DETECTIONS_ISRM"
+                                "COMPONENT_HEARTBEATS_MPX",
+                                "REQUEST_RDR_DETECTIONS_ISRM",
+                                "COMPONENT_HEARTBEATS_ISRM",
+                                "COMPONENT_HEARTBEATS_EOIR"
                             ],
                             [
                                 "COMPONENT_HEARTBEATS_RDR",
-                                "COMPONENT_HEARTBEATS_RDR",
-                                "COMPONENT_HEARTBEATS_RDR",
-                                "COMPONENT_HEARTBEATS_RDR",
                                 "RECEIVE_RDR_DETECTIONS_RDR",
-                                "MTI_RDR"
+                                "MTI_RDR",
+                                "COMPONENT_HEARTBEATS_RDR",
+                                "COMPONENT_HEARTBEATS_RDR",
+                                "COMPONENT_HEARTBEATS_RDR"
                             ]
                         ],
                         "codtaints": [
