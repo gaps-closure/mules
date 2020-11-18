@@ -310,7 +310,7 @@
             "message": "missionPlan",
             "isTopic": true,
             "schemaType": "JSONSchema",
-            "schemaFile": "schema/missionPlan_schema.json"
+            "schemaFile": "schema/updateMissionPlan_schema.json"
         },
         {
             "message": "receiveISRMDetections",
@@ -400,7 +400,7 @@
                     {
                         "remotelevel": "orange",
                         "direction": "egress",
-                        "guardhint": {
+                        "guarddirective": {
                             "operation": "allow"
                         },
                         "argtaints": [
@@ -439,7 +439,7 @@
                     {
                         "remotelevel": "orange",
                         "direction": "egress",
-                        "guardhint": {
+                        "guarddirective": {
                             "operation": "allow"
                         },
                         "argtaints": [
@@ -479,7 +479,7 @@
                     {
                         "remotelevel": "orange",
                         "direction": "egress",
-                        "guardhint": {
+                        "guarddirective": {
                             "operation": "allow"
                         },
                         "argtaints": [
@@ -523,7 +523,7 @@
                     {
                         "remotelevel": "orange",
                         "direction": "egress",
-                        "guardhint": {
+                        "guarddirective": {
                             "operation": "allow"
                         },
                         "argtaints": [
@@ -562,7 +562,7 @@
                     {
                         "remotelevel": "orange",
                         "direction": "egress",
-                        "guardhint": {
+                        "guarddirective": {
                             "operation": "allow"
                         },
                         "argtaints": [
@@ -601,7 +601,7 @@
                     {
                         "remotelevel": "orange",
                         "direction": "egress",
-                        "guardhint": {
+                        "guarddirective": {
                             "operation": "allow"
                         },
                         "argtaints": [
@@ -614,7 +614,7 @@
                     {
                         "remotelevel": "green",
                         "direction": "egress",
-                        "guardhint": {
+                        "guarddirective": {
                             "operation": "allow"
                         },
                         "argtaints": [
@@ -635,7 +635,7 @@
                     {
                         "remotelevel": "orange",
                         "direction": "egress",
-                        "guardhint": {
+                        "guarddirective": {
                             "operation": "allow"
                         },
                         "argtaints": [
@@ -656,7 +656,7 @@
                     {
                         "remotelevel": "orange",
                         "direction": "egress",
-                        "guardhint": {
+                        "guarddirective": {
                             "operation": "allow"
                         },
                         "argtaints": [
@@ -669,7 +669,7 @@
                     {
                         "remotelevel": "green",
                         "direction": "egress",
-                        "guardhint": {
+                        "guarddirective": {
                             "operation": "allow"
                         },
                         "argtaints": [
@@ -690,7 +690,7 @@
                     {
                         "remotelevel": "orange",
                         "direction": "egress",
-                        "guardhint": {
+                        "guarddirective": {
                             "operation": "allow"
                         },
                         "argtaints": [
@@ -703,7 +703,7 @@
                     {
                         "remotelevel": "green",
                         "direction": "egress",
-                        "guardhint": {
+                        "guarddirective": {
                             "operation": "allow"
                         },
                         "argtaints": [
@@ -724,7 +724,7 @@
                     {
                         "remotelevel": "orange",
                         "direction": "egress",
-                        "guardhint": {
+                        "guarddirective": {
                             "operation": "allow"
                         },
                         "argtaints": [
@@ -737,7 +737,7 @@
                     {
                         "remotelevel": "green",
                         "direction": "egress",
-                        "guardhint": {
+                        "guarddirective": {
                             "operation": "allow"
                         },
                         "argtaints": [
@@ -758,7 +758,7 @@
                     {
                         "remotelevel": "green",
                         "direction": "egress",
-                        "guardhint": {
+                        "guarddirective": {
                             "operation": "allow"
                         },
                         "argtaints": [
@@ -779,7 +779,7 @@
                     {
                         "remotelevel": "green",
                         "direction": "egress",
-                        "guardhint": {
+                        "guarddirective": {
                             "operation": "allow"
                         },
                         "argtaints": [
@@ -800,7 +800,7 @@
                     {
                         "remotelevel": "orange",
                         "direction": "egress",
-                        "guardhint": {
+                        "guarddirective": {
                             "operation": "allow"
                         },
                         "argtaints": [
@@ -813,7 +813,7 @@
                     {
                         "remotelevel": "green",
                         "direction": "egress",
-                        "guardhint": {
+                        "guarddirective": {
                             "operation": "allow"
                         },
                         "argtaints": [
@@ -834,7 +834,7 @@
                     {
                         "remotelevel": "green",
                         "direction": "egress",
-                        "guardhint": {
+                        "guarddirective": {
                             "operation": "allow"
                         },
                         "argtaints": [
@@ -855,7 +855,7 @@
                     {
                         "remotelevel": "orange",
                         "direction": "egress",
-                        "guardhint": {
+                        "guarddirective": {
                             "operation": "allow"
                         },
                         "argtaints": [
@@ -876,7 +876,7 @@
                     {
                         "remotelevel": "green",
                         "direction": "egress",
-                        "guardhint": {
+                        "guarddirective": {
                             "operation": "allow"
                         },
                         "argtaints": [
@@ -897,7 +897,7 @@
                     {
                         "remotelevel": "orange",
                         "direction": "egress",
-                        "guardhint": {
+                        "guarddirective": {
                             "operation": "allow"
                         },
                         "argtaints": [
@@ -918,7 +918,7 @@
                     {
                         "remotelevel": "orange",
                         "direction": "egress",
-                        "guardhint": {
+                        "guarddirective": {
                             "operation": "allow"
                         },
                         "argtaints": [
@@ -939,7 +939,7 @@
                     {
                         "remotelevel": "orange",
                         "direction": "egress",
-                        "guardhint": {
+                        "guarddirective": {
                             "operation": "allow"
                         },
                         "argtaints": [
@@ -960,7 +960,7 @@
                     {
                         "remotelevel": "orange",
                         "direction": "egress",
-                        "guardhint": {
+                        "guarddirective": {
                             "operation": "allow"
                         },
                         "argtaints": [
@@ -981,7 +981,7 @@
                     {
                         "remotelevel": "green",
                         "direction": "egress",
-                        "guardhint": {
+                        "guarddirective": {
                             "operation": "allow"
                         },
                         "argtaints": [
@@ -1002,7 +1002,7 @@
                     {
                         "remotelevel": "orange",
                         "direction": "egress",
-                        "guardhint": {
+                        "guarddirective": {
                             "operation": "allow"
                         },
                         "argtaints": [
@@ -1015,7 +1015,7 @@
                     {
                         "remotelevel": "green",
                         "direction": "egress",
-                        "guardhint": {
+                        "guarddirective": {
                             "operation": "allow"
                         },
                         "argtaints": [
