@@ -7,48 +7,125 @@
 #include <vector>
 #include <set>
 #include <nlohmann/json.hpp>
+#include <boost/ptr_container/ptr_map.hpp>
+#include <boost/any.hpp>
 
 using json = nlohmann::json;
 using namespace std;
 
 class Flow {
-public:
-    string source;
-    string destination;
+private:
+    int dataId;
+    string message;
+    string label;
+    string fromComponent;
+    string toComponent;
 
+public:
     Flow(nlohmann::basic_json<> value) {
         for (auto& el : value.items()) {
             string key = el.key();
 
-            if (!key.compare("source")) {
-                source = el.value().get<string>();
+            if (!key.compare("dataId")) {
+            	dataId = el.value().get<int>();
             }
-            else if (!key.compare("destination")) {
-                destination = el.value().get<string>();
+            else if (!key.compare("message")) {
+            	message = el.value().get<string>();
+            }
+            else if (!key.compare("label")) {
+            	label = el.value().get<string>();
+            }
+            else if (!key.compare("fromComponent")) {
+            	fromComponent = el.value().get<string>();
+            }
+            else if (!key.compare("toComponent")) {
+            	toComponent = el.value().get<string>();
+            }
+            else {
+            	cerr << "Flow: unrecognized key: " << key << endl;
             }
         }
     }
 
-    string getDestination() const {
-        return destination;
+	const int getDataId() const {
+		return dataId;
+	}
+
+	const string& getFromComponent() const {
+		return fromComponent;
+	}
+
+	const string& getLabel() const {
+		return label;
+	}
+
+	const string& getMessage() const {
+		return message;
+	}
+
+	const string& getToComponent() const {
+		return toComponent;
+	}
+};
+
+class Component {
+private:
+    string component;
+    string label;
+    vector<int> inMessages;
+    vector<int> outMessages;
+
+public:
+    Component(nlohmann::basic_json<> value) {
+        for (auto& el : value.items()) {
+            string key = el.key();
+
+            if (!key.compare("component")) {
+            	component = el.value().get<string>();
+            }
+            else if (!key.compare("label")) {
+            	label = el.value().get<string>();
+            }
+            else if (!key.compare("inMessages")) {
+            	for (auto& el2 : el.value().items())
+            		inMessages.push_back(el2.value());
+            }
+            else if (!key.compare("outMessages")) {
+            	for (auto& el2 : el.value().items())
+            		outMessages.push_back(el2.value());
+            }
+            else {
+            	cerr << "Component: unrecognized key: " << key << endl;
+            }
+        }
     }
 
-    string getSource() const {
-        return source;
-    }
+	const string& getComponent() const {
+		return component;
+	}
+
+	const vector<int>& getInMessages() const {
+		return inMessages;
+	}
+
+	const string& getLabel() const {
+		return label;
+	}
+
+	const vector<int>& getOutMessages() const {
+		return outMessages;
+	}
 };
 
 class Message {
-public:
-
+private:
     string name;
-    string comment;
-    vector<Flow> flows;
-    string schema;
-    string cle;
-    bool local;
+    string schemaFile;
+    string schemaType;
     bool topic;
+    bool local = false;
 
+public:
     Message(nlohmann::basic_json<> value) {
         for (auto& el : value.items()) {
             string key = el.key();
@@ -56,61 +133,44 @@ public:
             if (!key.compare("name")) {
                 name = el.value().get<string>();
             }
-            else if (!key.compare("comment")) {
-                comment = el.value().get<string>();
+            else if (!key.compare("schemaFile")) {
+                schemaFile = el.value().get<string>();
             }
-            else if (!key.compare("schema")) {
-                schema = el.value().get<string>();
-            }
-            else if (!key.compare("cle")) {
-                cle = el.value().get<string>();
-            }
-            else if (!key.compare("local")) {
-                local = el.value().get<bool>();
+            else if (!key.compare("schemaType")) {
+            	schemaType = el.value().get<string>();
             }
             else if (!key.compare("topic")) {
                 topic = el.value().get<bool>();
             }
-            else if (!key.compare("flows")) {
-                for (auto& el2 : el.value().items()) {
-                    Flow flow(el2.value());
-                    flows.push_back(flow);
-                }
+            else {
+            	cerr << "Message: unrecognized key: " << key << endl;
             }
         }
     }
 
-    string getCle() const {
-        return cle;
-    }
+	const string& getName() const {
+		return name;
+	}
 
-    string getComment() const {
-        return comment;
-    }
+	const string& getSchemaFile() const {
+		return schemaFile;
+	}
 
-    vector<Flow> getFlows() const {
-        return flows;
-    }
+	const string& getSchemaType() const {
+		return schemaType;
+	}
 
-    string getName() const {
-        return name;
-    }
+	bool isTopic() const {
+		return topic;
+	}
 
-    string getSchema() const {
-        return schema;
-    }
+	bool isLocal() const {
+		return local;
+	}
 
-    bool isLocal() const {
-        return local;
-    }
-
-    bool isTopic() const {
-        return topic;
-    }
-
-    void setLocal(bool local) {
-        this->local = local;
-    }
+	void setLocal(bool local = false) {
+		this->local = local;
+	}
 };
 
 class GuardDirective
@@ -234,24 +294,24 @@ public:
     }
 };
 
-class Cle
+class CleJson
 {
 public:
     string level;
     vector<Cdf> cdf;
 
   public:
-    Cle() {
+    CleJson() {
     }
 
-    Cle(string level, Cdf *cdf) {
+    CleJson(string level, Cdf *cdf) {
         this->level = level;
         this->cdf.push_back(*cdf);
     }
 
-    ~Cle() {};
+    ~CleJson() {};
 
-    Cle(nlohmann::basic_json<> value) {
+    CleJson(nlohmann::basic_json<> value) {
         for (auto& el : value.items()) {
             string key = el.key();
 
@@ -282,6 +342,17 @@ public:
         return NULL;
     }
 
+    bool isLocal(string enclave, Flow *flow) {
+        for (int i = 0; i < cdf.size(); i++) {
+            if (this->level.compare(enclave))  // not flowing from my enclave
+            	return false;
+
+            if (cdf[i].getRemoteLevel().compare(enclave)) // flow to a different enclave
+                return false;
+        }
+        return true;
+    }
+
     string getDirection() {
         return level + " -> " + cdf[0].getRemoteLevel();
     }
@@ -303,12 +374,46 @@ public:
     }
 };
 
+class Cle
+{
+public:
+    string label;
+    CleJson cleJson;
+
+  public:
+    Cle(nlohmann::basic_json<> value) {
+    	for (auto& el : value.items()) {
+    		string key = el.key();
+
+    		if (!key.compare("cle-label")) {
+    			label = el.value().get<string>();
+    		}
+    		else if (!key.compare("cle-json")) {
+                CleJson c(el.value());
+                cleJson = c;
+    		}
+    	}
+    }
+    
+    ~Cle() {
+	}
+
+	const CleJson& getCleJson() const {
+		return cleJson;
+	}
+
+	const string& getLabel() const {
+		return label;
+	}
+};
+
 class XdccFlow {
 public:
 
-    map<string, string> components;
-    map<string, Message *> messages;
-    map<string, Cle *> cles;
+    boost::ptr_map<string, boost::any> topology;
+    boost::ptr_map<string, boost::any> messages;
+    boost::ptr_map<int, boost::any > flows;
+    boost::ptr_map<string, boost::any> cles;
 
     XdccFlow(const string &filename) {
         std::ifstream jStream(filename);
@@ -319,18 +424,33 @@ public:
             string key = el.key();
             nlohmann::basic_json<> value = el.value();
 
-            if (!key.compare("components")) {
+            if (!key.compare("topology")) {
                 for (auto& el : value.items()) {
-                    components[el.key()] = el.value().get<string>();
+                	Component *component = new Component(el.value());
+                	topology[component->getComponent()] = component;
+                	cout << component->getComponent() << endl;
                 }
             }
             else if (!key.compare("messages")) {
                 for (auto& el : value.items()) {
-                    messages[el.key()] = new Message(el.value());
+                	Message *message = new Message(el.value());
+                    messages[message->getName()] = message;
+                	cout << message->getName() << endl;
+                }
+            }
+            else if (!key.compare("flows")) {
+                for (auto& el2 : value.items()) {
+                	Flow *flow = new Flow(el.value());
+                	flows[flow->getDataId()] = flow;
+                	cout << flow->getDataId() << endl;
                 }
             }
             else if (!key.compare("cles")) {
                 for (auto& el : value.items()) {
+                	Cle *cle = new Cle(el.value());
+                	cles[cle->getLabel()] = cle;
+                	cout << cle->getLabel() << endl;
+
                     cles[el.key()] = new Cle(el.value());
                 }
             }
@@ -347,7 +467,8 @@ public:
         Cle *cle = NULL;
         for (auto const& y : cles) {
             Cle *cle = (Cle *) y.second;
-            Cdf *cdf = cle->find_cdf(level, remote, false);
+            CleJson clejson = cle->getCleJson();
+            Cdf *cdf = clejson.find_cdf(level, remote, false);
             if (cdf != NULL)
                 return cdf;
         }
@@ -355,23 +476,27 @@ public:
         return NULL;
     }
 
-    Cle *find_cle(const Message *message) const {
-        std::map<string, Cle *>::const_iterator it = cles.find(message->getCle());
+    Cle *find_cle(const Flow *flow) const {
+        boost::ptr_map<string, boost::any>::const_iterator it = cles.find(flow->getLabel());
         if (it == cles.end()) {
             return NULL;
         }
-        return it->second;
+        return (Cle *)it->second;
     }
 
-    map<string, Cle*> getCles() const {
+    boost::ptr_map<string, boost::any> getCles() const {
         return cles;
     }
 
-    map<string, string> getComponents() const {
-        return components;
-    }
-
-    map<string, Message*> getMessages() const {
+    boost::ptr_map<string, boost::any> getMessages() const {
         return messages;
     }
+
+	const boost::ptr_map<string, boost::any>& getTopology() const {
+		return topology;
+	}
+
+	boost::ptr_map<int, boost::any>& getFlows() {
+		return flows;
+	}
 };

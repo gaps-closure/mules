@@ -96,7 +96,7 @@ int main(int argc, char **argv)
 
     GenEgress genEgress(config.getEgressDir(), "egress_xdcc.c", "");
     genEgress.generate(xdccFlow);
-
+/*
     GenEcho genEcho(config.getEchoDir(), "xdcc_echo.cpp", "xdcc_echo.h");
     genEcho.generate(xdccFlow);
 
@@ -109,4 +109,5 @@ int main(int argc, char **argv)
         config.setEnclave(enclave);
         genIngress.generate(xdccFlow);
     }
+    */
 }

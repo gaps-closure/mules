@@ -28,7 +28,7 @@ protected:
     ofstream genfile;
     ofstream headerfile;
     std::set<string> varSet;
-    int var_count;
+    int var_count = 1;
     set<const Message *> myMessages;
 
 public:
@@ -61,12 +61,12 @@ public:
     void generate(XdccFlow& xdccFlow) {
         get_my_messages(xdccFlow);
 
-        if (myMessages.empty()) {
-            return;
-        }
-        open(xdccFlow);
-        gen(xdccFlow);
-        close();
+//        if (myMessages.empty()) {
+//            return;
+//        }
+//        open(xdccFlow);
+//        gen(xdccFlow);
+//        close();
     }
 
     void endOfFunc() {
@@ -127,41 +127,29 @@ private:
         myMessages.clear();
         string enclave = config.getEnclave();
 
-        map<string, string> components = xdccFlow.getComponents();
-
         for (auto const& msg_map : xdccFlow.getMessages()) {
-            Message *message = msg_map.second;
-
-            Cle *cle = xdccFlow.find_cle(message);
-            if (cle == NULL) {
-                cerr << __FUNCTION__ << ": no CLE for " << msg_map.first;
-                continue;
-            }
-            if (cle->getLevel().empty()) {
-                cerr << __FUNCTION__ << ": no level defined for CLE " << message->getCle();
-                continue;
-            }
-            if (!cle->getLevel().compare(enclave)) {
-                myMessages.insert(message);
-            }
-            else {
-                continue;
-            }
+            Message *message = (Message *)msg_map.second;
+            string msgName = message->getName();
+            cout << msgName << endl;
 
             bool local = true;
-            for (auto &flow : message->getFlows()) {
-                map<string, string>::iterator it = components.find(flow.getDestination());
-                if (it != components.end()) {
-                    string dst_enclave = it->second;
-                    boost::to_lower(dst_enclave);
-                    if (dst_enclave.compare(enclave)) {
-                        local = false;
-                    }
-                    // cout << enclave << " -> " << dst_enclave  << " " << local << endl;
-                }
+            for (auto const flow_map : xdccFlow.getFlows()) {
+            	Flow *flow = (Flow *) flow_map.second;
+            	if (flow->getMessage().compare(msgName))
+            		continue;
+
+            	Cle *cle = xdccFlow.find_cle(flow);
+            	if (cle == NULL) {
+            		cerr << __FUNCTION__ << ": no CLE for " << msgName << endl;
+            		continue;
+            	}
+
+            	local = cle->isLocal(enclave, flow);
+            	if (!local)
+            		break;
             }
             message->setLocal(local);
-            // cout << msg_map.first << " " << message->isLocal() << " "  << enclave << endl << endl;
+            myMessages.insert(message);
         }
     }
 };

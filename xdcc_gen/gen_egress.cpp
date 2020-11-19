@@ -196,7 +196,7 @@ void GenEgress::gen_xdcc(Message *message)
 {
    string msg_name = message->getName();
 
-   std::ifstream schemaStream(message->getSchema());
+   std::ifstream schemaStream(message->getSchemaFile());
    json schemaJson;
    schemaStream >> schemaJson;
 
@@ -388,7 +388,7 @@ void GenEgress::gen_egress(Message *message)
 {
    string msg_name = message->getName();
 
-   std::ifstream schemaStream(message->getSchema());
+   std::ifstream schemaStream(message->getSchemaFile());
    json schemaJson;
    schemaStream >> schemaJson;
 
@@ -484,19 +484,19 @@ void GenEgress::annotations(const XdccFlow &xdccFlow)
     genfile << "#pragma cle def " + my_enclave_u + " {\"level\":\"" + my_enclave + "\"}" << endl << endl;
 
     // generate shareables
-    map<string, string> components = xdccFlow.getComponents();
-    for (auto const& message : myMessages) {
-        // find remote enclaves the message is to be shared, to prepare to generate the SHAREABLEs
-        for (auto &flow : message->getFlows()) {
-            map<string, string>::iterator it = components.find(flow.getDestination());
-            if (it != components.end() && it->second.compare(my_enclave_u)) {
-                remoteEnclaves.insert(it->second);
-                shares[message->getName()] = it->second;  // e.g. ORANGE or PURPLE
-            }
-        }
-    }
+//    map<string, string> components = xdccFlow.getComponents();
+//    for (auto const& message : myMessages) {
+//        // find remote enclaves the message is to be shared, to prepare to generate the SHAREABLEs
+//        for (auto &flow : message->getFlows()) {
+//            map<string, string>::iterator it = components.find(flow.getDestination());
+//            if (it != components.end() && it->second.compare(my_enclave_u)) {
+//                remoteEnclaves.insert(it->second);
+//                shares[message->getName()] = it->second;  // e.g. ORANGE or PURPLE
+//            }
+//        }
+//    }
 
-    map<string, Cle *> cles = xdccFlow.getCles();
+    boost::ptr_map<string, Cle *> cles = xdccFlow.getCles();
     for (auto const& x : remoteEnclaves) {
         Cdf *cdf = xdccFlow.find_cle(x, my_enclave);
         if (cdf == NULL) {
@@ -514,7 +514,7 @@ void GenEgress::annotations(const XdccFlow &xdccFlow)
         findAndReplaceAll(clestr, "\n", " \\\n");
         genfile << "#pragma cle def " + x + "_SHAREABLE " << clestr << endl << endl;
     }
-
+/*
     // generate xdlinkages
     set<string> gened;
     for (auto const& message : myMessages) {
@@ -558,6 +558,7 @@ void GenEgress::annotations(const XdccFlow &xdccFlow)
             genfile << "#pragma cle def XDLINKAGE_ECHO_" + upper_name << " " << clestr << endl << endl;
         }
     }
+    */
 }
 
 int GenEgress::open(const XdccFlow &xdccFlow)
@@ -578,21 +579,21 @@ int GenEgress::open(const XdccFlow &xdccFlow)
     genfile << "/* Messages in system */" << endl;
     genfile << "#define ALL_MSGS_LIST";
     for (auto const& message : myMessages) {
-        string msgName = message->name;
+        string msgName = message->getName();
 
         genfile << ", \\\n    " << msgName;
     }
     genfile << endl << endl;
 
     genfile << "/* _local_X is 1 if X is local, else 0 */\n";
-    for (auto const& message : myMessages) {
-        genfile << "#define _local_" + message->name + " " + (message->isLocal() ? "1" : "0") << endl;
-    }
+//    for (auto const& message : myMessages) {
+//        genfile << "#define _local_" + message->name + " " + (message->isLocal() ? "1" : "0") << endl;
+//    }
     genfile << endl << endl;
 
     genfile << "/* _topic_X is 1 if X is a msg_name, else 0 */\n";
     for (auto const& message : myMessages) {
-        genfile << "#define _topic_" + message->name + " " + (message->isTopic() ? "1" : "0") << endl;
+        genfile << "#define _topic_" + message->getName() + " " + (message->isTopic() ? "1" : "0") << endl;
     }
     genfile << endl;
 

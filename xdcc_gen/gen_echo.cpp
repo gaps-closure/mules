@@ -135,7 +135,7 @@ void GenEcho::gen_echo(Message *message)
 {
    string topic = message->getName();
 
-   std::ifstream schemaStream(message->getSchema());
+   std::ifstream schemaStream(message->getSchemaFile());
    json schemaJson;
    schemaStream >> schemaJson;
 
@@ -314,7 +314,7 @@ void GenEcho::gen_unmarshal_obj(Message *message, json j, vector<string> path, v
 
 void GenEcho::gen_unmarshal(Message *message)
 {
-   std::ifstream schemaStream(message->getSchema());
+   std::ifstream schemaStream(message->getSchemaFile());
    json schemaJson;
    schemaStream >> schemaJson;
 

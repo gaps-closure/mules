@@ -301,97 +301,97 @@
     ],
     "messages": [
         {
-            "message": "component_heartbeats",
-            "isTopic": true,
+            "name": "component_heartbeats",
+            "topic": true,
             "schemaType": "JSONSchema",
             "schemaFile": "schema/component_heartbeats_schema.json"
         },
         {
-            "message": "missionPlan",
-            "isTopic": true,
+            "name": "missionPlan",
+            "topic": true,
             "schemaType": "JSONSchema",
             "schemaFile": "schema/updateMissionPlan_schema.json"
         },
         {
-            "message": "receiveISRMDetections",
-            "isTopic": true,
+            "name": "receiveISRMDetections",
+            "topic": true,
             "schemaType": "JSONSchema",
             "schemaFile": "schema/receiveISRMDetections_schema.json"
         },
         {
-            "message": "groundMovers",
-            "isTopic": true,
+            "name": "groundMovers",
+            "topic": true,
             "schemaType": "JSONSchema",
             "schemaFile": "schema/groundMovers_schema.json"
         },
         {
-            "message": "requestISRMDetectionsn",
-            "isTopic": true,
+            "name": "requestISRMDetectionsn",
+            "topic": true,
             "schemaType": "JSONSchema",
             "schemaFile": "schema/requestISRMDetectionsn_schema.json"
         },
         {
-            "message": "pnt",
-            "isTopic": true,
+            "name": "pnt",
+            "topic": true,
             "schemaType": "JSONSchema",
             "schemaFile": "schema/pnt_schema.json"
         },
         {
-            "message": "status",
-            "isTopic": true,
+            "name": "status",
+            "topic": true,
             "schemaType": "JSONSchema",
             "schemaFile": "schema/status_schema.json"
         },
         {
-            "message": "requestEOIRDetections",
-            "isTopic": true,
+            "name": "requestEOIRDetections",
+            "topic": true,
             "schemaType": "JSONSchema",
             "schemaFile": "schema/requestEOIRDetections_schema.json"
         },
         {
-            "message": "requestRDRDetections",
-            "isTopic": true,
+            "name": "requestRDRDetections",
+            "topic": true,
             "schemaType": "JSONSchema",
             "schemaFile": "schema/requestRDRDetections_schema.json"
         },
         {
-            "message": "identified",
-            "isTopic": true,
+            "name": "identified",
+            "topic": true,
             "schemaType": "JSONSchema",
             "schemaFile": "schema/identified_schema.json"
         },
         {
-            "message": "receiveEOIRDetections",
-            "isTopic": true,
+            "name": "receiveEOIRDetections",
+            "topic": true,
             "schemaType": "JSONSchema",
             "schemaFile": "schema/receiveEOIRDetections_schema.json"
         },
         {
-            "message": "targets",
-            "isTopic": true,
+            "name": "targets",
+            "topic": true,
             "schemaType": "JSONSchema",
             "schemaFile": "schema/targets_schema.json"
         },
         {
-            "message": "detectObjects",
-            "isTopic": true,
+            "name": "detectObjects",
+            "topic": true,
             "schemaType": "JSONSchema",
             "schemaFile": "schema/detectObjects_schema.json"
         },
         {
-            "message": "receiveRDRDetections",
-            "isTopic": true,
+            "name": "receiveRDRDetections",
+            "topic": true,
             "schemaType": "JSONSchema",
             "schemaFile": "schema/receiveRDRDetections_schema.json"
         },
         {
-            "message": "MTI",
-            "isTopic": true,
+            "name": "MTI",
+            "topic": true,
             "schemaType": "JSONSchema",
             "schemaFile": "schema/MTI_schema.json"
         }
     ],    
-    "cle": [
+    "cles": [
         {
             "cle-label": "MPU_CLE_LABEL",
             "cle-json": {
