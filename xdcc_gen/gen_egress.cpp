@@ -62,13 +62,13 @@ void to_json(json& j, const Cdf& p) {
 
 void to_json(json& j, Cle& p)
 {
-    std::vector<Cdf> x = p.getCdf();
-    json j2 = x;
-
-    j = json{
-            {"level", p.getLevel()},
-            {"cdf", j2}
-    };
+//    std::vector<Cdf> x = p.getCdf();
+//    json j2 = x;
+//
+//    j = json{
+//            {"level", p.getLevel()},
+//            {"cdf", j2}
+//    };
 }
 
 /******************************
@@ -496,23 +496,23 @@ void GenEgress::annotations(const XdccFlow &xdccFlow)
 //        }
 //    }
 
-    boost::ptr_map<string, Cle *> cles = xdccFlow.getCles();
+    map<string, Cle *> cles = xdccFlow.getCles();
     for (auto const& x : remoteEnclaves) {
         Cdf *cdf = xdccFlow.find_cle(x, my_enclave);
         if (cdf == NULL) {
             cout << "SHAREABLE: Could not find CDF for level/remote : " << x << "/" << my_enclave << endl;
             continue;
         }
-
-        string lower_x = x;
-        boost::to_lower(lower_x);
-        Cle tmpCle(lower_x, cdf);
-        json clejson;
-        to_json(clejson, tmpCle);
-               
-        string clestr = clejson.dump(4);
-        findAndReplaceAll(clestr, "\n", " \\\n");
-        genfile << "#pragma cle def " + x + "_SHAREABLE " << clestr << endl << endl;
+//
+//        string lower_x = x;
+//        boost::to_lower(lower_x);
+//        Cle tmpCle(lower_x, cdf);
+//        json clejson;
+//        to_json(clejson, tmpCle);
+//
+//        string clestr = clejson.dump(4);
+//        findAndReplaceAll(clestr, "\n", " \\\n");
+//        genfile << "#pragma cle def " + x + "_SHAREABLE " << clestr << endl << endl;
     }
 /*
     // generate xdlinkages

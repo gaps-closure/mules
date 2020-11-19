@@ -7,7 +7,9 @@ OBJ = \
 	main.o \
 	gen_echo.o \
 	gen_egress.o \
-	util.o
+	util.o \
+	Gen.o \
+	XdccFlow.o
 
 TEST_OBJ = \
 	run.o

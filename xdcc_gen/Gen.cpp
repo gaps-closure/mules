@@ -1,0 +1,137 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <set>
+#include <nlohmann/json.hpp>
+#include <boost/filesystem/path.hpp>
+#include <boost/filesystem/operations.hpp>
+#include <boost/algorithm/string.hpp>
+
+#include "Gen.h"
+#include "XdccFlow.h"
+#include "util.h"
+#include "XdccException.h"
+
+Gen::Gen(const string& path, const string& filename, const string& header) {
+	string fname = filename;
+	string hname = header;
+	if (path.compare(".") != 0) {
+		fs::path dir(path);
+
+		if (!fs::exists(dir)) {
+			if (!boost::filesystem::create_directories(dir)) {
+				cout << "failed to create output directory: " << path << endl;
+				exit(1);
+			}
+		}
+		fname = path + "/" + filename;
+		hname = path + "/" + header;
+	}
+	genfile.open(fname);
+
+	if (!header.empty()) {
+		headerfile.open(hname);
+	}
+}
+
+void Gen::generate(XdccFlow& xdccFlow)
+{
+	get_my_messages(xdccFlow);
+
+	//        if (myMessages.empty()) {
+	//            return;
+	//        }
+	//        open(xdccFlow);
+	//        gen(xdccFlow);
+	//        close();
+}
+
+void Gen::endOfFunc()
+{
+	varSet.clear();
+	var_count = 1;
+}
+
+int Gen::gen_var(string &key)
+{
+	std::set<std::string>::iterator it = varSet.find(key);
+	if (it != varSet.end()) {
+		key += to_string(var_count);
+		var_count++;
+		return 1;
+	}
+	else {
+		varSet.insert(key);
+		return 0;
+	}
+}
+
+string Gen::gen_path(vector<string> &path)
+{
+	string pathStr;
+	for (std::vector<string>::iterator it = path.begin(); it != path.end(); ++it) {
+		pathStr += "[\"" + *it + "\"]";
+	}
+
+	return pathStr;
+}
+
+void Gen::gen_leaf(vector<string> path, string leaf, vector<string> &assignments, bool isString)
+{
+	string left = isString ? "string(" : "";
+	string right = isString ? ")" : "";
+
+	string assign = "    js" + gen_path(path) + " = " + left + leaf + right + ";";
+
+	assignments.push_back(assign);
+}
+
+string Gen::get_field(json js, string field, Message *message, vector<string> path)
+{
+	if (js.find(field) == js.end()) {
+		string err = "missing '" + field + "' field in schema of " + message->getName() + gen_path(path);
+		throw DataException(err);
+	}
+	string val;
+	try {
+		val = js[field];
+	}
+	catch (nlohmann::detail::type_error &e) {
+		val = to_string(js[field]);
+	}
+
+	return val;
+}
+
+void Gen::get_my_messages(XdccFlow& xdccFlow) {
+    myMessages.clear();
+    string enclave = config.getEnclave();
+
+    for (auto const& msg_map : xdccFlow.getMessages()) {
+        Message *message = (Message *)msg_map.second;
+        string msgName = message->getName();
+        cout << msgName << endl;
+
+        bool local = true;
+        for (auto const flow_map : xdccFlow.getFlows()) {
+        	Flow *flow = (Flow *) flow_map.second;
+        	if (flow->getMessage().compare(msgName))
+        		continue;
+
+        	Cle *cle = xdccFlow.find_cle(flow);
+        	if (cle == NULL) {
+        		cerr << __FUNCTION__ << ": no CLE for " << msgName << endl;
+        		continue;
+        	}
+
+        	CleJson cleJson = cle->getCleJson();
+        	local = cleJson.isLocal(enclave, flow);
+        	if (!local)
+        		break;
+        }
+        message->setLocal(local);
+        myMessages.insert(message);
+    }
+}

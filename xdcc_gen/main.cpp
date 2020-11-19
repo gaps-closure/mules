@@ -19,6 +19,7 @@ using json = nlohmann::json;
 #include "XdccFlow.h"
 
 Config config(".", ".", ".", "xdcc_flow.json");
+int verbose = 0;
 
 void from_json(const json& j, Config& config)
 {
@@ -51,13 +52,14 @@ static int parse_cmdline(int argc, char *argv[])
         {"ingress",  required_argument, 0, 'i'},
         {"echo",     required_argument, 0, 'k'},
         {"config",   required_argument, 0, 'c'},
+		{"verbose",     no_argument,       0, 'v'},
         {"help",     no_argument,       0, 'h'},
         {0, 0, 0, 0}
     };
 
     vector<char *> dirs;
     int option_index = 0;
-    while ((c = getopt_long(argc, argv, "he:i:k:f:c:", long_options, &option_index)) != -1) {
+    while ((c = getopt_long(argc, argv, "hve:i:k:f:c:", long_options, &option_index)) != -1) {
        switch (c) {
           case 'e':
              config.setEgressDir(optarg);
@@ -75,6 +77,9 @@ static int parse_cmdline(int argc, char *argv[])
 
               config = js.get<Config>();
           }
+             break;
+          case 'v':
+        	 verbose = 1;
              break;
           case 'h':
              print_usage(argv[0]);

@@ -1,4 +1,4 @@
-#include "gen.h"
+#include "Gen.h"
 #include "XdccFlow.h"
 
 void make_header_xdcc();
