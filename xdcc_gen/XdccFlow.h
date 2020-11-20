@@ -26,25 +26,25 @@ private:
 public:
     Flow(nlohmann::basic_json<> value);
 
-	const int getDataId() const {
-		return dataId;
-	}
+    const int getDataId() const {
+        return dataId;
+    }
 
-	const string& getFromComponent() const {
-		return fromComponent;
-	}
+    const string& getFromComponent() const {
+        return fromComponent;
+    }
 
-	const string& getLabel() const {
-		return label;
-	}
+    const string& getLabel() const {
+        return label;
+    }
 
-	const string& getMessage() const {
-		return message;
-	}
+    const string& getMessage() const {
+        return message;
+    }
 
-	const string& getToComponent() const {
-		return toComponent;
-	}
+    const string& getToComponent() const {
+        return toComponent;
+    }
 };
 
 class Component {
@@ -57,21 +57,21 @@ private:
 public:
     Component(nlohmann::basic_json<> value);
 
-	const string& getComponent() const {
-		return component;
-	}
+    const string& getComponent() const {
+        return component;
+    }
 
-	const vector<int>& getInMessages() const {
-		return inMessages;
-	}
+    const vector<int>& getInMessages() const {
+        return inMessages;
+    }
 
-	const string& getLabel() const {
-		return label;
-	}
+    const string& getLabel() const {
+        return label;
+    }
 
-	const vector<int>& getOutMessages() const {
-		return outMessages;
-	}
+    const vector<int>& getOutMessages() const {
+        return outMessages;
+    }
 };
 
 class Message {
@@ -85,29 +85,29 @@ private:
 public:
     Message(nlohmann::basic_json<> value);
 
-	const string& getName() const {
-		return name;
-	}
+    const string& getName() const {
+        return name;
+    }
 
-	const string& getSchemaFile() const {
-		return schemaFile;
-	}
+    const string& getSchemaFile() const {
+        return schemaFile;
+    }
 
-	const string& getSchemaType() const {
-		return schemaType;
-	}
+    const string& getSchemaType() const {
+        return schemaType;
+    }
 
-	bool isTopic() const {
-		return topic;
-	}
+    bool isTopic() const {
+        return topic;
+    }
 
-	bool isLocal() const {
-		return local;
-	}
+    bool isLocal() const {
+        return local;
+    }
 
-	void setLocal(bool local = false) {
-		this->local = local;
-	}
+    void setLocal(bool local = false) {
+        this->local = local;
+    }
 };
 
 class GuardDirective
@@ -231,15 +231,15 @@ public:
     Cle(nlohmann::basic_json<> value);
     
     ~Cle() {
-	}
+    }
 
-	const CleJson& getCleJson() const {
-		return cleJson;
-	}
+    const CleJson& getCleJson() const {
+        return cleJson;
+    }
 
-	const string& getLabel() const {
-		return label;
-	}
+    const string& getLabel() const {
+        return label;
+    }
 };
 
 class XdccFlow {
@@ -259,19 +259,19 @@ public:
 
     Cle *find_cle(const Flow *flow) const;
 
-	const map<string, Cle*>& getCles() const {
-		return cles;
-	}
+    const map<string, Cle*>& getCles() const {
+        return cles;
+    }
 
-	const map<int, Flow*>& getFlows() const {
-		return flows;
-	}
+    const map<int, Flow*>& getFlows() const {
+        return flows;
+    }
 
-	const map<string, Message*>& getMessages() const {
-		return messages;
-	}
+    const map<string, Message*>& getMessages() const {
+        return messages;
+    }
 
-	const map<string, Component*>& getTopology() const {
-		return topology;
-	}
+    const map<string, Component*>& getTopology() const {
+        return topology;
+    }
 };

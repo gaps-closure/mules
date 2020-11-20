@@ -39,8 +39,8 @@ static void print_usage(char *cmd)
          << "  -k \t echo output directory" << endl
          << "  -f \t input JSON file" << endl
          << "  -c \t configuration file" << endl
-		 << "  -d \t" << endl
-		 << "  -v \t" << endl
+         << "  -d \t" << endl
+         << "  -v \t" << endl
          << "  -h \t print this message and exit" << endl
          ;
     exit(0);
@@ -55,8 +55,8 @@ static int parse_cmdline(int argc, char *argv[])
         {"ingress",  required_argument, 0, 'i'},
         {"echo",     required_argument, 0, 'k'},
         {"config",   required_argument, 0, 'c'},
-		{"verbose",  no_argument,       0, 'v'},
-		{"debug",    no_argument,       0, 'd'},
+        {"verbose",  no_argument,       0, 'v'},
+        {"debug",    no_argument,       0, 'd'},
         {"help",     no_argument,       0, 'h'},
         {0, 0, 0, 0}
     };
@@ -83,10 +83,10 @@ static int parse_cmdline(int argc, char *argv[])
           }
              break;
           case 'v':
-        	 verbose = 1;
+             verbose = 1;
              break;
           case 'd':
-        	 debug = 1;
+             debug = 1;
              break;
           case 'h':
              print_usage(argv[0]);
