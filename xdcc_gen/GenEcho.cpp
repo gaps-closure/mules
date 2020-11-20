@@ -15,7 +15,7 @@ using namespace std;
 using json = nlohmann::json;
 
 #include "util.h"
-#include "gen_echo.h"
+#include "GenEcho.h"
 #include "XdccException.h"
 
 /******************************

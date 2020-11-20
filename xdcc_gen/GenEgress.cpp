@@ -12,15 +12,14 @@
 #include <nlohmann/json.hpp>
 #include <boost/algorithm/string.hpp>
 
-using namespace std;
-using json = nlohmann::json;
-
 #include "util.h"
-#include "gen_egress.h"
+#include "GenEgress.h"
 #include "Config.h"
 #include "XdccException.h"
+#include "main.h"
 
-extern Config config;
+using namespace std;
+using json = nlohmann::json;
 
 void to_json(json& j, const GuardDirective& p) {
     string x = p.getOperation();

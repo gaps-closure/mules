@@ -1,4 +1,9 @@
+#pragma once
+
+
 #include <vector>
+
+using namespace std;
 
 void trim(std::string &s);
 string toString(vector<int> v);

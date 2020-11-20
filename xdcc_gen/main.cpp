@@ -13,8 +13,8 @@ using namespace std;
 using json = nlohmann::json;
 
 #include "util.h"
-#include "gen_echo.h"
-#include "gen_egress.h"
+#include "GenEcho.h"
+#include "GenEgress.h"
 #include "Config.h"
 #include "XdccFlow.h"
 

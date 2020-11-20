@@ -1,8 +1,6 @@
-#include "Gen.h"
+#pragma once
 
-void make_header_echo();
-void gen_unmarshal(string topic, string filename);
-void gen_echo(string topic, string filename);
+#include "Gen.h"
 
 class GenEcho : public Gen
 {

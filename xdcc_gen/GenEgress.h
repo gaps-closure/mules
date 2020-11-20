@@ -1,9 +1,8 @@
+#pragma once
+
 #include "Gen.h"
 #include "XdccFlow.h"
-
-void make_header_xdcc();
-void gen_egress(string topic, string filename);
-void gen_xdcc(string topic, string filename);
+#include "main.h"
 
 class GenEgress : public Gen
 {
