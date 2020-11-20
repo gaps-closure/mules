@@ -73,7 +73,7 @@ void to_json(json& j, Cle& p)
 /******************************
  * XDCC
  */
-void GenEgress::gen_xdcc_array(Message *message, json j, vector<string> path, vector<string> &assignments,
+void GenEgress::genXdccArray(Message *message, json j, vector<string> path, vector<string> &assignments,
                       vector<string> &in_args, vector<string> &out_args)
 {
     string countVar = "count";
@@ -93,10 +93,10 @@ void GenEgress::gen_xdcc_array(Message *message, json j, vector<string> path, ve
         try {
             string type = get_field(val, "type", message, path);
             if (type == "array") {
-                gen_xdcc_array(message, val["items"]["properties"], path, assignments, in_args, out_args);
+                genXdccArray(message, val["items"]["properties"], path, assignments, in_args, out_args);
             }
             else if (type == "object") {
-                gen_xdcc_obj(message, j["properties"], path, assignments, in_args, out_args);
+                genXdccObj(message, j["properties"], path, assignments, in_args, out_args);
             }
             else {
                 string in_arg;
@@ -135,7 +135,7 @@ void GenEgress::gen_xdcc_array(Message *message, json j, vector<string> path, ve
     }
 }
 
-void GenEgress::gen_xdcc_obj(Message *message, json j, vector<string> path, vector<string> &assignments,
+void GenEgress::genXdccObj(Message *message, json j, vector<string> path, vector<string> &assignments,
                     vector<string> &in_args, vector<string> &out_args)
 {
     for (auto& el : j.items()) {
@@ -150,10 +150,10 @@ void GenEgress::gen_xdcc_obj(Message *message, json j, vector<string> path, vect
 
             string type = get_field(val, "type", message, path);
             if (type == "array") {
-                gen_xdcc_array(message, val["items"]["properties"], path, assignments, in_args, out_args);
+                genXdccArray(message, val["items"]["properties"], path, assignments, in_args, out_args);
             }
             else if (type == "object") {
-                gen_xdcc_obj(message, val["properties"], path, assignments, in_args, out_args);
+                genXdccObj(message, val["properties"], path, assignments, in_args, out_args);
             }
             else {
                 string in_arg;
@@ -191,7 +191,7 @@ void GenEgress::gen_xdcc_obj(Message *message, json j, vector<string> path, vect
     }
 }
 
-void GenEgress::gen_xdcc(Message *message)
+void GenEgress::genXdcc(Message *message)
 {
    string msg_name = message->getName();
 
@@ -207,10 +207,10 @@ void GenEgress::gen_xdcc(Message *message)
 
        string type = get_field(schemaJson, "type", message, path);
        if (type == "array") {
-           gen_xdcc_array(message, schemaJson["items"]["properties"], path, assignments, in_args, out_args);
+           genXdccArray(message, schemaJson["items"]["properties"], path, assignments, in_args, out_args);
        }
        else if (type == "object") {
-           gen_xdcc_obj(message, schemaJson["properties"], path, assignments, in_args, out_args);
+           genXdccObj(message, schemaJson["properties"], path, assignments, in_args, out_args);
        }
        else {
            throw DataException("unsupported type: " + type + " for " + message->getName());
@@ -261,7 +261,7 @@ void GenEgress::gen_xdcc(Message *message)
 /******************************
  * egress
  */
-void GenEgress::gen_egress_array(Message *message, json j, vector<string> path,
+void GenEgress::genEgressArray(Message *message, json j, vector<string> path,
         vector<string> &assignments, vector<string> &in_args, vector<string> &out_args)
 {
     string countVar = "count";
@@ -282,10 +282,10 @@ void GenEgress::gen_egress_array(Message *message, json j, vector<string> path,
         try {
             string type = get_field(val, "type", message, path);
             if (type == "array") {
-                gen_egress_array(message, val["items"]["properties"], path, assignments, in_args, out_args);
+                genEgressArray(message, val["items"]["properties"], path, assignments, in_args, out_args);
             }
             else if (type == "object") {
-                gen_egress_obj(message, val["properties"], path, assignments, in_args, out_args);
+                genEgressObj(message, val["properties"], path, assignments, in_args, out_args);
             }
             else {
                 string in_arg;
@@ -325,7 +325,7 @@ void GenEgress::gen_egress_array(Message *message, json j, vector<string> path,
     }
 }
 
-void GenEgress::gen_egress_obj(Message *message, json j, vector<string> path, vector<string> &assignments,
+void GenEgress::genEgressObj(Message *message, json j, vector<string> path, vector<string> &assignments,
         vector<string> &in_args, vector<string> &out_args)
 {
     for (auto& el : j.items()) {
@@ -339,11 +339,11 @@ void GenEgress::gen_egress_obj(Message *message, json j, vector<string> path, ve
 
             string type = get_field(val, "type", message, path);
             if (type == "array") {
-                gen_egress_array(message, val["items"]["properties"], path,
+                genEgressArray(message, val["items"]["properties"], path,
                         assignments, in_args, out_args);
             }
             else if (type == "object") {
-                gen_egress_obj(message, val["properties"], path, assignments,
+                genEgressObj(message, val["properties"], path, assignments,
                         in_args, out_args);
             }
             else {
@@ -383,7 +383,7 @@ void GenEgress::gen_egress_obj(Message *message, json j, vector<string> path, ve
     }
 }
 
-void GenEgress::gen_egress(Message *message)
+void GenEgress::genEgress(Message *message)
 {
    string msg_name = message->getName();
 
@@ -399,10 +399,10 @@ void GenEgress::gen_egress(Message *message)
 
        string type = get_field(schemaJson, "type", message, path);
        if (type == "array") {
-           gen_egress_array(message, schemaJson["items"]["properties"], path, assignments, in_args, out_args);
+           genEgressArray(message, schemaJson["items"]["properties"], path, assignments, in_args, out_args);
        }
        else if (type == "object") {
-           gen_egress_obj(message, schemaJson["properties"], path, assignments, in_args, out_args);
+           genEgressObj(message, schemaJson["properties"], path, assignments, in_args, out_args);
        }
        else {
            throw DataException("Unsupported type: " + type);
@@ -462,10 +462,10 @@ int GenEgress::gen(XdccFlow& xdccFlow)
 {
     string enclave = config.getEnclave();
     for (auto const& message : myMessages) {
-        gen_xdcc((Message *)message);
+        genXdcc((Message *)message);
         endOfFunc();
 
-        gen_egress((Message *)message);
+        genEgress((Message *)message);
         endOfFunc();
     }
     return 0;
