@@ -5,6 +5,7 @@
 #include <exception>
 #include <unordered_map>
 #include <set>
+#include <utility>
 #include <unistd.h>
 #include <dirent.h>
 #include <getopt.h>
@@ -193,69 +194,73 @@ void GenEgress::genXdccObj(Message *message, json j, vector<string> path, vector
 
 void GenEgress::genXdcc(Message *message)
 {
-   string msg_name = message->getName();
+    string msg_name = message->getName();
 
-   std::ifstream schemaStream(message->getSchemaFile());
-   json schemaJson;
-   schemaStream >> schemaJson;
+    std::ifstream schemaStream(message->getSchemaFile());
+    if (schemaStream.fail()) {
+        cerr << "ERROR: schema " << message->getSchemaFile() << " does not exists" << endl;
+        return;
+    }
+    json schemaJson;
+    schemaStream >> schemaJson;
 
-   try {
-       vector<string> path;
-       vector<string> assignments;
-       vector<string> in_args;
-       vector<string> out_args;
+    try {
+        vector<string> path;
+        vector<string> assignments;
+        vector<string> in_args;
+        vector<string> out_args;
 
-       string type = getField(schemaJson, "type", message, path);
-       if (type == "array") {
-           genXdccArray(message, schemaJson["items"]["properties"], path, assignments, in_args, out_args);
-       }
-       else if (type == "object") {
-           genXdccObj(message, schemaJson["properties"], path, assignments, in_args, out_args);
-       }
-       else {
-           throw DataException("unsupported type: " + type + " for " + message->getName());
-       }
+        string type = getField(schemaJson, "type", message, path);
+        if (type == "array") {
+            genXdccArray(message, schemaJson["items"]["properties"], path, assignments, in_args, out_args);
+        }
+        else if (type == "object") {
+            genXdccObj(message, schemaJson["properties"], path, assignments, in_args, out_args);
+        }
+        else {
+            throw DataException("unsupported type: " + type + " for " + message->getName());
+        }
 
-       string msg_name_u = msg_name;
-       boost::to_upper(msg_name_u);
-       genfile << "#pragma cle begin XDLINKAGE_ECHO_" << msg_name_u << endl
-               << "int echo_" << msg_name << "(";
+        string msg_name_u = msg_name;
+        boost::to_upper(msg_name_u);
+        genfile << "#pragma cle begin XDLINKAGE_ECHO_" << msg_name_u << endl
+                << "int echo_" << msg_name << "(";
 
-       bool first = true;
-       for (std::vector<string>::iterator it = in_args.begin(); it != in_args.end(); ++it) {
-           if (!first) {
-               genfile << ",";
-           }
-           else {
-               first = false;
-           }
-           genfile << "\n    " << *it;
-       }
-       genfile << endl
-               << ")" << endl
-               << "#pragma cle end XDLINKAGE_ECHO_" << msg_name_u << endl
-               << "{" << endl;
+        bool first = true;
+        for (std::vector<string>::iterator it = in_args.begin(); it != in_args.end(); ++it) {
+            if (!first) {
+                genfile << ",";
+            }
+            else {
+                first = false;
+            }
+            genfile << "\n    " << *it;
+        }
+        genfile << endl
+                << ")" << endl
+                << "#pragma cle end XDLINKAGE_ECHO_" << msg_name_u << endl
+                << "{" << endl;
 
-       for (std::vector<string>::iterator it = assignments.begin(); it != assignments.end(); ++it) {
-           genfile << *it << endl;
-       }
+        for (std::vector<string>::iterator it = assignments.begin(); it != assignments.end(); ++it) {
+            genfile << *it << endl;
+        }
 
-       genfile << "    echo_" + msg_name + "_cpp(\n"
-               << "        amq(),\n"
-               << "        _topic_" + msg_name;
-       for (std::vector<string>::iterator it = out_args.begin(); it != out_args.end(); ++it) {
-           genfile << ",";
-           genfile << "\n        " << *it;
-       }
-       genfile << "\n    );\n";
+        genfile << "    echo_" + msg_name + "_cpp(\n"
+                << "        amq(),\n"
+                << "        _topic_" + msg_name;
+        for (std::vector<string>::iterator it = out_args.begin(); it != out_args.end(); ++it) {
+            genfile << ",";
+            genfile << "\n        " << *it;
+        }
+        genfile << "\n    );\n";
 
-       genfile << "    return 0;" << endl
-               << "}" << endl
-               << endl;
-   }
-   catch (DataException &e) {
-       e.print();
-   }
+        genfile << "    return 0;" << endl
+                << "}" << endl
+                << endl;
+    }
+    catch (DataException &e) {
+        e.print();
+    }
 }
 
 /******************************
@@ -388,6 +393,10 @@ void GenEgress::genEgress(Message *message)
    string msg_name = message->getName();
 
    std::ifstream schemaStream(message->getSchemaFile());
+   if (schemaStream.fail()) {
+       cerr << "ERROR: schema " << message->getSchemaFile() << " does not exists" << endl;
+       return;
+   }
    json schemaJson;
    schemaStream >> schemaJson;
 
@@ -471,6 +480,147 @@ int GenEgress::gen(XdccFlow& xdccFlow)
     return 0;
 }
 
+void GenEgress::populateRemoteEnclaves(const XdccFlow &xdccFlow)
+{
+    string enclave = config.getEnclave();
+    remoteEnclaves.clear();
+
+    for (auto const &msg_map : xdccFlow.getMessages()) {
+        Message *message = (Message*) msg_map.second;
+        string msgName = message->getName();
+
+        for (auto const flow_map : xdccFlow.getFlows()) {
+            Flow *flow = (Flow*) flow_map.second;
+            if (flow->getMessage().compare(msgName))
+                continue;
+
+            Cle *cle = xdccFlow.find_cle(flow);
+            if (cle == NULL) {
+                cerr << __FUNCTION__ << ": no CLE for " << msgName << endl;
+                continue;
+            }
+
+            CleJson cleJson = cle->getCleJson();
+            string level = cleJson.getLevel();
+            vector<Cdf> cdf = cleJson.getCdf();
+            for (int i = 0; i < cdf.size(); i++) {
+                if (level.compare(enclave))  // not flowing from my enclave
+                    continue;
+
+                string remote = cdf[i].getRemoteLevel();
+                if (remote.compare(enclave)) { // flow to a different enclave
+                    remoteEnclaves.insert(remote);
+                    cout << "XXXX "  << remote << endl;
+                }
+            }
+        }
+    }
+
+}
+
+static void genShareables(const XdccFlow &xdccFlow, ofstream& genFile)
+{
+    string enclave = config.getEnclave();
+
+    for (auto const &msg_map : xdccFlow.getMessages()) {
+        Message *message = (Message*) msg_map.second;
+        string msgName = message->getName();
+
+        set<string> remoteEnclaves;
+        for (auto const flow_map : xdccFlow.getFlows()) {
+            Flow *flow = (Flow*) flow_map.second;
+            if (flow->getMessage().compare(msgName))
+                continue;
+
+            Cle *cle = xdccFlow.find_cle(flow);
+            if (cle == NULL) {
+                cerr << __FUNCTION__ << ": no CLE for " << msgName << endl;
+                continue;
+            }
+
+            CleJson cleJson = cle->getCleJson();
+            string level = cleJson.getLevel();
+            vector<Cdf> cdf = cleJson.getCdf();
+            for (int i = 0; i < cdf.size(); i++) {
+                if (level.compare(enclave))  // not flowing from my enclave
+                    continue;
+
+                string remote = cdf[i].getRemoteLevel();
+                if (remote.compare(enclave)) { // flow to a different enclave
+                    if (remoteEnclaves.find(remote) == remoteEnclaves.end()) { // not generated
+                        remoteEnclaves.insert(remote);
+
+                        string remote_u = remote;
+                        boost::to_upper(remote_u);
+                        string msgName_u = msgName;
+                        boost::to_upper(msgName_u);
+                        json clejson;
+                        to_json(clejson, cdf[i]);
+
+                        string clestr = clejson.dump(4);
+                        findAndReplaceAll(clestr, "\n", " \\\n");
+                        genFile << "#pragma cle def "
+                                << msgName_u << "_" << remote_u
+                                << "_SHAREABLE " << clestr << endl << endl;
+                    }
+                }
+            }
+        }
+    }
+}
+
+static void genXDLinkages(const XdccFlow &xdccFlow, ofstream& genFile)
+{
+    string enclave = config.getEnclave();
+
+    for (auto const &msg_map : xdccFlow.getMessages()) {
+        Message *message = (Message*) msg_map.second;
+        string msgName = message->getName();
+
+        set<string> remoteEnclaves;
+        for (auto const flow_map : xdccFlow.getFlows()) {
+            Flow *flow = (Flow*) flow_map.second;
+            if (flow->getMessage().compare(msgName))
+                continue;
+
+            Cle *cle = xdccFlow.find_cle(flow);
+            if (cle == NULL) {
+                cerr << __FUNCTION__ << ": no CLE for " << msgName << endl;
+                continue;
+            }
+
+            CleJson cleJson = cle->getCleJson();
+            string level = cleJson.getLevel();
+            vector<Cdf> cdf = cleJson.getCdf();
+            for (int i = 0; i < cdf.size(); i++) {
+                if (level.compare(enclave))  // not flowing from my enclave
+                    continue;
+
+                string remote = cdf[i].getRemoteLevel();
+                if (remote.compare(enclave)) { // flow to a different enclave
+                    if (remoteEnclaves.find(remote) == remoteEnclaves.end()) { // not generated
+                        remoteEnclaves.insert(remote);
+
+                        string remote_u = remote;
+                        boost::to_upper(remote_u);
+                        string msgName_u = msgName;
+                        boost::to_upper(msgName_u);
+                        json clejson;
+                        to_json(clejson, cdf[i]);
+
+                        string clestr = clejson.dump(4);
+                        findAndReplaceAll(clestr, "\n", " \\\n");
+
+                        genFile << "#pragma cle def XDLINKAGE_ECHO_"
+                                << msgName_u << "_" << remote_u << " "
+                                << clestr << endl << endl;
+                    }
+                }
+            }
+        }
+    }
+}
+
 void GenEgress::annotations(const XdccFlow &xdccFlow)
 {
     shares.clear();
@@ -482,82 +632,9 @@ void GenEgress::annotations(const XdccFlow &xdccFlow)
 
     genfile << "#pragma cle def " + my_enclave_u + " {\"level\":\"" + my_enclave + "\"}" << endl << endl;
 
-    // generate shareables
-//    map<string, string> components = xdccFlow.getComponents();
-//    for (auto const& message : myMessages) {
-//        // find remote enclaves the message is to be shared, to prepare to generate the SHAREABLEs
-//        for (auto &flow : message->getFlows()) {
-//            map<string, string>::iterator it = components.find(flow.getDestination());
-//            if (it != components.end() && it->second.compare(my_enclave_u)) {
-//                remoteEnclaves.insert(it->second);
-//                shares[message->getName()] = it->second;  // e.g. ORANGE or PURPLE
-//            }
-//        }
-//    }
-
-    map<string, Cle *> cles = xdccFlow.getCles();
-    for (auto const& x : remoteEnclaves) {
-        Cdf *cdf = xdccFlow.find_cle(x, my_enclave);
-        if (cdf == NULL) {
-            cout << "SHAREABLE: Could not find CDF for level/remote : " << x << "/" << my_enclave << endl;
-            continue;
-        }
-//
-//        string lower_x = x;
-//        boost::to_lower(lower_x);
-//        Cle tmpCle(lower_x, cdf);
-//        json clejson;
-//        to_json(clejson, tmpCle);
-//
-//        string clestr = clejson.dump(4);
-//        findAndReplaceAll(clestr, "\n", " \\\n");
-//        genfile << "#pragma cle def " + x + "_SHAREABLE " << clestr << endl << endl;
-    }
-/*
-    // generate xdlinkages
-    set<string> gened;
-    for (auto const& message : myMessages) {
-        std::map<string, Cle *>::iterator it = cles.find(message->getCle());
-        if (it == cles.end()) {
-            cout << "CLE " + message->getCle() << " not found for " << message->getName() << endl;
-            continue;
-        }
-        Cle *cle = it->second;
-
-        for (auto &flow : message->getFlows()) {
-            string dst = flow.getDestination();
-
-            map<string, string>::iterator it = components.find(dst);
-            if (it == components.end()) {
-                cout << "ERROR: no such destination in components: " + dst;
-                continue;
-            }
-            string remote = it->second;
-            boost::to_lower(remote);
-            if (gened.find(remote) != gened.end() || !remote.compare(my_enclave)) {
-                continue;
-            }
-            gened.insert(remote);
-
-            Cdf *cdf = cle->find_cdf(my_enclave, remote, true);
-            if (cdf == NULL) {
-                cout << "XDLINKAGE: Could not find CDF for level/remote: " << my_enclave << "/" << remote << endl;
-                continue;
-            }
-
-            Cle tmpCle(my_enclave, cdf);
-            json clejson;
-            to_json(clejson, tmpCle);
-
-            string upper_name = message->getName();
-            boost::to_upper(upper_name);
-
-            string clestr = clejson.dump(4);
-            findAndReplaceAll(clestr, "\n", " \\\n");
-            genfile << "#pragma cle def XDLINKAGE_ECHO_" + upper_name << " " << clestr << endl << endl;
-        }
-    }
-    */
+    populateRemoteEnclaves(xdccFlow);
+    genShareables(xdccFlow, genfile);
+    genXDLinkages(xdccFlow, genfile);
 }
 
 int GenEgress::open(const XdccFlow &xdccFlow)
@@ -577,18 +654,21 @@ int GenEgress::open(const XdccFlow &xdccFlow)
 
     genfile << "/* Messages in system */" << endl;
     genfile << "#define ALL_MSGS_LIST";
+    bool first = true;
     for (auto const& message : myMessages) {
         string msgName = message->getName();
-
-        genfile << ", \\\n    " << msgName;
+        if (!first)
+            genfile << ",";
+        genfile << " \\\n    " << msgName;
+        first = false;
     }
     genfile << endl << endl;
 
     genfile << "/* _local_X is 1 if X is local, else 0 */\n";
-//    for (auto const& message : myMessages) {
-//        genfile << "#define _local_" + message->name + " " + (message->isLocal() ? "1" : "0") << endl;
-//    }
-    genfile << endl << endl;
+    for (auto const& message : myMessages) {
+        genfile << "#define _local_" + message->getName() + " " + (message->isLocal() ? "1" : "0") << endl;
+    }
+    genfile << endl;
 
     genfile << "/* _topic_X is 1 if X is a msg_name, else 0 */\n";
     for (auto const& message : myMessages) {

@@ -23,6 +23,7 @@ public:
     }
 
 protected:
+    void populateRemoteEnclaves(const XdccFlow &xdccFlow);
     void annotations(const XdccFlow &xdccFlow);
 
     void genEgress(Message *message);

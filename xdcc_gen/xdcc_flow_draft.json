@@ -320,7 +320,7 @@
         },
         {
             "name": "groundMovers",
-            "topic": true,
+            "topic": false,
             "schemaType": "JSONSchema",
             "schemaFile": "schema/groundMovers_schema.json"
         },

@@ -46,8 +46,8 @@ void Gen::generate(XdccFlow &xdccFlow)
         return;
     }
     open(xdccFlow);
-    //        gen(xdccFlow);
-    //        close();
+    gen(xdccFlow);
+    close();
 }
 
 void Gen::endOfFunc()
