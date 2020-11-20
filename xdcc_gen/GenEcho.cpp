@@ -28,7 +28,7 @@ void GenEcho::genEchoArray(Message *message, string arrayName, json j, vector<st
     in_args.push_back("    int " + count);
     out_args.push_back(count);
 
-    string indices = gen_path(path);
+    string indices = genPath(path);
 
     assignments.push_back("\n    for (int i = 0; i < " + count + "; i++) {");
     assignments.push_back("        json ele = js" + indices + "[i];\n");
@@ -39,14 +39,14 @@ void GenEcho::genEchoArray(Message *message, string arrayName, json j, vector<st
         json val = el.value();
 
         string var(key);
-        int inc = gen_var(var);
+        int inc = genVar(var);
 
         path.push_back(key);
 
         try {
             string stmt = "        ele[\"" + key + "\"] = " + var + "[i];";
 
-            string type = get_field(val, "type", message, path);
+            string type = getField(val, "type", message, path);
             if (type == "array") {
                 genEchoArray(message, key, val["items"]["properties"], path, assignments, in_args, out_args);
             }
@@ -68,7 +68,7 @@ void GenEcho::genEchoArray(Message *message, string arrayName, json j, vector<st
                     in_arg = "    double " + var + "[]";
                 }
                 else {
-                    throw DataException("unsupported type " + type + " for " + gen_path(path));
+                    throw DataException("unsupported type " + type + " for " + genPath(path));
                 }
                 in_args.push_back(in_arg);
                 out_args.push_back(out_arg);
@@ -94,9 +94,9 @@ void GenEcho::genEchoObj(Message *message, json j, vector<string> path, vector<s
         path.push_back(key);
         try {
             string var(key);
-            gen_var(var);
+            genVar(var);
 
-            string type = get_field(val, "type", message, path);
+            string type = getField(val, "type", message, path);
             if (type == "array") {
                 genEchoArray(message, key, val["items"]["properties"], path, assignments, in_args, out_args);
             }
@@ -117,11 +117,11 @@ void GenEcho::genEchoObj(Message *message, json j, vector<string> path, vector<s
                     in_arg = "    double " + var;
                 }
                 else {
-                    throw DataException("unsupported type " + type + " for " + gen_path(path));
+                    throw DataException("unsupported type " + type + " for " + genPath(path));
                 }
                 in_args.push_back(in_arg);
 
-                gen_leaf(path, var, assignments, isString);
+                genLeaf(path, var, assignments, isString);
             }
         }
         catch (DataException &e) {
@@ -145,7 +145,7 @@ void GenEcho::genEcho(Message *message)
        vector<string> in_args;
        vector<string> out_args;
 
-       string type = get_field(schemaJson, "type", message, path);
+       string type = getField(schemaJson, "type", message, path);
        if (type == "array") {
            genEchoArray(message, "", schemaJson["items"]["properties"], path, assignments, in_args, out_args);
        }
@@ -196,10 +196,10 @@ void GenEcho::genUnmarshalArray(Message *message, string arrayName, json j, vect
         vector<string> &assignments, vector<string> &in_args, vector<string> &out_args)
 {
     string countVar = "count";
-    gen_var(countVar);
+    genVar(countVar);
     in_args.push_back("    int " + countVar);
 
-    string indices = gen_path(path);
+    string indices = genPath(path);
 
     assignments.push_back("\n    for (int i = 0; i < " + countVar +"; i++) {");
     assignments.push_back("        json ele = js" + indices + "[i];");
@@ -209,11 +209,11 @@ void GenEcho::genUnmarshalArray(Message *message, string arrayName, json j, vect
         json val = el.value();
 
         string var(key);
-        gen_var(var);
+        genVar(var);
 
         path.push_back(key);
         try {
-            string type = get_field(val, "type", message, path);
+            string type = getField(val, "type", message, path);
             if (type == "array") {
                 genUnmarshalArray(message, key, val["items"]["properties"], path, assignments, in_args, out_args);
             }
@@ -240,7 +240,7 @@ void GenEcho::genUnmarshalArray(Message *message, string arrayName, json j, vect
                     stmt = "        " + var + "[i] = ele[\"" + key + "\"]" + ".get<double>();";
                 }
                 else {
-                    throw DataException("unsupported type " + type + " for " + gen_path(path));
+                    throw DataException("unsupported type " + type + " for " + genPath(path));
                 }
                 assignments.push_back(stmt);
                 in_args.push_back(in_arg);
@@ -264,9 +264,9 @@ void GenEcho::genUnmarshalObj(Message *message, json j, vector<string> path, vec
         path.push_back(key);
         try {
             string var(key);
-            gen_var(var);
+            genVar(var);
 
-            string type = get_field(val, "type", message, path);
+            string type = getField(val, "type", message, path);
             if (type == "array") {
                 genUnmarshalArray(message, key, val["items"]["properties"], path, assignments, in_args, out_args);
             }
@@ -278,7 +278,7 @@ void GenEcho::genUnmarshalObj(Message *message, json j, vector<string> path, vec
                 string stmt;
                 string out_arg;
 
-                string indices = gen_path(path);
+                string indices = genPath(path);
 
                 if (type == "string") {
                     in_arg  = "    char *" + var;
@@ -297,7 +297,7 @@ void GenEcho::genUnmarshalObj(Message *message, json j, vector<string> path, vec
                     out_arg = "    *" + var + " = " + var + "_cpp;";
                 }
                 else {
-                    throw DataException("unsupported type " + type + " for " + gen_path(path));
+                    throw DataException("unsupported type " + type + " for " + genPath(path));
                 }
                 in_args.push_back(in_arg);
                 assignments.push_back(stmt);
@@ -324,7 +324,7 @@ void GenEcho::genUnmarshal(Message *message)
        vector<string> in_args;
        vector<string> out_args;
 
-       string type = get_field(schemaJson, "type", message, path);
+       string type = getField(schemaJson, "type", message, path);
        if (type == "array") {
            genUnmarshalArray(message, "", schemaJson["items"]["properties"], path, assignments, in_args, out_args);
        }

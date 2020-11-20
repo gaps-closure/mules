@@ -56,7 +56,7 @@ void Gen::endOfFunc()
     var_count = 1;
 }
 
-int Gen::gen_var(string &key)
+int Gen::genVar(string &key)
 {
     std::set<std::string>::iterator it = varSet.find(key);
     if (it != varSet.end()) {
@@ -70,7 +70,7 @@ int Gen::gen_var(string &key)
     }
 }
 
-string Gen::gen_path(vector<string> &path)
+string Gen::genPath(vector<string> &path)
 {
     string pathStr;
     for (std::vector<string>::iterator it = path.begin(); it != path.end();
@@ -81,24 +81,24 @@ string Gen::gen_path(vector<string> &path)
     return pathStr;
 }
 
-void Gen::gen_leaf(vector<string> path, string leaf,
+void Gen::genLeaf(vector<string> path, string leaf,
         vector<string> &assignments, bool isString)
 {
     string left = isString ? "string(" : "";
     string right = isString ? ")" : "";
 
-    string assign = "    js" + gen_path(path) + " = " + left + leaf + right
+    string assign = "    js" + genPath(path) + " = " + left + leaf + right
             + ";";
 
     assignments.push_back(assign);
 }
 
-string Gen::get_field(json js, string field, Message *message,
+string Gen::getField(json js, string field, Message *message,
         vector<string> path)
 {
     if (js.find(field) == js.end()) {
         string err = "missing '" + field + "' field in schema of "
-                + message->getName() + gen_path(path);
+                + message->getName() + genPath(path);
         throw DataException(err);
     }
     string val;

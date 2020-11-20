@@ -77,7 +77,7 @@ void GenEgress::genXdccArray(Message *message, json j, vector<string> path, vect
                       vector<string> &in_args, vector<string> &out_args)
 {
     string countVar = "count";
-    gen_var(countVar);
+    genVar(countVar);
     assignments.push_back("    int " + countVar + " = 1; // TODO: get json array length");
 
     int i = 0;
@@ -86,12 +86,12 @@ void GenEgress::genXdccArray(Message *message, json j, vector<string> path, vect
         json val = el.value();
 
         string var(key);
-        int inc = gen_var(var);
+        int inc = genVar(var);
 
         path.push_back(key);
 
         try {
-            string type = get_field(val, "type", message, path);
+            string type = getField(val, "type", message, path);
             if (type == "array") {
                 genXdccArray(message, val["items"]["properties"], path, assignments, in_args, out_args);
             }
@@ -105,7 +105,7 @@ void GenEgress::genXdccArray(Message *message, json j, vector<string> path, vect
                 if (type == "string") {
                     in_arg = "const char *" + var + "[]";
 
-                    string maxLength = get_field(val, "maxLength", message, path);
+                    string maxLength = getField(val, "maxLength", message, path);
                     assignments.push_back("    char " + var + "_cpp[" + countVar + "][" + maxLength + "];");
                     assignments.push_back("    for (int j = 0; j < " + countVar + "; j++)");
                     assignments.push_back("        memcpy(" + var + "_cpp[j], " + var + "[j], " + maxLength + ");\n");
@@ -119,7 +119,7 @@ void GenEgress::genXdccArray(Message *message, json j, vector<string> path, vect
                     in_arg = "double " + var + "[]";
                 }
                 else {
-                    throw DataException("unsupported type " + type + " for " + gen_path(path));
+                    throw DataException("unsupported type " + type + " for " + genPath(path));
                 }
                 in_args.push_back(in_arg);
                 out_args.push_back(out_arg);
@@ -146,9 +146,9 @@ void GenEgress::genXdccObj(Message *message, json j, vector<string> path, vector
 
         try {
             string var(key);
-            gen_var(var);
+            genVar(var);
 
-            string type = get_field(val, "type", message, path);
+            string type = getField(val, "type", message, path);
             if (type == "array") {
                 genXdccArray(message, val["items"]["properties"], path, assignments, in_args, out_args);
             }
@@ -161,7 +161,7 @@ void GenEgress::genXdccObj(Message *message, json j, vector<string> path, vector
                 if (type == "string") {
                     in_arg = "const char *" + var;
 
-                    string maxLength = get_field(val, "maxLength", message, path);
+                    string maxLength = getField(val, "maxLength", message, path);
 
                     string stmt = "    char " + var + "_cpp[" + maxLength + "];";
                     assignments.push_back(stmt);
@@ -178,7 +178,7 @@ void GenEgress::genXdccObj(Message *message, json j, vector<string> path, vector
                     in_arg = "double " + var;
                 }
                 else {
-                    throw DataException("unsupported type " + type + " for " + gen_path(path));
+                    throw DataException("unsupported type " + type + " for " + genPath(path));
                 }
                 in_args.push_back(in_arg);
                 out_args.push_back(out_arg);
@@ -205,7 +205,7 @@ void GenEgress::genXdcc(Message *message)
        vector<string> in_args;
        vector<string> out_args;
 
-       string type = get_field(schemaJson, "type", message, path);
+       string type = getField(schemaJson, "type", message, path);
        if (type == "array") {
            genXdccArray(message, schemaJson["items"]["properties"], path, assignments, in_args, out_args);
        }
@@ -265,7 +265,7 @@ void GenEgress::genEgressArray(Message *message, json j, vector<string> path,
         vector<string> &assignments, vector<string> &in_args, vector<string> &out_args)
 {
     string countVar = "count";
-    gen_var(countVar);
+    genVar(countVar);
     in_args.push_back("        " + countVar);
 
     assignments.push_back("    int " + countVar + " = 1; // TODO: get json array length");
@@ -276,11 +276,11 @@ void GenEgress::genEgressArray(Message *message, json j, vector<string> path,
         json val = el.value();
 
         string var(key);
-        gen_var(var);
+        genVar(var);
 
         path.push_back(key);
         try {
-            string type = get_field(val, "type", message, path);
+            string type = getField(val, "type", message, path);
             if (type == "array") {
                 genEgressArray(message, val["items"]["properties"], path, assignments, in_args, out_args);
             }
@@ -293,7 +293,7 @@ void GenEgress::genEgressArray(Message *message, json j, vector<string> path,
                 string out_arg;
 
                 if (type == "string") {
-                    string maxLength = get_field(val, "maxLength", message, path);
+                    string maxLength = getField(val, "maxLength", message, path);
 
                     stmt    = "    char " + var + "[" + countVar + "][" + maxLength + "];";
                     in_arg  = "        " + var;
@@ -335,9 +335,9 @@ void GenEgress::genEgressObj(Message *message, json j, vector<string> path, vect
         path.push_back(key);
         try {
             string var(key);
-            gen_var(var);
+            genVar(var);
 
-            string type = get_field(val, "type", message, path);
+            string type = getField(val, "type", message, path);
             if (type == "array") {
                 genEgressArray(message, val["items"]["properties"], path,
                         assignments, in_args, out_args);
@@ -352,7 +352,7 @@ void GenEgress::genEgressObj(Message *message, json j, vector<string> path, vect
                 string out_arg;
 
                 if (type == "string") {
-                    string maxLength = get_field(val, "maxLength", message, path);
+                    string maxLength = getField(val, "maxLength", message, path);
                     stmt = "    char " + var + "[" + maxLength + "];";
                     in_arg = "        " + var;
                     out_arg = "            " + var;
@@ -397,7 +397,7 @@ void GenEgress::genEgress(Message *message)
        vector<string> in_args;
        vector<string> out_args;
 
-       string type = get_field(schemaJson, "type", message, path);
+       string type = getField(schemaJson, "type", message, path);
        if (type == "array") {
            genEgressArray(message, schemaJson["items"]["properties"], path, assignments, in_args, out_args);
        }

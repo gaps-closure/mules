@@ -43,14 +43,14 @@ public:
 
     void endOfFunc();
 
-    int gen_var(string &key);
+    int genVar(string &key);
 
-    string gen_path(vector<string> &path);
+    string genPath(vector<string> &path);
 
-    void gen_leaf(vector<string> path, string leaf, vector<string> &assignments,
+    void genLeaf(vector<string> path, string leaf, vector<string> &assignments,
             bool isString);
 
-    string get_field(json js, string field, Message *message,
+    string getField(json js, string field, Message *message,
             vector<string> path);
 
 private:
