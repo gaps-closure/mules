@@ -13,7 +13,7 @@
 using json = nlohmann::json;
 using namespace std;
 
-extern int verbose;
+extern int debug;
 
 Flow::Flow(nlohmann::basic_json<> value) {
 	for (auto& el : value.items()) {
@@ -179,6 +179,9 @@ Cdf* CleJson::find_cdf(string level, string remote, bool note) {
 
 bool CleJson::isLocal(string enclave, Flow *flow) {
 	for (int i = 0; i < cdf.size(); i++) {
+		if (debug) {
+			cout << enclave << " " << level << " " << cdf[i].getRemoteLevel() << endl;
+		}
 		if (this->level.compare(enclave))  // not flowing from my enclave
 			return false;
 
@@ -215,37 +218,37 @@ XdccFlow::XdccFlow(const string &filename) {
 			for (auto& el : value.items()) {
 				Component *component = new Component(el.value());
 				topology[component->getComponent()] = component;
-				if (verbose)
-					cout << component->getComponent() << endl;
+				if (debug)
+					cout << "component: " << component->getComponent() << endl;
 			}
 		}
 		else if (!key.compare("messages")) {
 			for (auto& el : value.items()) {
 				Message *message = new Message(el.value());
 				messages[message->getName()] = message;
-				if (verbose)
-					cout << message->getName() << endl;
+				if (debug)
+					cout << "message: " << message->getName() << endl;
 
-				map<string, Message *>::iterator it = messages.find(message->getName());
-				if (it != messages.end()) {
-					cout << "#### " <<  ((Message *)it->second)->getName() << endl;
-				}
+//				map<string, Message *>::iterator it = messages.find(message->getName());
+//				if (it != messages.end()) {
+//					cout << "#### " <<  ((Message *)it->second)->getName() << endl;
+//				}
 			}
 		}
 		else if (!key.compare("flows")) {
 			for (auto& el2 : value.items()) {
 				Flow *flow = new Flow(el2.value());
 				flows[flow->getDataId()] = flow;
-				if (verbose)
-					cout << flow->getDataId() << endl;
+				if (debug)
+					cout << "flow: " << flow->getDataId() << endl;
 			}
 		}
 		else if (!key.compare("cles")) {
 			for (auto& el : value.items()) {
 				Cle *cle = new Cle(el.value());
 				cles[cle->getLabel()] = cle;
-				if (verbose)
-					cout << cle->getLabel() << endl;
+				if (debug)
+					cout << "cle: " << cle->getLabel() << endl;
 			}
 		}
 	}

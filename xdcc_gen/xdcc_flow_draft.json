@@ -160,7 +160,7 @@
         },
         {
             "dataId": 3001,            
-            "message": "requestEOIRDetection",
+            "message": "requestEOIRDetections",
             "label": "REQUEST_EOIR_DETECTION_ISRM",
             "fromComponent": "ISRM",
             "toComponent": "EOIR"
@@ -307,7 +307,7 @@
             "schemaFile": "schema/component_heartbeats_schema.json"
         },
         {
-            "name": "missionPlan",
+            "name": "updateMissionPlan",
             "topic": true,
             "schemaType": "JSONSchema",
             "schemaFile": "schema/updateMissionPlan_schema.json"
@@ -325,10 +325,10 @@
             "schemaFile": "schema/groundMovers_schema.json"
         },
         {
-            "name": "requestISRMDetectionsn",
+            "name": "requestISRMDetections",
             "topic": true,
             "schemaType": "JSONSchema",
-            "schemaFile": "schema/requestISRMDetectionsn_schema.json"
+            "schemaFile": "schema/requestISRMDetections_schema.json"
         },
         {
             "name": "pnt",
@@ -916,7 +916,7 @@
                 "level": "orange",
                 "cdf": [
                     {
-                        "remotelevel": "orange",
+                        "remotelevel": "green",
                         "direction": "egress",
                         "guarddirective": {
                             "operation": "allow"

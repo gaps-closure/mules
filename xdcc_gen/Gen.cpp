@@ -14,6 +14,8 @@
 #include "util.h"
 #include "XdccException.h"
 
+extern int debug;
+
 Gen::Gen(const string& path, const string& filename, const string& header) {
 	string fname = filename;
 	string hname = header;
@@ -112,7 +114,6 @@ void Gen::get_my_messages(XdccFlow& xdccFlow) {
     for (auto const& msg_map : xdccFlow.getMessages()) {
         Message *message = (Message *)msg_map.second;
         string msgName = message->getName();
-        cout << msgName << endl;
 
         bool local = true;
         for (auto const flow_map : xdccFlow.getFlows()) {
@@ -131,6 +132,8 @@ void Gen::get_my_messages(XdccFlow& xdccFlow) {
         	if (!local)
         		break;
         }
+        if (debug)
+        	cout << "message " << msgName << " is " << (local ? "" : "not ") << "local" << endl;
         message->setLocal(local);
         myMessages.insert(message);
     }
