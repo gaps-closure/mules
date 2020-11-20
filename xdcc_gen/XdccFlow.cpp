@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdarg.h>
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -8,6 +9,7 @@
 
 #include "XdccFlow.h"
 #include "main.h"
+#include "util.h"
 
 using json = nlohmann::json;
 using namespace std;
@@ -33,7 +35,7 @@ Flow::Flow(nlohmann::basic_json<> value)
             toComponent = el.value().get<string>();
         }
         else {
-            cerr << "Flow: unrecognized key: " << key << endl;
+            eprintf("unrecognized key %s", key.c_str());
         }
     }
 }
@@ -58,7 +60,7 @@ Component::Component(nlohmann::basic_json<> value)
                 outMessages.push_back(el2.value());
         }
         else {
-            cerr << "Component: unrecognized key: " << key << endl;
+            eprintf("unrecognized key %s", key.c_str());
         }
     }
 }
@@ -81,8 +83,11 @@ Message::Message(nlohmann::basic_json<> value)
             topic = el.value().get<bool>();
         }
         else {
-            cerr << "Message: unrecognized key: " << key << endl;
+            eprintf("unrecognized key %s", key.c_str());
         }
+    }
+    if (schemaFile.empty()) {
+        eprintf("schemaFile not specified for message %s", name.c_str());
     }
 }
 
@@ -102,6 +107,9 @@ GuardDirective::GuardDirective(nlohmann::basic_json<> value)
         }
         else if (!key.compare("oneway")) {
             oneway = el.value().get<bool>();
+        }
+        else {
+            eprintf("unrecognized key %s", key.c_str());
         }
     }
 }
@@ -140,6 +148,9 @@ Cdf::Cdf(nlohmann::basic_json<> value)
                 argtaints.push_back(vs);
             }
         }
+        else {
+            eprintf("unrecognized key %s", key.c_str());
+        }
     }
 }
 ;
@@ -163,6 +174,9 @@ CleJson::CleJson(nlohmann::basic_json<> value)
                 Cdf c(el2.value());
                 cdf.push_back(c);
             }
+        }
+        else {
+            eprintf("unrecognized key %s", key.c_str());
         }
     }
 }
@@ -211,6 +225,9 @@ Cle::Cle(nlohmann::basic_json<> value)
             CleJson c(el.value());
             cleJson = c;
         }
+        else {
+            eprintf("unrecognized key %s", key.c_str());
+        }
     }
 }
 
@@ -238,11 +255,6 @@ XdccFlow::XdccFlow(const string &filename)
                 messages[message->getName()] = message;
                 if (debug)
                     cout << "message: " << message->getName() << endl;
-
-//				map<string, Message *>::iterator it = messages.find(message->getName());
-//				if (it != messages.end()) {
-//					cout << "#### " <<  ((Message *)it->second)->getName() << endl;
-//				}
             }
         }
         else if (!key.compare("flows")) {
@@ -260,6 +272,9 @@ XdccFlow::XdccFlow(const string &filename)
                 if (debug)
                     cout << "cle: " << cle->getLabel() << endl;
             }
+        }
+        else {
+            eprintf("unrecognized key %s", key.c_str());
         }
     }
 }

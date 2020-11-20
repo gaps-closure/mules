@@ -198,11 +198,12 @@ void GenEgress::genXdcc(Message *message)
 
     std::ifstream schemaStream(message->getSchemaFile());
     if (schemaStream.fail()) {
-        cerr << "ERROR: schema " << message->getSchemaFile() << " does not exists" << endl;
+        eprintf("%s does not exist", message->getSchemaFile().c_str());
         return;
     }
     json schemaJson;
     schemaStream >> schemaJson;
+    schemaStream.close();
 
     try {
         vector<string> path;
@@ -394,11 +395,12 @@ void GenEgress::genEgress(Message *message)
 
    std::ifstream schemaStream(message->getSchemaFile());
    if (schemaStream.fail()) {
-       cerr << "ERROR: schema " << message->getSchemaFile() << " does not exists" << endl;
+       eprintf("%s does not exist", message->getSchemaFile().c_str());
        return;
    }
    json schemaJson;
    schemaStream >> schemaJson;
+   schemaStream.close();
 
    try {
        vector<string> path;
@@ -510,7 +512,6 @@ void GenEgress::populateRemoteEnclaves(const XdccFlow &xdccFlow)
                 string remote = cdf[i].getRemoteLevel();
                 if (remote.compare(enclave)) { // flow to a different enclave
                     remoteEnclaves.insert(remote);
-                    cout << "XXXX "  << remote << endl;
                 }
             }
         }

@@ -1,7 +1,8 @@
 #pragma once
 
-
 #include <vector>
+
+#define eprintf(fmt, ...)  fprintf(stderr, "ERROR in %s:%d, " fmt "\n", __FILE__, __LINE__, ##__VA_ARGS__)
 
 using namespace std;
 

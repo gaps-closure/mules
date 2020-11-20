@@ -137,11 +137,12 @@ void GenEcho::genEcho(Message *message)
 
    std::ifstream schemaStream(message->getSchemaFile());
    if (schemaStream.fail()) {
-       cerr << "ERROR: schema " << message->getSchemaFile() << " does not exists" << endl;
+       eprintf("%s does not exist", message->getSchemaFile().c_str());
        return;
    }
    json schemaJson;
    schemaStream >> schemaJson;
+   schemaStream.close();
 
    try {
        vector<string> path;
@@ -320,11 +321,12 @@ void GenEcho::genUnmarshal(Message *message)
 {
    std::ifstream schemaStream(message->getSchemaFile());
    if (schemaStream.fail()) {
-       cerr << "ERROR: schema " << message->getSchemaFile() << " does not exists" << endl;
+       eprintf("%s does not exist", message->getSchemaFile().c_str());
        return;
    }
    json schemaJson;
    schemaStream >> schemaJson;
+   schemaStream.close();
 
    try {
        vector<string> path;
