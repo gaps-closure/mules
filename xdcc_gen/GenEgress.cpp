@@ -359,19 +359,19 @@ void GenEgress::genEgressObj(Message *message, json j, vector<string> path, vect
 
                 if (type == "string") {
                     string maxLength = getField(val, "maxLength", message, path);
-                    stmt = "char " + var + "[" + maxLength + "];";
+                    stmt = "char " + var + "###[" + maxLength + "];";
                     in_arg = "        " + var;
-                    out_arg = var;
+                    out_arg = var + "###";
                 }
                 else if (type == "integer") {
-                    stmt = "int " + var + ";";
+                    stmt = "int " + var + "###;";
                     in_arg = "        &" + var;
-                    out_arg = var;
+                    out_arg = var + "###";
                 }
                 else if (type == "number") {
-                    stmt = "double " + var + ";";
+                    stmt = "double " + var + "###;";
                     in_arg = "        &" + var;
-                    out_arg = var;
+                    out_arg = var + "###";
                 }
                 else {
                     cout << "unsupported type: " << type << endl;
@@ -413,7 +413,9 @@ void GenEgress::genOneBranch(bool isElse, string msg_name, string component, vec
 
     genfile << "#pragma cle def begin " << msg_name_u << "_" << component_u + "_SHAREABLE" << endl;
     for (std::vector<string>::iterator it = assignments.begin(); it != assignments.end(); ++it) {
-        genfile << "            " << *it << endl;
+        string stmt = *it;
+        findAndReplaceAll(stmt, "###", "_" + component);
+        genfile << "            " << stmt << endl;
     }
     genfile << "#pragma cle def end " << msg_name_u << "_" << component_u + "_SHAREABLE" << endl;
 
@@ -422,7 +424,9 @@ void GenEgress::genOneBranch(bool isElse, string msg_name, string component, vec
     for (std::vector<string>::iterator it = out_args.begin(); it != out_args.end(); ++it) {
         if (!first)
             genfile << ",\n";
-        genfile << "                " << *it;
+        string stmt = *it;
+        findAndReplaceAll(stmt, "###", "_" + component);
+        genfile << "                " << stmt;
         first = false;
     }
     genfile << endl
@@ -467,7 +471,9 @@ void GenEgress::genEgress(Message *message)
                << endl;
 
        for (std::vector<string>::iterator it = assignments.begin(); it != assignments.end(); ++it) {
-           genfile << "    " << *it << endl;
+           string stmt = *it;
+           findAndReplaceAll(stmt, "###", "");
+           genfile << "    " << stmt << endl;
        }
 
        genfile << endl
