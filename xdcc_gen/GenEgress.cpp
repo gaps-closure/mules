@@ -421,7 +421,9 @@ void GenEgress::genEgress(Message *message)
 
        genfile << "int egress_" + msg_name + "(const char *jstr)" << endl
                << "{" << endl
-               << "    int fromRemote;" << endl;
+               << "    int fromRemote;"
+               << "    int dataId;"
+               << endl;
 
        map<string, string>::iterator share_it = shares.find(msg_name);
        if (share_it != shares.end()) {
@@ -441,7 +443,8 @@ void GenEgress::genEgress(Message *message)
 
        genfile << "    unmarshal_" + msg_name + "(" << endl
                << "        jstr," << endl
-               << "        &fromRemote";
+               << "        &fromRemote,"
+               << "        &dataId";
        for (std::vector<string>::iterator it = in_args.begin(); it != in_args.end(); ++it) {
            genfile << ",\n" << *it;
        }
@@ -489,34 +492,66 @@ void GenEgress::populateRemoteEnclaves(const XdccFlow &xdccFlow)
 
     for (auto const &msg_map : xdccFlow.getMessages()) {
         Message *message = (Message*) msg_map.second;
-        string msgName = message->getName();
+        message->clearOutFlow();
+    }
 
-        for (auto const flow_map : xdccFlow.getFlows()) {
-            Flow *flow = (Flow*) flow_map.second;
-            if (flow->getMessage().compare(msgName))
+    const map<string, Message*>& msg_map = xdccFlow.getMessages();
+    for (auto const flow_map : xdccFlow.getFlows()) {
+        Flow *flow = (Flow*) flow_map.second;
+        string msgName = flow->getMessage();
+
+        // add fromComponent to the message's senders
+        map<string, Message *>::const_iterator it = msg_map.find(msgName);
+        if (it == msg_map.end()) {
+            eprintf("no such message: %s", msgName.c_str());
+            continue;
+        }
+        Message *msg = (Message *) it->second;
+        msg->addOutFlow(flow);
+
+        // add remoteLevel to remoteEnclaves
+        Cle *cle = xdccFlow.find_cle(flow);
+        if (cle == NULL) {
+            eprintf("no CLE for %s", msgName.c_str());
+            continue;
+        }
+
+        CleJson cleJson = cle->getCleJson();
+        string level = cleJson.getLevel();
+        vector<Cdf> cdf = cleJson.getCdf();
+        for (int i = 0; i < cdf.size(); i++) {
+            if (level.compare(enclave))  // not flowing from my enclave
                 continue;
 
-            Cle *cle = xdccFlow.find_cle(flow);
-            if (cle == NULL) {
-                cerr << __FUNCTION__ << ": no CLE for " << msgName << endl;
-                continue;
-            }
-
-            CleJson cleJson = cle->getCleJson();
-            string level = cleJson.getLevel();
-            vector<Cdf> cdf = cleJson.getCdf();
-            for (int i = 0; i < cdf.size(); i++) {
-                if (level.compare(enclave))  // not flowing from my enclave
-                    continue;
-
-                string remote = cdf[i].getRemoteLevel();
-                if (remote.compare(enclave)) { // flow to a different enclave
-                    remoteEnclaves.insert(remote);
-                }
+            string remote = cdf[i].getRemoteLevel();
+            if (remote.compare(enclave)) { // flow to a different enclave
+                remoteEnclaves.insert(remote);
             }
         }
     }
 
+    if (debug) {
+        for (auto const &msg_map : xdccFlow.getMessages()) {
+            Message *message = (Message*) msg_map.second;
+            string msgName = message->getName();
+
+            cout << "message " << msgName << ": " << endl;
+            map<string, vector<Flow *>> outFlows = message->getOutFlows();
+            for (auto component : outFlows) {
+                cout << "\tfrom " << component.first << ": ";
+                for (auto& id : component.second) {
+                    cout << id->getDataId() << ", ";
+                }
+                cout << endl;
+            }
+        }
+
+        cout << "local encalve: " << enclave << ", remote enclaves: ";
+        for (auto e : remoteEnclaves) {
+            cout << e << ", ";
+        }
+        cout << endl;
+    }
 }
 
 static void genShareables(const XdccFlow &xdccFlow, ofstream& genFile)

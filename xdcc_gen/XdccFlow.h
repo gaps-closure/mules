@@ -81,9 +81,13 @@ private:
     string schemaType;
     bool topic;
     bool local = false;
+    map<string, vector<Flow *>> outFlows;  // component to flows from that component
 
 public:
     Message(nlohmann::basic_json<> value);
+
+    void addOutFlow(Flow* flow);
+    void clearOutFlow();
 
     const string& getName() const {
         return name;
@@ -107,6 +111,10 @@ public:
 
     void setLocal(bool local = false) {
         this->local = local;
+    }
+
+    const map<string, vector<Flow *>>& getOutFlows() const {
+        return outFlows;
     }
 };
 

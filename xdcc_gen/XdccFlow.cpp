@@ -91,6 +91,22 @@ Message::Message(nlohmann::basic_json<> value)
     }
 }
 
+void Message::addOutFlow(Flow* flow)
+{
+    string from = flow->getFromComponent();
+    const map<string, vector<Flow *>>::const_iterator& it2 = outFlows.find(from);
+    if (it2 == outFlows.end()) {
+        outFlows.insert(make_pair(from, vector<Flow *>()));
+    }
+
+    outFlows[from].push_back(flow);
+}
+
+void Message::clearOutFlow()
+{
+    outFlows.clear();
+}
+
 GuardDirective::GuardDirective(nlohmann::basic_json<> value)
 {
 
