@@ -9,6 +9,7 @@ class GenEgress : public Gen
 private:
     map<string, string> shares;   // from message names to enclave names
     set<string> remoteEnclaves;
+    vector<string> copies;
 
 public:
     GenEgress(const string& path, const string& filename, const string& header) : Gen(path, filename, header) {

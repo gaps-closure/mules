@@ -356,22 +356,29 @@ void GenEgress::genEgressObj(Message *message, json j, vector<string> path, vect
                 string in_arg;
                 string stmt;
                 string out_arg;
+                string copy;
 
                 if (type == "string") {
                     string maxLength = getField(val, "maxLength", message, path);
                     stmt = "char " + var + "###[" + maxLength + "];";
                     in_arg = "        " + var;
                     out_arg = var + "###";
+
+                    copy = "strncpy(" + var + "###, " + var + ", " + maxLength + ");";
                 }
                 else if (type == "integer") {
                     stmt = "int " + var + "###;";
                     in_arg = "        &" + var;
                     out_arg = var + "###";
+
+                    copy = var + "### = " + var + ";";
                 }
                 else if (type == "number") {
                     stmt = "double " + var + "###;";
                     in_arg = "        &" + var;
                     out_arg = var + "###";
+
+                    copy = var + "### = " + var + ";";
                 }
                 else {
                     cout << "unsupported type: " << type << endl;
@@ -380,6 +387,8 @@ void GenEgress::genEgressObj(Message *message, json j, vector<string> path, vect
                 in_args.push_back(in_arg);
                 assignments.push_back(stmt);
                 out_args.push_back(out_arg);
+
+                copies.push_back(copy);
             }
         }
         catch (DataException &e) {
@@ -419,6 +428,13 @@ void GenEgress::genOneBranch(bool isElse, string msg_name, string component, vec
     }
     genfile << "#pragma cle def end " << msg_name_u << "_" << component_u + "_SHAREABLE" << endl;
 
+    // copies
+    for (std::vector<string>::iterator it = copies.begin(); it != copies.end(); ++it) {
+        string stmt = *it;
+        findAndReplaceAll(stmt, "###", "_" + component);
+        genfile << "            " << stmt << endl;
+    }
+
     genfile << "            echo_" << msg_name << "_" << component << "(" << endl;
     first = true;
     for (std::vector<string>::iterator it = out_args.begin(); it != out_args.end(); ++it) {
@@ -448,6 +464,8 @@ void GenEgress::genEgress(Message *message)
    schemaStream.close();
 
    try {
+       copies.clear();
+
        vector<string> path;
        vector<string> assignments;
        vector<string> in_args;
