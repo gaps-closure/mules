@@ -359,19 +359,19 @@ void GenEgress::genEgressObj(Message *message, json j, vector<string> path, vect
 
                 if (type == "string") {
                     string maxLength = getField(val, "maxLength", message, path);
-                    stmt = "    char " + var + "[" + maxLength + "];";
+                    stmt = "char " + var + "[" + maxLength + "];";
                     in_arg = "        " + var;
-                    out_arg = "            " + var;
+                    out_arg = var;
                 }
                 else if (type == "integer") {
-                    stmt = "    int " + var + ";";
+                    stmt = "int " + var + ";";
                     in_arg = "        &" + var;
-                    out_arg = "            " + var;
+                    out_arg = var;
                 }
                 else if (type == "number") {
-                    stmt = "    double " + var + ";";
+                    stmt = "double " + var + ";";
                     in_arg = "        &" + var;
-                    out_arg = "            " + var;
+                    out_arg = var;
                 }
                 else {
                     cout << "unsupported type: " << type << endl;
@@ -387,6 +387,47 @@ void GenEgress::genEgressObj(Message *message, json j, vector<string> path, vect
         }
         path.pop_back();
     }
+}
+
+void GenEgress::genOneBranch(bool isElse, string msg_name, string component, vector<Flow *> flows, vector<string> assignments, vector<string> out_args)
+{
+    string msg_name_u = msg_name;
+    boost::to_upper(msg_name_u);
+
+    string component_u = component;
+    boost::to_upper(component_u);
+
+    if (isElse)
+        genfile << "        else if (";
+    else
+        genfile << "        if (";
+
+    bool first = true;
+    for (auto flow : flows) {
+        if (!first)
+            genfile << " || ";
+        genfile << "dataId == " << flow->getDataId();
+        first = false;
+    }
+    genfile << ") {" << endl;
+
+    genfile << "#pragma cle def begin " << msg_name_u << "_" << component_u + "_SHAREABLE" << endl;
+    for (std::vector<string>::iterator it = assignments.begin(); it != assignments.end(); ++it) {
+        genfile << "            " << *it << endl;
+    }
+    genfile << "#pragma cle def end " << msg_name_u << "_" << component_u + "_SHAREABLE" << endl;
+
+    genfile << "            echo_" << msg_name << "_" << component << "(" << endl;
+    first = true;
+    for (std::vector<string>::iterator it = out_args.begin(); it != out_args.end(); ++it) {
+        if (!first)
+            genfile << ",\n";
+        genfile << "                " << *it;
+        first = false;
+    }
+    genfile << endl
+            << "            );" << endl;
+    genfile << "        }" << endl;
 }
 
 void GenEgress::genEgress(Message *message)
@@ -421,19 +462,12 @@ void GenEgress::genEgress(Message *message)
 
        genfile << "int egress_" + msg_name + "(const char *jstr)" << endl
                << "{" << endl
-               << "    int fromRemote;"
+               << "    int fromRemote;" << endl
                << "    int dataId;"
                << endl;
 
-       map<string, string>::iterator share_it = shares.find(msg_name);
-       if (share_it != shares.end()) {
-           genfile << "#pragma cle def begin " + share_it->second + "_SHAREABLE" << endl;
-       }
        for (std::vector<string>::iterator it = assignments.begin(); it != assignments.end(); ++it) {
-           genfile << *it << endl;
-       }
-       if (share_it != shares.end()) {
-           genfile << "#pragma cle def end " + share_it->second + "_SHAREABLE" << endl;
+           genfile << "    " << *it << endl;
        }
 
        genfile << endl
@@ -443,7 +477,7 @@ void GenEgress::genEgress(Message *message)
 
        genfile << "    unmarshal_" + msg_name + "(" << endl
                << "        jstr," << endl
-               << "        &fromRemote,"
+               << "        &fromRemote," << endl
                << "        &dataId";
        for (std::vector<string>::iterator it = in_args.begin(); it != in_args.end(); ++it) {
            genfile << ",\n" << *it;
@@ -451,17 +485,15 @@ void GenEgress::genEgress(Message *message)
        genfile << endl
                << "    );" << endl;
 
-       genfile << "    if (fromRemote == 0)" << endl
-               << "        echo_" + msg_name + "(" << endl;
-       bool first = true;
-       for (std::vector<string>::iterator it = out_args.begin(); it != out_args.end(); ++it) {
-           if (!first)
-               genfile << ",\n";
-           genfile << *it;
-           first = false;
+       genfile << "    if (fromRemote == 0) {" << endl;
+
+       bool isElse = false;
+       map<string, vector<Flow *>> flows = message->getOutFlows();
+       for (auto component : flows) {
+           genOneBranch(isElse, msg_name, component.first, component.second, assignments, out_args);
+           isElse = true;
        }
-       genfile << endl
-               << "        );" << endl;
+       genfile << "    }" << endl; // if (fromRemote...
 
        genfile << "    return 0;" << endl
                << "}" << endl

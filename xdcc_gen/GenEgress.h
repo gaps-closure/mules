@@ -24,6 +24,7 @@ public:
 
 protected:
     void populateRemoteEnclaves(const XdccFlow &xdccFlow);
+    void genOneBranch(bool isElse, string msg_name, string component, vector<Flow *> flows, vector<string> assignments, vector<string> out_args);
     void annotations(const XdccFlow &xdccFlow);
 
     void genEgress(Message *message);
