@@ -23,6 +23,7 @@ using namespace std;
 using json = nlohmann::json;
 
 const string WCARD = "###";
+const string CPP = "_cpp";
 
 void to_json(json& j, const GuardDirective& p) {
     string x = p.getOperation();
@@ -108,11 +109,11 @@ void GenEgress::traverseArrayEcho(Message *message, json j, vector<string> path)
                     in_arg = "const char *" + var + "[]";
 
                     string maxLength = getField(val, "maxLength", message, path);
-                    stmts.push_back("    char " + var + "_cpp[" + countVar + "][" + maxLength + "];");
+                    stmts.push_back("    char " + var + CPP + "[" + countVar + "][" + maxLength + "];");
                     stmts.push_back("    for (int j = 0; j < " + countVar + "; j++)");
-                    stmts.push_back("        memcpy(" + var + "_cpp[j], " + var + "[j], " + maxLength + ");\n");
+                    stmts.push_back("        memcpy(" + var + CPP + "[j], " + var + "[j], " + maxLength + ");\n");
 
-                    out_arg = var + "_cpp";
+                    out_arg = var + CPP;
                 }
                 else if (type == "integer") {
                     in_arg = "int " + var + "[]";
@@ -164,13 +165,13 @@ void GenEgress::travereObjEcho(Message *message, json j, vector<string> path)
 
                     string maxLength = getField(val, "maxLength", message, path);
 
-                    string stmt = "    char " + var + "_cpp[" + maxLength + "];";
+                    string stmt = "    char " + var + CPP + "[" + maxLength + "];";
                     stmts.push_back(stmt);
 
-                    stmt = "    memcpy(" + var + "_cpp, " + var + ", " + maxLength + ");\n";
+                    stmt = "    memcpy(" + var + CPP + ", " + var + ", " + maxLength + ");\n";
                     stmts.push_back(stmt);
 
-                    out_arg = var + "_cpp";
+                    out_arg = var + CPP;
                 }
                 else if (type == "integer") {
                     in_arg = "int " + var;
@@ -240,7 +241,7 @@ void GenEgress::genEchoCommon(Message *message)
             genfile << *it << endl;
         }
 
-        genfile << "    echo_" + msg_name + "_cpp(\n"
+        genfile << "    echo_" + msg_name + CPP + "(\n"
                 << "        amq(),\n"
                 << "        _topic_" + msg_name;
         for (std::vector<string>::iterator it = out_args.begin(); it != out_args.end(); ++it) {
@@ -286,9 +287,12 @@ void GenEgress::genEcho(Message *message, string component)
         genfile << "    echo_" + msg_name + "_common(";
         first = true;
         for (std::vector<string>::iterator it = out_args.begin(); it != out_args.end(); ++it) {
+            string stmt = *it;
+            findAndReplaceAll(stmt, CPP, "");
+
             if (!first)
                 genfile << ",";
-            genfile << "\n        " << *it;
+            genfile << "\n        " << stmt;
             first = false;
         }
         genfile << "\n    );\n";
