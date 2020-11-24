@@ -86,7 +86,7 @@ void GenEgress::traverseArrayEcho(Message *message, json j, vector<string> path)
 {
     string countVar = "count";
     genVar(countVar);
-    stmts.push_back("    int " + countVar + " = 1; // TODO: get json array length");
+    stmts.push_back("int " + countVar + " = 1; // TODO: get json array length");
 
     int i = 0;
     for (auto& el : j.items()) {
@@ -114,9 +114,9 @@ void GenEgress::traverseArrayEcho(Message *message, json j, vector<string> path)
                     in_arg = "const char *" + var + "[]";
 
                     string maxLength = getField(val, "maxLength", message, path);
-                    stmts.push_back("    char " + var + CPP + "[" + countVar + "][" + maxLength + "];");
-                    stmts.push_back("    for (int j = 0; j < " + countVar + "; j++)");
-                    stmts.push_back("        memcpy(" + var + CPP + "[j], " + var + "[j], " + maxLength + ");\n");
+                    stmts.push_back("char " + var + CPP + "[" + countVar + "][" + maxLength + "];");
+                    stmts.push_back("for (int j = 0; j < " + countVar + "; j++)");
+                    stmts.push_back("    memcpy(" + var + CPP + "[j], " + var + "[j], " + maxLength + ");\n");
 
                     out_arg = var + CPP;
                 }
@@ -317,9 +317,9 @@ void GenEgress::traverseArrayEgress(Message *message, json j, vector<string> pat
 {
     string countVar = "count";
     genVar(countVar);
-    in_args.push_back("        " + countVar);
+    in_args.push_back(countVar);
 
-    stmts.push_back("    int " + countVar + " = 1; // TODO: get json array length");
+    stmts.push_back("int " + countVar + " = 1; // TODO: get json array length");
 
     int i = 0;
     for (auto& el : j.items()) {
@@ -339,26 +339,20 @@ void GenEgress::traverseArrayEgress(Message *message, json j, vector<string> pat
                 traverseObjEgress(message, val["properties"], path);
             }
             else {
-                string in_arg;
+                string in_arg = var;
                 string stmt;
-                string out_arg;
+                string out_arg = var;
 
                 if (type == "string") {
                     string maxLength = getField(val, "maxLength", message, path);
 
-                    stmt    = "    char " + var + "[" + countVar + "][" + maxLength + "];";
-                    in_arg  = "        " + var;
-                    out_arg = "            " + var;
+                    stmt    = "char " + var + "[" + countVar + "][" + maxLength + "];";
                 }
                 else if (type == "integer") {
-                    stmt    = "    int " + var + "[" + countVar + "];";
-                    in_arg  = "        " + var;
-                    out_arg = "            " + var;
+                    stmt    = "int " + var + "[" + countVar + "];";
                 }
                 else if (type == "number") {
-                    stmt    = "    double " + var + "[" + countVar + "];";
-                    in_arg  = "        " + var;
-                    out_arg = "            " + var;
+                    stmt    = "double " + var + "[" + countVar + "];";
                 }
                 else {
                     cout << "unsupported type: " << type << endl;
