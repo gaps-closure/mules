@@ -31,22 +31,21 @@ public:
         return remoteEnclaves;
     }
 
-    const XdccFlow& getXdccFlow() const
-    {
+    const XdccFlow& getXdccFlow() const {
         return xdccFlow;
     }
 
-    void setXdccFlow(const XdccFlow &xdccFlow)
-    {
+    void setXdccFlow(const XdccFlow &xdccFlow) {
         this->xdccFlow = xdccFlow;
     }
 
 protected:
     void genCombo(const XdccFlow &xdccFlow);
-    void groupByLevels(vector<Flow *> flows, map<string, vector<int>>& groups);
+    void populateRemoteEnclaves(const XdccFlow &xdccFlow);
+
     void beginFunc(Message *message, json& schemaJson);
 
-    void populateRemoteEnclaves(const XdccFlow &xdccFlow);
+    void groupByLevels(vector<Flow *> flows, map<string, vector<int>>& groups);
     void annotations(const XdccFlow &xdccFlow);
 
     void traverseEgress(Message *message);

@@ -766,9 +766,6 @@ void GenEgress::annotations(const XdccFlow &xdccFlow)
 
     genfile << "#pragma cle def " + my_enclave_u + " {\"level\":\"" + my_enclave + "\"}" << endl << endl;
 
-    populateRemoteEnclaves(xdccFlow);
-
-    genCombo(xdccFlow);
     for (auto const c : combo) {
         string key = c.first;
         boost::to_upper(key);
@@ -794,6 +791,10 @@ int GenEgress::open(const XdccFlow &xdccFlow)
     combo.clear();
     msgFanOuts.clear();
 
+    setXdccFlow(xdccFlow);
+    populateRemoteEnclaves(xdccFlow);
+    genCombo(xdccFlow);
+
     genfile
       << "#include <stdlib.h>" << endl
       << "#include <string.h>" << endl
@@ -803,7 +804,6 @@ int GenEgress::open(const XdccFlow &xdccFlow)
       << "#include \"map.h\"" << endl << endl
       ;
 
-    setXdccFlow(xdccFlow);
     annotations(xdccFlow);
 
     genfile << "/* Messages in system */" << endl;
