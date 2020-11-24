@@ -7,7 +7,6 @@
 class GenEgress : public Gen
 {
 private:
-    map<string, string> shares;   // from message names to enclave names
     set<string> remoteEnclaves;
 
     vector<string> copies;
@@ -17,7 +16,6 @@ private:
 
     map<string, string> combo;   // message_component_enclave to cle definition
     map<string, vector<string>> msgFanOuts;  // message name to list of combos for that message
-    map<string, map<string, vector<int>>>  groups; // msg -> (level -> [ dataId ])
 
     XdccFlow xdccFlow;
 

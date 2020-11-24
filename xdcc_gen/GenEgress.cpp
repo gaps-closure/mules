@@ -138,8 +138,8 @@ void GenEgress::traverseArrayEcho(Message *message, json j, vector<string> path)
         }
 
         path.pop_back();
-        var_count -= inc;
-        varSet.erase(key);
+//        var_count -= inc;
+//        varSet.erase(key);
     }
 }
 
@@ -248,7 +248,7 @@ void GenEgress::genEchoCommon(Message *message)
 
         genfile << TAB_1 << "echo_" + msg_name + CPP + "(\n"
                 << TAB_2 << "amq(),\n"
-                << TAB_2 << "topic_" + msg_name;
+                << TAB_2 << "_topic_" + msg_name;
         for (std::vector<string>::iterator it = out_args.begin(); it != out_args.end(); ++it) {
             genfile << ",";
             genfile << "\n" << TAB_2 << *it;
@@ -477,7 +477,7 @@ void GenEgress::beginFunc(Message *message, json& schemaJson)
 
 void GenEgress::genFlow(bool isElse, string msg_name, string component, string remote, vector<int> ids)
 {
-    genfile << TAB_1 << (isElse ? "else if (" : "if {");
+    genfile << TAB_1 << (isElse ? "else if (" : "if (");
 
     bool first = true;
     for (auto id : ids) {
@@ -497,14 +497,15 @@ void GenEgress::genFlow(bool isElse, string msg_name, string component, string r
         findAndReplaceAll(stmt, WCARD, suffix);
         genfile << TAB_2 << stmt << endl;
     }
-    genfile << "#pragma cle def end " << key << endl;
-
+    genfile << "#pragma cle def end " << key << endl
+            << endl;
     // copies
     for (std::vector<string>::iterator it = copies.begin(); it != copies.end(); ++it) {
         string stmt = *it;
         findAndReplaceAll(stmt, WCARD, suffix);
         genfile << TAB_2 << stmt << endl;
     }
+    genfile << endl;
 
     genfile << TAB_2 << "echo_" << msg_name << suffix << "(" << endl;
     first = true;
@@ -758,8 +759,6 @@ void GenEgress::genCombo(const XdccFlow& xdccFlow)
 
 void GenEgress::annotations(const XdccFlow &xdccFlow)
 {
-    shares.clear();
-
     string my_enclave = config.getEnclave();
 
     string my_enclave_u = my_enclave;
@@ -791,6 +790,10 @@ void GenEgress::annotations(const XdccFlow &xdccFlow)
 
 int GenEgress::open(const XdccFlow &xdccFlow)
 {
+    remoteEnclaves.clear();
+    combo.clear();
+    msgFanOuts.clear();
+
     genfile
       << "#include <stdlib.h>" << endl
       << "#include <string.h>" << endl
@@ -798,8 +801,6 @@ int GenEgress::open(const XdccFlow &xdccFlow)
       << "#include \"amqlib.h\"" << endl
       << "#include \"xdcc_echo.h\"" << endl
       << "#include \"map.h\"" << endl << endl
-//      << "/* XXX: Need to create CLE-JSON definitions here */" << endl << endl
-//      << "amqlib_t *amq() { static amqlib_t *a = NULL; if (a == NULL) { a = amqlib_create(); } return a; }\n" << endl
       ;
 
     setXdccFlow(xdccFlow);
@@ -840,23 +841,7 @@ int GenEgress::close()
       << "{" << endl
       ;
 
-   set<string> gened;
-   for (auto const& x : shares) {
-       if (gened.find(x.second) != gened.end()) {
-           continue;
-       }
-       gened.insert(x.second);
-       genfile << "#pragma cle def begin " + x.second + "_SHAREABLE" << endl;
-   }
    genfile << "    int i = 100;" << endl;
-   gened.clear();
-   for (auto const& x : shares) {
-       if (gened.find(x.second) != gened.end()) {
-           continue;
-       }
-       gened.insert(x.second);
-       genfile << "#pragma cle end begin " + x.second + "_SHAREABLE" << endl;
-   }
 
    genfile
       << "    amq();" << endl
