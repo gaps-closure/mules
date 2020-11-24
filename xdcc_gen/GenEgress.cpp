@@ -192,7 +192,7 @@ void GenEgress::genXdccObj(Message *message, json j, vector<string> path, vector
     }
 }
 
-void GenEgress::genXdcc(Message *message)
+void GenEgress::genXdcc(Message *message, string component)
 {
     string msg_name = message->getName();
 
@@ -224,8 +224,8 @@ void GenEgress::genXdcc(Message *message)
 
         string msg_name_u = msg_name;
         boost::to_upper(msg_name_u);
-        genfile << "#pragma cle begin XDLINKAGE_ECHO_" << msg_name_u << endl
-                << "int echo_" << msg_name << "(";
+        genfile << "#pragma cle begin XDLINKAGE_ECHO_" << msg_name_u << "_" << component << endl
+                << "int echo_" << msg_name << "_" << component << "(";
 
         bool first = true;
         for (std::vector<string>::iterator it = in_args.begin(); it != in_args.end(); ++it) {
@@ -239,7 +239,7 @@ void GenEgress::genXdcc(Message *message)
         }
         genfile << endl
                 << ")" << endl
-                << "#pragma cle end XDLINKAGE_ECHO_" << msg_name_u << endl
+                << "#pragma cle end XDLINKAGE_ECHO_" << msg_name_u << "_" << component<< endl
                 << "{" << endl;
 
         for (std::vector<string>::iterator it = assignments.begin(); it != assignments.end(); ++it) {
@@ -532,8 +532,11 @@ int GenEgress::gen(XdccFlow& xdccFlow)
 {
     string enclave = config.getEnclave();
     for (auto const& message : myMessages) {
-        genXdcc((Message *)message);
-        endOfFunc();
+        map<string, vector<Flow *>> flows = message->getOutFlows();
+        for (auto component : flows) {
+            genXdcc((Message *)message, component.first);
+            endOfFunc();
+        }
 
         genEgress((Message *)message);
         endOfFunc();
@@ -617,6 +620,11 @@ static void genShareables(const XdccFlow &xdccFlow, ofstream& genFile)
     for (auto const &msg_map : xdccFlow.getMessages()) {
         Message *message = (Message*) msg_map.second;
         string msgName = message->getName();
+
+        map<string, vector<Flow *>> flows = message->getOutFlows();
+        for (auto component : flows) {
+            string sender = component.first;
+        }
 
         set<string> remoteEnclaves;
         for (auto const flow_map : xdccFlow.getFlows()) {

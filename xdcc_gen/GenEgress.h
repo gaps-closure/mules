@@ -34,7 +34,7 @@ protected:
     void genEgressObj(Message *message, json j, vector<string> path, vector<string> &assignments,
             vector<string> &in_args, vector<string> &out_args);
 
-    void genXdcc(Message *message);
+    void genXdcc(Message *message, string component);
     void genXdccArray(Message *message, json j, vector<string> path, vector<string> &assignments,
                         vector<string> &in_args, vector<string> &out_args);
     void genXdccObj(Message *message, json j, vector<string> path, vector<string> &assignments,
