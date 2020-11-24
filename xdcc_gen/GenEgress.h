@@ -15,6 +15,9 @@ private:
     vector<string> in_args;
     vector<string> out_args;
 
+    map<string, string> combo;   // message_component_enclave to cle definition
+    map<string, vector<string>> msgFanOuts;  // message name to list of combos for that message
+
 public:
     GenEgress(const string& path, const string& filename, const string& header) : Gen(path, filename, header) {
     }
@@ -28,6 +31,7 @@ public:
     }
 
 protected:
+    void genCombo(const XdccFlow &xdccFlow);
     void beginFunc(Message *message, json& schemaJson);
 
     void populateRemoteEnclaves(const XdccFlow &xdccFlow);

@@ -259,15 +259,15 @@ void GenEgress::genEchoCommon(Message *message)
     }
 }
 
-void GenEgress::genEcho(Message *message, string component)
+void GenEgress::genEcho(Message *message, string combo)
 {
     try {
         string msg_name = message->getName();
 
-        string msg_name_u = msg_name;
-        boost::to_upper(msg_name_u);
-        genfile << "#pragma cle begin XDLINKAGE_ECHO_" << msg_name_u << "_" << component << endl
-                << "int echo_" << msg_name << "_" << component << "(";
+        string combo_u = combo;
+        boost::to_upper(combo_u);
+        genfile << "#pragma cle begin XDLINKAGE_ECHO_" << combo_u << endl
+                << "int echo_" << combo << "(";
 
         bool first = true;
         for (std::vector<string>::iterator it = in_args.begin(); it != in_args.end(); ++it) {
@@ -281,7 +281,7 @@ void GenEgress::genEcho(Message *message, string component)
         }
         genfile << endl
                 << ")" << endl
-                << "#pragma cle end XDLINKAGE_ECHO_" << msg_name_u << "_" << component<< endl
+                << "#pragma cle end XDLINKAGE_ECHO_" << combo_u << endl
                 << "{" << endl;
 
         genfile << "    echo_" + msg_name + "_common(";
@@ -590,10 +590,16 @@ int GenEgress::gen(XdccFlow& xdccFlow)
         genEchoCommon(message);
         endOfFunc();
 
-        map<string, vector<Flow *>> flows = message->getOutFlows();
-        for (auto component : flows) {
-            genEcho(message, component.first);
-            endOfFunc();
+        string msgName = message->getName();
+        map<string, vector<string>>::iterator it = msgFanOuts.find(msgName);
+        if (it == msgFanOuts.end()) {
+            eprintf("no such message: %s", msgName.c_str());
+        }
+        else {
+            for (auto const label : it->second) {
+                genEcho(message, label);
+                endOfFunc();
+            }
         }
 
         traverseEgress(message);
@@ -672,7 +678,7 @@ void GenEgress::populateRemoteEnclaves(const XdccFlow &xdccFlow)
     }
 }
 
-static void genCombo(const XdccFlow& xdccFlow, map<string, string>& combo)
+void GenEgress::genCombo(const XdccFlow& xdccFlow)
 {
     string enclave = config.getEnclave();
 
@@ -708,6 +714,12 @@ static void genCombo(const XdccFlow& xdccFlow, map<string, string>& combo)
 
             string key = msgName + "_" + fromComponent + "_" + remote;
             combo[key] = clestr;
+
+            const map<string, vector<string>>::const_iterator& it2 = msgFanOuts.find(msgName);
+            if (it2 == msgFanOuts.end()) {
+                msgFanOuts.insert(make_pair(msgName, vector<string>()));
+            }
+            msgFanOuts[msgName].push_back(key);
         }
     }
 }
@@ -725,9 +737,7 @@ void GenEgress::annotations(const XdccFlow &xdccFlow)
 
     populateRemoteEnclaves(xdccFlow);
 
-    map<string, string> combo;
-    genCombo(xdccFlow, combo);
-
+    genCombo(xdccFlow);
     for (auto const c : combo) {
         string key = c.first;
         boost::to_upper(key);
