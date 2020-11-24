@@ -28,6 +28,8 @@ public:
     }
 
 protected:
+    void beginFunc(Message *message, json& schemaJson);
+
     void populateRemoteEnclaves(const XdccFlow &xdccFlow);
     void annotations(const XdccFlow &xdccFlow);
 

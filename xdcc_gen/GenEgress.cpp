@@ -194,18 +194,10 @@ void GenEgress::travereObjEcho(Message *message, json j, vector<string> path)
 
 void GenEgress::traverseEcho(Message *message)
 {
-    string msg_name = message->getName();
-
-    std::ifstream schemaStream(message->getSchemaFile());
-    if (schemaStream.fail()) {
-        eprintf("%s does not exist", message->getSchemaFile().c_str());
-        return;
-    }
-    json schemaJson;
-    schemaStream >> schemaJson;
-    schemaStream.close();
-
     try {
+        json schemaJson;
+        beginFunc(message, schemaJson);
+
         vector<string> path;
 
         string type = getField(schemaJson, "type", message, path);
@@ -220,7 +212,6 @@ void GenEgress::traverseEcho(Message *message)
         }
     }
     catch (DataException &e) {
-        e.print();
     }
 }
 
@@ -442,22 +433,9 @@ void GenEgress::traverseObjEgress(Message *message, json j, vector<string> path)
 
 void GenEgress::traverseEgress(Message *message)
 {
-   string msg_name = message->getName();
-
-   std::ifstream schemaStream(message->getSchemaFile());
-   if (schemaStream.fail()) {
-       eprintf("%s does not exist", message->getSchemaFile().c_str());
-       return;
-   }
-   json schemaJson;
-   schemaStream >> schemaJson;
-   schemaStream.close();
-
    try {
-       copies.clear();
-       stmts.clear();
-       in_args.clear();
-       out_args.clear();
+       json schemaJson;
+       beginFunc(message, schemaJson);
 
        vector<string> path;
 
@@ -473,8 +451,25 @@ void GenEgress::traverseEgress(Message *message)
        }
    }
    catch (DataException &e) {
-       e.print();
    }
+}
+
+void GenEgress::beginFunc(Message *message, json& schemaJson)
+{
+    copies.clear();
+    stmts.clear();
+    in_args.clear();
+    out_args.clear();
+
+    string msg_name = message->getName();
+
+    std::ifstream schemaStream(message->getSchemaFile());
+    if (schemaStream.fail()) {
+        eprintf("%s does not exist", message->getSchemaFile().c_str());
+        throw DataException("");
+    }
+    schemaStream >> schemaJson;
+    schemaStream.close();
 }
 
 void GenEgress::genOneBranch(bool isElse, string msg_name, string component, vector<Flow *> flows)
