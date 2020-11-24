@@ -24,6 +24,11 @@ using json = nlohmann::json;
 
 const string WCARD = "###";
 const string CPP = "_cpp";
+const int INDENT = 4;
+
+#define TAB_1 string(INDENT, ' ')
+#define TAB_2 string(2 * INDENT, ' ')
+#define TAB_3 string(3 * INDENT, ' ')
 
 void to_json(json& j, const GuardDirective& p) {
     string x = p.getOperation();
@@ -165,10 +170,10 @@ void GenEgress::travereObjEcho(Message *message, json j, vector<string> path)
 
                     string maxLength = getField(val, "maxLength", message, path);
 
-                    string stmt = "    char " + var + CPP + "[" + maxLength + "];";
+                    string stmt = "char " + var + CPP + "[" + maxLength + "];";
                     stmts.push_back(stmt);
 
-                    stmt = "    memcpy(" + var + CPP + ", " + var + ", " + maxLength + ");\n";
+                    stmt = "memcpy(" + var + CPP + ", " + var + ", " + maxLength + ");\n";
                     stmts.push_back(stmt);
 
                     out_arg = var + CPP;
@@ -231,26 +236,26 @@ void GenEgress::genEchoCommon(Message *message)
             else {
                 first = false;
             }
-            genfile << "\n    " << *it;
+            genfile << "\n" << TAB_1 << *it;
         }
         genfile << endl
                 << ")" << endl
                 << "{" << endl;
 
         for (std::vector<string>::iterator it = stmts.begin(); it != stmts.end(); ++it) {
-            genfile << *it << endl;
+            genfile << TAB_1 << *it << endl;
         }
 
-        genfile << "    echo_" + msg_name + CPP + "(\n"
-                << "        amq(),\n"
-                << "        _topic_" + msg_name;
+        genfile << TAB_1 << "echo_" + msg_name + CPP + "(\n"
+                << TAB_2 << "amq(),\n"
+                << TAB_2 << "topic_" + msg_name;
         for (std::vector<string>::iterator it = out_args.begin(); it != out_args.end(); ++it) {
             genfile << ",";
-            genfile << "\n        " << *it;
+            genfile << "\n" << TAB_2 << *it;
         }
-        genfile << "\n    );\n";
+        genfile << "\n" << TAB_1 << ");\n";
 
-        genfile << "    return 0;" << endl
+        genfile << TAB_1 << "return 0;" << endl
                 << "}" << endl
                 << endl;
     }
@@ -277,14 +282,14 @@ void GenEgress::genEcho(Message *message, string combo)
             else {
                 first = false;
             }
-            genfile << "\n    " << *it;
+            genfile << "\n" << TAB_1 << *it;
         }
         genfile << endl
                 << ")" << endl
                 << "#pragma cle end XDLINKAGE_ECHO_" << combo_u << endl
                 << "{" << endl;
 
-        genfile << "    echo_" + msg_name + "_common(";
+        genfile << TAB_1 << "echo_" + msg_name + "_common(";
         first = true;
         for (std::vector<string>::iterator it = out_args.begin(); it != out_args.end(); ++it) {
             string stmt = *it;
@@ -292,12 +297,12 @@ void GenEgress::genEcho(Message *message, string combo)
 
             if (!first)
                 genfile << ",";
-            genfile << "\n        " << stmt;
+            genfile << "\n" << TAB_2 << stmt;
             first = false;
         }
-        genfile << "\n    );\n";
+        genfile << "\n" << TAB_1 << ");\n";
 
-        genfile << "    return 0;" << endl
+        genfile << TAB_1 << "return 0;" << endl
                 << "}" << endl
                 << endl;
     }
@@ -398,21 +403,21 @@ void GenEgress::traverseObjEgress(Message *message, json j, vector<string> path)
                 if (type == "string") {
                     string maxLength = getField(val, "maxLength", message, path);
                     stmt = "char " + var + WCARD + "[" + maxLength + "];";
-                    in_arg = "        " + var;
-                    out_arg = var + "###";
+                    in_arg = var;
+                    out_arg = var + WCARD;
 
                     copy = "strncpy(" + var + WCARD + ", " + var + ", " + maxLength + ");";
                 }
                 else if (type == "integer") {
                     stmt = "int " + var + WCARD + ";";
-                    in_arg = "        &" + var;
+                    in_arg = "&" + var;
                     out_arg = var + WCARD;
 
                     copy = var + WCARD + " = " + var + ";";
                 }
                 else if (type == "number") {
                     stmt = "double " + var + WCARD + ";";
-                    in_arg = "        &" + var;
+                    in_arg = "&" + var;
                     out_arg = var + WCARD;
 
                     copy = var + WCARD + "= " + var + ";";
@@ -478,10 +483,7 @@ void GenEgress::beginFunc(Message *message, json& schemaJson)
 
 void GenEgress::genFlow(bool isElse, string msg_name, string component, string remote, vector<int> ids)
 {
-    if (isElse)
-        genfile << "        else if (";
-    else
-        genfile << "        if (";
+    genfile << TAB_1 << (isElse ? "else if (" : "if {");
 
     bool first = true;
     for (auto id : ids) {
@@ -499,7 +501,7 @@ void GenEgress::genFlow(bool isElse, string msg_name, string component, string r
     for (std::vector<string>::iterator it = stmts.begin(); it != stmts.end(); ++it) {
         string stmt = *it;
         findAndReplaceAll(stmt, WCARD, suffix);
-        genfile << "            " << stmt << endl;
+        genfile << TAB_2 << stmt << endl;
     }
     genfile << "#pragma cle def end " << key << endl;
 
@@ -507,22 +509,22 @@ void GenEgress::genFlow(bool isElse, string msg_name, string component, string r
     for (std::vector<string>::iterator it = copies.begin(); it != copies.end(); ++it) {
         string stmt = *it;
         findAndReplaceAll(stmt, WCARD, suffix);
-        genfile << "            " << stmt << endl;
+        genfile << TAB_2 << stmt << endl;
     }
 
-    genfile << "            echo_" << msg_name << suffix << "(" << endl;
+    genfile << TAB_2 << "echo_" << msg_name << suffix << "(" << endl;
     first = true;
     for (std::vector<string>::iterator it = out_args.begin(); it != out_args.end(); ++it) {
         if (!first)
             genfile << ",\n";
         string stmt = *it;
         findAndReplaceAll(stmt, WCARD, suffix);
-        genfile << "                " << stmt;
+        genfile << TAB_3 << stmt;
         first = false;
     }
     genfile << endl
-            << "            );" << endl;
-    genfile << "        }" << endl;
+            << TAB_2 << ");" << endl;
+    genfile << TAB_1 << "}" << endl;
 }
 
 void GenEgress::genEgress(Message *message)
@@ -532,32 +534,34 @@ void GenEgress::genEgress(Message *message)
 
        genfile << "int egress_" + msg_name + "(const char *jstr)" << endl
                << "{" << endl
-               << "    int fromRemote;" << endl
-               << "    int dataId;"
+               << TAB_1 << "int fromRemote;" << endl
+               << TAB_1 << "int dataId;"
                << endl;
 
        for (std::vector<string>::iterator it = stmts.begin(); it != stmts.end(); ++it) {
            string stmt = *it;
            findAndReplaceAll(stmt, WCARD, "");
-           genfile << "    " << stmt << endl;
+           genfile << TAB_1 << stmt << endl;
        }
 
        genfile << endl
-               << "    if (_local_" + msg_name + ")" << endl
-               << "        return;" << endl
+               << TAB_1 << "if (_local_" + msg_name + ")" << endl
+               << TAB_2 << "return 0;" << endl
                << endl;
 
-       genfile << "    unmarshal_" + msg_name + "(" << endl
-               << "        jstr," << endl
-               << "        &fromRemote," << endl
-               << "        &dataId";
+       genfile << TAB_1 << "unmarshal_" + msg_name + "(" << endl
+               << TAB_2 << "jstr," << endl
+               << TAB_2 << "&fromRemote," << endl
+               << TAB_2 << "&dataId";
        for (std::vector<string>::iterator it = in_args.begin(); it != in_args.end(); ++it) {
-           genfile << ",\n" << *it;
+           genfile << ",\n" << TAB_2 << *it;
        }
        genfile << endl
-               << "    );" << endl;
+               << TAB_1 << ");" << endl;
 
-       genfile << "    if (fromRemote == 0) {" << endl;
+       genfile << TAB_1 << "if (fromRemote != 0)" << endl
+               << TAB_2 << "return 0;" << endl
+               << endl;
 
        bool isElse = false;
        map<string, vector<Flow *>> flows = message->getOutFlows();
@@ -570,9 +574,8 @@ void GenEgress::genEgress(Message *message)
                isElse = true;
            }
        }
-       genfile << "    }" << endl; // if (fromRemote...
 
-       genfile << "    return 0;" << endl
+       genfile << TAB_1 << "return 0;" << endl
                << "}" << endl
                << endl;
    }
@@ -711,44 +714,6 @@ void GenEgress::groupByLevels(vector<Flow *> flows, map<string, vector<int>>& gr
         }
         groups[remoteEnclave].push_back(flow->getDataId());
     }
-}
-
-void groupByLevelsX(const XdccFlow& xdccFlow)
-{
-//    string enclave = config.getEnclave();
-//
-//    map<string, Component *> topology = xdccFlow.getTopology();
-//
-//    for (auto const flow_map : xdccFlow.getFlows()) {
-//        Flow *flow = (Flow*) flow_map.second;
-//
-//        string fromComponent = flow->getFromComponent();
-//        string toComponent = flow->getToComponent();
-//        string msgName = flow->getMessage();
-//
-//        const map<string, Component *>::const_iterator& it = topology.find(toComponent);
-//        if (it == topology.end()) {
-//            eprintf("no such component: %s", toComponent.c_str());
-//            continue;
-//        }
-//        Component *component = it->second;
-//
-//        string label = component->getLabel();
-//        Cle *cle = xdccFlow.find_cle(label);
-//        if (cle == NULL) {
-//            eprintf("no CLE for %s", msgName.c_str());
-//            continue;
-//        }
-//
-//        CleJson cleJson = cle->getCleJson();
-//        string remoteEnclave = cleJson.getLevel();
-//
-//        const map<string, map<string, vector<int>>>::const_iterator& it2 = groups.find(msgName);
-//        if (it2 == groups.end()) {
-//            groups.insert(make_pair(msgName, map<string, vector<int>>()));
-//        }
-//        groups[msgName][remoteEnclave].push_back(flow->getDataId());
-//    }
 }
 
 void GenEgress::genCombo(const XdccFlow& xdccFlow)
