@@ -194,7 +194,7 @@ void GenEgress::genXdccObj(Message *message, json j, vector<string> path, vector
     }
 }
 
-void GenEgress::genCommon(Message *message)
+void GenEgress::traverse(Message *message)
 {
     string msg_name = message->getName();
 
@@ -209,9 +209,6 @@ void GenEgress::genCommon(Message *message)
 
     try {
         vector<string> path;
-        vector<string> assignments;
-        vector<string> in_args;
-        vector<string> out_args;
 
         string type = getField(schemaJson, "type", message, path);
         if (type == "array") {
@@ -223,7 +220,17 @@ void GenEgress::genCommon(Message *message)
         else {
             throw DataException("unsupported type: " + type + " for " + message->getName());
         }
+    }
+    catch (DataException &e) {
+        e.print();
+    }
+}
 
+void GenEgress::genCommon(Message *message)
+{
+    string msg_name = message->getName();
+
+    try {
         genfile << "int echo_" << msg_name << "_common(";
 
         bool first = true;
@@ -264,33 +271,8 @@ void GenEgress::genCommon(Message *message)
 
 void GenEgress::genXdcc(Message *message, string component)
 {
-    string msg_name = message->getName();
-
-    std::ifstream schemaStream(message->getSchemaFile());
-    if (schemaStream.fail()) {
-        eprintf("%s does not exist", message->getSchemaFile().c_str());
-        return;
-    }
-    json schemaJson;
-    schemaStream >> schemaJson;
-    schemaStream.close();
-
     try {
-        vector<string> path;
-        vector<string> assignments;
-        vector<string> in_args;
-        vector<string> out_args;
-
-        string type = getField(schemaJson, "type", message, path);
-        if (type == "array") {
-            genXdccArray(message, schemaJson["items"]["properties"], path, assignments, in_args, out_args);
-        }
-        else if (type == "object") {
-            genXdccObj(message, schemaJson["properties"], path, assignments, in_args, out_args);
-        }
-        else {
-            throw DataException("unsupported type: " + type + " for " + message->getName());
-        }
+        string msg_name = message->getName();
 
         string msg_name_u = msg_name;
         boost::to_upper(msg_name_u);
@@ -597,17 +579,22 @@ void GenEgress::genEgress(Message *message)
 int GenEgress::gen(XdccFlow& xdccFlow)
 {
     string enclave = config.getEnclave();
-    for (auto const& message : myMessages) {
-        genCommon((Message *) message);
+
+
+    for (auto const& m : myMessages) {
+        Message *message = (Message *) m;
+        traverse(message);
+
+        genCommon(message);
         endOfFunc();
 
         map<string, vector<Flow *>> flows = message->getOutFlows();
         for (auto component : flows) {
-            genXdcc((Message *)message, component.first);
+            genXdcc(message, component.first);
             endOfFunc();
         }
 
-        genEgress((Message *)message);
+        genEgress(message);
         endOfFunc();
     }
     return 0;

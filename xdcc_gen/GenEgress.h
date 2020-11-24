@@ -9,7 +9,11 @@ class GenEgress : public Gen
 private:
     map<string, string> shares;   // from message names to enclave names
     set<string> remoteEnclaves;
+
     vector<string> copies;
+    vector<string> assignments;
+    vector<string> in_args;
+    vector<string> out_args;
 
 public:
     GenEgress(const string& path, const string& filename, const string& header) : Gen(path, filename, header) {
@@ -34,6 +38,7 @@ protected:
     void genEgressObj(Message *message, json j, vector<string> path, vector<string> &assignments,
             vector<string> &in_args, vector<string> &out_args);
 
+    void traverse(Message *message);
     void genCommon(Message *message);
     void genXdcc(Message *message, string component);
     void genXdccArray(Message *message, json j, vector<string> path, vector<string> &assignments,
