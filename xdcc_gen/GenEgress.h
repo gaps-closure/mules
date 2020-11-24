@@ -11,7 +11,7 @@ private:
     set<string> remoteEnclaves;
 
     vector<string> copies;
-    vector<string> assignments;
+    vector<string> stmts;
     vector<string> in_args;
     vector<string> out_args;
 
@@ -29,20 +29,19 @@ public:
 
 protected:
     void populateRemoteEnclaves(const XdccFlow &xdccFlow);
-    void genOneBranch(bool isElse, string msg_name, string component, vector<Flow *> flows, vector<string> assignments, vector<string> out_args);
     void annotations(const XdccFlow &xdccFlow);
 
-    void genEgress(Message *message);
-    void genEgressArray(Message *message, json j, vector<string> path,
-                          vector<string> &assignments, vector<string> &in_args, vector<string> &out_args);
-    void genEgressObj(Message *message, json j, vector<string> path, vector<string> &assignments,
-            vector<string> &in_args, vector<string> &out_args);
+    void traverseEgress(Message *message);
+    void traverseArrayEgress(Message *message, json j, vector<string> path);
+    void traverseObjEgress(Message *message, json j, vector<string> path);
 
-    void traverse(Message *message);
-    void genCommon(Message *message);
-    void genXdcc(Message *message, string component);
-    void genXdccArray(Message *message, json j, vector<string> path, vector<string> &assignments,
-                        vector<string> &in_args, vector<string> &out_args);
-    void genXdccObj(Message *message, json j, vector<string> path, vector<string> &assignments,
-                      vector<string> &in_args, vector<string> &out_args);
+    void genOneBranch(bool isElse, string msg_name, string component, vector<Flow *> flows);
+    void genEgress(Message *message);
+
+    void traverseEcho(Message *message);
+    void traverseArrayEcho(Message *message, json j, vector<string> path);
+    void travereObjEcho(Message *message, json j, vector<string> path);
+
+    void genEchoCommon(Message *message);
+    void genEcho(Message *message, string component);
 };
