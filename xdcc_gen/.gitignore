@@ -1,0 +1,4 @@
+echo.cpp
+xdcc_gen
+test_code_gen
+*.o

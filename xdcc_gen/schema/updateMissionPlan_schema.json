@@ -1,0 +1,224 @@
+{
+	"definitions": {},
+	"$schema": "http://json-schema.org/draft-07/schema#", 
+	"$id": "https://example.com/object1601910373.json", 
+	"title": "Root", 
+	"type": "object",
+	"required": [
+		"missionPlan"
+	],
+	"properties": {
+		"missionPlan": {
+			"$id": "#root/missionPlan", 
+			"title": "Missionplan", 
+			"type": "object",
+			"required": [
+				"missionPlanId",
+				"sensorPlan",
+				"vehiclePlan"
+			],
+			"properties": {
+				"missionPlanId": {
+					"$id": "#root/missionPlan/missionPlanId", 
+					"title": "Missionplanid", 
+					"type": "string",
+                    "maxLength": 33,
+					"default": "",
+					"examples": [
+						"id"
+					],
+					"pattern": "^.*$"
+				},
+				"sensorPlan": {
+					"$id": "#root/missionPlan/sensorPlan", 
+					"title": "Sensorplan", 
+					"type": "object",
+					"required": [
+						"actions",
+						"numberOfSensorWayPoints",
+						"sensorPlanId",
+						"vehiclePlanId"
+					],
+					"properties": {
+						"actions": {
+							"$id": "#root/missionPlan/sensorPlan/actions", 
+							"title": "Actions", 
+							"type": "array",
+							"default": [],
+							"items":{
+								"$id": "#root/missionPlan/sensorPlan/actions/items", 
+								"title": "Items", 
+								"type": "object",
+								"required": [
+									"actionId",
+									"actionType",
+									"wayPointId"
+								],
+								"properties": {
+									"actionId": {
+										"$id": "#root/missionPlan/sensorPlan/actions/items/actionId", 
+										"title": "Actionid", 
+										"type": "string",
+                                        "maxLength": 34,
+										"default": "",
+										"examples": [
+											"ac1"
+										],
+										"pattern": "^.*$"
+									},
+									"actionType": {
+										"$id": "#root/missionPlan/sensorPlan/actions/items/actionType", 
+										"title": "Actiontype", 
+										"type": "string",
+                                        "maxLength": 35,
+										"default": "",
+										"examples": [
+											"find"
+										],
+										"pattern": "^.*$"
+									},
+									"wayPointId": {
+										"$id": "#root/missionPlan/sensorPlan/actions/items/wayPointId", 
+										"title": "Waypointid", 
+										"type": "string",
+                                        "maxLength": 36,
+										"default": "",
+										"examples": [
+											"wp1"
+										],
+										"pattern": "^.*$"
+									}
+								}
+							}
+
+						},
+						"numberOfSensorWayPoints": {
+							"$id": "#root/missionPlan/sensorPlan/numberOfSensorWayPoints", 
+							"title": "Numberofsensorwaypoints", 
+							"type": "integer",
+							"examples": [
+								1
+							],
+							"default": 0
+						},
+						"sensorPlanId": {
+							"$id": "#root/missionPlan/sensorPlan/sensorPlanId", 
+							"title": "Sensorplanid", 
+							"type": "string",
+                            "maxLength": 37,
+							"default": "",
+							"examples": [
+								"id"
+							],
+							"pattern": "^.*$"
+						},
+						"vehiclePlanId": {
+							"$id": "#root/missionPlan/sensorPlan/vehiclePlanId", 
+							"title": "Vehicleplanid", 
+							"type": "string",
+                            "maxLength": 38,
+							"default": "",
+							"examples": [
+								"id"
+							],
+							"pattern": "^.*$"
+						}
+					}
+				}
+,
+				"vehiclePlan": {
+					"$id": "#root/missionPlan/vehiclePlan", 
+					"title": "Vehicleplan", 
+					"type": "object",
+					"required": [
+						"numberOfWayPoints",
+						"vehiclePlanId",
+						"wayPoints"
+					],
+					"properties": {
+						"numberOfWayPoints": {
+							"$id": "#root/missionPlan/vehiclePlan/numberOfWayPoints", 
+							"title": "Numberofwaypoints", 
+							"type": "integer",
+							"examples": [
+								3
+							],
+							"default": 0
+						},
+						"vehiclePlanId": {
+							"$id": "#root/missionPlan/vehiclePlan/vehiclePlanId", 
+							"title": "Vehicleplanid", 
+							"type": "string",
+                            "maxLength": 39,
+							"default": "",
+							"examples": [
+								"id"
+							],
+							"pattern": "^.*$"
+						},
+						"wayPoints": {
+							"$id": "#root/missionPlan/vehiclePlan/wayPoints", 
+							"title": "Waypoints", 
+							"type": "array",
+							"default": [],
+							"items":{
+								"$id": "#root/missionPlan/vehiclePlan/wayPoints/items", 
+								"title": "Items", 
+								"type": "object",
+								"required": [
+									"wayPointId",
+									"x",
+									"y",
+									"z"
+								],
+								"properties": {
+									"wayPointId": {
+										"$id": "#root/missionPlan/vehiclePlan/wayPoints/items/wayPointId", 
+										"title": "Waypointid", 
+										"type": "string",
+                                        "maxLength": 40,
+										"default": "",
+										"examples": [
+											"wp0"
+										],
+										"pattern": "^.*$"
+									},
+									"x": {
+										"$id": "#root/missionPlan/vehiclePlan/wayPoints/items/x", 
+										"title": "X", 
+										"type": "number",
+										"examples": [
+											0.1
+										],
+										"default": 0.0
+									},
+									"y": {
+										"$id": "#root/missionPlan/vehiclePlan/wayPoints/items/y", 
+										"title": "Y", 
+										"type": "number",
+										"examples": [
+											0.1
+										],
+										"default": 0.0
+									},
+									"z": {
+										"$id": "#root/missionPlan/vehiclePlan/wayPoints/items/z", 
+										"title": "Z", 
+										"type": "number",
+										"examples": [
+											0.1
+										],
+										"default": 0.0
+									}
+								}
+							}
+
+						}
+					}
+				}
+
+			}
+		}
+
+	}
+}

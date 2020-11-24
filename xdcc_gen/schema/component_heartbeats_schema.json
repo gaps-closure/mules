@@ -1,0 +1,35 @@
+{
+	"definitions": {},
+	"$schema": "http://json-schema.org/draft-07/schema#", 
+	"$id": "https://example.com/object1601910282.json", 
+	"title": "Root", 
+	"type": "object",
+	"required": [
+		"ss",
+		"st"
+	],
+	"properties": {
+		"ss": {
+			"$id": "#root/ss", 
+			"title": "Ss", 
+			"type": "string",
+			"maxLength": 32,
+			"default": "",
+			"examples": [
+				"EOIR"
+			],
+			"pattern": "^.*$"
+		},
+		"st": {
+			"$id": "#root/st", 
+			"title": "St", 
+			"type": "string",
+			"maxLength": 64,
+			"default": "",
+			"examples": [
+				"ready"
+			],
+			"pattern": "^.*$"
+		}
+	}
+}
