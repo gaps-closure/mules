@@ -17,6 +17,9 @@ private:
 
     map<string, string> combo;   // message_component_enclave to cle definition
     map<string, vector<string>> msgFanOuts;  // message name to list of combos for that message
+    map<string, map<string, vector<int>>>  groups; // msg -> (level -> [ dataId ])
+
+    XdccFlow xdccFlow;
 
 public:
     GenEgress(const string& path, const string& filename, const string& header) : Gen(path, filename, header) {
@@ -30,8 +33,19 @@ public:
         return remoteEnclaves;
     }
 
+    const XdccFlow& getXdccFlow() const
+    {
+        return xdccFlow;
+    }
+
+    void setXdccFlow(const XdccFlow &xdccFlow)
+    {
+        this->xdccFlow = xdccFlow;
+    }
+
 protected:
     void genCombo(const XdccFlow &xdccFlow);
+    void groupByLevels(vector<Flow *> flows, map<string, vector<int>>& groups);
     void beginFunc(Message *message, json& schemaJson);
 
     void populateRemoteEnclaves(const XdccFlow &xdccFlow);
@@ -41,7 +55,7 @@ protected:
     void traverseArrayEgress(Message *message, json j, vector<string> path);
     void traverseObjEgress(Message *message, json j, vector<string> path);
 
-    void genFlow(bool isElse, string msg_name, string component, vector<Flow *> flows);
+    void genFlow(bool isElse, string msg_name, string component, string remote, vector<int> ids);
     void genEgress(Message *message);
 
     void traverseEcho(Message *message);

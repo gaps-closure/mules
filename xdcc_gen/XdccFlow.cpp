@@ -317,7 +317,13 @@ Cdf* XdccFlow::find_cle(string level, string remote) const
 
 Cle* XdccFlow::find_cle(const Flow *flow) const
 {
-    map<string, Cle*>::const_iterator it = cles.find(flow->getLabel());
+    string label = flow->getLabel();
+    return find_cle(label);
+}
+
+Cle* XdccFlow::find_cle(string &label) const
+{
+    map<string, Cle*>::const_iterator it = cles.find(label);
     if (it == cles.end()) {
         return NULL;
     }

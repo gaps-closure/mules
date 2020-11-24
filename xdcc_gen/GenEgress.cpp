@@ -476,50 +476,47 @@ void GenEgress::beginFunc(Message *message, json& schemaJson)
     schemaStream.close();
 }
 
-void GenEgress::genFlow(bool isElse, string msg_name, string component, vector<Flow *> flows)
+void GenEgress::genFlow(bool isElse, string msg_name, string component, string remote, vector<int> ids)
 {
-    string msg_name_u = msg_name;
-    boost::to_upper(msg_name_u);
-
-    string component_u = component;
-    boost::to_upper(component_u);
-
     if (isElse)
         genfile << "        else if (";
     else
         genfile << "        if (";
 
     bool first = true;
-    for (auto flow : flows) {
+    for (auto id : ids) {
         if (!first)
             genfile << " || ";
-        genfile << "dataId == " << flow->getDataId();
+        genfile << "dataId == " << id;
         first = false;
     }
     genfile << ") {" << endl;
 
-    genfile << "#pragma cle def begin " << msg_name_u << "_" << component_u + "_SHAREABLE" << endl;
+    string key = msg_name + "_" + component + "_" + remote + "_SHAREABLE";
+    boost::to_upper(key);
+    string suffix = "_" + component + "_" + remote;
+    genfile << "#pragma cle def begin " <<  key << endl;
     for (std::vector<string>::iterator it = stmts.begin(); it != stmts.end(); ++it) {
         string stmt = *it;
-        findAndReplaceAll(stmt, WCARD, "_" + component);
+        findAndReplaceAll(stmt, WCARD, suffix);
         genfile << "            " << stmt << endl;
     }
-    genfile << "#pragma cle def end " << msg_name_u << "_" << component_u + "_SHAREABLE" << endl;
+    genfile << "#pragma cle def end " << key << endl;
 
     // copies
     for (std::vector<string>::iterator it = copies.begin(); it != copies.end(); ++it) {
         string stmt = *it;
-        findAndReplaceAll(stmt, WCARD, "_" + component);
+        findAndReplaceAll(stmt, WCARD, suffix);
         genfile << "            " << stmt << endl;
     }
 
-    genfile << "            echo_" << msg_name << "_" << component << "(" << endl;
+    genfile << "            echo_" << msg_name << suffix << "(" << endl;
     first = true;
     for (std::vector<string>::iterator it = out_args.begin(); it != out_args.end(); ++it) {
         if (!first)
             genfile << ",\n";
         string stmt = *it;
-        findAndReplaceAll(stmt, WCARD, "_" + component);
+        findAndReplaceAll(stmt, WCARD, suffix);
         genfile << "                " << stmt;
         first = false;
     }
@@ -565,8 +562,13 @@ void GenEgress::genEgress(Message *message)
        bool isElse = false;
        map<string, vector<Flow *>> flows = message->getOutFlows();
        for (auto component : flows) {
-           genFlow(isElse, msg_name, component.first, component.second);
-           isElse = true;
+           map<string, vector<int>> groups;
+           groupByLevels(component.second, groups);
+
+           for (auto const& g : groups) {
+               genFlow(isElse, msg_name, component.first, g.first, g.second);
+               isElse = true;
+           }
        }
        genfile << "    }" << endl; // if (fromRemote...
 
@@ -678,6 +680,77 @@ void GenEgress::populateRemoteEnclaves(const XdccFlow &xdccFlow)
     }
 }
 
+void GenEgress::groupByLevels(vector<Flow *> flows, map<string, vector<int>>& groups)
+{
+    for (auto const flow : flows) {
+        string fromComponent = flow->getFromComponent();
+        string toComponent = flow->getToComponent();
+        string msgName = flow->getMessage();
+
+        map<string, Component *> topology = xdccFlow.getTopology();
+        const map<string, Component *>::const_iterator& it2 = topology.find(toComponent);
+        if (it2 == topology.end()) {
+            eprintf("no such component: %s", toComponent.c_str());
+            return;
+        }
+        Component *component = it2->second;
+
+        string label = component->getLabel();
+        Cle *cle = xdccFlow.find_cle(label);
+        if (cle == NULL) {
+            eprintf("no CLE for %s", msgName.c_str());
+            return;
+        }
+
+        CleJson cleJson = cle->getCleJson();
+        string remoteEnclave = cleJson.getLevel();
+
+        const map<string, vector<int>>::const_iterator& it3 = groups.find(remoteEnclave);
+        if (it3 == groups.end()) {
+            groups.insert(make_pair(remoteEnclave, vector<int>()));
+        }
+        groups[remoteEnclave].push_back(flow->getDataId());
+    }
+}
+
+void groupByLevelsX(const XdccFlow& xdccFlow)
+{
+//    string enclave = config.getEnclave();
+//
+//    map<string, Component *> topology = xdccFlow.getTopology();
+//
+//    for (auto const flow_map : xdccFlow.getFlows()) {
+//        Flow *flow = (Flow*) flow_map.second;
+//
+//        string fromComponent = flow->getFromComponent();
+//        string toComponent = flow->getToComponent();
+//        string msgName = flow->getMessage();
+//
+//        const map<string, Component *>::const_iterator& it = topology.find(toComponent);
+//        if (it == topology.end()) {
+//            eprintf("no such component: %s", toComponent.c_str());
+//            continue;
+//        }
+//        Component *component = it->second;
+//
+//        string label = component->getLabel();
+//        Cle *cle = xdccFlow.find_cle(label);
+//        if (cle == NULL) {
+//            eprintf("no CLE for %s", msgName.c_str());
+//            continue;
+//        }
+//
+//        CleJson cleJson = cle->getCleJson();
+//        string remoteEnclave = cleJson.getLevel();
+//
+//        const map<string, map<string, vector<int>>>::const_iterator& it2 = groups.find(msgName);
+//        if (it2 == groups.end()) {
+//            groups.insert(make_pair(msgName, map<string, vector<int>>()));
+//        }
+//        groups[msgName][remoteEnclave].push_back(flow->getDataId());
+//    }
+}
+
 void GenEgress::genCombo(const XdccFlow& xdccFlow)
 {
     string enclave = config.getEnclave();
@@ -715,8 +788,8 @@ void GenEgress::genCombo(const XdccFlow& xdccFlow)
             string key = msgName + "_" + fromComponent + "_" + remote;
             combo[key] = clestr;
 
-            const map<string, vector<string>>::const_iterator& it2 = msgFanOuts.find(msgName);
-            if (it2 == msgFanOuts.end()) {
+            const map<string, vector<string>>::const_iterator& it = msgFanOuts.find(msgName);
+            if (it == msgFanOuts.end()) {
                 msgFanOuts.insert(make_pair(msgName, vector<string>()));
             }
             msgFanOuts[msgName].push_back(key);
@@ -770,6 +843,7 @@ int GenEgress::open(const XdccFlow &xdccFlow)
 //      << "amqlib_t *amq() { static amqlib_t *a = NULL; if (a == NULL) { a = amqlib_create(); } return a; }\n" << endl
       ;
 
+    setXdccFlow(xdccFlow);
     annotations(xdccFlow);
 
     genfile << "/* Messages in system */" << endl;

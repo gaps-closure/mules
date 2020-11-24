@@ -258,6 +258,9 @@ public:
     map<int, Flow * > flows;
     map<string, Cle*> cles;
 
+    XdccFlow() {
+    }
+
     XdccFlow(const string &filename);
 
     /**
@@ -266,6 +269,7 @@ public:
     Cdf *find_cle(string level, string remote) const;
 
     Cle *find_cle(const Flow *flow) const;
+    Cle* find_cle(string &label) const;
 
     const map<string, Cle*>& getCles() const {
         return cles;
