@@ -22,6 +22,8 @@
 using namespace std;
 using json = nlohmann::json;
 
+const string WCARD = "###";
+
 void to_json(json& j, const GuardDirective& p) {
     string x = p.getOperation();
 
@@ -192,6 +194,74 @@ void GenEgress::genXdccObj(Message *message, json j, vector<string> path, vector
     }
 }
 
+void GenEgress::genCommon(Message *message)
+{
+    string msg_name = message->getName();
+
+    std::ifstream schemaStream(message->getSchemaFile());
+    if (schemaStream.fail()) {
+        eprintf("%s does not exist", message->getSchemaFile().c_str());
+        return;
+    }
+    json schemaJson;
+    schemaStream >> schemaJson;
+    schemaStream.close();
+
+    try {
+        vector<string> path;
+        vector<string> assignments;
+        vector<string> in_args;
+        vector<string> out_args;
+
+        string type = getField(schemaJson, "type", message, path);
+        if (type == "array") {
+            genXdccArray(message, schemaJson["items"]["properties"], path, assignments, in_args, out_args);
+        }
+        else if (type == "object") {
+            genXdccObj(message, schemaJson["properties"], path, assignments, in_args, out_args);
+        }
+        else {
+            throw DataException("unsupported type: " + type + " for " + message->getName());
+        }
+
+        genfile << "int echo_" << msg_name << "_common(";
+
+        bool first = true;
+        for (std::vector<string>::iterator it = in_args.begin(); it != in_args.end(); ++it) {
+            if (!first) {
+                genfile << ",";
+            }
+            else {
+                first = false;
+            }
+            genfile << "\n    " << *it;
+        }
+        genfile << endl
+                << ")" << endl
+                << "{" << endl;
+
+        for (std::vector<string>::iterator it = assignments.begin(); it != assignments.end(); ++it) {
+            genfile << *it << endl;
+        }
+
+        genfile << "    echo_" + msg_name + "_cpp(\n"
+                << "        amq(),\n"
+                << "        _topic_" + msg_name;
+        for (std::vector<string>::iterator it = out_args.begin(); it != out_args.end(); ++it) {
+            genfile << ",";
+            genfile << "\n        " << *it;
+        }
+        genfile << "\n    );\n";
+
+        genfile << "    return 0;" << endl
+                << "}" << endl
+                << endl;
+    }
+    catch (DataException &e) {
+        e.print();
+    }
+}
+
 void GenEgress::genXdcc(Message *message, string component)
 {
     string msg_name = message->getName();
@@ -242,16 +312,13 @@ void GenEgress::genXdcc(Message *message, string component)
                 << "#pragma cle end XDLINKAGE_ECHO_" << msg_name_u << "_" << component<< endl
                 << "{" << endl;
 
-        for (std::vector<string>::iterator it = assignments.begin(); it != assignments.end(); ++it) {
-            genfile << *it << endl;
-        }
-
-        genfile << "    echo_" + msg_name + "_cpp(\n"
-                << "        amq(),\n"
-                << "        _topic_" + msg_name;
+        genfile << "    echo_" + msg_name + "_common(";
+        first = true;
         for (std::vector<string>::iterator it = out_args.begin(); it != out_args.end(); ++it) {
-            genfile << ",";
+            if (!first)
+                genfile << ",";
             genfile << "\n        " << *it;
+            first = false;
         }
         genfile << "\n    );\n";
 
@@ -263,7 +330,6 @@ void GenEgress::genXdcc(Message *message, string component)
         e.print();
     }
 }
-
 /******************************
  * egress
  */
@@ -360,25 +426,25 @@ void GenEgress::genEgressObj(Message *message, json j, vector<string> path, vect
 
                 if (type == "string") {
                     string maxLength = getField(val, "maxLength", message, path);
-                    stmt = "char " + var + "###[" + maxLength + "];";
+                    stmt = "char " + var + WCARD + "[" + maxLength + "];";
                     in_arg = "        " + var;
                     out_arg = var + "###";
 
-                    copy = "strncpy(" + var + "###, " + var + ", " + maxLength + ");";
+                    copy = "strncpy(" + var + WCARD + ", " + var + ", " + maxLength + ");";
                 }
                 else if (type == "integer") {
-                    stmt = "int " + var + "###;";
+                    stmt = "int " + var + WCARD + ";";
                     in_arg = "        &" + var;
-                    out_arg = var + "###";
+                    out_arg = var + WCARD;
 
-                    copy = var + "### = " + var + ";";
+                    copy = var + WCARD + " = " + var + ";";
                 }
                 else if (type == "number") {
-                    stmt = "double " + var + "###;";
+                    stmt = "double " + var + WCARD + ";";
                     in_arg = "        &" + var;
-                    out_arg = var + "###";
+                    out_arg = var + WCARD;
 
-                    copy = var + "### = " + var + ";";
+                    copy = var + WCARD + "= " + var + ";";
                 }
                 else {
                     cout << "unsupported type: " << type << endl;
@@ -423,7 +489,7 @@ void GenEgress::genOneBranch(bool isElse, string msg_name, string component, vec
     genfile << "#pragma cle def begin " << msg_name_u << "_" << component_u + "_SHAREABLE" << endl;
     for (std::vector<string>::iterator it = assignments.begin(); it != assignments.end(); ++it) {
         string stmt = *it;
-        findAndReplaceAll(stmt, "###", "_" + component);
+        findAndReplaceAll(stmt, WCARD, "_" + component);
         genfile << "            " << stmt << endl;
     }
     genfile << "#pragma cle def end " << msg_name_u << "_" << component_u + "_SHAREABLE" << endl;
@@ -431,7 +497,7 @@ void GenEgress::genOneBranch(bool isElse, string msg_name, string component, vec
     // copies
     for (std::vector<string>::iterator it = copies.begin(); it != copies.end(); ++it) {
         string stmt = *it;
-        findAndReplaceAll(stmt, "###", "_" + component);
+        findAndReplaceAll(stmt, WCARD, "_" + component);
         genfile << "            " << stmt << endl;
     }
 
@@ -441,7 +507,7 @@ void GenEgress::genOneBranch(bool isElse, string msg_name, string component, vec
         if (!first)
             genfile << ",\n";
         string stmt = *it;
-        findAndReplaceAll(stmt, "###", "_" + component);
+        findAndReplaceAll(stmt, WCARD, "_" + component);
         genfile << "                " << stmt;
         first = false;
     }
@@ -490,7 +556,7 @@ void GenEgress::genEgress(Message *message)
 
        for (std::vector<string>::iterator it = assignments.begin(); it != assignments.end(); ++it) {
            string stmt = *it;
-           findAndReplaceAll(stmt, "###", "");
+           findAndReplaceAll(stmt, WCARD, "");
            genfile << "    " << stmt << endl;
        }
 
@@ -532,6 +598,9 @@ int GenEgress::gen(XdccFlow& xdccFlow)
 {
     string enclave = config.getEnclave();
     for (auto const& message : myMessages) {
+        genCommon((Message *) message);
+        endOfFunc();
+
         map<string, vector<Flow *>> flows = message->getOutFlows();
         for (auto component : flows) {
             genXdcc((Message *)message, component.first);
@@ -673,50 +742,43 @@ static void genXDLinkages(const XdccFlow &xdccFlow, ofstream& genFile)
 {
     string enclave = config.getEnclave();
 
-    for (auto const &msg_map : xdccFlow.getMessages()) {
-        Message *message = (Message*) msg_map.second;
-        string msgName = message->getName();
+    set<string> remoteEnclaves;
+    for (auto const flow_map : xdccFlow.getFlows()) {
+        Flow *flow = (Flow*) flow_map.second;
+        if (remoteEnclaves.find(flow->getLabel()) != remoteEnclaves.end()) // already generated
+            continue;
+        remoteEnclaves.insert(flow->getLabel());
 
-        set<string> remoteEnclaves;
-        for (auto const flow_map : xdccFlow.getFlows()) {
-            Flow *flow = (Flow*) flow_map.second;
-            if (flow->getMessage().compare(msgName))
-                continue;
+        string fromComponent = flow->getFromComponent();
+        string msgName = flow->getMessage();
+        Cle *cle = xdccFlow.find_cle(flow);
+        if (cle == NULL) {
+            eprintf("no CLE for %s", msgName.c_str());
+            continue;
+        }
 
-            Cle *cle = xdccFlow.find_cle(flow);
-            if (cle == NULL) {
-                cerr << __FUNCTION__ << ": no CLE for " << msgName << endl;
-                continue;
-            }
+        CleJson cleJson = cle->getCleJson();
+        string level = cleJson.getLevel();
+        if (level.compare(enclave))  // not flowing from my enclave
+            continue;
 
-            CleJson cleJson = cle->getCleJson();
-            string level = cleJson.getLevel();
-            vector<Cdf> cdf = cleJson.getCdf();
-            for (int i = 0; i < cdf.size(); i++) {
-                if (level.compare(enclave))  // not flowing from my enclave
-                    continue;
+        vector<Cdf> cdf = cleJson.getCdf();
+        for (int i = 0; i < cdf.size(); i++) {
+            string remote = cdf[i].getRemoteLevel();
 
-                string remote = cdf[i].getRemoteLevel();
-                if (remote.compare(enclave)) { // flow to a different enclave
-                    if (remoteEnclaves.find(remote) == remoteEnclaves.end()) { // not generated
-                        remoteEnclaves.insert(remote);
+            string remote_u = remote;
+            boost::to_upper(remote_u);
+            string msgName_u = msgName;
+            boost::to_upper(msgName_u);
+            json clejson;
+            to_json(clejson, cdf[i]);
 
-                        string remote_u = remote;
-                        boost::to_upper(remote_u);
-                        string msgName_u = msgName;
-                        boost::to_upper(msgName_u);
-                        json clejson;
-                        to_json(clejson, cdf[i]);
+            string clestr = clejson.dump(4);
+            findAndReplaceAll(clestr, "\n", " \\\n");
 
-                        string clestr = clejson.dump(4);
-                        findAndReplaceAll(clestr, "\n", " \\\n");
-
-                        genFile << "#pragma cle def XDLINKAGE_ECHO_"
-                                << msgName_u << "_" << remote_u << " "
-                                << clestr << endl << endl;
-                    }
-                }
-            }
+            genFile << "#pragma cle def XDLINKAGE_ECHO_"
+                    << msgName_u << "_" << fromComponent << "_" << remote_u << " "
+                    << clestr << endl << endl;
         }
     }
 }
