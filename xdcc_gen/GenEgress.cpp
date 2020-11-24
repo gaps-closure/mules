@@ -476,7 +476,7 @@ void GenEgress::beginFunc(Message *message, json& schemaJson)
     schemaStream.close();
 }
 
-void GenEgress::genOneBranch(bool isElse, string msg_name, string component, vector<Flow *> flows)
+void GenEgress::genFlow(bool isElse, string msg_name, string component, vector<Flow *> flows)
 {
     string msg_name_u = msg_name;
     boost::to_upper(msg_name_u);
@@ -565,7 +565,7 @@ void GenEgress::genEgress(Message *message)
        bool isElse = false;
        map<string, vector<Flow *>> flows = message->getOutFlows();
        for (auto component : flows) {
-           genOneBranch(isElse, msg_name, component.first, component.second);
+           genFlow(isElse, msg_name, component.first, component.second);
            isElse = true;
        }
        genfile << "    }" << endl; // if (fromRemote...
@@ -672,72 +672,16 @@ void GenEgress::populateRemoteEnclaves(const XdccFlow &xdccFlow)
     }
 }
 
-static void genShareables(const XdccFlow &xdccFlow, ofstream& genFile)
+static void genCombo(const XdccFlow& xdccFlow, map<string, string>& combo)
 {
     string enclave = config.getEnclave();
 
-    for (auto const &msg_map : xdccFlow.getMessages()) {
-        Message *message = (Message*) msg_map.second;
-        string msgName = message->getName();
-
-        map<string, vector<Flow *>> flows = message->getOutFlows();
-        for (auto component : flows) {
-            string sender = component.first;
-        }
-
-        set<string> remoteEnclaves;
-        for (auto const flow_map : xdccFlow.getFlows()) {
-            Flow *flow = (Flow*) flow_map.second;
-            if (flow->getMessage().compare(msgName))
-                continue;
-
-            Cle *cle = xdccFlow.find_cle(flow);
-            if (cle == NULL) {
-                cerr << __FUNCTION__ << ": no CLE for " << msgName << endl;
-                continue;
-            }
-
-            CleJson cleJson = cle->getCleJson();
-            string level = cleJson.getLevel();
-            vector<Cdf> cdf = cleJson.getCdf();
-            for (int i = 0; i < cdf.size(); i++) {
-                if (level.compare(enclave))  // not flowing from my enclave
-                    continue;
-
-                string remote = cdf[i].getRemoteLevel();
-                if (remote.compare(enclave)) { // flow to a different enclave
-                    if (remoteEnclaves.find(remote) == remoteEnclaves.end()) { // not generated
-                        remoteEnclaves.insert(remote);
-
-                        string remote_u = remote;
-                        boost::to_upper(remote_u);
-                        string msgName_u = msgName;
-                        boost::to_upper(msgName_u);
-                        json clejson;
-                        to_json(clejson, cdf[i]);
-
-                        string clestr = clejson.dump(4);
-                        findAndReplaceAll(clestr, "\n", " \\\n");
-                        genFile << "#pragma cle def "
-                                << msgName_u << "_" << remote_u
-                                << "_SHAREABLE " << clestr << endl << endl;
-                    }
-                }
-            }
-        }
-    }
-}
-
-static void genXDLinkages(const XdccFlow &xdccFlow, ofstream& genFile)
-{
-    string enclave = config.getEnclave();
-
-    set<string> remoteEnclaves;
+    set<string> genedLabels;
     for (auto const flow_map : xdccFlow.getFlows()) {
         Flow *flow = (Flow*) flow_map.second;
-        if (remoteEnclaves.find(flow->getLabel()) != remoteEnclaves.end()) // already generated
+        if (genedLabels.find(flow->getLabel()) != genedLabels.end()) // already generated
             continue;
-        remoteEnclaves.insert(flow->getLabel());
+        genedLabels.insert(flow->getLabel());
 
         string fromComponent = flow->getFromComponent();
         string msgName = flow->getMessage();
@@ -756,19 +700,14 @@ static void genXDLinkages(const XdccFlow &xdccFlow, ofstream& genFile)
         for (int i = 0; i < cdf.size(); i++) {
             string remote = cdf[i].getRemoteLevel();
 
-            string remote_u = remote;
-            boost::to_upper(remote_u);
-            string msgName_u = msgName;
-            boost::to_upper(msgName_u);
             json clejson;
             to_json(clejson, cdf[i]);
 
             string clestr = clejson.dump(4);
             findAndReplaceAll(clestr, "\n", " \\\n");
 
-            genFile << "#pragma cle def XDLINKAGE_ECHO_"
-                    << msgName_u << "_" << fromComponent << "_" << remote_u << " "
-                    << clestr << endl << endl;
+            string key = msgName + "_" + fromComponent + "_" + remote;
+            combo[key] = clestr;
         }
     }
 }
@@ -785,8 +724,27 @@ void GenEgress::annotations(const XdccFlow &xdccFlow)
     genfile << "#pragma cle def " + my_enclave_u + " {\"level\":\"" + my_enclave + "\"}" << endl << endl;
 
     populateRemoteEnclaves(xdccFlow);
-    genShareables(xdccFlow, genfile);
-    genXDLinkages(xdccFlow, genfile);
+
+    map<string, string> combo;
+    genCombo(xdccFlow, combo);
+
+    for (auto const c : combo) {
+        string key = c.first;
+        boost::to_upper(key);
+
+        genfile << "#pragma cle def "
+                << key
+                << "_SHAREABLE " << c.second << endl << endl;
+    }
+
+    for (auto const c : combo) {
+        string key = c.first;
+        boost::to_upper(key);
+
+        genfile << "#pragma cle def XDLINKAGE_ECHO_"
+                << key << " "
+                << c.second << endl << endl;
+    }
 }
 
 int GenEgress::open(const XdccFlow &xdccFlow)

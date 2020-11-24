@@ -37,7 +37,7 @@ protected:
     void traverseArrayEgress(Message *message, json j, vector<string> path);
     void traverseObjEgress(Message *message, json j, vector<string> path);
 
-    void genOneBranch(bool isElse, string msg_name, string component, vector<Flow *> flows);
+    void genFlow(bool isElse, string msg_name, string component, vector<Flow *> flows);
     void genEgress(Message *message);
 
     void traverseEcho(Message *message);
