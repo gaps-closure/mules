@@ -68,6 +68,18 @@ void to_json(json& j, const Cdf& p) {
     };
 }
 
+void to_json(json& j, const CleJson& p) {
+    vector<Cdf> cdf = p.getCdf();
+    json jcdf = cdf;
+
+    string level = p.getLevel();
+
+    j = json{
+            {"level", level },
+            {"cdf", jcdf },
+    };
+}
+
 void to_json(json& j, Cle& p)
 {
 //    std::vector<Cdf> x = p.getCdf();
@@ -522,6 +534,43 @@ void GenEgress::genFlow(bool isElse, string msg_name, string component, string r
     genfile << TAB_1 << "}" << endl;
 }
 
+void GenEgress::genFlowToRemote(string msg_name, string remote)
+{
+    genfile << TAB_1 << "{" << endl;
+
+    string key = remote + "_SHAREABLE";
+    boost::to_upper(key);
+    genfile << "#pragma cle def begin " <<  key << endl;
+    for (std::vector<string>::iterator it = stmts.begin(); it != stmts.end(); ++it) {
+        string stmt = *it;
+        findAndReplaceAll(stmt, WCARD, remote);
+        genfile << TAB_2 << stmt << endl;
+    }
+    genfile << "#pragma cle def end " << key << endl
+            << endl;
+    // copies
+    for (std::vector<string>::iterator it = copies.begin(); it != copies.end(); ++it) {
+        string stmt = *it;
+        findAndReplaceAll(stmt, WCARD, remote);
+        genfile << TAB_2 << stmt << endl;
+    }
+    genfile << endl;
+
+    genfile << TAB_2 << "echo_" << msg_name << "_" << remote << "(" << endl;
+    bool first = true;
+    for (std::vector<string>::iterator it = out_args.begin(); it != out_args.end(); ++it) {
+        if (!first)
+            genfile << ",\n";
+        string stmt = *it;
+        findAndReplaceAll(stmt, WCARD, remote);
+        genfile << TAB_3 << stmt;
+        first = false;
+    }
+    genfile << endl
+            << TAB_2 << ");" << endl;
+    genfile << TAB_1 << "}" << endl;
+}
+
 void GenEgress::genEgress(Message *message)
 {
    try {
@@ -530,7 +579,7 @@ void GenEgress::genEgress(Message *message)
        genfile << "int egress_" + msg_name + "(const char *jstr)" << endl
                << "{" << endl
                << TAB_1 << "int fromRemote;" << endl
-               << TAB_1 << "int dataId;"
+//               << TAB_1 << "int dataId;"
                << endl;
 
        for (std::vector<string>::iterator it = stmts.begin(); it != stmts.end(); ++it) {
@@ -546,8 +595,8 @@ void GenEgress::genEgress(Message *message)
 
        genfile << TAB_1 << "unmarshal_" + msg_name + "(" << endl
                << TAB_2 << "jstr," << endl
-               << TAB_2 << "&fromRemote," << endl
-               << TAB_2 << "&dataId";
+               << TAB_2 << "&fromRemote";
+//               << TAB_2 << "&dataId";
        for (std::vector<string>::iterator it = in_args.begin(); it != in_args.end(); ++it) {
            genfile << ",\n" << TAB_2 << *it;
        }
@@ -558,17 +607,29 @@ void GenEgress::genEgress(Message *message)
                << TAB_2 << "return 0;" << endl
                << endl;
 
-       bool isElse = false;
-       map<string, vector<Flow *>> flows = message->getOutFlows();
-       for (auto component : flows) {
-           map<string, vector<int>> groups;
-           groupByLevels(component.second, groups);
-
-           for (auto const& g : groups) {
-               genFlow(isElse, msg_name, component.first, g.first, g.second);
-               isElse = true;
-           }
+       map<string, set<string>>::iterator it = msgToEnclaves.find(msg_name);
+       if (it == msgToEnclaves.end()) {
+           eprintf("no such message: %s", msg_name.c_str());
+           return;
        }
+
+       string my_enclave = config.getEnclave();
+       for (auto const remote : it->second) {
+           if (my_enclave.compare(remote))
+               genFlowToRemote(msg_name, remote);
+       }
+
+//       bool isElse = false;
+//       map<string, vector<Flow *>> flows = message->getOutFlows();
+//       for (auto component : flows) {
+//           map<string, vector<int>> groups;
+//           groupByLevels(component.second, groups);
+//
+//           for (auto const& g : groups) {
+//               genFlow(isElse, msg_name, component.first, g.first, g.second);
+//               isElse = true;
+//           }
+//       }
 
        genfile << TAB_1 << "return 0;" << endl
                << "}" << endl
@@ -651,6 +712,12 @@ void GenEgress::populateRemoteEnclaves(const XdccFlow &xdccFlow)
             if (remote.compare(enclave)) { // flow to a different enclave
                 remoteEnclaves.insert(remote);
             }
+
+            const map<string, set<string>>::const_iterator& it = msgToEnclaves.find(msgName);
+             if (it == msgToEnclaves.end()) {
+                 msgToEnclaves.insert(make_pair(msgName, set<string>()));
+             }
+             msgToEnclaves[msgName].insert(remote);
         }
     }
 
@@ -736,13 +803,17 @@ void GenEgress::genCombo(const XdccFlow& xdccFlow)
             continue;
 
         vector<Cdf> cdf = cleJson.getCdf();
+        if (cdf.size() > 1) {
+            cout << "WARNING: more than one CDFs " << cle->getLabel() << endl;
+        }
+
         for (int i = 0; i < cdf.size(); i++) {
             string remote = cdf[i].getRemoteLevel();
 
             json clejson;
             to_json(clejson, cdf[i]);
 
-            string clestr = clejson.dump(4);
+            string clestr = clejson.dump(2);
             findAndReplaceAll(clestr, "\n", " \\\n");
 
             string key = msgName + "_" + fromComponent + "_" + remote;
@@ -753,6 +824,19 @@ void GenEgress::genCombo(const XdccFlow& xdccFlow)
                 msgFanOuts.insert(make_pair(msgName, vector<string>()));
             }
             msgFanOuts[msgName].push_back(key);
+
+
+            if (!remote.compare(enclave)) {  // same enclave
+                continue;
+            }
+            json cjs;
+            to_json(cjs, cleJson);
+            string cdfstr = cjs.dump(2);
+            //string cdfstr = "{\"level\": \"" + enclave + "\", \"cdf\": [ " + clestr + "]}";
+            findAndReplaceAll(cdfstr, "\n", " \\\n");
+
+            key = msgName + "_" + remote;
+            newCombo[key] = cdfstr;
         }
     }
 }
@@ -766,6 +850,29 @@ void GenEgress::annotations(const XdccFlow &xdccFlow)
 
     genfile << "#pragma cle def " + my_enclave_u + " {\"level\":\"" + my_enclave + "\"}" << endl << endl;
 
+    for (auto remote : remoteEnclaves) {
+        string remote_u = remote;
+        boost::to_upper(remote_u);
+
+        genfile << "#pragma cle def " << remote_u << "_SHAREABLE {" << endl
+                << "  \"level\": \"" << my_enclave << "\",\\" << endl
+                << "  \"cdf\": [\\" << endl
+                << "    {\"remotelevel\":\"" << remote << "\", \\" << endl
+                << "     \"direction\": \"egress\", \\" << endl
+                << "     \"guarddirective\": { \"operation\": \"allow\"}}\\" << endl
+                << "] }" << endl;
+    }
+    genfile << endl;
+
+    for (auto const c : newCombo) {
+        string key = c.first;
+        boost::to_upper(key);
+
+        genfile << "#pragma cle def XDLINKAGE_ECHO_"
+                << key << " "
+                << c.second << endl << endl;
+    }
+/*
     for (auto const c : combo) {
         string key = c.first;
         boost::to_upper(key);
@@ -783,6 +890,7 @@ void GenEgress::annotations(const XdccFlow &xdccFlow)
                 << key << " "
                 << c.second << endl << endl;
     }
+    */
 }
 
 int GenEgress::open(const XdccFlow &xdccFlow)

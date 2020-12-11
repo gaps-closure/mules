@@ -35,28 +35,28 @@
         {
             "dataId": 1001,            
             "message": "component_heartbeats",
-            "label": "COMPONENT_HEARTBEATS_MPU",
+            "label": "COMPONENT_HEARTBEATS_ORANGE_ORANGE",
             "fromComponent": "MPU",
             "toComponent": "MPX"
         },
         {
             "dataId": 1002,            
             "message": "component_heartbeats",
-            "label": "COMPONENT_HEARTBEATS_MPU",
+            "label": "COMPONENT_HEARTBEATS_ORANGE_GREEN",
             "fromComponent": "MPU",
             "toComponent": "ISRM"
         },
         {
             "dataId": 1003,            
             "message": "component_heartbeats",
-            "label": "COMPONENT_HEARTBEATS_MPU",
+            "label": "COMPONENT_HEARTBEATS_ORANGE_GREEN",
             "fromComponent": "MPU",
             "toComponent": "EOIR"
         },
         {
             "dataId": 1004,            
             "message": "component_heartbeats",
-            "label": "COMPONENT_HEARTBEATS_MPU",
+            "label": "COMPONENT_HEARTBEATS_ORANGE_GREEN",
             "fromComponent": "MPU",
             "toComponent": "RDR"
         },
@@ -133,28 +133,28 @@
         {
             "dataId": 2991,            
             "message": "component_heartbeats",
-            "label": "COMPONENT_HEARTBEATS_MPX",
+            "label": "COMPONENT_HEARTBEATS_ORANGE_ORANGE",
             "fromComponent": "MPX",
             "toComponent": "MPU"
         },
         {
             "dataId": 2993,            
             "message": "component_heartbeats",
-            "label": "COMPONENT_HEARTBEATS_MPX",
+            "label": "COMPONENT_HEARTBEATS_ORANGE_GREEN",
             "fromComponent": "MPX",
             "toComponent": "ISRM"
         },
         {
             "dataId": 2994,            
             "message": "component_heartbeats",
-            "label": "COMPONENT_HEARTBEATS_MPX",
+            "label": "COMPONENT_HEARTBEATS_ORANGE_GREEN",
             "fromComponent": "MPX",
             "toComponent": "EOIR"
         },
         {
             "dataId": 2995,            
             "message": "component_heartbeats",
-            "label": "COMPONENT_HEARTBEATS_MPX",
+            "label": "COMPONENT_HEARTBEATS_ORANGE_GREEN",
             "fromComponent": "MPX",
             "toComponent": "RDR"
         },
@@ -182,28 +182,28 @@
         {
             "dataId": 3991,            
             "message": "component_heartbeats",
-            "label": "COMPONENT_HEARTBEATS_ISRM",
+            "label": "COMPONENT_HEARTBEATS_GREEN_ORANGE",
             "fromComponent": "ISRM",
             "toComponent": "MPU"
         },
         {
             "dataId": 3992,            
             "message": "component_heartbeats",
-            "label": "COMPONENT_HEARTBEATS_ISRM",
+            "label": "COMPONENT_HEARTBEATS_GREEN_ORANGE",
             "fromComponent": "ISRM",
             "toComponent": "MPX"
         },
         {
             "dataId": 3994,            
             "message": "component_heartbeats",
-            "label": "COMPONENT_HEARTBEATS_ISRM",
+            "label": "COMPONENT_HEARTBEATS_GREEN_GREEN",
             "fromComponent": "ISRM",
             "toComponent": "EOIR"
         },
         {
             "dataId": 3995,            
             "message": "component_heartbeats",
-            "label": "COMPONENT_HEARTBEATS_ISRM",
+            "label": "COMPONENT_HEARTBEATS_GREEN_GREEN",
             "fromComponent": "ISRM",
             "toComponent": "RDR"
         },
@@ -231,42 +231,42 @@
         {
             "dataId": 4991,            
             "message": "component_heartbeats",
-            "label": "COMPONENT_HEARTBEATS_EOIR",
+            "label": "COMPONENT_HEARTBEATS_GREEN_ORANGE",
             "fromComponent": "EOIR",
             "toComponent": "MPU"
         },
         {
             "dataId": 4992,            
             "message": "component_heartbeats",
-            "label": "COMPONENT_HEARTBEATS_EOIR",
+            "label": "COMPONENT_HEARTBEATS_GREEN_ORANGE",
             "fromComponent": "EOIR",
             "toComponent": "MPX"
         },
         {
             "dataId": 4993,            
             "message": "component_heartbeats",
-            "label": "COMPONENT_HEARTBEATS_EOIR",
+            "label": "COMPONENT_HEARTBEATS_GREEN_GREEN",
             "fromComponent": "EOIR",
             "toComponent": "ISRM"
         },
         {
             "dataId": 4995,            
             "message": "component_heartbeats",
-            "label": "COMPONENT_HEARTBEATS_EOIR",
+            "label": "COMPONENT_HEARTBEATS_GREEN_GREEN",
             "fromComponent": "EOIR",
             "toComponent": "RDR"
         },
         {
             "dataId": 5001,            
             "message": "component_heartbeats",
-            "label": "COMPONENT_HEARTBEATS_RDR",
+            "label": "COMPONENT_HEARTBEATS_GREEN_ORANGE",
             "fromComponent": "RDR",
             "toComponent": "MPU"
         },
         {
             "dataId": 5002,            
             "message": "receiveRDRDetections",
-            "label": "RECEIVE_RDR_DETECTIONS_RDR",
+            "label": "COMPONENT_HEARTBEATS_GREEN_GREEN",
             "fromComponent": "RDR",
             "toComponent": "ISRM"
         },
@@ -280,21 +280,21 @@
         {
             "dataId": 5992,            
             "message": "component_heartbeats",
-            "label": "COMPONENT_HEARTBEATS_RDR",
+            "label": "COMPONENT_HEARTBEATS_GREEN_ORANGE",
             "fromComponent": "RDR",
             "toComponent": "MPX"
         },
         {
             "dataId": 5993,            
             "message": "component_heartbeats",
-            "label": "COMPONENT_HEARTBEATS_RDR",
+            "label": "COMPONENT_HEARTBEATS_GREEN_GREEN",
             "fromComponent": "RDR",
             "toComponent": "ISRM"
         },
         {
             "dataId": 5994,            
             "message": "component_heartbeats",
-            "label": "COMPONENT_HEARTBEATS_RDR",
+            "label": "COMPONENT_HEARTBEATS_GREEN_GREEN",
             "fromComponent": "RDR",
             "toComponent": "EOIR"
         }
@@ -406,16 +406,16 @@
                         "argtaints": [
                             [
                                 "PNT_MPX",
-                                "COMPONENT_HEARTBEATS_MPX",
-                                "COMPONENT_HEARTBEATS_ISRM",
-                                "COMPONENT_HEARTBEATS_EOIR",
-                                "COMPONENT_HEARTBEATS_RDR"
+                                "COMPONENT_HEARTBEATS_ORANGE_ORANGE",
+                                "COMPONENT_HEARTBEATS_GREEN_ORANGE",
+                                "COMPONENT_HEARTBEATS_GREEN_ORANGE",
+                                "COMPONENT_HEARTBEATS_GREEN_ORANGE"
                             ],
                             [
-                                "COMPONENT_HEARTBEATS_MPU",
-                                "COMPONENT_HEARTBEATS_MPU",
-                                "COMPONENT_HEARTBEATS_MPU",
-                                "COMPONENT_HEARTBEATS_MPU",
+                                "COMPONENT_HEARTBEATS_ORANGE_ORANGE",
+                                "COMPONENT_HEARTBEATS_ORANGE_GREEN",
+                                "COMPONENT_HEARTBEATS_ORANGE_GREEN",
+                                "COMPONENT_HEARTBEATS_ORANGE_GREEN",
                                 "UPDATE_MISSION_PLAN_MPU",
                                 "UPDATE_MISSION_PLAN_MPU",
                                 "UPDATE_MISSION_PLAN_MPU",
@@ -444,12 +444,12 @@
                         },
                         "argtaints": [
                             [
-                                "COMPONENT_HEARTBEATS_MPU",
+                                "COMPONENT_HEARTBEATS_ORANGE_ORANGE",
                                 "UPDATE_MISSION_PLAN_MPU",
                                 "RECEIVE_ISRM_DETECTIONS_ISRM",
-                                "COMPONENT_HEARTBEATS_ISRM",
-                                "COMPONENT_HEARTBEATS_EOIR",
-                                "COMPONENT_HEARTBEATS_RDR"
+                                "COMPONENT_HEARTBEATS_GREEN_ORANGE",
+                                "COMPONENT_HEARTBEATS_GREEN_ORANGE",
+                                "COMPONENT_HEARTBEATS_GREEN_ORANGE"
                             ],
                             [
                                 "PNT_MPX",
@@ -457,10 +457,10 @@
                                 "PNT_MPX",
                                 "PNT_MPX",
                                 "REQUEST_ISRM_DETECTION_MPX",
-                                "COMPONENT_HEARTBEATS_MPX",
-                                "COMPONENT_HEARTBEATS_MPX",
-                                "COMPONENT_HEARTBEATS_MPX",
-                                "COMPONENT_HEARTBEATS_MPX"
+                                "COMPONENT_HEARTBEATS_ORANGE_ORANGE",
+                                "COMPONENT_HEARTBEATS_ORANGE_GREEN",
+                                "COMPONENT_HEARTBEATS_ORANGE_GREEN",
+                                "COMPONENT_HEARTBEATS_ORANGE_GREEN"
                             ]
                         ],
                         "codtaints": [
@@ -484,27 +484,27 @@
                         },
                         "argtaints": [
                             [
-                                "COMPONENT_HEARTBEATS_MPU",
+                                "COMPONENT_HEARTBEATS_ORANGE_GREEN",
                                 "UPDATE_MISSION_PLAN_MPU",
                                 "PNT_MPX",
                                 "REQUEST_ISRM_DETECTION_MPX",
-                                "COMPONENT_HEARTBEATS_MPX",
+                                "COMPONENT_HEARTBEATS_ORANGE_GREEN",
                                 "RECEIVE_EOIR_DETECTIONS_EOIR",
                                 "TARGETS_EOIR",
                                 "DETECT_OBJECTS_EOIR",
-                                "COMPONENT_HEARTBEATS_EOIR",
+                                "COMPONENT_HEARTBEATS_GREEN_GREEN",
                                 "RECEIVE_RDR_DETECTIONS_RDR",
                                 "MTI_RDR",
-                                "COMPONENT_HEARTBEATS_RDR"
+                                "COMPONENT_HEARTBEATS_GREEN_GREEN"
                             ],
                             [
                                 "REQUEST_EOIR_DETECTION_ISRM",
                                 "REQUEST_RDR_DETECTIONS_ISRM",
                                 "RECEIVE_ISRM_DETECTIONS_ISRM",
-                                "COMPONENT_HEARTBEATS_ISRM",
-                                "COMPONENT_HEARTBEATS_ISRM",
-                                "COMPONENT_HEARTBEATS_ISRM",
-                                "COMPONENT_HEARTBEATS_ISRM"
+                                "COMPONENT_HEARTBEATS_GREEN_ORANGE",
+                                "COMPONENT_HEARTBEATS_GREEN_ORANGE",
+                                "COMPONENT_HEARTBEATS_GREEN_GREEN",
+                                "COMPONENT_HEARTBEATS_GREEN_GREEN"
                             ]
                         ],
                         "codtaints": [
@@ -528,22 +528,22 @@
                         },
                         "argtaints": [
                             [
-                                "COMPONENT_HEARTBEATS_MPU",
+                                "COMPONENT_HEARTBEATS_ORANGE_GREEN",
                                 "UPDATE_MISSION_PLAN_MPU",
                                 "PNT_MPX",
-                                "COMPONENT_HEARTBEATS_MPX",
+                                "COMPONENT_HEARTBEATS_ORANGE_GREEN",
                                 "REQUEST_EOIR_DETECTION_ISRM",
-                                "COMPONENT_HEARTBEATS_ISRM",
-                                "COMPONENT_HEARTBEATS_RDR"
+                                "COMPONENT_HEARTBEATS_GREEN_GREEN",
+                                "COMPONENT_HEARTBEATS_GREEN_GREEN"
                             ],
                             [
                                 "RECEIVE_EOIR_DETECTIONS_EOIR",
                                 "TARGETS_EOIR",
                                 "DETECT_OBJECTS_EOIR",
-                                "COMPONENT_HEARTBEATS_EOIR",
-                                "COMPONENT_HEARTBEATS_EOIR",
-                                "COMPONENT_HEARTBEATS_EOIR",
-                                "COMPONENT_HEARTBEATS_EOIR"
+                                "COMPONENT_HEARTBEATS_GREEN_ORANGE",
+                                "COMPONENT_HEARTBEATS_GREEN_ORANGE",
+                                "COMPONENT_HEARTBEATS_GREEN_GREEN",
+                                "COMPONENT_HEARTBEATS_GREEN_GREEN"
                             ]
                         ],
                         "codtaints": [
@@ -567,22 +567,22 @@
                         },
                         "argtaints": [
                             [
-                                "COMPONENT_HEARTBEATS_MPU",
+                                "COMPONENT_HEARTBEATS_ORANGE_GREEN",
                                 "UPDATE_MISSION_PLAN_MPU",
                                 "STATUS_MPU",
                                 "PNT_MPX",
-                                "COMPONENT_HEARTBEATS_MPX",
+                                "COMPONENT_HEARTBEATS_ORANGE_GREEN",
                                 "REQUEST_RDR_DETECTIONS_ISRM",
-                                "COMPONENT_HEARTBEATS_ISRM",
-                                "COMPONENT_HEARTBEATS_EOIR"
+                                "COMPONENT_HEARTBEATS_GREEN_GREEN",
+                                "COMPONENT_HEARTBEATS_GREEN_GREEN"
                             ],
                             [
-                                "COMPONENT_HEARTBEATS_RDR",
+                                "COMPONENT_HEARTBEATS_GREEN_GREEN",
                                 "RECEIVE_RDR_DETECTIONS_RDR",
                                 "MTI_RDR",
-                                "COMPONENT_HEARTBEATS_RDR",
-                                "COMPONENT_HEARTBEATS_RDR",
-                                "COMPONENT_HEARTBEATS_RDR"
+                                "COMPONENT_HEARTBEATS_GREEN_GREEN",
+                                "COMPONENT_HEARTBEATS_GREEN_ORANGE",
+                                "COMPONENT_HEARTBEATS_GREEN_ORANGE"
                             ]
                         ],
                         "codtaints": [
@@ -594,160 +594,87 @@
             }
         },
         {
-            "cle-label": "COMPONENT_HEARTBEATS_EOIR",
+            "cle-label": "COMPONENT_HEARTBEATS_GREEN_GREEN",
             "cle-json": {
-                "level": "orange",
-                "cdf": [
-                    {
-                        "remotelevel": "orange",
-                        "direction": "egress",
-                        "guarddirective": {
-                            "operation": "allow"
-                        },
-                        "argtaints": [
-                        ],
-                        "codtaints": [
-                        ],
-                        "rettaints": [
-                        ]
-                    },
-                    {
-                        "remotelevel": "green",
-                        "direction": "egress",
-                        "guarddirective": {
-                            "operation": "allow"
-                        },
-                        "argtaints": [
-                        ],
-                        "codtaints": [
-                        ],
-                        "rettaints": [
-                        ]
-                    }                    
-                ]
+               "level":"green",
+               "cdf":[
+                  {
+                     "remotelevel":"green",
+                     "direction":"ingress",
+                     "guarddirective":{
+                        "operation":"allow",
+                        "oneway":true
+                     },
+                     "argtaints":[
+                        [ "TAG_REQUEST_ECHO_COMPONENT_HEARTBEATS" ]
+                     ],
+                     "codtaints":[ "GREEN" ],
+                     "rettaints":[]
+                  }
+               ]
+            }
+        },        
+        {
+            "cle-label": "COMPONENT_HEARTBEATS_ORANGE_ORANGE",
+            "cle-json": {
+               "level":"orange",
+               "cdf":[
+                  {
+                     "remotelevel":"orange",
+                     "direction":"ingress",
+                     "guarddirective":{
+                        "operation":"allow",
+                        "oneway":true
+                     },
+                     "argtaints":[
+                        [ "TAG_REQUEST_ECHO_COMPONENT_HEARTBEATS" ]
+                     ],
+                     "codtaints":[ "ORANGE" ],
+                     "rettaints":[]
+                  }
+               ]
             }
         },
         {
-            "cle-label": "COMPONENT_HEARTBEATS_ISRM",
+            "cle-label": "COMPONENT_HEARTBEATS_GREEN_ORANGE",
             "cle-json": {
-                "level": "green",
-                "cdf": [
-                    {
-                        "remotelevel": "orange",
-                        "direction": "egress",
-                        "guarddirective": {
-                            "operation": "allow"
-                        },
-                        "argtaints": [
-                        ],
-                        "codtaints": [
-                        ],
-                        "rettaints": [
-                        ]
-                    }
-                ]
+               "level":"green",
+               "cdf":[
+                  {
+                     "remotelevel":"orange",
+                     "direction":"ingress",
+                     "guarddirective":{
+                        "operation":"allow",
+                        "oneway":true
+                     },
+                     "argtaints":[
+                        [ "TAG_REQUEST_ECHO_COMPONENT_HEARTBEATS" ]
+                     ],
+                     "codtaints":[ "GREEN" ],
+                     "rettaints":[]
+                  }
+               ]
             }
         },
         {
-            "cle-label": "COMPONENT_HEARTBEATS_MPU",
+            "cle-label": "COMPONENT_HEARTBEATS_ORANGE_GREEN",
             "cle-json": {
-                "level": "orange",
-                "cdf": [
-                    {
-                        "remotelevel": "orange",
-                        "direction": "egress",
-                        "guarddirective": {
-                            "operation": "allow"
-                        },
-                        "argtaints": [
-                        ],
-                        "codtaints": [
-                        ],
-                        "rettaints": [
-                        ]
-                    },
-                    {
-                        "remotelevel": "green",
-                        "direction": "egress",
-                        "guarddirective": {
-                            "operation": "allow"
-                        },
-                        "argtaints": [
-                        ],
-                        "codtaints": [
-                        ],
-                        "rettaints": [
-                        ]
-                    }                    
-                ]
-            }
-        },
-        {
-            "cle-label": "COMPONENT_HEARTBEATS_MPX",
-            "cle-json": {
-                "level": "orange",
-                "cdf": [
-                    {
-                        "remotelevel": "orange",
-                        "direction": "egress",
-                        "guarddirective": {
-                            "operation": "allow"
-                        },
-                        "argtaints": [
-                        ],
-                        "codtaints": [
-                        ],
-                        "rettaints": [
-                        ]
-                    },
-                    {
-                        "remotelevel": "green",
-                        "direction": "egress",
-                        "guarddirective": {
-                            "operation": "allow"
-                        },
-                        "argtaints": [
-                        ],
-                        "codtaints": [
-                        ],
-                        "rettaints": [
-                        ]
-                    }                    
-                ]
-            }
-        },
-        {
-            "cle-label": "COMPONENT_HEARTBEATS_RDR",
-            "cle-json": {
-                "level": "orange",
-                "cdf": [
-                    {
-                        "remotelevel": "orange",
-                        "direction": "egress",
-                        "guarddirective": {
-                            "operation": "allow"
-                        },
-                        "argtaints": [
-                        ],
-                        "codtaints": [
-                        ],
-                        "rettaints": [
-                        ]
-                    },
-                    {
-                        "remotelevel": "green",
-                        "direction": "egress",
-                        "guarddirective": {
-                            "operation": "allow"
-                        },
-                        "argtaints": [
-                        ],
-                        "codtaints": [
-                        ],
-                        "rettaints": [
-                        ]
-                    }                    
-                ]
+               "level":"orange",
+               "cdf":[
+                  {
+                     "remotelevel":"green",
+                     "direction":"ingress",
+                     "guarddirective":{
+                        "operation":"allow",
+                        "oneway":true
+                     },
+                     "argtaints":[
+                        [ "TAG_REQUEST_ECHO_COMPONENT_HEARTBEATS" ]
+                     ],
+                     "codtaints":[ "GREEN" ],
+                     "rettaints":[]
+                  }
+               ]
             }
         },
         {

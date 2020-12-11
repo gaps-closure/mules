@@ -8,6 +8,8 @@ class GenEgress : public Gen
 {
 private:
     set<string> remoteEnclaves;
+    map<string, set<string>> msgToEnclaves;  // message name to list of dst enclaves
+    map<string, string> newCombo;   // msg_remote to cle def
 
     vector<string> copies;
     vector<string> stmts;
@@ -53,6 +55,7 @@ protected:
     void traverseObjEgress(Message *message, json j, vector<string> path);
 
     void genFlow(bool isElse, string msg_name, string component, string remote, vector<int> ids);
+    void genFlowToRemote(string msg_name, string remote);
     void genEgress(Message *message);
 
     void traverseEcho(Message *message);

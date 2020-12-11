@@ -212,11 +212,11 @@ public:
         return level + " -> " + cdf[0].getRemoteLevel();
     }
 
-    string getLevel() {
+    string getLevel() const {
         return level;
     }
 
-    vector<Cdf>& getCdf() {
+    vector<Cdf> getCdf() const {
         return cdf;
     }
 
