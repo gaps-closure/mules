@@ -233,12 +233,20 @@ void GenEgress::traverseEcho(Message *message)
     }
 }
 
-void GenEgress::genEchoCommon(Message *message)
+void GenEgress::genEchoCommon(Message *message, bool singleRemote)
 {
     string msg_name = message->getName();
 
     try {
-        genfile << "int echo_" << msg_name << "_common(";
+        string msg_name_u = msg_name;
+
+        if (singleRemote) {
+            boost::to_upper(msg_name_u);
+            genfile << "#pragma cle begin XDLINKAGE_ECHO_" << msg_name_u << endl;
+        }
+
+        string suffix = singleRemote ? "(" : "_common(";
+        genfile << "int echo_" << msg_name << suffix;
 
         bool first = true;
         for (std::vector<string>::iterator it = in_args.begin(); it != in_args.end(); ++it) {
@@ -253,6 +261,9 @@ void GenEgress::genEchoCommon(Message *message)
         genfile << endl
                 << ")" << endl
                 << "{" << endl;
+        if (singleRemote) {
+            genfile << "#pragma cle end XDLINKAGE_ECHO_" << msg_name_u << endl;
+        }
 
         for (std::vector<string>::iterator it = stmts.begin(); it != stmts.end(); ++it) {
             genfile << TAB_1 << *it << endl;
@@ -276,12 +287,13 @@ void GenEgress::genEchoCommon(Message *message)
     }
 }
 
-void GenEgress::genEcho(Message *message, string combo)
+void GenEgress::genEcho(Message *message, string remote)
 {
     try {
         string msg_name = message->getName();
 
-        string combo_u = msg_name + "_" + combo;
+        string combo = msg_name + "_" + remote;
+        string combo_u = combo;
         boost::to_upper(combo_u);
         genfile << "#pragma cle begin XDLINKAGE_ECHO_" << combo_u << endl
                 << "int echo_" << combo << "(";
@@ -322,6 +334,7 @@ void GenEgress::genEcho(Message *message, string combo)
         e.print();
     }
 }
+
 /******************************
  * egress
  */
@@ -578,17 +591,37 @@ void GenEgress::genEgress(Message *message)
    try {
        string msg_name = message->getName();
 
+       map<string, set<string>>::iterator it = msgToEnclaves.find(msg_name);
+       if (it == msgToEnclaves.end()) {
+           eprintf("no such message: %s", msg_name.c_str());
+           return;
+       }
+       set<string> remotes = it->second;
+       bool singleRemote = (remotes.size() == 1);
+
        genfile << "int egress_" + msg_name + "(const char *jstr)" << endl
                << "{" << endl
                << TAB_1 << "int fromRemote;" << endl
 //               << TAB_1 << "int dataId;"
                << endl;
 
+       string key;
+       if (singleRemote) {
+           string theRemote;
+           for (auto const remote : remotes) {
+               key = remote + "_SHAREABLE";
+               boost::to_upper(key);
+           }
+           genfile << "#pragma cle def begin " <<  key << endl;
+       }
        for (std::vector<string>::iterator it = stmts.begin(); it != stmts.end(); ++it) {
            string stmt = *it;
            findAndReplaceAll(stmt, WCARD, "");
            genfile << TAB_1 << stmt << endl;
        }
+       if (singleRemote)
+           genfile << "#pragma cle def begin " <<  key << endl;
+
 
        genfile << endl
                << TAB_1 << "if (_local_" + msg_name + ")" << endl
@@ -605,34 +638,33 @@ void GenEgress::genEgress(Message *message)
        genfile << endl
                << TAB_1 << ");" << endl;
 
-       genfile << TAB_1 << "if (fromRemote != 0)" << endl
-               << TAB_2 << "return 0;" << endl
-               << endl;
 
-       map<string, set<string>>::iterator it = msgToEnclaves.find(msg_name);
-       if (it == msgToEnclaves.end()) {
-           eprintf("no such message: %s", msg_name.c_str());
-           return;
+       if (singleRemote) {
+           genfile << TAB_1 << "if (fromRemote == 0) {" << endl;
+           genfile << TAB_2 << "echo_" << msg_name << "(" << endl;
+           bool first = true;
+           for (std::vector<string>::iterator it = out_args.begin(); it != out_args.end(); ++it) {
+               if (!first)
+                   genfile << ",\n";
+               string stmt = *it;
+               findAndReplaceAll(stmt, WCARD, "");
+               genfile << TAB_3 << stmt;
+               first = false;
+           }
+           genfile << endl << TAB_2 << ");" << endl;
+           genfile << TAB_1 << "}" << endl;
        }
+       else { // need separate annotations
+           genfile << TAB_1 << "if (fromRemote != 0)" << endl
+                   << TAB_2 << "return 0;" << endl
+                   << endl;
 
-       string my_enclave = config.getEnclave();
-       for (auto const remote : it->second) {
-           if (my_enclave.compare(remote))
-               genFlowToRemote(msg_name, remote);
+           string my_enclave = config.getEnclave();
+           for (auto const remote : remotes) {
+               if (my_enclave.compare(remote))
+                   genFlowToRemote(msg_name, remote);
+           }
        }
-
-//       bool isElse = false;
-//       map<string, vector<Flow *>> flows = message->getOutFlows();
-//       for (auto component : flows) {
-//           map<string, vector<int>> groups;
-//           groupByLevels(component.second, groups);
-//
-//           for (auto const& g : groups) {
-//               genFlow(isElse, msg_name, component.first, g.first, g.second);
-//               isElse = true;
-//           }
-//       }
-
        genfile << TAB_1 << "return 0;" << endl
                << "}" << endl
                << endl;
@@ -650,18 +682,22 @@ int GenEgress::gen(XdccFlow& xdccFlow)
         Message *message = (Message *) m;
         traverseEcho(message);
 
-        genEchoCommon(message);
+        string msg_name = message->getName();
+        map<string, set<string>>::iterator it = msgToEnclaves.find(msg_name);
+        if (it == msgToEnclaves.end()) {
+            eprintf("no such message: %s", msg_name.c_str());
+            continue;
+        }
+        set<string> remotes = it->second;
+        bool singleRemote = (remotes.size() == 1);
+
+        genEchoCommon(message, singleRemote);
         endOfFunc();
 
-        string msgName = message->getName();
-        map<string, set<string>>::iterator it = msgToEnclaves.find(msgName);
-        if (it == msgToEnclaves.end()) {
-            eprintf("no such message: %s", msgName.c_str());
-        }
-        else {
-            for (auto const remote : it->second) {
-                if (!enclave.compare(remote))
-                    continue;
+        for (auto const remote : it->second) {
+            if (!enclave.compare(remote))
+                continue;
+            if (!singleRemote) {
                 genEcho(message, remote);
                 endOfFunc();
             }
@@ -721,7 +757,8 @@ void GenEgress::populateRemoteEnclaves(const XdccFlow &xdccFlow)
              if (it == msgToEnclaves.end()) {
                  msgToEnclaves.insert(make_pair(msgName, set<string>()));
              }
-             msgToEnclaves[msgName].insert(remote);
+             if (remote.compare(enclave))
+                 msgToEnclaves[msgName].insert(remote);
         }
     }
 

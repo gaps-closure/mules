@@ -62,6 +62,6 @@ protected:
     void traverseArrayEcho(Message *message, json j, vector<string> path);
     void travereObjEcho(Message *message, json j, vector<string> path);
 
-    void genEchoCommon(Message *message);
+    void genEchoCommon(Message *message, bool singleRemote);
     void genEcho(Message *message, string component);
 };
