@@ -185,7 +185,7 @@ void GenEcho::genEcho(Message *message)
 
        genfile << endl
                << "    AMQManager *amq = static_cast<AMQManager *>(__amqlib->obj);" << endl
-               << "    amq->publish(\"" + topic + "\", js.dump(), __is_topic == 0 ? false : true);" << endl
+               << "    amq->publish(\"" + topic + "\", js, __is_topic == 0 ? false : true);" << endl
                << "}" << endl
                << endl;
    }
