@@ -281,7 +281,7 @@ void GenEgress::genEcho(Message *message, string combo)
     try {
         string msg_name = message->getName();
 
-        string combo_u = combo;
+        string combo_u = msg_name + "_" + combo;
         boost::to_upper(combo_u);
         genfile << "#pragma cle begin XDLINKAGE_ECHO_" << combo_u << endl
                 << "int echo_" << combo << "(";
@@ -540,10 +540,12 @@ void GenEgress::genFlowToRemote(string msg_name, string remote)
 
     string key = remote + "_SHAREABLE";
     boost::to_upper(key);
+    string suffix = "_" + remote;
+
     genfile << "#pragma cle def begin " <<  key << endl;
     for (std::vector<string>::iterator it = stmts.begin(); it != stmts.end(); ++it) {
         string stmt = *it;
-        findAndReplaceAll(stmt, WCARD, remote);
+        findAndReplaceAll(stmt, WCARD, suffix);
         genfile << TAB_2 << stmt << endl;
     }
     genfile << "#pragma cle def end " << key << endl
@@ -551,7 +553,7 @@ void GenEgress::genFlowToRemote(string msg_name, string remote)
     // copies
     for (std::vector<string>::iterator it = copies.begin(); it != copies.end(); ++it) {
         string stmt = *it;
-        findAndReplaceAll(stmt, WCARD, remote);
+        findAndReplaceAll(stmt, WCARD, suffix);
         genfile << TAB_2 << stmt << endl;
     }
     genfile << endl;
@@ -562,7 +564,7 @@ void GenEgress::genFlowToRemote(string msg_name, string remote)
         if (!first)
             genfile << ",\n";
         string stmt = *it;
-        findAndReplaceAll(stmt, WCARD, remote);
+        findAndReplaceAll(stmt, WCARD, suffix);
         genfile << TAB_3 << stmt;
         first = false;
     }
@@ -652,13 +654,15 @@ int GenEgress::gen(XdccFlow& xdccFlow)
         endOfFunc();
 
         string msgName = message->getName();
-        map<string, vector<string>>::iterator it = msgFanOuts.find(msgName);
-        if (it == msgFanOuts.end()) {
+        map<string, set<string>>::iterator it = msgToEnclaves.find(msgName);
+        if (it == msgToEnclaves.end()) {
             eprintf("no such message: %s", msgName.c_str());
         }
         else {
-            for (auto const label : it->second) {
-                genEcho(message, label);
+            for (auto const remote : it->second) {
+                if (!enclave.compare(remote))
+                    continue;
+                genEcho(message, remote);
                 endOfFunc();
             }
         }
