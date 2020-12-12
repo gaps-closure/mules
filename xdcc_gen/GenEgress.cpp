@@ -590,14 +590,17 @@ void GenEgress::genEgress(Message *message)
 {
    try {
        string msg_name = message->getName();
+       bool singleRemote = false;
+       set<string> remotes;
 
        map<string, set<string>>::iterator it = msgToEnclaves.find(msg_name);
        if (it == msgToEnclaves.end()) {
-           eprintf("no such message: %s", msg_name.c_str());
-           return;
+           singleRemote = true;
        }
-       set<string> remotes = it->second;
-       bool singleRemote = (remotes.size() == 1);
+       else {
+           remotes = it->second;
+           singleRemote = (remotes.size() == 1);
+       }
        // if the message flows to only one remote enclave, then
        // there is no need to fan out (echo_*_common() and related are not generated
 
@@ -686,16 +689,14 @@ int GenEgress::gen(XdccFlow& xdccFlow)
 {
     string enclave = config.getEnclave();
 
-    for (auto const& m : myMessages) {
-        Message *message = (Message *) m;
+    for (auto const &msg_map : xdccFlow.getMessages()) {
+        Message *message = (Message*) msg_map.second;
         traverseEcho(message);
 
         string msg_name = message->getName();
+
         map<string, set<string>>::iterator it = msgToEnclaves.find(msg_name);
-        if (it == msgToEnclaves.end()) {
-            eprintf("no such message: %s", msg_name.c_str());
-            continue;
-        }
+        if (it != msgToEnclaves.end()) {
         int remotesSize = it->second.size();
         if (remotesSize > 0) {
             bool singleRemote = (remotesSize == 1);
@@ -712,7 +713,8 @@ int GenEgress::gen(XdccFlow& xdccFlow)
                 }
             }
         }
-
+        }
+cout << "@@@ " << msg_name << endl;
         traverseEgress(message);
         genEgress(message);
         endOfFunc();
