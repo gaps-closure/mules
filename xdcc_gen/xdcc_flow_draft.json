@@ -98,35 +98,35 @@
         {
             "dataId": 2001,            
             "message": "pnt",
-            "label": "PNT_MPX",
+            "label": "PNT_ORANGE_ORANGE",
             "fromComponent": "MPX",
             "toComponent": "MPU"
         },
         {
             "dataId": 2002,            
             "message": "pnt",
-            "label": "PNT_MPX",
+            "label": "PNT_ORANGE_GREEN",
             "fromComponent": "MPX",
             "toComponent": "ISRM"
         },
         {
             "dataId": 2003,            
             "message": "pnt",
-            "label": "PNT_MPX",
+            "label": "PNT_ORANGE_GREEN",
             "fromComponent": "MPX",
             "toComponent": "EOIR"
         },
         {
             "dataId": 2004,            
             "message": "pnt",
-            "label": "PNT_MPX",
+            "label": "PNT_ORANGE_GREEN",
             "fromComponent": "MPX",
             "toComponent": "RDR"
         },
         {
             "dataId": 2005,            
             "message": "requestISRMDetections",
-            "label": "REQUEST_ISRM_DETECTION_MPX",
+            "label": "REQUEST_ISRM_DETECTIONS_ORANGE_GREEN",
             "fromComponent": "MPX",
             "toComponent": "ISRM"
         },
@@ -161,21 +161,21 @@
         {
             "dataId": 3001,            
             "message": "requestEOIRDetections",
-            "label": "REQUEST_EOIR_DETECTION_ISRM",
+            "label": "REQUEST_EOIR_DETECTIONS_GREEN_GREEN",
             "fromComponent": "ISRM",
             "toComponent": "EOIR"
         },
         {
             "dataId": 3002,            
             "message": "requestRDRDetections",
-            "label": "REQUEST_RDR_DETECTIONS_ISRM",
+            "label": "REQUEST_RDR_DETECTIONS_GREEN_GREEN",
             "fromComponent": "ISRM",
             "toComponent": "RDR"
         },
         {
             "dataId": 3003,            
             "message": "receiveISRMDetections",
-            "label": "RECEIVE_ISRM_DETECTIONS_ISRM",
+            "label": "RECEIVE_ISRM_DETECTIONS_GREEN_ORANGE",
             "fromComponent": "ISRM",
             "toComponent": "MPX"
         },
@@ -210,7 +210,7 @@
         {
             "dataId": 4001,            
             "message": "receiveEOIRDetections",
-            "label": "RECEIVE_EOIR_DETECTIONS_EOIR",
+            "label": "RECEIVE_EOIR_DETECTIONS_GREEN_GREEN",
             "fromComponent": "EOIR",
             "toComponent": "ISRM"
         },
@@ -405,7 +405,7 @@
                         },
                         "argtaints": [
                             [
-                                "PNT_MPX",
+                                "PNT_ORANGE_ORANGE",
                                 "COMPONENT_HEARTBEATS_ORANGE_ORANGE",
                                 "COMPONENT_HEARTBEATS_GREEN_ORANGE",
                                 "COMPONENT_HEARTBEATS_GREEN_ORANGE",
@@ -446,17 +446,17 @@
                             [
                                 "COMPONENT_HEARTBEATS_ORANGE_ORANGE",
                                 "UPDATE_MISSION_PLAN_MPU",
-                                "RECEIVE_ISRM_DETECTIONS_ISRM",
+                                "RECEIVE_ISRM_DETECTIONS_GREEN_ORANGE",
                                 "COMPONENT_HEARTBEATS_GREEN_ORANGE",
                                 "COMPONENT_HEARTBEATS_GREEN_ORANGE",
                                 "COMPONENT_HEARTBEATS_GREEN_ORANGE"
                             ],
                             [
-                                "PNT_MPX",
-                                "PNT_MPX",
-                                "PNT_MPX",
-                                "PNT_MPX",
-                                "REQUEST_ISRM_DETECTION_MPX",
+                                "PNT_ORANGE_ORANGE",
+                                "PNT_ORANGE_GREEN",
+                                "PNT_ORANGE_GREEN",
+                                "PNT_ORANGE_GREEN",
+                                "REQUEST_ISRM_DETECTIONS_ORANGE_GREEN",
                                 "COMPONENT_HEARTBEATS_ORANGE_ORANGE",
                                 "COMPONENT_HEARTBEATS_ORANGE_GREEN",
                                 "COMPONENT_HEARTBEATS_ORANGE_GREEN",
@@ -486,10 +486,10 @@
                             [
                                 "COMPONENT_HEARTBEATS_ORANGE_GREEN",
                                 "UPDATE_MISSION_PLAN_MPU",
-                                "PNT_MPX",
-                                "REQUEST_ISRM_DETECTION_MPX",
+                                "PNT_ORANGE_GREEN",
+                                "REQUEST_ISRM_DETECTIONS_ORANGE_GREEN",
                                 "COMPONENT_HEARTBEATS_ORANGE_GREEN",
-                                "RECEIVE_EOIR_DETECTIONS_EOIR",
+                                "RECEIVE_EOIR_DETECTIONS_GREEN_GREEN",
                                 "TARGETS_EOIR",
                                 "DETECT_OBJECTS_EOIR",
                                 "COMPONENT_HEARTBEATS_GREEN_GREEN",
@@ -498,9 +498,9 @@
                                 "COMPONENT_HEARTBEATS_GREEN_GREEN"
                             ],
                             [
-                                "REQUEST_EOIR_DETECTION_ISRM",
-                                "REQUEST_RDR_DETECTIONS_ISRM",
-                                "RECEIVE_ISRM_DETECTIONS_ISRM",
+                                "REQUEST_EOIR_DETECTIONS_GREEN_GREEN",
+                                "REQUEST_RDR_DETECTIONS_GREEN_GREEN",
+                                "RECEIVE_ISRM_DETECTIONS_GREEN_ORANGE",
                                 "COMPONENT_HEARTBEATS_GREEN_ORANGE",
                                 "COMPONENT_HEARTBEATS_GREEN_ORANGE",
                                 "COMPONENT_HEARTBEATS_GREEN_GREEN",
@@ -530,14 +530,14 @@
                             [
                                 "COMPONENT_HEARTBEATS_ORANGE_GREEN",
                                 "UPDATE_MISSION_PLAN_MPU",
-                                "PNT_MPX",
+                                "PNT_ORANGE_GREEN",
                                 "COMPONENT_HEARTBEATS_ORANGE_GREEN",
-                                "REQUEST_EOIR_DETECTION_ISRM",
+                                "REQUEST_EOIR_DETECTIONS_GREEN_GREEN",
                                 "COMPONENT_HEARTBEATS_GREEN_GREEN",
                                 "COMPONENT_HEARTBEATS_GREEN_GREEN"
                             ],
                             [
-                                "RECEIVE_EOIR_DETECTIONS_EOIR",
+                                "RECEIVE_EOIR_DETECTIONS_GREEN_GREEN",
                                 "TARGETS_EOIR",
                                 "DETECT_OBJECTS_EOIR",
                                 "COMPONENT_HEARTBEATS_GREEN_ORANGE",
@@ -570,9 +570,9 @@
                                 "COMPONENT_HEARTBEATS_ORANGE_GREEN",
                                 "UPDATE_MISSION_PLAN_MPU",
                                 "STATUS_MPU",
-                                "PNT_MPX",
+                                "PNT_ORANGE_GREEN",
                                 "COMPONENT_HEARTBEATS_ORANGE_GREEN",
-                                "REQUEST_RDR_DETECTIONS_ISRM",
+                                "REQUEST_RDR_DETECTIONS_GREEN_GREEN",
                                 "COMPONENT_HEARTBEATS_GREEN_GREEN",
                                 "COMPONENT_HEARTBEATS_GREEN_GREEN"
                             ],
@@ -720,79 +720,87 @@
             }
         },
         {
-            "cle-label": "PNT_MPX",
+            "cle-label": "PNT_ORANGE_ORANGE",
             "cle-json": {
-                "level": "orange",
-                "cdf": [
-                    {
-                        "remotelevel": "orange",
-                        "direction": "egress",
-                        "guarddirective": {
-                            "operation": "allow"
-                        },
-                        "argtaints": [
-                        ],
-                        "codtaints": [
-                        ],
-                        "rettaints": [
-                        ]
-                    },
-                    {
-                        "remotelevel": "green",
-                        "direction": "egress",
-                        "guarddirective": {
-                            "operation": "allow"
-                        },
-                        "argtaints": [
-                        ],
-                        "codtaints": [
-                        ],
-                        "rettaints": [
-                        ]
-                    }                    
-                ]
+               "level":"orange",
+               "cdf":[
+                  {
+                     "remotelevel":"orange",
+                     "direction":"ingress",
+                     "guarddirective":{
+                        "operation":"allow",
+                        "oneway":true
+                     },
+                     "argtaints":[
+                        [ "TAG_REQUEST_ECHO_PNT" ]
+                     ],
+                     "codtaints":[ "ORANGE" ],
+                     "rettaints":[]
+                  }
+               ]
+            }            
+        },
+        {
+            "cle-label": "PNT_ORANGE_GREEN",
+            "cle-json": {
+               "level":"orange",
+               "cdf":[
+                  {
+                     "remotelevel":"green",
+                     "direction":"ingress",
+                     "guarddirective":{
+                        "operation":"allow",
+                        "oneway":true
+                     },
+                     "argtaints":[
+                        [ "TAG_REQUEST_ECHO_PNT" ]
+                     ],
+                     "codtaints":[ "ORANGE" ],
+                     "rettaints":[]
+                  }
+               ]
+            }            
+        },
+        {
+            "cle-label": "RECEIVE_EOIR_DETECTIONS_GREEN_GREEN",
+            "cle-json": {
+               "level":"green",
+               "cdf":[
+                  {
+                     "remotelevel":"green",
+                     "direction":"ingress",
+                     "guarddirective":{
+                        "operation":"allow",
+                        "oneway":true
+                     },
+                     "argtaints":[
+                        [ "TAG_REQUEST_ECHO_RECEIVEEOIRDETECTIONS" ]
+                     ],
+                     "codtaints":[ "GREEN" ],
+                     "rettaints":[]
+                  }
+               ]
             }
         },
         {
-            "cle-label": "RECEIVE_EOIR_DETECTIONS_EOIR",
+            "cle-label": "RECEIVE_ISRM_DETECTIONS_GREEN_ORANGE",
             "cle-json": {
-                "level": "orange",
-                "cdf": [
-                    {
-                        "remotelevel": "green",
-                        "direction": "egress",
-                        "guarddirective": {
-                            "operation": "allow"
-                        },
-                        "argtaints": [
-                        ],
-                        "codtaints": [
-                        ],
-                        "rettaints": [
-                        ]
-                    }
-                ]
-            }
-        },
-        {
-            "cle-label": "RECEIVE_ISRM_DETECTIONS_ISRM",
-            "cle-json": {
-                "level": "green",
-                "cdf": [
-                    {
-                        "remotelevel": "orange",
-                        "direction": "egress",
-                        "guarddirective": {
-                            "operation": "allow"
-                        },
-                        "argtaints": [
-                        ],
-                        "codtaints": [
-                        ],
-                        "rettaints": [
-                        ]
-                    }
-                ]
+               "level":"green",
+               "cdf":[
+                  {
+                     "remotelevel":"orange",
+                     "direction":"ingress",
+                     "guarddirective":{
+                        "operation":"allow",
+                        "oneway":true
+                     },
+                     "argtaints":[
+                        [ "TAG_REQUEST_ECHO_RECEIVEISRMDETECTIONS" ]
+                     ],
+                     "codtaints":[ "GREEN" ],
+                     "rettaints":[]
+                  }
+               ]
             }
         },
         {
@@ -817,66 +825,66 @@
             }
         },
         {
-            "cle-label": "REQUEST_EOIR_DETECTION_ISRM",
+            "cle-label": "REQUEST_EOIR_DETECTIONS_GREEN_GREEN",
             "cle-json": {
-                "level": "green",
-                "cdf": [
-                    {
-                        "remotelevel": "orange",
-                        "direction": "egress",
-                        "guarddirective": {
-                            "operation": "allow"
-                        },
-                        "argtaints": [
-                        ],
-                        "codtaints": [
-                        ],
-                        "rettaints": [
-                        ]
-                    }
-                ]
+               "level":"green",
+               "cdf":[
+                  {
+                     "remotelevel":"green",
+                     "direction":"ingress",
+                     "guarddirective":{
+                        "operation":"allow",
+                        "oneway":true
+                     },
+                     "argtaints":[
+                        [ "TAG_REQUEST_ECHO_REQUESTISRMDETECTIONS" ]
+                     ],
+                     "codtaints":[ "GREEN" ],
+                     "rettaints":[]
+                  }
+               ]
             }
         },
         {
-            "cle-label": "REQUEST_ISRM_DETECTION_MPX",
+            "cle-label": "REQUEST_ISRM_DETECTIONS_ORANGE_GREEN",
             "cle-json": {
-                "level": "orange",
-                "cdf": [
-                    {
-                        "remotelevel": "green",
-                        "direction": "egress",
-                        "guarddirective": {
-                            "operation": "allow"
-                        },
-                        "argtaints": [
-                        ],
-                        "codtaints": [
-                        ],
-                        "rettaints": [
-                        ]
-                    }
-                ]
+               "level":"orange",
+               "cdf":[
+                  {
+                     "remotelevel":"green",
+                     "direction":"ingress",
+                     "guarddirective":{
+                        "operation":"allow",
+                        "oneway":true
+                     },
+                     "argtaints":[
+                        [ "TAG_REQUEST_ECHO_REQUESTISRMDETECTIONS" ]
+                     ],
+                     "codtaints":[ "ORANGE" ],
+                     "rettaints":[]
+                  }
+               ]
             }
         },
         {
-            "cle-label": "REQUEST_RDR_DETECTIONS_ISRM",
+            "cle-label": "REQUEST_RDR_DETECTIONS_GREEN_GREEN",
             "cle-json": {
-                "level": "green",
-                "cdf": [
-                    {
-                        "remotelevel": "orange",
-                        "direction": "egress",
-                        "guarddirective": {
-                            "operation": "allow"
-                        },
-                        "argtaints": [
-                        ],
-                        "codtaints": [
-                        ],
-                        "rettaints": [
-                        ]
-                    }
-                ]
+               "level":"green",
+               "cdf":[
+                  {
+                     "remotelevel":"green",
+                     "direction":"ingress",
+                     "guarddirective":{
+                        "operation":"allow",
+                        "oneway":true
+                     },
+                     "argtaints":[
+                        [ "TAG_REQUEST_ECHO_REQUESTRDRDETECTIONS" ]
+                     ],
+                     "codtaints":[ "GREEN" ],
+                     "rettaints":[]
+                  }
+               ]
             }
         },
         {
@@ -934,7 +942,7 @@
                         "oneway":true
                      },
                      "argtaints":[
-                        [ "TAG_REQUEST_ECHO_UPDATE_MISSION_PLAN" ]
+                        [ "TAG_REQUEST_ECHO_UPDATEMISSIONPLAN" ]
                      ],
                      "codtaints":[ "ORANGE" ],
                      "rettaints":[]
@@ -955,7 +963,7 @@
                         "oneway":true
                      },
                      "argtaints":[
-                        [ "TAG_REQUEST_ECHO_UPDATE_MISSION_PLAN" ]
+                        [ "TAG_REQUEST_ECHO_UPDATEMISSIONPLAN" ]
                      ],
                      "codtaints":[ "ORANGE" ],
                      "rettaints":[]
