@@ -620,7 +620,7 @@ void GenEgress::genEgress(Message *message)
            genfile << TAB_1 << stmt << endl;
        }
        if (singleRemote)
-           genfile << "#pragma cle def begin " <<  key << endl;
+           genfile << "#pragma cle def end " <<  key << endl;
 
 
        genfile << endl
