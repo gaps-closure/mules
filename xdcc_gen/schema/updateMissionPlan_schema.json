@@ -44,6 +44,7 @@
 							"$id": "#root/missionPlan/sensorPlan/actions", 
 							"title": "Actions", 
 							"type": "array",
+							"numElements": 2,
 							"default": [],
 							"items":{
 								"$id": "#root/missionPlan/sensorPlan/actions/items", 
@@ -160,6 +161,7 @@
 							"$id": "#root/missionPlan/vehiclePlan/wayPoints", 
 							"title": "Waypoints", 
 							"type": "array",
+							"numElements": 2,
 							"default": [],
 							"items":{
 								"$id": "#root/missionPlan/vehiclePlan/wayPoints/items", 

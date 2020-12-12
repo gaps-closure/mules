@@ -94,11 +94,11 @@ void to_json(json& j, Cle& p)
 /******************************
  * XDCC
  */
-void GenEgress::traverseArrayEcho(Message *message, json j, vector<string> path)
+void GenEgress::traverseArrayEcho(Message *message, json j, vector<string> path, string numElements)
 {
     string countVar = "count";
     genVar(countVar);
-    stmts.push_back("int " + countVar + " = 1; // TODO: get json array length");
+    stmts.push_back("int " + countVar + " = " + numElements + "; // numElements from schema");
 
     int i = 0;
     for (auto& el : j.items()) {
@@ -113,7 +113,8 @@ void GenEgress::traverseArrayEcho(Message *message, json j, vector<string> path)
         try {
             string type = getField(val, "type", message, path);
             if (type == "array") {
-                traverseArrayEcho(message, val["items"]["properties"], path);
+                string numElements = getField(val, "numElements", message, path);
+                traverseArrayEcho(message, val["items"]["properties"], path, numElements);
             }
             else if (type == "object") {
                 travereObjEcho(message, j["properties"], path);
@@ -169,7 +170,8 @@ void GenEgress::travereObjEcho(Message *message, json j, vector<string> path)
 
             string type = getField(val, "type", message, path);
             if (type == "array") {
-                traverseArrayEcho(message, val["items"]["properties"], path);
+                string numElements = getField(val, "numElements", message, path);
+                traverseArrayEcho(message, val["items"]["properties"], path, numElements);
             }
             else if (type == "object") {
                 travereObjEcho(message, val["properties"], path);
@@ -220,7 +222,8 @@ void GenEgress::traverseEcho(Message *message)
 
         string type = getField(schemaJson, "type", message, path);
         if (type == "array") {
-            traverseArrayEcho(message, schemaJson["items"]["properties"], path);
+            string numElements = getField(schemaJson, "numElements", message, path);
+            traverseArrayEcho(message, schemaJson["items"]["properties"], path, numElements);
         }
         else if (type == "object") {
             travereObjEcho(message, schemaJson["properties"], path);
@@ -338,13 +341,13 @@ void GenEgress::genEcho(Message *message, string remote)
 /******************************
  * egress
  */
-void GenEgress::traverseArrayEgress(Message *message, json j, vector<string> path)
+void GenEgress::traverseArrayEgress(Message *message, json j, vector<string> path, string numElements)
 {
     string countVar = "count";
     genVar(countVar);
     in_args.push_back(countVar);
 
-    stmts.push_back("int " + countVar + " = 1; // TODO: get json array length");
+    stmts.push_back("int " + countVar + " = " + numElements + "; // numElements from schema");
 
     int i = 0;
     for (auto& el : j.items()) {
@@ -358,7 +361,8 @@ void GenEgress::traverseArrayEgress(Message *message, json j, vector<string> pat
         try {
             string type = getField(val, "type", message, path);
             if (type == "array") {
-                traverseArrayEgress(message, val["items"]["properties"], path);
+                string numElements = getField(val, "numElements", message, path);
+                traverseArrayEgress(message, val["items"]["properties"], path, numElements);
             }
             else if (type == "object") {
                 traverseObjEgress(message, val["properties"], path);
@@ -408,7 +412,8 @@ void GenEgress::traverseObjEgress(Message *message, json j, vector<string> path)
 
             string type = getField(val, "type", message, path);
             if (type == "array") {
-                traverseArrayEgress(message, val["items"]["properties"], path);
+                string numElements = getField(val, "numElements", message, path);
+                traverseArrayEgress(message, val["items"]["properties"], path, numElements);
             }
             else if (type == "object") {
                 traverseObjEgress(message, val["properties"], path);
@@ -469,7 +474,8 @@ void GenEgress::traverseEgress(Message *message)
 
        string type = getField(schemaJson, "type", message, path);
        if (type == "array") {
-           traverseArrayEgress(message, schemaJson["items"]["properties"], path);
+           string numElements = getField(schemaJson, "numElements", message, path);
+           traverseArrayEgress(message, schemaJson["items"]["properties"], path, numElements);
        }
        else if (type == "object") {
            traverseObjEgress(message, schemaJson["properties"], path);

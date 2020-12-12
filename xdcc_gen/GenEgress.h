@@ -47,14 +47,14 @@ protected:
     void annotations(const XdccFlow &xdccFlow);
 
     void traverseEgress(Message *message);
-    void traverseArrayEgress(Message *message, json j, vector<string> path);
+    void traverseArrayEgress(Message *message, json j, vector<string> path, string numElements);
     void traverseObjEgress(Message *message, json j, vector<string> path);
 
     void genFlowToRemote(string msg_name, string remote);
     void genEgress(Message *message);
 
     void traverseEcho(Message *message);
-    void traverseArrayEcho(Message *message, json j, vector<string> path);
+    void traverseArrayEcho(Message *message, json j, vector<string> path, string numElements);
     void travereObjEcho(Message *message, json j, vector<string> path);
 
     void genEchoCommon(Message *message, bool singleRemote);
