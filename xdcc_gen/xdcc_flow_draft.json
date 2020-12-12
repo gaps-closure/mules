@@ -63,28 +63,28 @@
         {
             "dataId": 1005,            
             "message": "updateMissionPlan",
-            "label": "UPDATE_MISSION_PLAN_MPU",
+            "label": "UPDATE_MISSION_PLAN_ORANGE_ORANGE",
             "fromComponent": "MPU",
             "toComponent": "MPX"
         },
         {
             "dataId": 1006,            
             "message": "updateMissionPlan",
-            "label": "UPDATE_MISSION_PLAN_MPU",
+            "label": "UPDATE_MISSION_PLAN_ORANGE_GREEN",
             "fromComponent": "MPU",
             "toComponent": "ISRM"
         },
         {
             "dataId": 1007,            
             "message": "updateMissionPlan",
-            "label": "UPDATE_MISSION_PLAN_MPU",
+            "label": "UPDATE_MISSION_PLAN_ORANGE_GREEN",
             "fromComponent": "MPU",
             "toComponent": "EOIR"
         },
         {
             "dataId": 1008,            
             "message": "updateMissionPlan",
-            "label": "UPDATE_MISSION_PLAN_MPU",
+            "label": "UPDATE_MISSION_PLAN_ORANGE_GREEN",
             "fromComponent": "MPU",
             "toComponent": "RDR"
         },
@@ -416,10 +416,10 @@
                                 "COMPONENT_HEARTBEATS_ORANGE_GREEN",
                                 "COMPONENT_HEARTBEATS_ORANGE_GREEN",
                                 "COMPONENT_HEARTBEATS_ORANGE_GREEN",
-                                "UPDATE_MISSION_PLAN_MPU",
-                                "UPDATE_MISSION_PLAN_MPU",
-                                "UPDATE_MISSION_PLAN_MPU",
-                                "UPDATE_MISSION_PLAN_MPU",
+                                "UPDATE_MISSION_PLAN_ORANGE_ORANGE",
+                                "UPDATE_MISSION_PLAN_ORANGE_GREEN",
+                                "UPDATE_MISSION_PLAN_ORANGE_GREEN",
+                                "UPDATE_MISSION_PLAN_ORANGE_GREEN",
                                 "STATUS_MPU"
                             ]
                         ],
@@ -922,38 +922,46 @@
             }
         },
         {
-            "cle-label": "UPDATE_MISSION_PLAN_MPU",
+            "cle-label": "UPDATE_MISSION_PLAN_ORANGE_ORANGE",
             "cle-json": {
-                "level": "orange",
-                "cdf": [
-                    {
-                        "remotelevel": "orange",
-                        "direction": "egress",
-                        "guarddirective": {
-                            "operation": "allow"
-                        },
-                        "argtaints": [
-                        ],
-                        "codtaints": [
-                        ],
-                        "rettaints": [
-                        ]
-                    },
-                    {
-                        "remotelevel": "green",
-                        "direction": "egress",
-                        "guarddirective": {
-                            "operation": "allow"
-                        },
-                        "argtaints": [
-                        ],
-                        "codtaints": [
-                        ],
-                        "rettaints": [
-                        ]
-                    }                    
-                ]
+               "level":"orange",
+               "cdf":[
+                  {
+                     "remotelevel":"orange",
+                     "direction":"ingress",
+                     "guarddirective":{
+                        "operation":"allow",
+                        "oneway":true
+                     },
+                     "argtaints":[
+                        [ "TAG_REQUEST_ECHO_UPDATE_MISSION_PLAN" ]
+                     ],
+                     "codtaints":[ "ORANGE" ],
+                     "rettaints":[]
+                  }
+               ]
             }
-        }
+        },
+        {
+            "cle-label": "UPDATE_MISSION_PLAN_ORANGE_GREEN",
+            "cle-json": {
+               "level":"orange",
+               "cdf":[
+                  {
+                     "remotelevel":"green",
+                     "direction":"ingress",
+                     "guarddirective":{
+                        "operation":"allow",
+                        "oneway":true
+                     },
+                     "argtaints":[
+                        [ "TAG_REQUEST_ECHO_UPDATE_MISSION_PLAN" ]
+                     ],
+                     "codtaints":[ "ORANGE" ],
+                     "rettaints":[]
+                  }
+               ]
+            }
+        }        
     ]
 }

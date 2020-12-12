@@ -598,11 +598,12 @@ void GenEgress::genEgress(Message *message)
        }
        set<string> remotes = it->second;
        bool singleRemote = (remotes.size() == 1);
+       // if the message flows to only one remote enclave, then
+       // there is no need to fan out (echo_*_common() and related are not generated
 
        genfile << "int egress_" + msg_name + "(const char *jstr)" << endl
                << "{" << endl
                << TAB_1 << "int fromRemote;" << endl
-//               << TAB_1 << "int dataId;"
                << endl;
 
        string key;
@@ -631,7 +632,6 @@ void GenEgress::genEgress(Message *message)
        genfile << TAB_1 << "unmarshal_" + msg_name + "(" << endl
                << TAB_2 << "jstr," << endl
                << TAB_2 << "&fromRemote";
-//               << TAB_2 << "&dataId";
        for (std::vector<string>::iterator it = in_args.begin(); it != in_args.end(); ++it) {
            genfile << ",\n" << TAB_2 << *it;
        }
@@ -757,8 +757,9 @@ void GenEgress::populateRemoteEnclaves(const XdccFlow &xdccFlow)
              if (it == msgToEnclaves.end()) {
                  msgToEnclaves.insert(make_pair(msgName, set<string>()));
              }
-             if (remote.compare(enclave))
+             if (remote.compare(enclave)) {
                  msgToEnclaves[msgName].insert(remote);
+             }
         }
     }
 
@@ -832,6 +833,16 @@ void GenEgress::genCombo(const XdccFlow& xdccFlow)
 
         string fromComponent = flow->getFromComponent();
         string msgName = flow->getMessage();
+
+
+        map<string, set<string>>::iterator it = msgToEnclaves.find(msgName);
+        if (it == msgToEnclaves.end()) {
+            eprintf("no such message: %s", msgName.c_str());
+            continue;
+        }
+        set<string> remotes = it->second;
+        bool singleRemote = (remotes.size() == 1);
+
         Cle *cle = xdccFlow.find_cle(flow);
         if (cle == NULL) {
             eprintf("no CLE for %s", msgName.c_str());
@@ -876,7 +887,7 @@ void GenEgress::genCombo(const XdccFlow& xdccFlow)
             //string cdfstr = "{\"level\": \"" + enclave + "\", \"cdf\": [ " + clestr + "]}";
             findAndReplaceAll(cdfstr, "\n", " \\\n");
 
-            key = msgName + "_" + remote;
+            key = msgName + (singleRemote ? "" : ("_" + remote));
             newCombo[key] = cdfstr;
         }
     }
