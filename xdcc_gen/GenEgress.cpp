@@ -602,8 +602,16 @@ void GenEgress::genEgress(Message *message)
        // there is no need to fan out (echo_*_common() and related are not generated
 
        genfile << "int egress_" + msg_name + "(const char *jstr)" << endl
-               << "{" << endl
-               << TAB_1 << "int fromRemote;" << endl
+               << "{" << endl;
+
+       if (message->isLocal()) {
+           genfile << TAB_1 << "return 0;" << endl
+                   << "}" << endl
+                   << endl;
+           return;
+       }
+
+       genfile << TAB_1 << "int fromRemote;" << endl
                << endl;
 
        string key;
@@ -688,18 +696,20 @@ int GenEgress::gen(XdccFlow& xdccFlow)
             eprintf("no such message: %s", msg_name.c_str());
             continue;
         }
-        set<string> remotes = it->second;
-        bool singleRemote = (remotes.size() == 1);
+        int remotesSize = it->second.size();
+        if (remotesSize > 0) {
+            bool singleRemote = (remotesSize == 1);
 
-        genEchoCommon(message, singleRemote);
-        endOfFunc();
+            genEchoCommon(message, singleRemote);
+            endOfFunc();
 
-        for (auto const remote : it->second) {
-            if (!enclave.compare(remote))
-                continue;
-            if (!singleRemote) {
-                genEcho(message, remote);
-                endOfFunc();
+            for (auto const remote : it->second) {
+                if (!enclave.compare(remote))
+                    continue;
+                if (!singleRemote) {
+                    genEcho(message, remote);
+                    endOfFunc();
+                }
             }
         }
 
@@ -924,25 +934,6 @@ void GenEgress::annotations(const XdccFlow &xdccFlow)
                 << key << " "
                 << c.second << endl << endl;
     }
-/*
-    for (auto const c : combo) {
-        string key = c.first;
-        boost::to_upper(key);
-
-        genfile << "#pragma cle def "
-                << key
-                << "_SHAREABLE " << c.second << endl << endl;
-    }
-
-    for (auto const c : combo) {
-        string key = c.first;
-        boost::to_upper(key);
-
-        genfile << "#pragma cle def XDLINKAGE_ECHO_"
-                << key << " "
-                << c.second << endl << endl;
-    }
-    */
 }
 
 int GenEgress::open(const XdccFlow &xdccFlow)
@@ -979,8 +970,15 @@ int GenEgress::open(const XdccFlow &xdccFlow)
     genfile << endl << endl;
 
     genfile << "/* _local_X is 1 if X is local, else 0 */\n";
-    for (auto const& message : myMessages) {
-        genfile << "#define _local_" + message->getName() + " " + (message->isLocal() ? "1" : "0") << endl;
+    for (auto message : myMessages) {
+        bool local = true;
+        string msg_name = message->getName();
+        map<string, set<string>>::iterator it = msgToEnclaves.find(msg_name);
+        if (it != msgToEnclaves.end() && it->second.size() > 0)
+            local = false;
+
+        ((Message *)message)->setLocal(local);
+        genfile << "#define _local_" + msg_name + " " + (local ? "1" : "0") << endl;
     }
     genfile << endl;
 
