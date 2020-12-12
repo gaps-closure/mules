@@ -4,30 +4,30 @@
             "component": "MPU",
             "label": "MPU_CLE_LABEL",
             "inMessages": [ 2001, 2991, 3991, 4991, 5001 ],
-            "outMessages": [ 1001, 1002, 1003, 1004, 1005, 1006, 1007, 1008, 1009 ]
+            "outMessages": [ 1001, 1002, 1003, 1004, 1005, 1006, 1007, 1008 ]
         },
         {
             "component": "MPX",
             "label": "MPX_CLE_LABEL",
-            "inMessages": [ 1001, 1005, 3004, 3992, 4992, 5992 ],
+            "inMessages": [ 1001, 1005, 3003, 3992, 4992, 5992 ],
             "outMessages": [ 2001, 2002, 2003, 2004, 2005, 2991, 2993, 2994, 2995 ]
         },
         {
             "component": "ISRM",
             "label": "ISRM_CLE_LABEL",
-            "inMessages": [ 1002, 1006, 2002, 2005, 2993, 4001, 4002, 4003, 4993, 5002, 5003, 5993 ], 
+            "inMessages": [ 1002, 1006, 2002, 2005, 2993, 4001, 4993, 5002, 5003, 5993 ], 
             "outMessages": [ 3001, 3002, 3003, 3991, 3992, 3994, 3995 ]
         },
         {
             "component": "EOIR",
             "label": "EOIR_CLE_LABEL",
             "inMessages": [ 1003, 1007, 2003, 2994, 3001, 3994, 5994 ],
-            "outMessages": [ 4001, 4002, 4003, 4991, 4992, 4993, 4995 ]
+            "outMessages": [ 4001, 4991, 4992, 4993, 4995 ]
         },
         {
             "component": "RDR",
             "label": "RDR_CLE_LABEL",
-            "inMessages": [ 1004, 1008, 1009, 2004, 2995, 3002, 3995, 4995 ],
+            "inMessages": [ 1004, 1008, 2004, 2995, 3002, 3995, 4995 ],
             "outMessages": [ 5001, 5002, 5003, 5992, 5993, 5994 ]
         }
     ],
@@ -85,13 +85,6 @@
             "dataId": 1008,            
             "message": "updateMissionPlan",
             "label": "UPDATE_MISSION_PLAN_ORANGE_GREEN",
-            "fromComponent": "MPU",
-            "toComponent": "RDR"
-        },
-        {
-            "dataId": 1009,            
-            "message": "status",
-            "label": "STATUS_MPU",
             "fromComponent": "MPU",
             "toComponent": "RDR"
         },
@@ -215,20 +208,6 @@
             "toComponent": "ISRM"
         },
         {
-            "dataId": 4002,            
-            "message": "targets",
-            "label": "TARGETS_EOIR",
-            "fromComponent": "EOIR",
-            "toComponent": "ISRM"
-        },
-        {
-            "dataId": 4003,            
-            "message": "detectObjects",
-            "label": "DETECT_OBJECTS_EOIR",
-            "fromComponent": "EOIR",
-            "toComponent": "ISRM"
-        },
-        {
             "dataId": 4991,            
             "message": "component_heartbeats",
             "label": "COMPONENT_HEARTBEATS_GREEN_ORANGE",
@@ -337,12 +316,6 @@
             "schemaFile": "schema/pnt_schema.json"
         },
         {
-            "name": "status",
-            "topic": true,
-            "schemaType": "JSONSchema",
-            "schemaFile": "schema/status_schema.json"
-        },
-        {
             "name": "requestEOIRDetections",
             "topic": true,
             "schemaType": "JSONSchema",
@@ -365,18 +338,6 @@
             "topic": true,
             "schemaType": "JSONSchema",
             "schemaFile": "schema/receiveEOIRDetections_schema.json"
-        },
-        {
-            "name": "targets",
-            "topic": true,
-            "schemaType": "JSONSchema",
-            "schemaFile": "schema/targets_schema.json"
-        },
-        {
-            "name": "detectObjects",
-            "topic": true,
-            "schemaType": "JSONSchema",
-            "schemaFile": "schema/detectObjects_schema.json"
         },
         {
             "name": "receiveRDRDetections",
@@ -419,8 +380,7 @@
                                 "UPDATE_MISSION_PLAN_ORANGE_ORANGE",
                                 "UPDATE_MISSION_PLAN_ORANGE_GREEN",
                                 "UPDATE_MISSION_PLAN_ORANGE_GREEN",
-                                "UPDATE_MISSION_PLAN_ORANGE_GREEN",
-                                "STATUS_MPU"
+                                "UPDATE_MISSION_PLAN_ORANGE_GREEN"
                             ]
                         ],
                         "codtaints": [
@@ -445,7 +405,7 @@
                         "argtaints": [
                             [
                                 "COMPONENT_HEARTBEATS_ORANGE_ORANGE",
-                                "UPDATE_MISSION_PLAN_MPU",
+                                "UPDATE_MISSION_PLAN_ORANGE_ORANGE",
                                 "RECEIVE_ISRM_DETECTIONS_GREEN_ORANGE",
                                 "COMPONENT_HEARTBEATS_GREEN_ORANGE",
                                 "COMPONENT_HEARTBEATS_GREEN_ORANGE",
@@ -490,8 +450,6 @@
                                 "REQUEST_ISRM_DETECTIONS_ORANGE_GREEN",
                                 "COMPONENT_HEARTBEATS_ORANGE_GREEN",
                                 "RECEIVE_EOIR_DETECTIONS_GREEN_GREEN",
-                                "TARGETS_EOIR",
-                                "DETECT_OBJECTS_EOIR",
                                 "COMPONENT_HEARTBEATS_GREEN_GREEN",
                                 "RECEIVE_RDR_DETECTIONS_RDR",
                                 "MTI_RDR",
@@ -538,8 +496,6 @@
                             ],
                             [
                                 "RECEIVE_EOIR_DETECTIONS_GREEN_GREEN",
-                                "TARGETS_EOIR",
-                                "DETECT_OBJECTS_EOIR",
                                 "COMPONENT_HEARTBEATS_GREEN_ORANGE",
                                 "COMPONENT_HEARTBEATS_GREEN_ORANGE",
                                 "COMPONENT_HEARTBEATS_GREEN_GREEN",
@@ -569,7 +525,6 @@
                             [
                                 "COMPONENT_HEARTBEATS_ORANGE_GREEN",
                                 "UPDATE_MISSION_PLAN_MPU",
-                                "STATUS_MPU",
                                 "PNT_ORANGE_GREEN",
                                 "COMPONENT_HEARTBEATS_ORANGE_GREEN",
                                 "REQUEST_RDR_DETECTIONS_GREEN_GREEN",
@@ -894,27 +849,6 @@
                 "cdf": [
                     {
                         "remotelevel": "orange",
-                        "direction": "egress",
-                        "guarddirective": {
-                            "operation": "allow"
-                        },
-                        "argtaints": [
-                        ],
-                        "codtaints": [
-                        ],
-                        "rettaints": [
-                        ]
-                    }
-                ]
-            }
-        },
-        {
-            "cle-label": "TARGETS_EOIR",
-            "cle-json": {
-                "level": "orange",
-                "cdf": [
-                    {
-                        "remotelevel": "green",
                         "direction": "egress",
                         "guarddirective": {
                             "operation": "allow"
