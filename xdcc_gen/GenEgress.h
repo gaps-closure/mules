@@ -9,15 +9,12 @@ class GenEgress : public Gen
 private:
     set<string> remoteEnclaves;
     map<string, set<string>> msgToEnclaves;  // message name to list of dst enclaves
-    map<string, string> newCombo;   // msg_remote to cle def
+    map<string, string> combo;   // msg_remote to cle def
 
     vector<string> copies;
     vector<string> stmts;
     vector<string> in_args;
     vector<string> out_args;
-
-    map<string, string> combo;   // message_component_enclave to cle definition
-    map<string, vector<string>> msgFanOuts;  // message name to list of combos for that message
 
     XdccFlow xdccFlow;
 
@@ -47,14 +44,12 @@ protected:
 
     void beginFunc(Message *message, json& schemaJson);
 
-    void groupByLevels(vector<Flow *> flows, map<string, vector<int>>& groups);
     void annotations(const XdccFlow &xdccFlow);
 
     void traverseEgress(Message *message);
     void traverseArrayEgress(Message *message, json j, vector<string> path);
     void traverseObjEgress(Message *message, json j, vector<string> path);
 
-    void genFlow(bool isElse, string msg_name, string component, string remote, vector<int> ids);
     void genFlowToRemote(string msg_name, string remote);
     void genEgress(Message *message);
 

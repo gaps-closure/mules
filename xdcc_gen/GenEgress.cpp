@@ -500,53 +500,6 @@ void GenEgress::beginFunc(Message *message, json& schemaJson)
     schemaStream.close();
 }
 
-void GenEgress::genFlow(bool isElse, string msg_name, string component, string remote, vector<int> ids)
-{
-    genfile << TAB_1 << (isElse ? "else if (" : "if (");
-
-    bool first = true;
-    for (auto id : ids) {
-        if (!first)
-            genfile << " || ";
-        genfile << "dataId == " << id;
-        first = false;
-    }
-    genfile << ") {" << endl;
-
-    string key = msg_name + "_" + component + "_" + remote + "_SHAREABLE";
-    boost::to_upper(key);
-    string suffix = "_" + component + "_" + remote;
-    genfile << "#pragma cle def begin " <<  key << endl;
-    for (std::vector<string>::iterator it = stmts.begin(); it != stmts.end(); ++it) {
-        string stmt = *it;
-        findAndReplaceAll(stmt, WCARD, suffix);
-        genfile << TAB_2 << stmt << endl;
-    }
-    genfile << "#pragma cle def end " << key << endl
-            << endl;
-    // copies
-    for (std::vector<string>::iterator it = copies.begin(); it != copies.end(); ++it) {
-        string stmt = *it;
-        findAndReplaceAll(stmt, WCARD, suffix);
-        genfile << TAB_2 << stmt << endl;
-    }
-    genfile << endl;
-
-    genfile << TAB_2 << "echo_" << msg_name << suffix << "(" << endl;
-    first = true;
-    for (std::vector<string>::iterator it = out_args.begin(); it != out_args.end(); ++it) {
-        if (!first)
-            genfile << ",\n";
-        string stmt = *it;
-        findAndReplaceAll(stmt, WCARD, suffix);
-        genfile << TAB_3 << stmt;
-        first = false;
-    }
-    genfile << endl
-            << TAB_2 << ");" << endl;
-    genfile << TAB_1 << "}" << endl;
-}
-
 void GenEgress::genFlowToRemote(string msg_name, string remote)
 {
     genfile << TAB_1 << "{" << endl;
@@ -697,24 +650,23 @@ int GenEgress::gen(XdccFlow& xdccFlow)
 
         map<string, set<string>>::iterator it = msgToEnclaves.find(msg_name);
         if (it != msgToEnclaves.end()) {
-        int remotesSize = it->second.size();
-        if (remotesSize > 0) {
-            bool singleRemote = (remotesSize == 1);
+            int remotesSize = it->second.size();
+            if (remotesSize > 0) {
+                bool singleRemote = (remotesSize == 1);
 
-            genEchoCommon(message, singleRemote);
-            endOfFunc();
+                genEchoCommon(message, singleRemote);
+                endOfFunc();
 
-            for (auto const remote : it->second) {
-                if (!enclave.compare(remote))
-                    continue;
-                if (!singleRemote) {
-                    genEcho(message, remote);
-                    endOfFunc();
+                for (auto const remote : it->second) {
+                    if (!enclave.compare(remote))
+                        continue;
+                    if (!singleRemote) {
+                        genEcho(message, remote);
+                        endOfFunc();
+                    }
                 }
             }
         }
-        }
-cout << "@@@ " << msg_name << endl;
         traverseEgress(message);
         genEgress(message);
         endOfFunc();
@@ -799,39 +751,6 @@ void GenEgress::populateRemoteEnclaves(const XdccFlow &xdccFlow)
     }
 }
 
-void GenEgress::groupByLevels(vector<Flow *> flows, map<string, vector<int>>& groups)
-{
-    for (auto const flow : flows) {
-        string fromComponent = flow->getFromComponent();
-        string toComponent = flow->getToComponent();
-        string msgName = flow->getMessage();
-
-        map<string, Component *> topology = xdccFlow.getTopology();
-        const map<string, Component *>::const_iterator& it2 = topology.find(toComponent);
-        if (it2 == topology.end()) {
-            eprintf("no such component: %s", toComponent.c_str());
-            return;
-        }
-        Component *component = it2->second;
-
-        string label = component->getLabel();
-        Cle *cle = xdccFlow.find_cle(label);
-        if (cle == NULL) {
-            eprintf("no CLE for %s", msgName.c_str());
-            return;
-        }
-
-        CleJson cleJson = cle->getCleJson();
-        string remoteEnclave = cleJson.getLevel();
-
-        const map<string, vector<int>>::const_iterator& it3 = groups.find(remoteEnclave);
-        if (it3 == groups.end()) {
-            groups.insert(make_pair(remoteEnclave, vector<int>()));
-        }
-        groups[remoteEnclave].push_back(flow->getDataId());
-    }
-}
-
 void GenEgress::genCombo(const XdccFlow& xdccFlow)
 {
     string enclave = config.getEnclave();
@@ -849,7 +768,6 @@ void GenEgress::genCombo(const XdccFlow& xdccFlow)
 
         map<string, set<string>>::iterator it = msgToEnclaves.find(msgName);
         if (it == msgToEnclaves.end()) {
-            eprintf("no such message: %s", msgName.c_str());
             continue;
         }
         set<string> remotes = it->second;
@@ -868,7 +786,7 @@ void GenEgress::genCombo(const XdccFlow& xdccFlow)
 
         vector<Cdf> cdf = cleJson.getCdf();
         if (cdf.size() > 1) {
-            cout << "WARNING: more than one CDFs " << cle->getLabel() << endl;
+            eprintf("more than one CDFs %s", cle->getLabel().c_str());
         }
 
         for (int i = 0; i < cdf.size(); i++) {
@@ -880,16 +798,6 @@ void GenEgress::genCombo(const XdccFlow& xdccFlow)
             string clestr = clejson.dump(2);
             findAndReplaceAll(clestr, "\n", " \\\n");
 
-            string key = msgName + "_" + fromComponent + "_" + remote;
-            combo[key] = clestr;
-
-            const map<string, vector<string>>::const_iterator& it = msgFanOuts.find(msgName);
-            if (it == msgFanOuts.end()) {
-                msgFanOuts.insert(make_pair(msgName, vector<string>()));
-            }
-            msgFanOuts[msgName].push_back(key);
-
-
             if (!remote.compare(enclave)) {  // same enclave
                 continue;
             }
@@ -899,8 +807,8 @@ void GenEgress::genCombo(const XdccFlow& xdccFlow)
             //string cdfstr = "{\"level\": \"" + enclave + "\", \"cdf\": [ " + clestr + "]}";
             findAndReplaceAll(cdfstr, "\n", " \\\n");
 
-            key = msgName + (singleRemote ? "" : ("_" + remote));
-            newCombo[key] = cdfstr;
+            string key = msgName + (singleRemote ? "" : ("_" + remote));
+            combo[key] = cdfstr;
         }
     }
 }
@@ -928,7 +836,7 @@ void GenEgress::annotations(const XdccFlow &xdccFlow)
     }
     genfile << endl;
 
-    for (auto const c : newCombo) {
+    for (auto const c : combo) {
         string key = c.first;
         boost::to_upper(key);
 
@@ -941,8 +849,6 @@ void GenEgress::annotations(const XdccFlow &xdccFlow)
 int GenEgress::open(const XdccFlow &xdccFlow)
 {
     remoteEnclaves.clear();
-    combo.clear();
-    msgFanOuts.clear();
 
     setXdccFlow(xdccFlow);
     populateRemoteEnclaves(xdccFlow);
