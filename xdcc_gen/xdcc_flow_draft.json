@@ -207,6 +207,27 @@
             "toComponent": "RDR"
         },
         {
+            "dataId": 3050,            
+            "message": "updateMissionPlanXD",
+            "label": "UPDATE_MISSION_PLAN_XD_ORANGE_GREEN",
+            "fromComponent": "ISRM",
+            "toComponent": "ISRMshadow"
+        },
+        {
+            "dataId": 3107,            
+            "message": "updateMissionPlanXD",
+            "label": "UPDATE_MISSION_PLAN_GREEN_GREEN",
+            "fromComponent": "ISRMshadow",
+            "toComponent": "EOIR"
+        },
+        {
+            "dataId": 3108,            
+            "message": "updateMissionPlanXD",
+            "label": "UPDATE_MISSION_PLAN_GREEN_GREEN",
+            "fromComponent": "ISRMshadow",
+            "toComponent": "RDR"
+        },                
+        {
             "dataId": 4001,            
             "message": "receiveEOIRDetections",
             "label": "RECEIVE_EOIR_DETECTIONS_GREEN_GREEN",
@@ -251,7 +272,7 @@
         {
             "dataId": 5002,            
             "message": "receiveRDRDetections",
-            "label": "COMPONENT_HEARTBEATS_GREEN_GREEN",
+            "label": "RECEIVE_RDR_DETECTIONS_GREEN_ORANGE",
             "fromComponent": "RDR",
             "toComponent": "ISRM"
         },
@@ -446,13 +467,13 @@
                         "argtaints": [
                             [
                                 "COMPONENT_HEARTBEATS_ORANGE_GREEN",
-                                "UPDATE_MISSION_PLAN_MPU",
+                                "UPDATE_MISSION_PLAN_ORANGE_GREEN",
                                 "PNT_ORANGE_GREEN",
                                 "REQUEST_ISRM_DETECTIONS_ORANGE_GREEN",
                                 "COMPONENT_HEARTBEATS_ORANGE_GREEN",
                                 "RECEIVE_EOIR_DETECTIONS_GREEN_GREEN",
                                 "COMPONENT_HEARTBEATS_GREEN_GREEN",
-                                "RECEIVE_RDR_DETECTIONS_RDR",
+                                "RECEIVE_RDR_DETECTIONS_GREEN_ORANGE",
                                 "COMPONENT_HEARTBEATS_GREEN_GREEN"
                             ],
                             [
@@ -524,7 +545,7 @@
                         "argtaints": [
                             [
                                 "COMPONENT_HEARTBEATS_ORANGE_GREEN",
-                                "UPDATE_MISSION_PLAN_MPU",
+                                "UPDATE_MISSION_PLAN_ORANGE_GREEN",
                                 "PNT_ORANGE_GREEN",
                                 "COMPONENT_HEARTBEATS_ORANGE_GREEN",
                                 "REQUEST_RDR_DETECTIONS_GREEN_GREEN",
@@ -533,7 +554,7 @@
                             ],
                             [
                                 "COMPONENT_HEARTBEATS_GREEN_GREEN",
-                                "RECEIVE_RDR_DETECTIONS_RDR",
+                                "RECEIVE_RDR_DETECTIONS_GREEN_ORANGE",
                                 "COMPONENT_HEARTBEATS_GREEN_GREEN",
                                 "COMPONENT_HEARTBEATS_GREEN_ORANGE",
                                 "COMPONENT_HEARTBEATS_GREEN_ORANGE"
@@ -632,27 +653,6 @@
             }
         },
         {
-            "cle-label": "DETECT_OBJECTS_EOIR",
-            "cle-json": {
-                "level": "orange",
-                "cdf": [
-                    {
-                        "remotelevel": "green",
-                        "direction": "egress",
-                        "guarddirective": {
-                            "operation": "allow"
-                        },
-                        "argtaints": [
-                        ],
-                        "codtaints": [
-                        ],
-                        "rettaints": [
-                        ]
-                    }
-                ]
-            }
-        },
-        {
             "cle-label": "PNT_ORANGE_ORANGE",
             "cle-json": {
                "level":"orange",
@@ -737,24 +737,24 @@
             }
         },
         {
-            "cle-label": "RECEIVE_RDR_DETECTIONS_RDR",
+            "cle-label": "RECEIVE_RDR_DETECTIONS_GREEN_ORANGE",
             "cle-json": {
-                "level": "orange",
-                "cdf": [
-                    {
-                        "remotelevel": "green",
-                        "direction": "egress",
-                        "guarddirective": {
-                            "operation": "allow"
-                        },
-                        "argtaints": [
-                        ],
-                        "codtaints": [
-                        ],
-                        "rettaints": [
-                        ]
-                    }
-                ]
+               "level":"green",
+               "cdf":[
+                  {
+                     "remotelevel":"orange",
+                     "direction":"ingress",
+                     "guarddirective":{
+                        "operation":"allow",
+                        "oneway":true
+                     },
+                     "argtaints":[
+                        [ "TAG_REQUEST_ECHO_RECEIVERDRDETECTIONS" ]
+                     ],
+                     "codtaints":[ "GREEN" ],
+                     "rettaints":[]
+                  }
+               ]
             }
         },
         {
@@ -818,27 +818,6 @@
                      "rettaints":[]
                   }
                ]
-            }
-        },
-        {
-            "cle-label": "STATUS_MPU",
-            "cle-json": {
-                "level": "orange",
-                "cdf": [
-                    {
-                        "remotelevel": "orange",
-                        "direction": "egress",
-                        "guarddirective": {
-                            "operation": "allow"
-                        },
-                        "argtaints": [
-                        ],
-                        "codtaints": [
-                        ],
-                        "rettaints": [
-                        ]
-                    }
-                ]
             }
         },
         {
