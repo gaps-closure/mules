@@ -15,7 +15,7 @@
         {
             "component": "ISRM",
             "label": "ISRM_CLE_LABEL",
-            "inMessages": [ 1002, 1006, 2002, 2005, 2993, 4001, 4993, 5002, 5003, 5993 ], 
+            "inMessages": [ 1002, 1006, 2002, 2005, 2993, 4001, 4993, 5002, 5993 ], 
             "outMessages": [ 3001, 3002, 3003, 3991, 3992, 3994, 3995 ]
         },
         {
@@ -28,7 +28,7 @@
             "component": "RDR",
             "label": "RDR_CLE_LABEL",
             "inMessages": [ 1004, 1008, 2004, 2995, 3002, 3995, 4995 ],
-            "outMessages": [ 5001, 5002, 5003, 5992, 5993, 5994 ]
+            "outMessages": [ 5001, 5002, 5992, 5993, 5994 ]
         }
     ],
     "flows": [
@@ -250,13 +250,6 @@
             "toComponent": "ISRM"
         },
         {
-            "dataId": 5003,            
-            "message": "MTI",
-            "label": "MTI_RDR",
-            "fromComponent": "RDR",
-            "toComponent": "ISRM"
-        },
-        {
             "dataId": 5992,            
             "message": "component_heartbeats",
             "label": "COMPONENT_HEARTBEATS_GREEN_ORANGE",
@@ -328,12 +321,6 @@
             "schemaFile": "schema/requestRDRDetections_schema.json"
         },
         {
-            "name": "identified",
-            "topic": true,
-            "schemaType": "JSONSchema",
-            "schemaFile": "schema/identified_schema.json"
-        },
-        {
             "name": "receiveEOIRDetections",
             "topic": true,
             "schemaType": "JSONSchema",
@@ -344,12 +331,6 @@
             "topic": true,
             "schemaType": "JSONSchema",
             "schemaFile": "schema/receiveRDRDetections_schema.json"
-        },
-        {
-            "name": "MTI",
-            "topic": true,
-            "schemaType": "JSONSchema",
-            "schemaFile": "schema/MTI_schema.json"
         }
     ],    
     "cles": [
@@ -452,7 +433,6 @@
                                 "RECEIVE_EOIR_DETECTIONS_GREEN_GREEN",
                                 "COMPONENT_HEARTBEATS_GREEN_GREEN",
                                 "RECEIVE_RDR_DETECTIONS_RDR",
-                                "MTI_RDR",
                                 "COMPONENT_HEARTBEATS_GREEN_GREEN"
                             ],
                             [
@@ -534,7 +514,6 @@
                             [
                                 "COMPONENT_HEARTBEATS_GREEN_GREEN",
                                 "RECEIVE_RDR_DETECTIONS_RDR",
-                                "MTI_RDR",
                                 "COMPONENT_HEARTBEATS_GREEN_GREEN",
                                 "COMPONENT_HEARTBEATS_GREEN_ORANGE",
                                 "COMPONENT_HEARTBEATS_GREEN_ORANGE"
@@ -634,27 +613,6 @@
         },
         {
             "cle-label": "DETECT_OBJECTS_EOIR",
-            "cle-json": {
-                "level": "orange",
-                "cdf": [
-                    {
-                        "remotelevel": "green",
-                        "direction": "egress",
-                        "guarddirective": {
-                            "operation": "allow"
-                        },
-                        "argtaints": [
-                        ],
-                        "codtaints": [
-                        ],
-                        "rettaints": [
-                        ]
-                    }
-                ]
-            }
-        },
-        {
-            "cle-label": "MTI_RDR",
             "cle-json": {
                 "level": "orange",
                 "cdf": [
