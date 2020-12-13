@@ -251,7 +251,7 @@
         {
             "dataId": 5002,            
             "message": "receiveRDRDetections",
-            "label": "COMPONENT_HEARTBEATS_GREEN_GREEN",
+            "label": "RECEIVE_RDR_DETECTIONS_GREEN_GREEN",
             "fromComponent": "RDR",
             "toComponent": "ISRM"
         },
@@ -446,7 +446,7 @@
                         "argtaints": [
                             [
                                 "COMPONENT_HEARTBEATS_ORANGE_GREEN",
-                                "UPDATE_MISSION_PLAN_MPU",
+                                "UPDATE_MISSION_PLAN_ORANGE_GREEN",
                                 "PNT_ORANGE_GREEN",
                                 "REQUEST_ISRM_DETECTIONS_ORANGE_GREEN",
                                 "COMPONENT_HEARTBEATS_ORANGE_GREEN",
@@ -487,7 +487,7 @@
                         "argtaints": [
                             [
                                 "COMPONENT_HEARTBEATS_ORANGE_GREEN",
-                                "UPDATE_MISSION_PLAN_MPU",
+                                "UPDATE_MISSION_PLAN_ORANGE_GREEN",
                                 "PNT_ORANGE_GREEN",
                                 "COMPONENT_HEARTBEATS_ORANGE_GREEN",
                                 "REQUEST_EOIR_DETECTIONS_GREEN_GREEN",
@@ -524,7 +524,7 @@
                         "argtaints": [
                             [
                                 "COMPONENT_HEARTBEATS_ORANGE_GREEN",
-                                "UPDATE_MISSION_PLAN_MPU",
+                                "UPDATE_MISSION_PLAN_ORANGE_GREEN",
                                 "PNT_ORANGE_GREEN",
                                 "COMPONENT_HEARTBEATS_ORANGE_GREEN",
                                 "REQUEST_RDR_DETECTIONS_GREEN_GREEN",
@@ -532,11 +532,37 @@
                                 "COMPONENT_HEARTBEATS_GREEN_GREEN"
                             ],
                             [
-                                "COMPONENT_HEARTBEATS_GREEN_GREEN",
-                                "RECEIVE_RDR_DETECTIONS_RDR",
-                                "COMPONENT_HEARTBEATS_GREEN_GREEN",
                                 "COMPONENT_HEARTBEATS_GREEN_ORANGE",
-                                "COMPONENT_HEARTBEATS_GREEN_ORANGE"
+                                "RECEIVE_RDR_DETECTIONS_GREEN_GREEN",
+                                "COMPONENT_HEARTBEATS_GREEN_ORANGE",
+                                "COMPONENT_HEARTBEATS_GREEN_GREEN",
+                                "COMPONENT_HEARTBEATS_GREEN_GREEN"
+                            ]
+                        ],
+                        "codtaints": [
+                        ],
+                        "rettaints": [
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "cle-label": "External_CLE_LABEL",
+            "cle-json": {
+                "level": "green",
+                "cdf": [
+                    {
+                        "remotelevel": "green",
+                        "direction": "egress",
+                        "guarddirective": {
+                            "operation": "allow"
+                        },
+                        "argtaints": [
+                            [],
+                            [
+                                "GROUND_MOVERS_GREEN_GREEN",
+                                "GROUND_MOVERS_GREEN_GREEN"
                             ]
                         ],
                         "codtaints": [
