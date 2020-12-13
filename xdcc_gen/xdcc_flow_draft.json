@@ -15,14 +15,14 @@
         {
             "component": "ISRM",
             "label": "ISRM_CLE_LABEL",
-            "inMessages": [ 1002, 1006, 2002, 2005, 2993, 4001, 4993, 5002, 5993 ], 
-            "outMessages": [ 3001, 3002, 3003, 3991, 3992, 3994, 3995, 3050 ]
+            "inMessages": [ 1002, 1006, 2002, 2005, 2993, 4001, 4993, 5002, 5993, 3052 ], 
+            "outMessages": [ 3001, 3002, 3003, 3991, 3992, 3994, 3995, 3050, 3051 ]
         },
         {
             "component": "ISRMshadow",
             "label": "ISRM_SHADOW_CLE_LABEL",
-            "inMessages": [ 3050 ], 
-            "outMessages": [ 1007, 1008 ]
+            "inMessages": [ 3050, 3051 ], 
+            "outMessages": [ 1007, 1008, 3052 ]
         },
         {
             "component": "EOIR",
@@ -185,6 +185,27 @@
             "toComponent": "MPX"
         },
         {
+            "dataId": 3050,            
+            "message": "updateMissionPlanXD",
+            "label": "UPDATE_MISSION_PLAN_XD_ORANGE_GREEN",
+            "fromComponent": "ISRM",
+            "toComponent": "ISRMshadow"
+        },
+        {
+            "dataId": 3051,            
+            "message": "requestISRMDetectionsXD",
+            "label": "REQUEST_ISRM_DETECTIONS_XD_ORANGE_GREEN",
+            "fromComponent": "ISRM",
+            "toComponent": "ISRMshadow"
+        },
+        {
+            "dataId": 3052,            
+            "message": "receiveISRMDetectionsXD",
+            "label": "RECEIVE_ISRM_DETECTIONS_XD_GREEN_ORANGE",
+            "fromComponent": "ISRMshadow",
+            "toComponent": "ISRM"
+        },
+        {
             "dataId": 3991,            
             "message": "component_heartbeats",
             "label": "COMPONENT_HEARTBEATS_ORANGE_ORANGE",
@@ -211,13 +232,6 @@
             "label": "COMPONENT_HEARTBEATS_ORANGE_GREEN",
             "fromComponent": "ISRM",
             "toComponent": "RDR"
-        },
-        {
-            "dataId": 3050,            
-            "message": "updateMissionPlanXD",
-            "label": "UPDATE_MISSION_PLAN_XD_ORANGE_GREEN",
-            "fromComponent": "ISRM",
-            "toComponent": "ISRMshadow"
         },
         {
             "dataId": 4001,            
@@ -424,7 +438,7 @@
                             [
                                 "COMPONENT_HEARTBEATS_ORANGE_ORANGE",
                                 "UPDATE_MISSION_PLAN_ORANGE_ORANGE",
-                                "RECEIVE_ISRM_DETECTIONS_GREEN_ORANGE",
+                                "RECEIVE_ISRM_DETECTIONS_ORANGE_ORANGE",
                                 "COMPONENT_HEARTBEATS_ORANGE_ORANGE",
                                 "COMPONENT_HEARTBEATS_GREEN_ORANGE",
                                 "COMPONENT_HEARTBEATS_GREEN_ORANGE"
@@ -470,7 +484,8 @@
                                 "RECEIVE_EOIR_DETECTIONS_GREEN_ORANGE",
                                 "COMPONENT_HEARTBEATS_GREEN_ORANGE",
                                 "RECEIVE_RDR_DETECTIONS_GREEN_ORANGE",
-                                "COMPONENT_HEARTBEATS_GREEN_ORANGE"
+                                "COMPONENT_HEARTBEATS_GREEN_ORANGE",
+                                "RECEIVE_ISRM_DETECTIONS_XD_GREEN_ORANGE"
                             ],
                             [
                                 "REQUEST_EOIR_DETECTIONS_ORANGE_GREEN",
@@ -480,7 +495,8 @@
                                 "COMPONENT_HEARTBEATS_GREEN_ORANGE",
                                 "COMPONENT_HEARTBEATS_ORANGE_GREEN",
                                 "COMPONENT_HEARTBEATS_GREEN_GREEN",
-                                "UPDATE_MISSION_PLAN_XD_ORANGE_GREEN"
+                                "UPDATE_MISSION_PLAN_XD_ORANGE_GREEN",
+                                "REQUEST_ISRM_DETECTIONS_XD_ORANGE_GREEN"
                             ]
                         ],
                         "codtaints": [
@@ -504,11 +520,13 @@
                         },
                         "argtaints": [
                             [
-                                "UPDATE_MISSION_PLAN_XD_ORANGE_GREEN"
+                                "UPDATE_MISSION_PLAN_XD_ORANGE_GREEN",
+                                "REQUEST_ISRM_DETECTIONS_XD_ORANGE_GREEN"
                             ],
                             [
                                 "UPDATE_MISSION_PLAN_GREEN_GREEN",
-                                "UPDATE_MISSION_PLAN_GREEN_GREEN"
+                                "UPDATE_MISSION_PLAN_GREEN_GREEN",
+                                "RECEIVE_ISRM_DETECTIONS_XD_GREEN_ORANGE"
                             ]
                         ],
                         "codtaints": [
@@ -788,6 +806,27 @@
             }
         },
         {
+            "cle-label": "RECEIVE_ISRM_DETECTIONS_XD_GREEN_ORANGE",
+            "cle-json": {
+               "level":"green",
+               "cdf":[
+                  {
+                     "remotelevel":"orange",
+                     "direction":"ingress",
+                     "guarddirective":{
+                        "operation":"allow",
+                        "oneway":true
+                     },
+                     "argtaints":[
+                        [ "TAG_REQUEST_ECHO_RECEIVEISRMDETECTIONSXD" ]
+                     ],
+                     "codtaints":[ "GREEN" ],
+                     "rettaints":[]
+                  }
+               ]
+            }
+        },
+        {
             "cle-label": "RECEIVE_RDR_DETECTIONS_GREEN_ORANGE",
             "cle-json": {
                "level":"green",
@@ -830,7 +869,28 @@
             }
         },
         {
-            "cle-label": "REQUEST_ISRM_DETECTIONS_ORANGE_GREEN",
+            "cle-label": "REQUEST_ISRM_DETECTIONS_ORANGE_ORANGE",
+            "cle-json": {
+               "level":"orange",
+               "cdf":[
+                  {
+                     "remotelevel":"orange",
+                     "direction":"ingress",
+                     "guarddirective":{
+                        "operation":"allow",
+                        "oneway":true
+                     },
+                     "argtaints":[
+                        [ "TAG_REQUEST_ECHO_REQUESTISRMDETECTIONS" ]
+                     ],
+                     "codtaints":[ "ORANGE" ],
+                     "rettaints":[]
+                  }
+               ]
+            }
+        },
+        {
+            "cle-label": "REQUEST_ISRM_DETECTIONS_XD_ORANGE_GREEN",
             "cle-json": {
                "level":"orange",
                "cdf":[
@@ -842,7 +902,7 @@
                         "oneway":true
                      },
                      "argtaints":[
-                        [ "TAG_REQUEST_ECHO_REQUESTISRMDETECTIONS" ]
+                        [ "TAG_REQUEST_ECHO_REQUESTISRMDETECTIONSXD" ]
                      ],
                      "codtaints":[ "ORANGE" ],
                      "rettaints":[]
