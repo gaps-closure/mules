@@ -129,7 +129,7 @@ void Gen::setMessageLocal(XdccFlow &xdccFlow)
 
             Cle *cle = xdccFlow.find_cle(flow);
             if (cle == NULL) {
-                cerr << __FUNCTION__ << ": no CLE for " << msgName << endl;
+                eprintf("no CLE for %s/%s", msgName.c_str(), flow->getLabel().c_str());
                 continue;
             }
 

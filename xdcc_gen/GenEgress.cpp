@@ -698,7 +698,7 @@ void GenEgress::populateRemoteEnclaves(const XdccFlow &xdccFlow)
         // add fromComponent to the message's senders
         map<string, Message *>::const_iterator it = msg_map.find(msgName);
         if (it == msg_map.end()) {
-            eprintf("no such message: %s", msgName.c_str());
+            eprintf("no such message in the \"messages\" section: %s", msgName.c_str());
             continue;
         }
         Message *msg = (Message *) it->second;
