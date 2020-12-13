@@ -171,7 +171,8 @@ void GenEcho::genEcho(Message *message)
        }
 
        headerfile << signature
-               << ");" << endl;
+               << ");" << endl
+               << endl;
 
        genfile << signature
                << "\n)" << endl
@@ -355,7 +356,8 @@ void GenEcho::genUnmarshal(Message *message)
        }
 
        headerfile << signature
-               << ");" << endl;
+               << ");" << endl
+               << endl;
 
        genfile << signature << endl
                << ")" << endl
