@@ -833,9 +833,9 @@ void GenEgress::annotations(const XdccFlow &xdccFlow)
         boost::to_upper(remote_u);
 
         genfile << "#pragma cle def " << remote_u << "_SHAREABLE {" << endl
-                << "  \"level\": \"" << my_enclave << "\",\\" << endl
+                << "  \"level\": \"" << remote << "\",\\" << endl
                 << "  \"cdf\": [\\" << endl
-                << "    {\"remotelevel\":\"" << remote << "\", \\" << endl
+                << "    {\"remotelevel\":\"" << my_enclave << "\", \\" << endl
                 << "     \"direction\": \"egress\", \\" << endl
                 << "     \"guarddirective\": { \"operation\": \"allow\"}}\\" << endl
                 << "] }" << endl;
@@ -913,7 +913,14 @@ int GenEgress::close()
       << "{" << endl
       ;
 
-   genfile << "    int i = 100;" << endl;
+   for (auto remote : remoteEnclaves) {
+       string remote_u = remote;
+       boost::to_upper(remote_u);
+
+       genfile << "#pragma cle begin " << remote_u << "_SHAREABLE" << endl;
+       genfile << "    int i = 100;" << endl;
+       genfile << "#pragma cle end " << remote_u << "_SHAREABLE" << endl;
+   }
 
    genfile
       << "    amq();" << endl
