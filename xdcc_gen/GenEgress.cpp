@@ -866,7 +866,8 @@ void GenEgress::annotations(const XdccFlow &xdccFlow)
     genfile << endl;
 
     map<string, Message *> msg_map = xdccFlow.getMessages();
-    for (auto const c : combo) {
+
+    for (auto const& c : msgToEnclaves) {
         string msg_name = c.first;
         string msg_name_u = msg_name;
         boost::to_upper(msg_name_u);
@@ -879,21 +880,72 @@ void GenEgress::annotations(const XdccFlow &xdccFlow)
         Message *message = (Message *) it->second;
         traverseEcho(message);  // to get in_args.size()
 
-        json js = json::parse(c.second);
+        int idx = 0;
+        json combined;
+        bool first = true;
+        bool singleRemote = (c.second.size() == 1);
+        for (auto const& remote : c.second) {
+            string cb = msg_name + (singleRemote ? "" : "_" + remote);
 
-        for (int i = 0; i < in_args.size(); i++) {
-            auto jsonObjects = json::array();
-            jsonObjects.push_back("TAG_REQUEST_ECHO_" + msg_name_u);
-            js["cdf"][0]["argtaints"][i] = jsonObjects;
+            map<string, string>::const_iterator it2 = combo.find(cb);
+            if (it2 == combo.end()) {
+                eprintf("no such combo: %s", cb.c_str());
+                continue;
+            }
+
+            json js = json::parse(it2->second);
+            if (first)
+                combined = json::parse(it2->second);
+            for (int i = 0; i < in_args.size(); i++) {
+                auto jsonObjects = json::array();
+                jsonObjects.push_back("TAG_REQUEST_ECHO_" + msg_name_u);
+                js["cdf"][0]["argtaints"][i] = jsonObjects;
+            }
+            combined["cdf"][idx] = js["cdf"][0];
+
+            first = false;
+            idx++;
         }
+        if (c.second.size() > 0) {
+            string cdfstr = combined.dump(2);
+            findAndReplaceAll(cdfstr, "\n", " \\\n ");
 
-        string cdfstr = js.dump(2);
-        findAndReplaceAll(cdfstr, "\n", " \\\n ");
-
-        genfile << "#pragma cle def XDLINKAGE_ECHO_"
-                << msg_name_u << " "
-                << cdfstr << endl << endl;
+            genfile << "#pragma cle def XDLINKAGE_ECHO_"
+                    << msg_name_u << " "
+                    << cdfstr << endl << endl;
+        }
+        endOfFunc();
     }
+//
+//    for (auto const c : combo) {
+//        string msg_name = c.first;
+//        string msg_name_u = msg_name;
+//        boost::to_upper(msg_name_u);
+
+//
+//        map<string, Message *>::const_iterator it = msg_map.find(msg_name);
+//        if (it == msg_map.end()) {
+//            eprintf("no such message in the \"messages\" section: %s", msg_name.c_str());
+//            continue;
+//        }
+//        Message *message = (Message *) it->second;
+//        traverseEcho(message);  // to get in_args.size()
+//
+//        json js = json::parse(c.second);
+//
+//        for (int i = 0; i < in_args.size(); i++) {
+//            auto jsonObjects = json::array();
+//            jsonObjects.push_back("TAG_REQUEST_ECHO_" + msg_name_u);
+//            js["cdf"][0]["argtaints"][i] = jsonObjects;
+//        }
+//
+//        string cdfstr = js.dump(2);
+//        findAndReplaceAll(cdfstr, "\n", " \\\n ");
+//
+//        genfile << "#pragma cle def XDLINKAGE_ECHO_"
+//                << msg_name_u << " "
+//                << cdfstr << endl << endl;
+//    }
 }
 
 int GenEgress::open(const XdccFlow &xdccFlow)
