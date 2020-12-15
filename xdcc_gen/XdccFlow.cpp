@@ -328,9 +328,12 @@ Cle* XdccFlow::find_cle(string &label) const
     return (Cle*) it->second;
 }
 
-bool XdccFlow::verify() const
+void verifyComponent(const XdccFlow& xdccFlow)
 {
-    for (auto const topoMap : topology) {
+    map<string, Cle*> cles = xdccFlow.getCles();
+    map<int, Flow *> flows = xdccFlow.getFlows();
+
+    for (auto const topoMap : xdccFlow.getTopology()) {
         Component *component = (Component *) topoMap.second;
         string comp_name = component->getComponent();
 
@@ -346,8 +349,9 @@ bool XdccFlow::verify() const
             argtaints = cdf.getArgtaints();
         }
 
+        // check that all referenced flowId's do exist in the flows block
+        // and collect the CLE label of the flows.
         vector<string> mytaints;
-
         for (auto const flowId : component->getInFlows()) {
             map<int, Flow *>::const_iterator it = flows.find(flowId);
             if (it == flows.end()) {
@@ -368,9 +372,8 @@ bool XdccFlow::verify() const
             mytaints.push_back(it->second->getLabel());
         }
 
-        bool matched = true;
+        // check that the implied taints of the flows are the same as those listed in the componens' CLE
         if (mytaints.size() != argtaints.size()) {
-            matched = false;
             eprintf("%s, length of argtaints do not match inFlows and outFlows: %ld v.s. %ld",
                     comp_name.c_str(), mytaints.size(), argtaints.size());
         }
@@ -379,19 +382,22 @@ bool XdccFlow::verify() const
                 vector<string> oneArg  = argtaints[i];
                 if (oneArg.size() == 0) {
                     eprintf("empty taints in the CLE for the %d argument of %s\n", i, comp_name.c_str());
-                    matched = false;
                 }
                 else {
                     string cdfTaint = oneArg[0];
                     if (mytaints[i].compare(cdfTaint)) {
                         eprintf("taints mismatched taints for the %d argument of %s: %s v.s. %s\n",
                                 i, comp_name.c_str(), cdfTaint.c_str(), mytaints[i].c_str());
-                        matched = false;
                     }
                 }
             }
         }
     }
+}
+
+bool XdccFlow::verify() const
+{
+    verifyComponent(*this);
 
     for (auto const flow_map : flows) {
         Flow *flow = (Flow*) flow_map.second;
