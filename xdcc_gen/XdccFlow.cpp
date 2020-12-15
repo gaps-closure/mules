@@ -19,8 +19,8 @@ Flow::Flow(nlohmann::basic_json<> value)
     for (auto &el : value.items()) {
         string key = el.key();
 
-        if (!key.compare("dataId")) {
-            dataId = el.value().get<int>();
+        if (!key.compare("flowId")) {
+            flowId = el.value().get<int>();
         }
         else if (!key.compare("message")) {
             message = el.value().get<string>();

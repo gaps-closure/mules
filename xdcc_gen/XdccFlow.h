@@ -17,7 +17,7 @@ extern int verbose;
 
 class Flow {
 private:
-    int dataId;
+    int flowId;
     string message;
     string label;
 
@@ -25,7 +25,7 @@ public:
     Flow(nlohmann::basic_json<> value);
 
     const int getDataId() const {
-        return dataId;
+        return flowId;
     }
 
     const string& getLabel() const {

@@ -39,182 +39,182 @@
     ],
     "flows": [
         {
-            "dataId": 1001,            
+            "flowId": 1001,            
             "message": "component_heartbeats",
             "label": "COMPONENT_HEARTBEATS_ORANGE_ORANGE"
         },
         {
-            "dataId": 1002,            
+            "flowId": 1002,            
             "message": "component_heartbeats",
             "label": "COMPONENT_HEARTBEATS_ORANGE_PURPLE"
         },
         {
-            "dataId": 1003,            
+            "flowId": 1003,            
             "message": "component_heartbeats",
             "label": "COMPONENT_HEARTBEATS_ORANGE_PURPLE"
         },
         {
-            "dataId": 1004,            
+            "flowId": 1004,            
             "message": "component_heartbeats",
             "label": "COMPONENT_HEARTBEATS_ORANGE_PURPLE"
         },
         {
-            "dataId": 1005,            
+            "flowId": 1005,            
             "message": "updateMissionPlan",
             "label": "UPDATE_MISSION_PLAN_ORANGE_ORANGE"
         },
         {
-            "dataId": 1006,            
+            "flowId": 1006,            
             "message": "updateMissionPlan",
             "label": "UPDATE_MISSION_PLAN_ORANGE_PURPLE"
         },
         {
-            "dataId": 1007,            
+            "flowId": 1007,            
             "message": "updateMissionPlan",
             "label": "UPDATE_MISSION_PLAN_ORANGE_PURPLE"
         },
         {
-            "dataId": 1008,            
+            "flowId": 1008,            
             "message": "updateMissionPlan",
             "label": "UPDATE_MISSION_PLAN_ORANGE_PURPLE"
         },
         {
-            "dataId": 2001,            
+            "flowId": 2001,            
             "message": "pnt",
             "label": "PNT_ORANGE_ORANGE"
         },
         {
-            "dataId": 2002,            
+            "flowId": 2002,            
             "message": "pnt",
             "label": "PNT_ORANGE_PURPLE"
         },
         {
-            "dataId": 2003,            
+            "flowId": 2003,            
             "message": "pnt",
             "label": "PNT_ORANGE_PURPLE"
         },
         {
-            "dataId": 2004,            
+            "flowId": 2004,            
             "message": "pnt",
             "label": "PNT_ORANGE_PURPLE"
         },
         {
-            "dataId": 2005,            
+            "flowId": 2005,            
             "message": "requestISRMDetections",
             "label": "REQUEST_ISRM_DETECTIONS_ORANGE_PURPLE"
         },
         {
-            "dataId": 2991,            
+            "flowId": 2991,            
             "message": "component_heartbeats",
             "label": "COMPONENT_HEARTBEATS_ORANGE_ORANGE"
         },
         {
-            "dataId": 2993,            
+            "flowId": 2993,            
             "message": "component_heartbeats",
             "label": "COMPONENT_HEARTBEATS_ORANGE_PURPLE"
         },
         {
-            "dataId": 2994,            
+            "flowId": 2994,            
             "message": "component_heartbeats",
             "label": "COMPONENT_HEARTBEATS_ORANGE_PURPLE"
         },
         {
-            "dataId": 2995,            
+            "flowId": 2995,            
             "message": "component_heartbeats",
             "label": "COMPONENT_HEARTBEATS_ORANGE_PURPLE"
         },
         {
-            "dataId": 3001,            
+            "flowId": 3001,            
             "message": "requestEOIRDetections",
             "label": "REQUEST_EOIR_DETECTIONS_PURPLE_PURPLE"
         },
         {
-            "dataId": 3002,            
+            "flowId": 3002,            
             "message": "requestRDRDetections",
             "label": "REQUEST_RDR_DETECTIONS_PURPLE_PURPLE"
         },
         {
-            "dataId": 3003,            
+            "flowId": 3003,            
             "message": "receiveISRMDetections",
             "label": "RECEIVE_ISRM_DETECTIONS_PURPLE_ORANGE"
         },
         {
-            "dataId": 3991,            
+            "flowId": 3991,            
             "message": "component_heartbeats",
             "label": "COMPONENT_HEARTBEATS_PURPLE_ORANGE"
         },
         {
-            "dataId": 3992,            
+            "flowId": 3992,            
             "message": "component_heartbeats",
             "label": "COMPONENT_HEARTBEATS_PURPLE_ORANGE"
         },
         {
-            "dataId": 3994,            
+            "flowId": 3994,            
             "message": "component_heartbeats",
             "label": "COMPONENT_HEARTBEATS_PURPLE_PURPLE"
         },
         {
-            "dataId": 3995,            
+            "flowId": 3995,            
             "message": "component_heartbeats",
             "label": "COMPONENT_HEARTBEATS_PURPLE_PURPLE"
         },
         {
-            "dataId": 4001,            
+            "flowId": 4001,            
             "message": "receiveEOIRDetections",
             "label": "RECEIVE_EOIR_DETECTIONS_PURPLE_PURPLE"
         },
         {
-            "dataId": 4991,            
+            "flowId": 4991,            
             "message": "component_heartbeats",
             "label": "COMPONENT_HEARTBEATS_PURPLE_ORANGE"
         },
         {
-            "dataId": 4992,            
+            "flowId": 4992,            
             "message": "component_heartbeats",
             "label": "COMPONENT_HEARTBEATS_PURPLE_ORANGE"
         },
         {
-            "dataId": 4993,            
+            "flowId": 4993,            
             "message": "component_heartbeats",
             "label": "COMPONENT_HEARTBEATS_PURPLE_PURPLE"
         },
         {
-            "dataId": 4995,            
+            "flowId": 4995,            
             "message": "component_heartbeats",
             "label": "COMPONENT_HEARTBEATS_PURPLE_PURPLE"
         },
         {
-            "dataId": 5001,            
+            "flowId": 5001,            
             "message": "component_heartbeats",
             "label": "COMPONENT_HEARTBEATS_PURPLE_ORANGE"
         },
         {
-            "dataId": 5002,            
+            "flowId": 5002,            
             "message": "receiveRDRDetections",
             "label": "RECEIVE_RDR_DETECTIONS_PURPLE_PURPLE"
         },
         {
-            "dataId": 5992,            
+            "flowId": 5992,            
             "message": "component_heartbeats",
             "label": "COMPONENT_HEARTBEATS_PURPLE_ORANGE"
         },
         {
-            "dataId": 5993,            
+            "flowId": 5993,            
             "message": "component_heartbeats",
             "label": "COMPONENT_HEARTBEATS_PURPLE_PURPLE"
         },
         {
-            "dataId": 5994,            
+            "flowId": 5994,            
             "message": "component_heartbeats",
             "label": "COMPONENT_HEARTBEATS_PURPLE_PURPLE"
         },
         {
-            "dataId": 6001,            
+            "flowId": 6001,            
             "message": "groundMovers",
             "label": "GROUND_MOVERS_PURPLE_PURPLE"
         },
         {
-            "dataId": 6002,            
+            "flowId": 6002,            
             "message": "groundMovers",
             "label": "GROUND_MOVERS_PURPLE_PURPLE"
         }
@@ -512,12 +512,7 @@
                      "guarddirective":{
                         "operation":"allow",
                         "oneway":true
-                     },
-                     "argtaints":[
-                        [ "TAG_REQUEST_ECHO_COMPONENT_HEARTBEATS" ]
-                     ],
-                     "codtaints":[ "PURPLE" ],
-                     "rettaints":[]
+                     }
                   }
                ]
             }
@@ -533,12 +528,7 @@
                      "guarddirective":{
                         "operation":"allow",
                         "oneway":true
-                     },
-                     "argtaints":[
-                        [ "TAG_REQUEST_ECHO_COMPONENT_HEARTBEATS" ]
-                     ],
-                     "codtaints":[ "ORANGE" ],
-                     "rettaints":[]
+                     }
                   }
                ]
             }
@@ -554,12 +544,7 @@
                      "guarddirective":{
                         "operation":"allow",
                         "oneway":true
-                     },
-                     "argtaints":[
-                        [ "TAG_REQUEST_ECHO_COMPONENT_HEARTBEATS" ]
-                     ],
-                     "codtaints":[ "PURPLE" ],
-                     "rettaints":[]
+                     }
                   }
                ]
             }
@@ -575,12 +560,7 @@
                      "guarddirective":{
                         "operation":"allow",
                         "oneway":true
-                     },
-                     "argtaints":[
-                        [ "TAG_REQUEST_ECHO_COMPONENT_HEARTBEATS" ]
-                     ],
-                     "codtaints":[ "PURPLE" ],
-                     "rettaints":[]
+                     }
                   }
                ]
             }
@@ -596,12 +576,7 @@
                      "guarddirective":{
                         "operation":"allow",
                         "oneway":true
-                     },
-                     "argtaints":[
-                        [ "TAG_REQUEST_ECHO_PNT" ]
-                     ],
-                     "codtaints":[ "ORANGE" ],
-                     "rettaints":[]
+                     }
                   }
                ]
             }            
@@ -617,12 +592,7 @@
                      "guarddirective":{
                         "operation":"allow",
                         "oneway":true
-                     },
-                     "argtaints":[
-                        [ "TAG_REQUEST_ECHO_PNT" ]
-                     ],
-                     "codtaints":[ "ORANGE" ],
-                     "rettaints":[]
+                     }
                   }
                ]
             }            
@@ -638,12 +608,7 @@
                      "guarddirective":{
                         "operation":"allow",
                         "oneway":true
-                     },
-                     "argtaints":[
-                        [ "TAG_REQUEST_ECHO_RECEIVEEOIRDETECTIONS" ]
-                     ],
-                     "codtaints":[ "PURPLE" ],
-                     "rettaints":[]
+                     }
                   }
                ]
             }
@@ -659,12 +624,7 @@
                      "guarddirective":{
                         "operation":"allow",
                         "oneway":true
-                     },
-                     "argtaints":[
-                        [ "TAG_REQUEST_ECHO_RECEIVEISRMDETECTIONS" ]
-                     ],
-                     "codtaints":[ "PURPLE" ],
-                     "rettaints":[]
+                     }
                   }
                ]
             }
@@ -679,13 +639,7 @@
                         "direction": "egress",
                         "guarddirective": {
                             "operation": "allow"
-                        },
-                        "argtaints": [
-                        ],
-                        "codtaints": [
-                        ],
-                        "rettaints": [
-                        ]
+                        }
                     }
                 ]
             }
@@ -701,12 +655,7 @@
                      "guarddirective":{
                         "operation":"allow",
                         "oneway":true
-                     },
-                     "argtaints":[
-                        [ "TAG_REQUEST_ECHO_REQUESTISRMDETECTIONS" ]
-                     ],
-                     "codtaints":[ "PURPLE" ],
-                     "rettaints":[]
+                     }
                   }
                ]
             }
@@ -722,12 +671,7 @@
                      "guarddirective":{
                         "operation":"allow",
                         "oneway":true
-                     },
-                     "argtaints":[
-                        [ "TAG_REQUEST_ECHO_REQUESTISRMDETECTIONS" ]
-                     ],
-                     "codtaints":[ "ORANGE" ],
-                     "rettaints":[]
+                     }
                   }
                ]
             }
@@ -743,12 +687,7 @@
                      "guarddirective":{
                         "operation":"allow",
                         "oneway":true
-                     },
-                     "argtaints":[
-                        [ "TAG_REQUEST_ECHO_REQUESTRDRDETECTIONS" ]
-                     ],
-                     "codtaints":[ "PURPLE" ],
-                     "rettaints":[]
+                     }
                   }
                ]
             }
@@ -764,12 +703,7 @@
                      "guarddirective":{
                         "operation":"allow",
                         "oneway":true
-                     },
-                     "argtaints":[
-                        [ "TAG_REQUEST_ECHO_UPDATEMISSIONPLAN" ]
-                     ],
-                     "codtaints":[ "ORANGE" ],
-                     "rettaints":[]
+                     }
                   }
                ]
             }
@@ -785,12 +719,7 @@
                      "guarddirective":{
                         "operation":"allow",
                         "oneway":true
-                     },
-                     "argtaints":[
-                        [ "TAG_REQUEST_ECHO_UPDATEMISSIONPLAN" ]
-                     ],
-                     "codtaints":[ "ORANGE" ],
-                     "rettaints":[]
+                     }
                   }
                ]
             }
@@ -806,12 +735,7 @@
                      "guarddirective":{
                         "operation":"allow",
                         "oneway":true
-                     },
-                     "argtaints":[
-                        [ "TAG_REQUEST_ECHO_GROUNDMOVERS" ]
-                     ],
-                     "codtaints":[ "PURPLE" ],
-                     "rettaints":[]
+                     }
                   }
                ]
             }
