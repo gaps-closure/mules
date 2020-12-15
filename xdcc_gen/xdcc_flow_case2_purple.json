@@ -166,7 +166,7 @@
         },
         {
             "flowId": 4001,            
-            "message": "receiveEOIRDetections",
+            "message": "recieveEOIRDetections",
             "label": "RECEIVE_EOIR_DETECTIONS_PURPLE_PURPLE"
         },
         {
@@ -196,7 +196,7 @@
         },
         {
             "flowId": 5002,            
-            "message": "receiveRDRDetections",
+            "message": "recieveRDRDetections",
             "label": "RECEIVE_RDR_DETECTIONS_PURPLE_PURPLE"
         },
         {
@@ -293,13 +293,13 @@
             "schemaFile": "schema/requestRDRDetections_schema.json"
         },
         {
-            "name": "receiveEOIRDetections",
+            "name": "recieveEOIRDetections",
             "topic": true,
             "schemaType": "JSONSchema",
             "schemaFile": "schema/receiveEOIRDetections_schema.json"
         },
         {
-            "name": "receiveRDRDetections",
+            "name": "recieveRDRDetections",
             "topic": true,
             "schemaType": "JSONSchema",
             "schemaFile": "schema/receiveRDRDetections_schema.json"
