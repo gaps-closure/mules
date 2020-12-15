@@ -51,13 +51,13 @@ Component::Component(nlohmann::basic_json<> value)
         else if (!key.compare("label")) {
             label = el.value().get<string>();
         }
-        else if (!key.compare("inMessages")) {
+        else if (!key.compare("inFlows")) {
             for (auto &el2 : el.value().items())
-                inMessages.push_back(el2.value());
+                inFlows.push_back(el2.value());
         }
-        else if (!key.compare("outMessages")) {
+        else if (!key.compare("outFlows")) {
             for (auto &el2 : el.value().items())
-                outMessages.push_back(el2.value());
+                outFlows.push_back(el2.value());
         }
         else {
             eprintf("unrecognized key %s", key.c_str());

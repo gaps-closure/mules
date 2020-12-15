@@ -1,5 +1,5 @@
 Changes to the design spec json
-- change inMessages and outMessages in topology to inFlows and outFlows.
+DONE - change inMessages and outMessages in topology to inFlows and outFlows.
 - ensure that the flows exactly match v1.0, including topic names.
 - remove fromComponent and toComponent in flow.
 - ensure each flow id is unique

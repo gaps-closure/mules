@@ -51,8 +51,8 @@ class Component {
 private:
     string component;
     string label;
-    vector<int> inMessages;
-    vector<int> outMessages;
+    vector<int> inFlows;
+    vector<int> outFlows;
 
 public:
     Component(nlohmann::basic_json<> value);
@@ -62,7 +62,7 @@ public:
     }
 
     const vector<int>& getInMessages() const {
-        return inMessages;
+        return inFlows;
     }
 
     const string& getLabel() const {
@@ -70,7 +70,7 @@ public:
     }
 
     const vector<int>& getOutMessages() const {
-        return outMessages;
+        return outFlows;
     }
 };
 
