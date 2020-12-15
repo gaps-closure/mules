@@ -164,7 +164,7 @@ void GenEcho::genEcho(Message *message)
        string signature;
        signature = "void echo_" + topic + "_cpp(\n"
                + "    amqlib_t *__amqlib,\n"
-               + "    bool __is_topic";
+               + "    int __is_topic";
 
        for (std::vector<string>::iterator it = in_args.begin(); it != in_args.end(); ++it) {
            signature += ",\n" + *it;

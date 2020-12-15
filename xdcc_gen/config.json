@@ -3,5 +3,5 @@
     "ingressDir": "/tmp/ingress_xdcc/xdcc_autogen",
     "echoDir": "/tmp/xdcc_echo",
     "enclave": "purple",
-    "xdccFlow": "xdcc_flow_case2_purple.json"
+    "xdccFlow": "xdcc_flow_case1_purple.json"
 }

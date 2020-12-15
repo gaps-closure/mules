@@ -99,6 +99,7 @@ void GenEgress::traverseArrayEcho(Message *message, json j, vector<string> path,
     string countVar = "count";
     genVar(countVar);
     stmts.push_back("int " + countVar + " = " + numElements + "; // numElements from schema");
+    out_args.push_back(countVar);
 
     int i = 0;
     for (auto& el : j.items()) {
@@ -122,9 +123,10 @@ void GenEgress::traverseArrayEcho(Message *message, json j, vector<string> path,
             else {
                 string in_arg;
                 string out_arg = var;
+                string stmt;
 
                 if (type == "string") {
-                    in_arg = "const char *" + var + "[]";
+                    in_arg = "char *" + var + "[]";
 
                     string maxLength = getField(val, "maxLength", message, path);
                     stmts.push_back("char " + var + CPP + "[" + countVar + "][" + maxLength + "];");
@@ -135,9 +137,19 @@ void GenEgress::traverseArrayEcho(Message *message, json j, vector<string> path,
                 }
                 else if (type == "integer") {
                     in_arg = "int " + var + "[]";
+
+                    string x = to_string(sizeof(int) * stoi(numElements));
+                    stmts.push_back("int " + var + CPP + "[" + numElements + "];");
+                    stmt = "memcpy((char *)" + var + CPP + ", (char *)" + var + ", " + x + ");\n";
+                    stmts.push_back(stmt);
                 }
                 else if (type == "number") {
                     in_arg = "double " + var + "[]";
+
+                    string x = to_string(sizeof(double) * stoi(numElements));
+                    stmts.push_back("double " + var + CPP + "[" + numElements + "];");
+                    stmt = "memcpy((char *)" + var + CPP + ", (char *)" + var + ", " + x + ");\n";
+                    stmts.push_back(stmt);
                 }
                 else {
                     throw DataException("unsupported type " + type + " for " + genPath(path));
@@ -179,12 +191,14 @@ void GenEgress::travereObjEcho(Message *message, json j, vector<string> path)
             else {
                 string in_arg;
                 string out_arg = var;
+                string stmt;
+
                 if (type == "string") {
-                    in_arg = "const char *" + var;
+                    in_arg = "char *" + var;
 
                     string maxLength = getField(val, "maxLength", message, path);
 
-                    string stmt = "char " + var + CPP + "[" + maxLength + "];";
+                    stmt = "char " + var + CPP + "[" + maxLength + "];";
                     stmts.push_back(stmt);
 
                     stmt = "memcpy(" + var + CPP + ", " + var + ", " + maxLength + ");\n";
@@ -194,6 +208,9 @@ void GenEgress::travereObjEcho(Message *message, json j, vector<string> path)
                 }
                 else if (type == "integer") {
                     in_arg = "int " + var;
+
+                    stmt = "memcpy(" + var + CPP + ", " + var + ", sizeof(int));\n";
+                    stmts.push_back(stmt);
                 }
                 else if (type == "number") {
                     in_arg = "double " + var;
@@ -514,13 +531,13 @@ void GenEgress::genFlowToRemote(string msg_name, string remote)
     boost::to_upper(key);
     string suffix = "_" + remote;
 
-    genfile << "#pragma cle def begin " <<  key << endl;
+    genfile << "#pragma cle begin " <<  key << endl;
     for (std::vector<string>::iterator it = stmts.begin(); it != stmts.end(); ++it) {
         string stmt = *it;
         findAndReplaceAll(stmt, WCARD, suffix);
         genfile << TAB_2 << stmt << endl;
     }
-    genfile << "#pragma cle def end " << key << endl
+    genfile << "#pragma cle end " << key << endl
             << endl;
     // copies
     for (std::vector<string>::iterator it = copies.begin(); it != copies.end(); ++it) {
@@ -563,11 +580,26 @@ void GenEgress::genEgress(Message *message)
        // if the message flows to only one remote enclave, then
        // there is no need to fan out (echo_*_common() and related are not generated
 
-       genfile << "int egress_" + msg_name + "(const char *jstr)" << endl
+       genfile << "int egress_" + msg_name + "(char *jstr)" << endl
                << "{" << endl;
 
        if (message->isLocal()) {
-           genfile << TAB_1 << "return 0;" << endl
+           for (auto remote : remoteEnclaves) {
+               string remote_u = remote;
+               boost::to_upper(remote_u);
+
+               genfile << "#pragma cle begin " << remote_u << "_SHAREABLE" << endl;
+           }
+           genfile << TAB_1 << "int ret = 0;" << endl;
+
+           for (auto remote : remoteEnclaves) {
+               string remote_u = remote;
+               boost::to_upper(remote_u);
+
+               genfile << "#pragma cle end " << remote_u << "_SHAREABLE" << endl;
+           }
+
+           genfile << TAB_1 << "return ret;" << endl
                    << "}" << endl
                    << endl;
            return;
@@ -583,7 +615,7 @@ void GenEgress::genEgress(Message *message)
                key = remote + "_SHAREABLE";
                boost::to_upper(key);
            }
-           genfile << "#pragma cle def begin " <<  key << endl;
+           genfile << "#pragma cle begin " <<  key << endl;
        }
        for (std::vector<string>::iterator it = stmts.begin(); it != stmts.end(); ++it) {
            string stmt = *it;
@@ -591,7 +623,7 @@ void GenEgress::genEgress(Message *message)
            genfile << TAB_1 << stmt << endl;
        }
        if (singleRemote)
-           genfile << "#pragma cle def end " <<  key << endl;
+           genfile << "#pragma cle end " <<  key << endl;
 
 
        genfile << endl
@@ -811,7 +843,7 @@ void GenEgress::genCombo(const XdccFlow& xdccFlow)
             to_json(cjs, cleJson);
             string cdfstr = cjs.dump(2);
             //string cdfstr = "{\"level\": \"" + enclave + "\", \"cdf\": [ " + clestr + "]}";
-            findAndReplaceAll(cdfstr, "\n", " \\\n");
+            findAndReplaceAll(cdfstr, "\n", " \\\n ");
 
             string key = msgName + (singleRemote ? "" : ("_" + remote));
             combo[key] = cdfstr;
@@ -832,13 +864,13 @@ void GenEgress::annotations(const XdccFlow &xdccFlow)
         string remote_u = remote;
         boost::to_upper(remote_u);
 
-        genfile << "#pragma cle def " << remote_u << "_SHAREABLE {" << endl
+        genfile << "#pragma cle def " << remote_u << "_SHAREABLE {\\" << endl
                 << "  \"level\": \"" << remote << "\",\\" << endl
                 << "  \"cdf\": [\\" << endl
                 << "    {\"remotelevel\":\"" << my_enclave << "\", \\" << endl
                 << "     \"direction\": \"egress\", \\" << endl
                 << "     \"guarddirective\": { \"operation\": \"allow\"}}\\" << endl
-                << "] }" << endl;
+                << " ] }" << endl;
     }
     genfile << endl;
 
