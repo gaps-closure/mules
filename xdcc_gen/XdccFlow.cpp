@@ -238,39 +238,59 @@ XdccFlow::XdccFlow(const string &filename)
         if (!key.compare("topology")) {
             for (auto &el : value.items()) {
                 Component *component = new Component(el.value());
-                topology[component->getComponent()] = component;
-                if (debug)
-                    cout << "component: " << component->getComponent() << endl;
+                string comp_name = component->getComponent();
+                map<string, Component *>::iterator it = topology.find(comp_name);
+                if (it != topology.end()) {
+                    eprintf("duplicated component: %s", comp_name.c_str());
+                    continue;
+                }
+                topology[comp_name] = component;
             }
         }
         else if (!key.compare("messages")) {
             for (auto &el : value.items()) {
                 Message *message = new Message(el.value());
-                messages[message->getName()] = message;
-                if (debug)
-                    cout << "message: " << message->getName() << endl;
+
+                string msg_name = message->getName();
+                map<string, Message *>::iterator it = messages.find(msg_name);
+                if (it != messages.end()) {
+                    eprintf("duplicated message: %s", msg_name.c_str());
+                    continue;
+                }
+                messages[msg_name] = message;
             }
         }
         else if (!key.compare("flows")) {
             for (auto &el2 : value.items()) {
                 Flow *flow = new Flow(el2.value());
-                flows[flow->getDataId()] = flow;
-                if (debug)
-                    cout << "flow: " << flow->getDataId() << endl;
+
+                int flowId = flow->getFlowId();
+                map<int, Flow *>::iterator it = flows.find(flowId);
+                if (it != flows.end()) {
+                    eprintf("duplicated flow: %d", flowId);
+                    continue;
+                }
+                flows[flowId] = flow;
             }
         }
         else if (!key.compare("cles")) {
             for (auto &el : value.items()) {
                 Cle *cle = new Cle(el.value());
-                cles[cle->getLabel()] = cle;
-                if (debug)
-                    cout << "cle: " << cle->getLabel() << endl;
+
+                string label = cle->getLabel();
+                map<string, Cle *>::iterator it = cles.find(label);
+                if (it != cles.end()) {
+                    eprintf("duplicated CLE: %s", label.c_str());
+                    continue;
+                }
+                cles[label] = cle;
             }
         }
         else {
             eprintf("unrecognized key %s", key.c_str());
         }
     }
+    verify();
 }
 
 /**
@@ -306,4 +326,122 @@ Cle* XdccFlow::find_cle(string &label) const
         return NULL;
     }
     return (Cle*) it->second;
+}
+
+bool XdccFlow::verify() const
+{
+    for (auto const topoMap : topology) {
+        Component *component = (Component *) topoMap.second;
+        string comp_name = component->getComponent();
+
+        vector<vector<string>> argtaints;
+        map<string, Cle *>::const_iterator itCle = cles.find(component->getLabel());
+        if (itCle == cles.end()) {
+            eprintf("undefined CLE %s for component %s", component->getLabel().c_str(), comp_name.c_str());
+        }
+        else {
+            CleJson cleJson = itCle->second->getCleJson();
+            vector<Cdf> cdfs = cleJson.getCdf();
+            Cdf cdf = cdfs[0];
+            argtaints = cdf.getArgtaints();
+        }
+
+        vector<string> mytaints;
+
+        for (auto const flowId : component->getInFlows()) {
+            map<int, Flow *>::const_iterator it = flows.find(flowId);
+            if (it == flows.end()) {
+                eprintf("%s inFlow %d is undefined in XDCC's the \"flows\" block",
+                        comp_name.c_str(), flowId);
+                continue;
+            }
+            mytaints.push_back(it->second->getLabel());
+        }
+
+        for (auto const flowId : component->getOutFlows()) {
+            map<int, Flow *>::const_iterator it = flows.find(flowId);
+            if (it == flows.end()) {
+                eprintf("%s outFlow %d is undefined in XDCC's the \"flows\" block",
+                        comp_name.c_str(), flowId);
+                continue;
+            }
+            mytaints.push_back(it->second->getLabel());
+        }
+
+        bool matched = true;
+        if (mytaints.size() != argtaints.size()) {
+            matched = false;
+            eprintf("%s, length of argtaints do not match inFlows and outFlows: %ld v.s. %ld",
+                    comp_name.c_str(), mytaints.size(), argtaints.size());
+        }
+        else {
+            for (int i = 0; i < mytaints.size(); i++) {
+                vector<string> oneArg  = argtaints[i];
+                if (oneArg.size() == 0) {
+                    eprintf("empty taints in the CLE for the %d argument of %s\n", i, comp_name.c_str());
+                    matched = false;
+                }
+                else {
+                    string cdfTaint = oneArg[0];
+                    if (mytaints[i].compare(cdfTaint)) {
+                        eprintf("taints mismatched taints for the %d argument of %s: %s v.s. %s\n",
+                                i, comp_name.c_str(), cdfTaint.c_str(), mytaints[i].c_str());
+                        matched = false;
+                    }
+                }
+            }
+        }
+    }
+
+    for (auto const flow_map : flows) {
+        Flow *flow = (Flow*) flow_map.second;
+        int flowId = flow->getFlowId();
+
+        bool foundIn = false;
+        bool foundOut = false;
+
+        for (auto const topoMap : topology) {
+            Component *component = (Component *) topoMap.second;
+            string comp_name = component->getComponent();
+
+            bool localFoundIn = false;
+            bool localFoundOut = false;
+            vector<int> list = component->getInFlows();
+            if (std::find(list.begin(), list.end(), flowId) != list.end()) {
+                if (foundIn) {
+                    eprintf("Flow %d appear more than once in inFlow", flowId);
+                }
+                localFoundIn = true;
+                foundIn = true;
+            }
+
+            list = component->getOutFlows();
+            if (std::find(list.begin(), list.end(), flowId) != list.end()) {
+                if (foundOut) {
+                    eprintf("Flow %d appear more than once in outFlow", flowId);
+                }
+                localFoundOut = true;
+                foundOut = true;
+            }
+            if (localFoundIn && localFoundOut)
+                eprintf("Flow %d appear in both inFlows and outFlows of %s", flowId, comp_name.c_str());
+        }
+        if (!foundIn || !foundOut) {
+            eprintf("Flow %d must appear exactly once in inFlows and outFlows of two components", flowId);
+        }
+
+        string msgName = flow->getMessage();
+
+        map<string, Message *>::const_iterator it = messages.find(msgName);
+        if (it == messages.end()) {
+            eprintf("undefined message %s for flow %d", msgName.c_str(), flowId);
+        }
+
+        map<string, Cle *>::const_iterator it2 = cles.find(flow->getLabel());
+        if (it2 == cles.end()) {
+            eprintf("undefined CLE %s for flow %d", flow->getLabel().c_str(), flowId);
+        }
+    }
+
+    return true;
 }

@@ -21,13 +21,13 @@
         {
             "component": "EOIR",
             "label": "EOIR_CLE_LABEL",
-            "inFlows": [ 1003, 1007, 2994, 3001, 3994, 5994 ],
+            "inFlows": [ 1003, 1007, 2994, 3001, 3994, 5994, 6001 ],
             "outFlows": [ 4001, 4991, 4992, 4993, 4995 ]
         },
         {
             "component": "RDR",
             "label": "RDR_CLE_LABEL",
-            "inFlows": [ 1004, 1008, 2004, 2995, 3002, 3995, 4995 ],
+            "inFlows": [ 1004, 1008, 2004, 2995, 3002, 3995, 4995, 6002 ],
             "outFlows": [ 5001, 5002, 5992, 5993, 5994 ]
         },
         {
@@ -82,6 +82,11 @@
             "flowId": 2004,            
             "message": "pnt",
             "label": "PNT_ORANGE_PURPLE"
+        },
+        {
+            "flowId": 9999,            
+            "message": "pnt",
+            "label": "PNT_ORANGE_BLUE"
         },
         {
             "flowId": 2005,            
@@ -390,6 +395,7 @@
                             [ "REQUEST_EOIR_DETECTIONS_PURPLE_PURPLE" ],
                             [ "COMPONENT_HEARTBEATS_PURPLE_PURPLE" ],
                             [ "COMPONENT_HEARTBEATS_PURPLE_PURPLE" ],
+                            [ "GROUND_MOVERS_PURPLE_PURPLE" ],
                             
                             [ "RECEIVE_EOIR_DETECTIONS_PURPLE_PURPLE" ],
                             [ "COMPONENT_HEARTBEATS_PURPLE_ORANGE" ],
@@ -424,6 +430,7 @@
                             [ "REQUEST_RDR_DETECTIONS_PURPLE_PURPLE" ],
                             [ "COMPONENT_HEARTBEATS_PURPLE_PURPLE" ],
                             [ "COMPONENT_HEARTBEATS_PURPLE_PURPLE" ],
+                            [ "GROUND_MOVERS_PURPLE_PURPLE" ],
                             
                             [ "COMPONENT_HEARTBEATS_PURPLE_ORANGE" ],
                             [ "RECEIVE_RDR_DETECTIONS_PURPLE_PURPLE" ],
@@ -534,6 +541,22 @@
                "cdf":[
                   {
                      "remotelevel":"purple",
+                     "direction":"ingress",
+                     "guarddirective":{
+                        "operation":"allow",
+                        "oneway":true
+                     }
+                  }
+               ]
+            }            
+        },
+        {
+            "cle-label": "PNT_ORANGE_BLUE",
+            "cle-json": {
+               "level":"orange",
+               "cdf":[
+                  {
+                     "remotelevel":"blue",
                      "direction":"ingress",
                      "guarddirective":{
                         "operation":"allow",

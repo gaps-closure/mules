@@ -768,7 +768,7 @@ void GenEgress::populateRemoteEnclaves(const XdccFlow &xdccFlow)
             for (auto component : outFlows) {
                 cout << "\tfrom " << component.first << ": ";
                 for (auto& id : component.second) {
-                    cout << id->getDataId() << ", ";
+                    cout << id->getFlowId() << ", ";
                 }
                 cout << endl;
             }
@@ -916,36 +916,6 @@ void GenEgress::annotations(const XdccFlow &xdccFlow)
         }
         endOfFunc();
     }
-//
-//    for (auto const c : combo) {
-//        string msg_name = c.first;
-//        string msg_name_u = msg_name;
-//        boost::to_upper(msg_name_u);
-
-//
-//        map<string, Message *>::const_iterator it = msg_map.find(msg_name);
-//        if (it == msg_map.end()) {
-//            eprintf("no such message in the \"messages\" section: %s", msg_name.c_str());
-//            continue;
-//        }
-//        Message *message = (Message *) it->second;
-//        traverseEcho(message);  // to get in_args.size()
-//
-//        json js = json::parse(c.second);
-//
-//        for (int i = 0; i < in_args.size(); i++) {
-//            auto jsonObjects = json::array();
-//            jsonObjects.push_back("TAG_REQUEST_ECHO_" + msg_name_u);
-//            js["cdf"][0]["argtaints"][i] = jsonObjects;
-//        }
-//
-//        string cdfstr = js.dump(2);
-//        findAndReplaceAll(cdfstr, "\n", " \\\n ");
-//
-//        genfile << "#pragma cle def XDLINKAGE_ECHO_"
-//                << msg_name_u << " "
-//                << cdfstr << endl << endl;
-//    }
 }
 
 int GenEgress::open(const XdccFlow &xdccFlow)

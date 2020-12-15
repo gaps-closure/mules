@@ -24,7 +24,7 @@ private:
 public:
     Flow(nlohmann::basic_json<> value);
 
-    const int getDataId() const {
+    const int getFlowId() const {
         return flowId;
     }
 
@@ -51,7 +51,7 @@ public:
         return component;
     }
 
-    const vector<int>& getInMessages() const {
+    const vector<int>& getInFlows() const {
         return inFlows;
     }
 
@@ -59,7 +59,7 @@ public:
         return label;
     }
 
-    const vector<int>& getOutMessages() const {
+    const vector<int>& getOutFlows() const {
         return outFlows;
     }
 };
@@ -257,6 +257,8 @@ public:
 
     Cle *find_cle(const Flow *flow) const;
     Cle* find_cle(string &label) const;
+
+    bool verify() const;
 
     const map<string, Cle*>& getCles() const {
         return cles;
