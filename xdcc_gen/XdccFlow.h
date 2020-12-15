@@ -20,8 +20,6 @@ private:
     int dataId;
     string message;
     string label;
-    string fromComponent;
-    string toComponent;
 
 public:
     Flow(nlohmann::basic_json<> value);
@@ -30,20 +28,12 @@ public:
         return dataId;
     }
 
-    const string& getFromComponent() const {
-        return fromComponent;
-    }
-
     const string& getLabel() const {
         return label;
     }
 
     const string& getMessage() const {
         return message;
-    }
-
-    const string& getToComponent() const {
-        return toComponent;
     }
 };
 
@@ -85,9 +75,6 @@ private:
 
 public:
     Message(nlohmann::basic_json<> value);
-
-    void addOutFlow(Flow* flow);
-    void clearOutFlow();
 
     const string& getName() const {
         return name;

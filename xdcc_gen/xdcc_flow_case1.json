@@ -41,254 +41,182 @@
         {
             "dataId": 1001,            
             "message": "component_heartbeats",
-            "label": "COMPONENT_HEARTBEATS_ORANGE_ORANGE",
-            "fromComponent": "MPU",
-            "toComponent": "MPX"
+            "label": "COMPONENT_HEARTBEATS_ORANGE_ORANGE"
         },
         {
             "dataId": 1002,            
             "message": "component_heartbeats",
-            "label": "COMPONENT_HEARTBEATS_ORANGE_GREEN",
-            "fromComponent": "MPU",
-            "toComponent": "ISRM"
+            "label": "COMPONENT_HEARTBEATS_ORANGE_GREEN"
         },
         {
             "dataId": 1003,            
             "message": "component_heartbeats",
-            "label": "COMPONENT_HEARTBEATS_ORANGE_GREEN",
-            "fromComponent": "MPU",
-            "toComponent": "EOIR"
+            "label": "COMPONENT_HEARTBEATS_ORANGE_GREEN"
         },
         {
             "dataId": 1004,            
             "message": "component_heartbeats",
-            "label": "COMPONENT_HEARTBEATS_ORANGE_GREEN",
-            "fromComponent": "MPU",
-            "toComponent": "RDR"
+            "label": "COMPONENT_HEARTBEATS_ORANGE_GREEN"
         },
         {
             "dataId": 1005,            
             "message": "updateMissionPlan",
-            "label": "UPDATE_MISSION_PLAN_ORANGE_ORANGE",
-            "fromComponent": "MPU",
-            "toComponent": "MPX"
+            "label": "UPDATE_MISSION_PLAN_ORANGE_ORANGE"
         },
         {
             "dataId": 1006,            
             "message": "updateMissionPlan",
-            "label": "UPDATE_MISSION_PLAN_ORANGE_GREEN",
-            "fromComponent": "MPU",
-            "toComponent": "ISRM"
+            "label": "UPDATE_MISSION_PLAN_ORANGE_GREEN"
         },
         {
             "dataId": 1007,            
             "message": "updateMissionPlan",
-            "label": "UPDATE_MISSION_PLAN_ORANGE_GREEN",
-            "fromComponent": "MPU",
-            "toComponent": "EOIR"
+            "label": "UPDATE_MISSION_PLAN_ORANGE_GREEN"
         },
         {
             "dataId": 1008,            
             "message": "updateMissionPlan",
-            "label": "UPDATE_MISSION_PLAN_ORANGE_GREEN",
-            "fromComponent": "MPU",
-            "toComponent": "RDR"
+            "label": "UPDATE_MISSION_PLAN_ORANGE_GREEN"
         },
         {
             "dataId": 2001,            
             "message": "pnt",
-            "label": "PNT_ORANGE_ORANGE",
-            "fromComponent": "MPX",
-            "toComponent": "MPU"
+            "label": "PNT_ORANGE_ORANGE"
         },
         {
             "dataId": 2002,            
             "message": "pnt",
-            "label": "PNT_ORANGE_GREEN",
-            "fromComponent": "MPX",
-            "toComponent": "ISRM"
+            "label": "PNT_ORANGE_GREEN"
         },
         {
             "dataId": 2003,            
             "message": "pnt",
-            "label": "PNT_ORANGE_GREEN",
-            "fromComponent": "MPX",
-            "toComponent": "EOIR"
+            "label": "PNT_ORANGE_GREEN"
         },
         {
             "dataId": 2004,            
             "message": "pnt",
-            "label": "PNT_ORANGE_GREEN",
-            "fromComponent": "MPX",
-            "toComponent": "RDR"
+            "label": "PNT_ORANGE_GREEN"
         },
         {
             "dataId": 2005,            
             "message": "requestISRMDetections",
-            "label": "REQUEST_ISRM_DETECTIONS_ORANGE_GREEN",
-            "fromComponent": "MPX",
-            "toComponent": "ISRM"
+            "label": "REQUEST_ISRM_DETECTIONS_ORANGE_GREEN"
         },
         {
             "dataId": 2991,            
             "message": "component_heartbeats",
-            "label": "COMPONENT_HEARTBEATS_ORANGE_ORANGE",
-            "fromComponent": "MPX",
-            "toComponent": "MPU"
+            "label": "COMPONENT_HEARTBEATS_ORANGE_ORANGE"
         },
         {
             "dataId": 2993,            
             "message": "component_heartbeats",
-            "label": "COMPONENT_HEARTBEATS_ORANGE_GREEN",
-            "fromComponent": "MPX",
-            "toComponent": "ISRM"
+            "label": "COMPONENT_HEARTBEATS_ORANGE_GREEN"
         },
         {
             "dataId": 2994,            
             "message": "component_heartbeats",
-            "label": "COMPONENT_HEARTBEATS_ORANGE_GREEN",
-            "fromComponent": "MPX",
-            "toComponent": "EOIR"
+            "label": "COMPONENT_HEARTBEATS_ORANGE_GREEN"
         },
         {
             "dataId": 2995,            
             "message": "component_heartbeats",
-            "label": "COMPONENT_HEARTBEATS_ORANGE_GREEN",
-            "fromComponent": "MPX",
-            "toComponent": "RDR"
+            "label": "COMPONENT_HEARTBEATS_ORANGE_GREEN"
         },
         {
             "dataId": 3001,            
             "message": "requestEOIRDetections",
-            "label": "REQUEST_EOIR_DETECTIONS_GREEN_GREEN",
-            "fromComponent": "ISRM",
-            "toComponent": "EOIR"
+            "label": "REQUEST_EOIR_DETECTIONS_GREEN_GREEN"
         },
         {
             "dataId": 3002,            
             "message": "requestRDRDetections",
-            "label": "REQUEST_RDR_DETECTIONS_GREEN_GREEN",
-            "fromComponent": "ISRM",
-            "toComponent": "RDR"
+            "label": "REQUEST_RDR_DETECTIONS_GREEN_GREEN"
         },
         {
             "dataId": 3003,            
             "message": "receiveISRMDetections",
-            "label": "RECEIVE_ISRM_DETECTIONS_GREEN_ORANGE",
-            "fromComponent": "ISRM",
-            "toComponent": "MPX"
+            "label": "RECEIVE_ISRM_DETECTIONS_GREEN_ORANGE"
         },
         {
             "dataId": 3991,            
             "message": "component_heartbeats",
-            "label": "COMPONENT_HEARTBEATS_GREEN_ORANGE",
-            "fromComponent": "ISRM",
-            "toComponent": "MPU"
+            "label": "COMPONENT_HEARTBEATS_GREEN_ORANGE"
         },
         {
             "dataId": 3992,            
             "message": "component_heartbeats",
-            "label": "COMPONENT_HEARTBEATS_GREEN_ORANGE",
-            "fromComponent": "ISRM",
-            "toComponent": "MPX"
+            "label": "COMPONENT_HEARTBEATS_GREEN_ORANGE"
         },
         {
             "dataId": 3994,            
             "message": "component_heartbeats",
-            "label": "COMPONENT_HEARTBEATS_GREEN_GREEN",
-            "fromComponent": "ISRM",
-            "toComponent": "EOIR"
+            "label": "COMPONENT_HEARTBEATS_GREEN_GREEN"
         },
         {
             "dataId": 3995,            
             "message": "component_heartbeats",
-            "label": "COMPONENT_HEARTBEATS_GREEN_GREEN",
-            "fromComponent": "ISRM",
-            "toComponent": "RDR"
+            "label": "COMPONENT_HEARTBEATS_GREEN_GREEN"
         },
         {
             "dataId": 4001,            
             "message": "receiveEOIRDetections",
-            "label": "RECEIVE_EOIR_DETECTIONS_GREEN_GREEN",
-            "fromComponent": "EOIR",
-            "toComponent": "ISRM"
+            "label": "RECEIVE_EOIR_DETECTIONS_GREEN_GREEN"
         },
         {
             "dataId": 4991,            
             "message": "component_heartbeats",
-            "label": "COMPONENT_HEARTBEATS_GREEN_ORANGE",
-            "fromComponent": "EOIR",
-            "toComponent": "MPU"
+            "label": "COMPONENT_HEARTBEATS_GREEN_ORANGE"
         },
         {
             "dataId": 4992,            
             "message": "component_heartbeats",
-            "label": "COMPONENT_HEARTBEATS_GREEN_ORANGE",
-            "fromComponent": "EOIR",
-            "toComponent": "MPX"
+            "label": "COMPONENT_HEARTBEATS_GREEN_ORANGE"
         },
         {
             "dataId": 4993,            
             "message": "component_heartbeats",
-            "label": "COMPONENT_HEARTBEATS_GREEN_GREEN",
-            "fromComponent": "EOIR",
-            "toComponent": "ISRM"
+            "label": "COMPONENT_HEARTBEATS_GREEN_GREEN"
         },
         {
             "dataId": 4995,            
             "message": "component_heartbeats",
-            "label": "COMPONENT_HEARTBEATS_GREEN_GREEN",
-            "fromComponent": "EOIR",
-            "toComponent": "RDR"
+            "label": "COMPONENT_HEARTBEATS_GREEN_GREEN"
         },
         {
             "dataId": 5001,            
             "message": "component_heartbeats",
-            "label": "COMPONENT_HEARTBEATS_GREEN_ORANGE",
-            "fromComponent": "RDR",
-            "toComponent": "MPU"
+            "label": "COMPONENT_HEARTBEATS_GREEN_ORANGE"
         },
         {
             "dataId": 5002,            
             "message": "receiveRDRDetections",
-            "label": "RECEIVE_RDR_DETECTIONS_GREEN_GREEN",
-            "fromComponent": "RDR",
-            "toComponent": "ISRM"
+            "label": "RECEIVE_RDR_DETECTIONS_GREEN_GREEN"
         },
         {
             "dataId": 5992,            
             "message": "component_heartbeats",
-            "label": "COMPONENT_HEARTBEATS_GREEN_ORANGE",
-            "fromComponent": "RDR",
-            "toComponent": "MPX"
+            "label": "COMPONENT_HEARTBEATS_GREEN_ORANGE"
         },
         {
             "dataId": 5993,            
             "message": "component_heartbeats",
-            "label": "COMPONENT_HEARTBEATS_GREEN_GREEN",
-            "fromComponent": "RDR",
-            "toComponent": "ISRM"
+            "label": "COMPONENT_HEARTBEATS_GREEN_GREEN"
         },
         {
             "dataId": 5994,            
             "message": "component_heartbeats",
-            "label": "COMPONENT_HEARTBEATS_GREEN_GREEN",
-            "fromComponent": "RDR",
-            "toComponent": "EOIR"
+            "label": "COMPONENT_HEARTBEATS_GREEN_GREEN"
         },
         {
             "dataId": 6001,            
             "message": "groundMovers",
-            "label": "GROUND_MOVERS_GREEN_GREEN",
-            "fromComponent": "External",
-            "toComponent": "RDR"
+            "label": "GROUND_MOVERS_GREEN_GREEN"
         },
         {
             "dataId": 6002,            
             "message": "groundMovers",
-            "label": "GROUND_MOVERS_GREEN_GREEN",
-            "fromComponent": "External",
-            "toComponent": "EOIR"
+            "label": "GROUND_MOVERS_GREEN_GREEN"
         }
     ],
     "messages": [

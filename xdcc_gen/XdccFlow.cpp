@@ -28,12 +28,6 @@ Flow::Flow(nlohmann::basic_json<> value)
         else if (!key.compare("label")) {
             label = el.value().get<string>();
         }
-        else if (!key.compare("fromComponent")) {
-            fromComponent = el.value().get<string>();
-        }
-        else if (!key.compare("toComponent")) {
-            toComponent = el.value().get<string>();
-        }
         else {
             eprintf("unrecognized key %s", key.c_str());
         }
@@ -89,22 +83,6 @@ Message::Message(nlohmann::basic_json<> value)
     if (schemaFile.empty()) {
         eprintf("schemaFile not specified for message %s", name.c_str());
     }
-}
-
-void Message::addOutFlow(Flow* flow)
-{
-    string from = flow->getFromComponent();
-    const map<string, vector<Flow *>>::const_iterator& it2 = outFlows.find(from);
-    if (it2 == outFlows.end()) {
-        outFlows.insert(make_pair(from, vector<Flow *>()));
-    }
-
-    outFlows[from].push_back(flow);
-}
-
-void Message::clearOutFlow()
-{
-    outFlows.clear();
 }
 
 GuardDirective::GuardDirective(nlohmann::basic_json<> value)

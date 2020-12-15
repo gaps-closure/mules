@@ -717,24 +717,17 @@ void GenEgress::populateRemoteEnclaves(const XdccFlow &xdccFlow)
     string enclave = config.getEnclave();
     remoteEnclaves.clear();
 
-    for (auto const &msg_map : xdccFlow.getMessages()) {
-        Message *message = (Message*) msg_map.second;
-        message->clearOutFlow();
-    }
-
     const map<string, Message*>& msg_map = xdccFlow.getMessages();
     for (auto const flow_map : xdccFlow.getFlows()) {
         Flow *flow = (Flow*) flow_map.second;
         string msgName = flow->getMessage();
 
-        // add fromComponent to the message's senders
         map<string, Message *>::const_iterator it = msg_map.find(msgName);
         if (it == msg_map.end()) {
             eprintf("no such message in the \"messages\" section: %s", msgName.c_str());
             continue;
         }
         Message *msg = (Message *) it->second;
-        msg->addOutFlow(flow);
 
         // add remoteLevel to remoteEnclaves
         Cle *cle = xdccFlow.find_cle(flow);
@@ -800,9 +793,7 @@ void GenEgress::genCombo(const XdccFlow& xdccFlow)
             continue;
         genedLabels.insert(flow->getLabel());
 
-        string fromComponent = flow->getFromComponent();
         string msgName = flow->getMessage();
-
 
         map<string, set<string>>::iterator it = msgToEnclaves.find(msgName);
         if (it == msgToEnclaves.end()) {
