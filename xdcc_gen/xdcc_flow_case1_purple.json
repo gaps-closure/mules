@@ -279,22 +279,19 @@
                             "operation": "allow"
                         },
                         "argtaints": [
-                            [
-                                "COMPONENT_HEARTBEATS_ORANGE_ORANGE",
-                                "COMPONENT_HEARTBEATS_PURPLE_ORANGE",
-                                "COMPONENT_HEARTBEATS_PURPLE_ORANGE",
-                                "COMPONENT_HEARTBEATS_PURPLE_ORANGE"
-                            ],
-                            [
-                                "COMPONENT_HEARTBEATS_ORANGE_ORANGE",
-                                "COMPONENT_HEARTBEATS_ORANGE_PURPLE",
-                                "COMPONENT_HEARTBEATS_ORANGE_PURPLE",
-                                "COMPONENT_HEARTBEATS_ORANGE_PURPLE",
-                                "UPDATE_MISSION_PLAN_ORANGE_ORANGE",
-                                "UPDATE_MISSION_PLAN_ORANGE_PURPLE",
-                                "UPDATE_MISSION_PLAN_ORANGE_PURPLE",
-                                "UPDATE_MISSION_PLAN_ORANGE_PURPLE"
-                            ]
+                            [ "COMPONENT_HEARTBEATS_ORANGE_ORANGE" ],
+                            [ "COMPONENT_HEARTBEATS_PURPLE_ORANGE" ],
+                            [ "COMPONENT_HEARTBEATS_PURPLE_ORANGE" ],
+                            [ "COMPONENT_HEARTBEATS_PURPLE_ORANGE" ],
+
+                            [ "COMPONENT_HEARTBEATS_ORANGE_ORANGE" ],
+                            [ "COMPONENT_HEARTBEATS_ORANGE_PURPLE" ],
+                            [ "COMPONENT_HEARTBEATS_ORANGE_PURPLE" ],
+                            [ "COMPONENT_HEARTBEATS_ORANGE_PURPLE" ],
+                            [ "UPDATE_MISSION_PLAN_ORANGE_ORANGE" ],
+                            [ "UPDATE_MISSION_PLAN_ORANGE_PURPLE" ],
+                            [ "UPDATE_MISSION_PLAN_ORANGE_PURPLE" ],
+                            [ "UPDATE_MISSION_PLAN_ORANGE_PURPLE" ]
                         ],
                         "codtaints": [
                         ],
@@ -316,22 +313,19 @@
                             "operation": "allow"
                         },
                         "argtaints": [
-                            [
-                                "COMPONENT_HEARTBEATS_ORANGE_ORANGE",
-                                "UPDATE_MISSION_PLAN_ORANGE_ORANGE",
-                                "RECEIVE_ISRM_DETECTIONS_PURPLE_ORANGE",
-                                "COMPONENT_HEARTBEATS_PURPLE_ORANGE",
-                                "COMPONENT_HEARTBEATS_PURPLE_ORANGE",
-                                "COMPONENT_HEARTBEATS_PURPLE_ORANGE"
-                            ],
-                            [
-                                "PNT_ORANGE_PURPLE",
-                                "REQUEST_ISRM_DETECTIONS_ORANGE_PURPLE",
-                                "COMPONENT_HEARTBEATS_ORANGE_ORANGE",
-                                "COMPONENT_HEARTBEATS_ORANGE_PURPLE",
-                                "COMPONENT_HEARTBEATS_ORANGE_PURPLE",
-                                "COMPONENT_HEARTBEATS_ORANGE_PURPLE"
-                            ]
+                            [ "COMPONENT_HEARTBEATS_ORANGE_ORANGE" ],
+                            [ "UPDATE_MISSION_PLAN_ORANGE_ORANGE" ],
+                            [ "RECEIVE_ISRM_DETECTIONS_PURPLE_ORANGE" ],
+                            [ "COMPONENT_HEARTBEATS_PURPLE_ORANGE" ],
+                            [ "COMPONENT_HEARTBEATS_PURPLE_ORANGE" ],
+                            [ "COMPONENT_HEARTBEATS_PURPLE_ORANGE" ],
+
+                            [ "PNT_ORANGE_PURPLE" ],
+                            [ "REQUEST_ISRM_DETECTIONS_ORANGE_PURPLE" ],
+                            [ "COMPONENT_HEARTBEATS_ORANGE_ORANGE" ],
+                            [ "COMPONENT_HEARTBEATS_ORANGE_PURPLE" ],
+                            [ "COMPONENT_HEARTBEATS_ORANGE_PURPLE" ],
+                            [ "COMPONENT_HEARTBEATS_ORANGE_PURPLE" ]
                         ],
                         "codtaints": [
                         ],
@@ -353,25 +347,22 @@
                             "operation": "allow"
                         },
                         "argtaints": [
-                            [
-                                "COMPONENT_HEARTBEATS_ORANGE_PURPLE",
-                                "UPDATE_MISSION_PLAN_ORANGE_PURPLE",
-                                "REQUEST_ISRM_DETECTIONS_ORANGE_PURPLE",
-                                "COMPONENT_HEARTBEATS_ORANGE_PURPLE",
-                                "RECEIVE_EOIR_DETECTIONS_PURPLE_PURPLE",
-                                "COMPONENT_HEARTBEATS_PURPLE_PURPLE",
-                                "RECEIVE_RDR_DETECTIONS_PURPLE_PURPLE",
-                                "COMPONENT_HEARTBEATS_PURPLE_PURPLE"
-                            ],
-                            [
-                                "REQUEST_EOIR_DETECTIONS_PURPLE_PURPLE",
-                                "REQUEST_RDR_DETECTIONS_PURPLE_PURPLE",
-                                "RECEIVE_ISRM_DETECTIONS_PURPLE_ORANGE",
-                                "COMPONENT_HEARTBEATS_PURPLE_ORANGE",
-                                "COMPONENT_HEARTBEATS_PURPLE_ORANGE",
-                                "COMPONENT_HEARTBEATS_PURPLE_PURPLE",
-                                "COMPONENT_HEARTBEATS_PURPLE_PURPLE"
-                            ]
+                            [ "COMPONENT_HEARTBEATS_ORANGE_PURPLE" ],
+                            [ "UPDATE_MISSION_PLAN_ORANGE_PURPLE" ],
+                            [ "REQUEST_ISRM_DETECTIONS_ORANGE_PURPLE" ],
+                            [ "COMPONENT_HEARTBEATS_ORANGE_PURPLE" ],
+                            [ "RECEIVE_EOIR_DETECTIONS_PURPLE_PURPLE" ],
+                            [ "COMPONENT_HEARTBEATS_PURPLE_PURPLE" ],
+                            [ "RECEIVE_RDR_DETECTIONS_PURPLE_PURPLE" ],
+                            [ "COMPONENT_HEARTBEATS_PURPLE_PURPLE" ],
+                            
+                            [ "REQUEST_EOIR_DETECTIONS_PURPLE_PURPLE" ],
+                            [ "REQUEST_RDR_DETECTIONS_PURPLE_PURPLE" ],
+                            [ "RECEIVE_ISRM_DETECTIONS_PURPLE_ORANGE" ],
+                            [ "COMPONENT_HEARTBEATS_PURPLE_ORANGE" ],
+                            [ "COMPONENT_HEARTBEATS_PURPLE_ORANGE" ],
+                            [ "COMPONENT_HEARTBEATS_PURPLE_PURPLE" ],
+                            [ "COMPONENT_HEARTBEATS_PURPLE_PURPLE" ]
                         ],
                         "codtaints": [
                         ],
@@ -393,21 +384,18 @@
                             "operation": "allow"
                         },
                         "argtaints": [
-                            [
-                                "COMPONENT_HEARTBEATS_ORANGE_PURPLE",
-                                "UPDATE_MISSION_PLAN_ORANGE_PURPLE",
-                                "COMPONENT_HEARTBEATS_ORANGE_PURPLE",
-                                "REQUEST_EOIR_DETECTIONS_PURPLE_PURPLE",
-                                "COMPONENT_HEARTBEATS_PURPLE_PURPLE",
-                                "COMPONENT_HEARTBEATS_PURPLE_PURPLE"
-                            ],
-                            [
-                                "RECEIVE_EOIR_DETECTIONS_PURPLE_PURPLE",
-                                "COMPONENT_HEARTBEATS_PURPLE_ORANGE",
-                                "COMPONENT_HEARTBEATS_PURPLE_ORANGE",
-                                "COMPONENT_HEARTBEATS_PURPLE_PURPLE",
-                                "COMPONENT_HEARTBEATS_PURPLE_PURPLE"
-                            ]
+                            [ "COMPONENT_HEARTBEATS_ORANGE_PURPLE" ],
+                            [ "UPDATE_MISSION_PLAN_ORANGE_PURPLE" ],
+                            [ "COMPONENT_HEARTBEATS_ORANGE_PURPLE" ],
+                            [ "REQUEST_EOIR_DETECTIONS_PURPLE_PURPLE" ],
+                            [ "COMPONENT_HEARTBEATS_PURPLE_PURPLE" ],
+                            [ "COMPONENT_HEARTBEATS_PURPLE_PURPLE" ],
+                            
+                            [ "RECEIVE_EOIR_DETECTIONS_PURPLE_PURPLE" ],
+                            [ "COMPONENT_HEARTBEATS_PURPLE_ORANGE" ],
+                            [ "COMPONENT_HEARTBEATS_PURPLE_ORANGE" ],
+                            [ "COMPONENT_HEARTBEATS_PURPLE_PURPLE" ],
+                            [ "COMPONENT_HEARTBEATS_PURPLE_PURPLE" ]
                         ],
                         "codtaints": [
                         ],
@@ -429,22 +417,19 @@
                             "operation": "allow"
                         },
                         "argtaints": [
-                            [
-                                "COMPONENT_HEARTBEATS_ORANGE_PURPLE",
-                                "UPDATE_MISSION_PLAN_ORANGE_PURPLE",
-                                "PNT_ORANGE_PURPLE",
-                                "COMPONENT_HEARTBEATS_ORANGE_PURPLE",
-                                "REQUEST_RDR_DETECTIONS_PURPLE_PURPLE",
-                                "COMPONENT_HEARTBEATS_PURPLE_PURPLE",
-                                "COMPONENT_HEARTBEATS_PURPLE_PURPLE"
-                            ],
-                            [
-                                "COMPONENT_HEARTBEATS_PURPLE_ORANGE",
-                                "RECEIVE_RDR_DETECTIONS_PURPLE_PURPLE",
-                                "COMPONENT_HEARTBEATS_PURPLE_ORANGE",
-                                "COMPONENT_HEARTBEATS_PURPLE_PURPLE",
-                                "COMPONENT_HEARTBEATS_PURPLE_PURPLE"
-                            ]
+                            [ "COMPONENT_HEARTBEATS_ORANGE_PURPLE" ],
+                            [ "UPDATE_MISSION_PLAN_ORANGE_PURPLE" ],
+                            [ "PNT_ORANGE_PURPLE" ],
+                            [ "COMPONENT_HEARTBEATS_ORANGE_PURPLE" ],
+                            [ "REQUEST_RDR_DETECTIONS_PURPLE_PURPLE" ],
+                            [ "COMPONENT_HEARTBEATS_PURPLE_PURPLE" ],
+                            [ "COMPONENT_HEARTBEATS_PURPLE_PURPLE" ],
+                            
+                            [ "COMPONENT_HEARTBEATS_PURPLE_ORANGE" ],
+                            [ "RECEIVE_RDR_DETECTIONS_PURPLE_PURPLE" ],
+                            [ "COMPONENT_HEARTBEATS_PURPLE_ORANGE" ],
+                            [ "COMPONENT_HEARTBEATS_PURPLE_PURPLE" ],
+                            [ "COMPONENT_HEARTBEATS_PURPLE_PURPLE" ]
                         ],
                         "codtaints": [
                         ],
@@ -466,11 +451,9 @@
                             "operation": "allow"
                         },
                         "argtaints": [
-                            [],
-                            [
-                                "GROUND_MOVERS_PURPLE_PURPLE",
-                                "GROUND_MOVERS_PURPLE_PURPLE"
-                            ]
+                                
+                            [ "GROUND_MOVERS_PURPLE_PURPLE" ],
+                            [ "GROUND_MOVERS_PURPLE_PURPLE" ]
                         ],
                         "codtaints": [
                         ],

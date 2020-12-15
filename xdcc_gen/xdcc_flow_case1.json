@@ -279,22 +279,19 @@
                             "operation": "allow"
                         },
                         "argtaints": [
-                            [
-                                "COMPONENT_HEARTBEATS_ORANGE_ORANGE",
-                                "COMPONENT_HEARTBEATS_GREEN_ORANGE",
-                                "COMPONENT_HEARTBEATS_GREEN_ORANGE",
-                                "COMPONENT_HEARTBEATS_GREEN_ORANGE"
-                            ],
-                            [
-                                "COMPONENT_HEARTBEATS_ORANGE_ORANGE",
-                                "COMPONENT_HEARTBEATS_ORANGE_GREEN",
-                                "COMPONENT_HEARTBEATS_ORANGE_GREEN",
-                                "COMPONENT_HEARTBEATS_ORANGE_GREEN",
-                                "UPDATE_MISSION_PLAN_ORANGE_ORANGE",
-                                "UPDATE_MISSION_PLAN_ORANGE_GREEN",
-                                "UPDATE_MISSION_PLAN_ORANGE_GREEN",
-                                "UPDATE_MISSION_PLAN_ORANGE_GREEN"
-                            ]
+                            [ "COMPONENT_HEARTBEATS_ORANGE_ORANGE" ],
+                            [ "COMPONENT_HEARTBEATS_GREEN_ORANGE" ],
+                            [ "COMPONENT_HEARTBEATS_GREEN_ORANGE" ],
+                            [ "COMPONENT_HEARTBEATS_GREEN_ORANGE" ],
+
+                            [ "COMPONENT_HEARTBEATS_ORANGE_ORANGE" ],
+                            [ "COMPONENT_HEARTBEATS_ORANGE_GREEN" ],
+                            [ "COMPONENT_HEARTBEATS_ORANGE_GREEN" ],
+                            [ "COMPONENT_HEARTBEATS_ORANGE_GREEN" ],
+                            [ "UPDATE_MISSION_PLAN_ORANGE_ORANGE" ],
+                            [ "UPDATE_MISSION_PLAN_ORANGE_GREEN" ],
+                            [ "UPDATE_MISSION_PLAN_ORANGE_GREEN" ],
+                            [ "UPDATE_MISSION_PLAN_ORANGE_GREEN" ]
                         ],
                         "codtaints": [
                         ],
@@ -316,22 +313,19 @@
                             "operation": "allow"
                         },
                         "argtaints": [
-                            [
-                                "COMPONENT_HEARTBEATS_ORANGE_ORANGE",
-                                "UPDATE_MISSION_PLAN_ORANGE_ORANGE",
-                                "RECEIVE_ISRM_DETECTIONS_GREEN_ORANGE",
-                                "COMPONENT_HEARTBEATS_GREEN_ORANGE",
-                                "COMPONENT_HEARTBEATS_GREEN_ORANGE",
-                                "COMPONENT_HEARTBEATS_GREEN_ORANGE"
-                            ],
-                            [
-                                "PNT_ORANGE_GREEN",
-                                "REQUEST_ISRM_DETECTIONS_ORANGE_GREEN",
-                                "COMPONENT_HEARTBEATS_ORANGE_ORANGE",
-                                "COMPONENT_HEARTBEATS_ORANGE_GREEN",
-                                "COMPONENT_HEARTBEATS_ORANGE_GREEN",
-                                "COMPONENT_HEARTBEATS_ORANGE_GREEN"
-                            ]
+                            [ "COMPONENT_HEARTBEATS_ORANGE_ORANGE" ],
+                            [ "UPDATE_MISSION_PLAN_ORANGE_ORANGE" ],
+                            [ "RECEIVE_ISRM_DETECTIONS_GREEN_ORANGE" ],
+                            [ "COMPONENT_HEARTBEATS_GREEN_ORANGE" ],
+                            [ "COMPONENT_HEARTBEATS_GREEN_ORANGE" ],
+                            [ "COMPONENT_HEARTBEATS_GREEN_ORANGE" ],
+
+                            [ "PNT_ORANGE_GREEN" ],
+                            [ "REQUEST_ISRM_DETECTIONS_ORANGE_GREEN" ],
+                            [ "COMPONENT_HEARTBEATS_ORANGE_ORANGE" ],
+                            [ "COMPONENT_HEARTBEATS_ORANGE_GREEN" ],
+                            [ "COMPONENT_HEARTBEATS_ORANGE_GREEN" ],
+                            [ "COMPONENT_HEARTBEATS_ORANGE_GREEN" ]
                         ],
                         "codtaints": [
                         ],
@@ -353,25 +347,22 @@
                             "operation": "allow"
                         },
                         "argtaints": [
-                            [
-                                "COMPONENT_HEARTBEATS_ORANGE_GREEN",
-                                "UPDATE_MISSION_PLAN_ORANGE_GREEN",
-                                "REQUEST_ISRM_DETECTIONS_ORANGE_GREEN",
-                                "COMPONENT_HEARTBEATS_ORANGE_GREEN",
-                                "RECEIVE_EOIR_DETECTIONS_GREEN_GREEN",
-                                "COMPONENT_HEARTBEATS_GREEN_GREEN",
-                                "RECEIVE_RDR_DETECTIONS_GREEN_GREEN",
-                                "COMPONENT_HEARTBEATS_GREEN_GREEN"
-                            ],
-                            [
-                                "REQUEST_EOIR_DETECTIONS_GREEN_GREEN",
-                                "REQUEST_RDR_DETECTIONS_GREEN_GREEN",
-                                "RECEIVE_ISRM_DETECTIONS_GREEN_ORANGE",
-                                "COMPONENT_HEARTBEATS_GREEN_ORANGE",
-                                "COMPONENT_HEARTBEATS_GREEN_ORANGE",
-                                "COMPONENT_HEARTBEATS_GREEN_GREEN",
-                                "COMPONENT_HEARTBEATS_GREEN_GREEN"
-                            ]
+                            [ "COMPONENT_HEARTBEATS_ORANGE_GREEN" ],
+                            [ "UPDATE_MISSION_PLAN_ORANGE_GREEN" ],
+                            [ "REQUEST_ISRM_DETECTIONS_ORANGE_GREEN" ],
+                            [ "COMPONENT_HEARTBEATS_ORANGE_GREEN" ],
+                            [ "RECEIVE_EOIR_DETECTIONS_GREEN_GREEN" ],
+                            [ "COMPONENT_HEARTBEATS_GREEN_GREEN" ],
+                            [ "RECEIVE_RDR_DETECTIONS_GREEN_GREEN" ],
+                            [ "COMPONENT_HEARTBEATS_GREEN_GREEN" ],
+                            
+                            [ "REQUEST_EOIR_DETECTIONS_GREEN_GREEN" ],
+                            [ "REQUEST_RDR_DETECTIONS_GREEN_GREEN" ],
+                            [ "RECEIVE_ISRM_DETECTIONS_GREEN_ORANGE" ],
+                            [ "COMPONENT_HEARTBEATS_GREEN_ORANGE" ],
+                            [ "COMPONENT_HEARTBEATS_GREEN_ORANGE" ],
+                            [ "COMPONENT_HEARTBEATS_GREEN_GREEN" ],
+                            [ "COMPONENT_HEARTBEATS_GREEN_GREEN" ]
                         ],
                         "codtaints": [
                         ],
@@ -393,21 +384,18 @@
                             "operation": "allow"
                         },
                         "argtaints": [
-                            [
-                                "COMPONENT_HEARTBEATS_ORANGE_GREEN",
-                                "UPDATE_MISSION_PLAN_ORANGE_GREEN",
-                                "COMPONENT_HEARTBEATS_ORANGE_GREEN",
-                                "REQUEST_EOIR_DETECTIONS_GREEN_GREEN",
-                                "COMPONENT_HEARTBEATS_GREEN_GREEN",
-                                "COMPONENT_HEARTBEATS_GREEN_GREEN"
-                            ],
-                            [
-                                "RECEIVE_EOIR_DETECTIONS_GREEN_GREEN",
-                                "COMPONENT_HEARTBEATS_GREEN_ORANGE",
-                                "COMPONENT_HEARTBEATS_GREEN_ORANGE",
-                                "COMPONENT_HEARTBEATS_GREEN_GREEN",
-                                "COMPONENT_HEARTBEATS_GREEN_GREEN"
-                            ]
+                            [ "COMPONENT_HEARTBEATS_ORANGE_GREEN" ],
+                            [ "UPDATE_MISSION_PLAN_ORANGE_GREEN" ],
+                            [ "COMPONENT_HEARTBEATS_ORANGE_GREEN" ],
+                            [ "REQUEST_EOIR_DETECTIONS_GREEN_GREEN" ],
+                            [ "COMPONENT_HEARTBEATS_GREEN_GREEN" ],
+                            [ "COMPONENT_HEARTBEATS_GREEN_GREEN" ],
+                            
+                            [ "RECEIVE_EOIR_DETECTIONS_GREEN_GREEN" ],
+                            [ "COMPONENT_HEARTBEATS_GREEN_ORANGE" ],
+                            [ "COMPONENT_HEARTBEATS_GREEN_ORANGE" ],
+                            [ "COMPONENT_HEARTBEATS_GREEN_GREEN" ],
+                            [ "COMPONENT_HEARTBEATS_GREEN_GREEN" ]
                         ],
                         "codtaints": [
                         ],
@@ -429,22 +417,19 @@
                             "operation": "allow"
                         },
                         "argtaints": [
-                            [
-                                "COMPONENT_HEARTBEATS_ORANGE_GREEN",
-                                "UPDATE_MISSION_PLAN_ORANGE_GREEN",
-                                "PNT_ORANGE_GREEN",
-                                "COMPONENT_HEARTBEATS_ORANGE_GREEN",
-                                "REQUEST_RDR_DETECTIONS_GREEN_GREEN",
-                                "COMPONENT_HEARTBEATS_GREEN_GREEN",
-                                "COMPONENT_HEARTBEATS_GREEN_GREEN"
-                            ],
-                            [
-                                "COMPONENT_HEARTBEATS_GREEN_ORANGE",
-                                "RECEIVE_RDR_DETECTIONS_GREEN_GREEN",
-                                "COMPONENT_HEARTBEATS_GREEN_ORANGE",
-                                "COMPONENT_HEARTBEATS_GREEN_GREEN",
-                                "COMPONENT_HEARTBEATS_GREEN_GREEN"
-                            ]
+                            [ "COMPONENT_HEARTBEATS_ORANGE_GREEN" ],
+                            [ "UPDATE_MISSION_PLAN_ORANGE_GREEN" ],
+                            [ "PNT_ORANGE_GREEN" ],
+                            [ "COMPONENT_HEARTBEATS_ORANGE_GREEN" ],
+                            [ "REQUEST_RDR_DETECTIONS_GREEN_GREEN" ],
+                            [ "COMPONENT_HEARTBEATS_GREEN_GREEN" ],
+                            [ "COMPONENT_HEARTBEATS_GREEN_GREEN" ],
+                            
+                            [ "COMPONENT_HEARTBEATS_GREEN_ORANGE" ],
+                            [ "RECEIVE_RDR_DETECTIONS_GREEN_GREEN" ],
+                            [ "COMPONENT_HEARTBEATS_GREEN_ORANGE" ],
+                            [ "COMPONENT_HEARTBEATS_GREEN_GREEN" ],
+                            [ "COMPONENT_HEARTBEATS_GREEN_GREEN" ]
                         ],
                         "codtaints": [
                         ],
@@ -466,11 +451,9 @@
                             "operation": "allow"
                         },
                         "argtaints": [
-                            [],
-                            [
-                                "GROUND_MOVERS_GREEN_GREEN",
-                                "GROUND_MOVERS_GREEN_GREEN"
-                            ]
+
+                            [ "GROUND_MOVERS_GREEN_GREEN" ],
+                            [ "GROUND_MOVERS_GREEN_GREEN" ]
                         ],
                         "codtaints": [
                         ],
