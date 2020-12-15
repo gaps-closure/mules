@@ -3,25 +3,25 @@
         {
             "component": "MPU",
             "label": "MPU_CLE_LABEL",
-            "inFlows": [ 2001, 2991, 3991, 4991, 5001 ],
+            "inFlows": [ 2991, 3991, 4991, 5001 ],
             "outFlows": [ 1001, 1002, 1003, 1004, 1005, 1006, 1007, 1008 ]
         },
         {
             "component": "MPX",
             "label": "MPX_CLE_LABEL",
             "inFlows": [ 1001, 1005, 3003, 3992, 4992, 5992 ],
-            "outFlows": [ 2001, 2002, 2003, 2004, 2005, 2991, 2993, 2994, 2995 ]
+            "outFlows": [ 2004, 2005, 2991, 2993, 2994, 2995 ]
         },
         {
             "component": "ISRM",
             "label": "ISRM_CLE_LABEL",
-            "inFlows": [ 1002, 1006, 2002, 2005, 2993, 4001, 4993, 5002, 5993 ], 
+            "inFlows": [ 1002, 1006, 2005, 2993, 4001, 4993, 5002, 5993 ], 
             "outFlows": [ 3001, 3002, 3003, 3991, 3992, 3994, 3995 ]
         },
         {
             "component": "EOIR",
             "label": "EOIR_CLE_LABEL",
-            "inFlows": [ 1003, 1007, 2003, 2994, 3001, 3994, 5994 ],
+            "inFlows": [ 1003, 1007, 2994, 3001, 3994, 5994 ],
             "outFlows": [ 4001, 4991, 4992, 4993, 4995 ]
         },
         {
@@ -77,21 +77,6 @@
             "flowId": 1008,            
             "message": "updateMissionPlan",
             "label": "UPDATE_MISSION_PLAN_ORANGE_PURPLE"
-        },
-        {
-            "flowId": 2001,            
-            "message": "pnt",
-            "label": "PNT_ORANGE_ORANGE"
-        },
-        {
-            "flowId": 2002,            
-            "message": "pnt",
-            "label": "PNT_ORANGE_PURPLE"
-        },
-        {
-            "flowId": 2003,            
-            "message": "pnt",
-            "label": "PNT_ORANGE_PURPLE"
         },
         {
             "flowId": 2004,            
@@ -295,7 +280,6 @@
                         },
                         "argtaints": [
                             [
-                                "PNT_ORANGE_ORANGE",
                                 "COMPONENT_HEARTBEATS_ORANGE_ORANGE",
                                 "COMPONENT_HEARTBEATS_PURPLE_ORANGE",
                                 "COMPONENT_HEARTBEATS_PURPLE_ORANGE",
@@ -341,9 +325,6 @@
                                 "COMPONENT_HEARTBEATS_PURPLE_ORANGE"
                             ],
                             [
-                                "PNT_ORANGE_ORANGE",
-                                "PNT_ORANGE_PURPLE",
-                                "PNT_ORANGE_PURPLE",
                                 "PNT_ORANGE_PURPLE",
                                 "REQUEST_ISRM_DETECTIONS_ORANGE_PURPLE",
                                 "COMPONENT_HEARTBEATS_ORANGE_ORANGE",
@@ -375,7 +356,6 @@
                             [
                                 "COMPONENT_HEARTBEATS_ORANGE_PURPLE",
                                 "UPDATE_MISSION_PLAN_ORANGE_PURPLE",
-                                "PNT_ORANGE_PURPLE",
                                 "REQUEST_ISRM_DETECTIONS_ORANGE_PURPLE",
                                 "COMPONENT_HEARTBEATS_ORANGE_PURPLE",
                                 "RECEIVE_EOIR_DETECTIONS_PURPLE_PURPLE",
@@ -416,7 +396,6 @@
                             [
                                 "COMPONENT_HEARTBEATS_ORANGE_PURPLE",
                                 "UPDATE_MISSION_PLAN_ORANGE_PURPLE",
-                                "PNT_ORANGE_PURPLE",
                                 "COMPONENT_HEARTBEATS_ORANGE_PURPLE",
                                 "REQUEST_EOIR_DETECTIONS_PURPLE_PURPLE",
                                 "COMPONENT_HEARTBEATS_PURPLE_PURPLE",
@@ -564,22 +543,6 @@
                   }
                ]
             }
-        },
-        {
-            "cle-label": "PNT_ORANGE_ORANGE",
-            "cle-json": {
-               "level":"orange",
-               "cdf":[
-                  {
-                     "remotelevel":"orange",
-                     "direction":"ingress",
-                     "guarddirective":{
-                        "operation":"allow",
-                        "oneway":true
-                     }
-                  }
-               ]
-            }            
         },
         {
             "cle-label": "PNT_ORANGE_PURPLE",
