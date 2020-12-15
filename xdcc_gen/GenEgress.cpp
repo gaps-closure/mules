@@ -834,7 +834,7 @@ void GenEgress::genCombo(const XdccFlow& xdccFlow)
             to_json(cjs, cleJson);
             string cdfstr = cjs.dump(2);
             //string cdfstr = "{\"level\": \"" + enclave + "\", \"cdf\": [ " + clestr + "]}";
-            findAndReplaceAll(cdfstr, "\n", " \\\n ");
+//            findAndReplaceAll(cdfstr, "\n", " \\\n ");
 
             string key = msgName + (singleRemote ? "" : ("_" + remote));
             combo[key] = cdfstr;
@@ -865,13 +865,34 @@ void GenEgress::annotations(const XdccFlow &xdccFlow)
     }
     genfile << endl;
 
+    map<string, Message *> msg_map = xdccFlow.getMessages();
     for (auto const c : combo) {
-        string key = c.first;
-        boost::to_upper(key);
+        string msg_name = c.first;
+        string msg_name_u = msg_name;
+        boost::to_upper(msg_name_u);
+
+        map<string, Message *>::const_iterator it = msg_map.find(msg_name);
+        if (it == msg_map.end()) {
+            eprintf("no such message in the \"messages\" section: %s", msg_name.c_str());
+            continue;
+        }
+        Message *message = (Message *) it->second;
+        traverseEcho(message);  // to get in_args.size()
+
+        json js = json::parse(c.second);
+
+        for (int i = 0; i < in_args.size(); i++) {
+            auto jsonObjects = json::array();
+            jsonObjects.push_back("TAG_REQUEST_ECHO_" + msg_name_u);
+            js["cdf"][0]["argtaints"][i] = jsonObjects;
+        }
+
+        string cdfstr = js.dump(2);
+        findAndReplaceAll(cdfstr, "\n", " \\\n ");
 
         genfile << "#pragma cle def XDLINKAGE_ECHO_"
-                << key << " "
-                << c.second << endl << endl;
+                << msg_name_u << " "
+                << cdfstr << endl << endl;
     }
 }
 
