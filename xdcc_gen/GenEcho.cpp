@@ -464,8 +464,9 @@ int GenEcho::open(const XdccFlow &xdccFlow)
 {
     genfile << "#include <amqm/AMQManager.h>\n"
             << "#include <nlohmann/json.hpp>\n"
-            << "#include <string.h>\n"
-            << "#include <xdcc_echo.h>\n\n"
+            << "#include <string.h>\n\n"
+//            << "#include <xdcc_echo.h>\n\n"
+            << "#include \"xdcc_echo.h\"\n"
             << endl
             << "using namespace std;\n"
             << "using namespace amqm;\n"
