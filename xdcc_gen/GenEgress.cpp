@@ -121,41 +121,40 @@ void GenEgress::traverseArrayEcho(Message *message, json j, vector<string> path,
                 travereObjEcho(message, j["properties"], path);
             }
             else {
-                string in_arg;
-                string out_arg = var;
-                string stmt;
-
                 if (type == "string") {
-                    in_arg = "char *" + var + "[]";
-
                     string maxLength = getField(val, "maxLength", message, path);
-                    stmts.push_back("char " + var + CPP + "[" + countVar + "][" + maxLength + "];");
-                    stmts.push_back("for (int j = 0; j < " + countVar + "; j++)");
-                    stmts.push_back("    memcpy(" + var + CPP + "[j], " + var + "[j], " + maxLength + ");\n");
+                    for (int i = 0; i < stoi(numElements); i++) {
+                        string idx = to_string(i);
+                        string varidx = var + idx;
+                        string varidxcpp = varidx + CPP;
 
-                    out_arg = var + CPP;
+                        in_args.push_back("char *" + varidx);
+                        stmts.push_back("char " + varidxcpp + "[" + maxLength + "];");
+                        stmts.push_back("memcpy(" + varidxcpp + ", " + varidx + ", " + maxLength + ");\n");
+                        out_args.push_back(varidx);
+                    }
                 }
                 else if (type == "integer") {
-                    in_arg = "int " + var + "[]";
+                    string varcpp = var + CPP;
+                    string size = to_string(sizeof(int) * stoi(numElements));
 
-                    string x = to_string(sizeof(int) * stoi(numElements));
-                    stmts.push_back("int " + var + CPP + "[" + numElements + "];");
-                    stmt = "memcpy((char *)" + var + CPP + ", (char *)" + var + ", " + x + ");\n";
-                    stmts.push_back(stmt);
+                    in_args.push_back("int " + var + "[]");
+                    stmts.push_back("int " + varcpp + "[" + numElements + "];");
+                    stmts.push_back("memcpy((char *)" + varcpp + ", (char *)" + var + ", " + size + ");\n");
+                    out_args.push_back(var);
                 }
                 else if (type == "number") {
-                    in_arg = "double " + var + "[]";
+                    string varcpp = var + CPP;
+                    string size = to_string(sizeof(double) * stoi(numElements));
 
-                    string x = to_string(sizeof(double) * stoi(numElements));
-                    stmts.push_back("double " + var + CPP + "[" + numElements + "];");
-                    stmt = "memcpy((char *)" + var + CPP + ", (char *)" + var + ", " + x + ");\n";
-                    stmts.push_back(stmt);
+                    in_args.push_back("double " + var + "[]");
+                    stmts.push_back("double " + varcpp + "[" + numElements + "];");
+                    stmts.push_back("memcpy((char *)" + varcpp + ", (char *)" + var + ", " + size + ");\n");
+                    out_args.push_back(var);
                 }
                 else {
                     throw DataException("unsupported type " + type + " for " + genPath(path));
                 }
-                in_args.push_back(in_arg);
-                out_args.push_back(out_arg);
             }
         }
         catch (DataException &e) {
@@ -385,28 +384,30 @@ void GenEgress::traverseArrayEgress(Message *message, json j, vector<string> pat
                 traverseObjEgress(message, val["properties"], path);
             }
             else {
-                string in_arg = var;
-                string stmt;
-                string out_arg = var;
-
                 if (type == "string") {
                     string maxLength = getField(val, "maxLength", message, path);
+                    for (int i = 0; i < stoi(numElements); i++) {
+                        string idx = to_string(i);
 
-                    stmt    = "char " + var + "[" + countVar + "][" + maxLength + "];";
+                        stmts.push_back("char " + var + idx + "[" + maxLength + "];");
+                        in_args.push_back(var + idx);
+                        out_args.push_back(var + idx);
+                    }
                 }
                 else if (type == "integer") {
-                    stmt    = "int " + var + "[" + countVar + "];";
+                    stmts.push_back("int " + var + "[" + countVar + "];");
+                    in_args.push_back(var);
+                    out_args.push_back(var);
                 }
                 else if (type == "number") {
-                    stmt    = "double " + var + "[" + countVar + "];";
+                    stmts.push_back("double " + var + "[" + countVar + "];");
+                    in_args.push_back(var);
+                    out_args.push_back(var);
                 }
                 else {
                     cout << "unsupported type: " << type << endl;
                     exit(1);
                 }
-                in_args.push_back(in_arg);
-                stmts.push_back(stmt);
-                out_args.push_back(out_arg);
             }
         }
         catch (DataException &e) {
@@ -975,8 +976,7 @@ int GenEgress::close()
 {
    genfile
       << "#define XDCCLISTEN(X) amqlib_listen(amq(), #X, egress_##X, _topic_##X);" << endl
-      << "int main()" << endl
-      << "{" << endl
+      << "int main() {" << endl
       ;
 
    for (auto remote : remoteEnclaves) {

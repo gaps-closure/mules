@@ -18,6 +18,12 @@ using json = nlohmann::json;
 #include "GenEcho.h"
 #include "XdccException.h"
 
+const int INDENT = 4;
+
+#define TAB_1 string(INDENT, ' ')
+#define TAB_2 string(2 * INDENT, ' ')
+#define TAB_3 string(3 * INDENT, ' ')
+
 /******************************
  * echo
  */
@@ -45,8 +51,6 @@ void GenEcho::traverseArrayEcho(Message *message, string arrayName, json j,
         path.push_back(key);
 
         try {
-            string stmt = "        ele[\"" + key + "\"] = " + var + "[i];";
-
             string type = getField(val, "type", message, path);
             if (type == "array") {
                 string numElements = getField(val, "numElements", message, path);
@@ -57,24 +61,32 @@ void GenEcho::traverseArrayEcho(Message *message, string arrayName, json j,
             }
             else {
                 string in_arg;
-                string out_arg = var;
                 if (type == "string") {
-                    in_arg = "    const char *" + var + "[]";
-                    out_arg = var + "_";
-                    stmt = "        ele[\"" + key + "\"] = string(" + var + "[i]);";
+                    string maxLength = getField(val, "maxLength", message, path);
+                    for (int i = 0; i < stoi(numElements); i++) {
+                        string idx = to_string(i);
+                        string varidx = var + idx;
+
+                        in_args.push_back("    char *" + varidx);
+
+                        string stmt = "    if (count > " + idx + ")";
+                        copies.push_back(stmt);
+
+                        stmt = "        js[" + idx + "][\"" + key + "\"] = string(" + varidx + ");";
+                        copies.push_back(stmt);
+                    }
                 }
                 else if (type == "integer") {
-                    in_arg = "    int " + var + "[]";
+                    in_args.push_back("    int " + var + "[]");
+                    stmts.push_back("        ele[\"" + key + "\"] = " + var + "[i];");
                 }
                 else if (type == "number") {
-                    in_arg = "    double " + var + "[]";
+                    in_args.push_back("    double " + var + "[]");
+                    stmts.push_back("        ele[\"" + key + "\"] = " + var + "[i];");
                 }
                 else {
                     throw DataException("unsupported type " + type + " for " + genPath(path));
                 }
-                in_args.push_back(in_arg);
-                out_args.push_back(out_arg);
-                stmts.push_back(stmt);
             }
         }
         catch (DataException &e) {
@@ -83,7 +95,7 @@ void GenEcho::traverseArrayEcho(Message *message, string arrayName, json j,
         path.pop_back();
     }
     stmts.push_back("\n        js" + indices + "[i] = ele;");
-    stmts.push_back("    }\n");
+    stmts.push_back("    }");
 }
 
 void GenEcho::traverseObjEcho(Message *message, json j, vector<string> path)
@@ -185,6 +197,10 @@ void GenEcho::genEcho(Message *message)
                << "    json js;" << endl
                << "    js[\"fromRemote\"] = 1;" << endl;
 
+       for (std::vector<string>::iterator it = copies.begin(); it != copies.end(); ++it) {
+           genfile << *it << endl;
+       }
+
        for (std::vector<string>::iterator it = stmts.begin(); it != stmts.end(); ++it) {
            genfile << *it << endl;
        }
@@ -211,7 +227,7 @@ void GenEcho::traverseArrayUnmarshal(Message *message, string arrayName, json j,
 
     string indices = genPath(path);
 
-    stmts.push_back("\n    for (int i = 0; i < " + countVar +"; i++) {");
+    stmts.push_back("    for (int i = 0; i < " + countVar +"; i++) {");
     stmts.push_back("        json ele = js" + indices + "[i];");
     int i = 0;
     for (auto& el : j.items()) {
@@ -232,29 +248,33 @@ void GenEcho::traverseArrayUnmarshal(Message *message, string arrayName, json j,
                 traverseObjUnmarshal(message, val["properties"], path);
             }
             else {
-                string in_arg;
-                string stmt;
-                string out_arg;
-
                 if (type == "string") {
-                    string maxLength = to_string(val["maxLength"]);
-                    in_arg  = "    char * " + var + "[]";
-                    stmt    = "        strncpy(" + var + "[i], ele[\"" + key + "\"]"
-                            + ".get<string>().c_str(), " + maxLength + ");";
+                    string maxLength = getField(val, "maxLength", message, path);
+                    for (int i = 0; i < stoi(numElements); i++) {
+                        string idx = to_string(i);
+                        string varidx = var + idx;
+
+                        in_args.push_back("    char *" + varidx);
+
+                        string stmt = "    if (count > " + to_string(i) + ")";
+                        copies.push_back(stmt);
+
+                        stmt = "        strncpy(" + varidx + ", js[" + to_string(i) + "][\"" + key + "\"]"
+                                + ".get<string>().c_str(), " + maxLength + ");";
+                        copies.push_back(stmt);
+                    }
                 }
                 else if (type == "integer") {
-                    in_arg  = "    int " + var + "[]";
-                    stmt = "        " + var + "[i] = ele[\"" + key + "\"]" + ".get<int>();";
+                    in_args.push_back("    int " + var + "[]");
+                    stmts.push_back("        " + var + "[i] = ele[\"" + key + "\"]" + ".get<int>();");
                 }
                 else if (type == "number") {
-                    in_arg  = "    double " + var + "[]";
-                    stmt = "        " + var + "[i] = ele[\"" + key + "\"]" + ".get<double>();";
+                    in_args.push_back("    double " + var + "[]");
+                    stmts.push_back("        " + var + "[i] = ele[\"" + key + "\"]" + ".get<double>();");
                 }
                 else {
                     throw DataException("unsupported type " + type + " for " + genPath(path));
                 }
-                stmts.push_back(stmt);
-                in_args.push_back(in_arg);
             }
         }
         catch (DataException &e) {
@@ -371,6 +391,10 @@ void GenEcho::genUnmarshal(Message *message)
                << "    json js = json::parse(jstr);" << endl
                << "    int fromRemote_cpp = js.contains(\"fromRemote\") ? js[\"fromRemote\"].get<int>() : 0;" << endl
                << endl;
+
+       for (std::vector<string>::iterator it = copies.begin(); it != copies.end(); ++it) {
+           genfile << *it << endl;
+       }
 
        for (std::vector<string>::iterator it = stmts.begin(); it != stmts.end(); ++it) {
            genfile << *it << endl;
