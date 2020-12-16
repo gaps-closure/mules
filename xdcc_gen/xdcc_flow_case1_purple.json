@@ -84,11 +84,6 @@
             "label": "PNT_ORANGE_PURPLE"
         },
         {
-            "flowId": 9999,            
-            "message": "pnt",
-            "label": "PNT_ORANGE_BLUE"
-        },
-        {
             "flowId": 2005,            
             "message": "requestISRMDetections",
             "label": "REQUEST_ISRM_DETECTIONS_ORANGE_PURPLE"

@@ -238,8 +238,8 @@ void GenEcho::traverseArrayUnmarshal(Message *message, string arrayName, json j,
     string indices = genPath(path);
 
     copies.push_back("    " + countVar + " = js" + indices + ".size();");
-    copies.push_back("    if (" + countVar + " > " + countMaxVar + ")");
-    copies.push_back("        return;");
+//    copies.push_back("    if (" + countVar + " > " + countMaxVar + ")");
+//    copies.push_back("        return;");
 
     stmts.push_back("    for (int i = 0; i < " + countVar +"; i++) {");
     stmts.push_back("        json ele = js" + indices + "[i];");
