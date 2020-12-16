@@ -31,13 +31,19 @@ const int INDENT = 4;
 void GenEcho::traverseArrayEcho(Message *message, string arrayName, json j,
         vector<string> path, string numElements)
 {
-    string count = "count_" + arrayName;
-    in_args.push_back("    int " + count);
-    out_args.push_back(count);
+    string activeCnt = arrayName + "ActiveCnt";
+    genVar(activeCnt);
+    in_args.push_back("    int " + activeCnt);
+    out_args.push_back(activeCnt);
+
+    string maxCnt = arrayName + "MaxCnt";
+    genVar(maxCnt);
+    in_args.push_back("    int " + maxCnt);
+    out_args.push_back(maxCnt);
 
     string indices = genPath(path);
 
-    stmts.push_back("\n    for (int i = 0; i < " + count + "; i++) {");
+    stmts.push_back("\n    for (int i = 0; i < " + activeCnt + "; i++) {");
     stmts.push_back("        json ele = js" + indices + "[i];\n");
 
     int i = 0;
@@ -69,7 +75,7 @@ void GenEcho::traverseArrayEcho(Message *message, string arrayName, json j,
 
                         in_args.push_back("    char *" + varidx);
 
-                        string stmt = "    if (count > " + idx + ")";
+                        string stmt = "    if (" + activeCnt + " > " + idx + ")";
                         copies.push_back(stmt);
 
                         stmt = "        js" + indices + "[" + idx + "][\"" + key + "\"] = string(" + varidx + ");";
@@ -221,11 +227,19 @@ void GenEcho::genEcho(Message *message)
  */
 void GenEcho::traverseArrayUnmarshal(Message *message, string arrayName, json j, vector<string> path, string numElements)
 {
-    string countVar = "count";
+    string countVar = "*" + arrayName + "ActiveCnt";
     genVar(countVar);
     in_args.push_back("    int " + countVar);
 
+    string countMaxVar = arrayName + "MaxCnt";
+    genVar(countMaxVar);
+    in_args.push_back("    int " + countMaxVar);
+
     string indices = genPath(path);
+
+    copies.push_back("    " + countVar + " = js" + indices + ".size();");
+    copies.push_back("    if (" + countVar + " > " + countMaxVar + ")");
+    copies.push_back("        return;");
 
     stmts.push_back("    for (int i = 0; i < " + countVar +"; i++) {");
     stmts.push_back("        json ele = js" + indices + "[i];");
@@ -256,7 +270,7 @@ void GenEcho::traverseArrayUnmarshal(Message *message, string arrayName, json j,
 
                         in_args.push_back("    char *" + varidx);
 
-                        string stmt = "    if (count > " + to_string(i) + ")";
+                        string stmt = "    if (" + countVar + " > " + to_string(i) + ")";
                         copies.push_back(stmt);
 
                         stmt = "        strncpy(" + varidx + ", js" + indices + "[" + idx + "][\"" + key + "\"]"
