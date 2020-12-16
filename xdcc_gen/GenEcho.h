@@ -13,15 +13,21 @@ public:
     int close();
 
 private:
-    void genEcho(Message *message);
-    void genEchoObj(Message *message, json j, vector<string> path, vector<string> &assignments,
-                        vector<string> &in_args, vector<string> &out_args);
-    void genEchoArray(Message *message, string arrayName, json j, vector<string> path, vector<string> &assignments,
-                          vector<string> &in_args, vector<string> &out_args);
+    vector<string> copies;
+    vector<string> stmts;
+    vector<string> in_args;
+    vector<string> out_args;
 
-    void genUnmarshalArray(Message *message, string arrayName, json j, vector<string> path,
-            vector<string> &assignments, vector<string> &in_args, vector<string> &out_args);
-    void genUnmarshalObj(Message *message, json j, vector<string> path, vector<string> &assignments,
-            vector<string> &in_args, vector<string> &out_args);
+    void beginFunc(Message *message, json& schemaJson);
+
+    void traverseEcho(Message *message);
+    void traverseArrayEcho(Message *message, string arrayName, json j, vector<string> path, string numElements);
+    void traverseObjEcho(Message *message, json j, vector<string> path);
+
+    void genEcho(Message *message);
     void genUnmarshal(Message *message);
+
+    void traverseUnmarshal(Message *message);
+    void traverseArrayUnmarshal(Message *message, string arrayName, json j, vector<string> path, string numElements);
+    void traverseObjUnmarshal(Message *message, json j, vector<string> path);
 };
