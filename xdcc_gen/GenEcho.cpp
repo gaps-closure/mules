@@ -72,7 +72,7 @@ void GenEcho::traverseArrayEcho(Message *message, string arrayName, json j,
                         string stmt = "    if (count > " + idx + ")";
                         copies.push_back(stmt);
 
-                        stmt = "        js[" + idx + "][\"" + key + "\"] = string(" + varidx + ");";
+                        stmt = "        js" + indices + "[" + idx + "][\"" + key + "\"] = string(" + varidx + ");";
                         copies.push_back(stmt);
                     }
                 }
@@ -121,7 +121,7 @@ void GenEcho::traverseObjEcho(Message *message, json j, vector<string> path)
                 string in_arg;
                 bool isString = false;
                 if (type == "string") {
-                    in_arg = "    const char *" + var;
+                    in_arg = "    char *" + var;
                     isString = true;
                 }
                 else if (type == "integer") {
@@ -259,7 +259,7 @@ void GenEcho::traverseArrayUnmarshal(Message *message, string arrayName, json j,
                         string stmt = "    if (count > " + to_string(i) + ")";
                         copies.push_back(stmt);
 
-                        stmt = "        strncpy(" + varidx + ", js[" + to_string(i) + "][\"" + key + "\"]"
+                        stmt = "        strncpy(" + varidx + ", js" + indices + "[" + idx + "][\"" + key + "\"]"
                                 + ".get<string>().c_str(), " + maxLength + ");";
                         copies.push_back(stmt);
                     }
@@ -374,7 +374,7 @@ void GenEcho::genUnmarshal(Message *message)
 
        string signature;
        signature = "void unmarshal_" + message->getName() + "(\n"
-               + "    const char *jstr,\n"
+               + "    char *jstr,\n"
                + "    int *fromRemote";
 
        for (std::vector<string>::iterator it = in_args.begin(); it != in_args.end(); ++it) {
