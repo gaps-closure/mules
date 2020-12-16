@@ -212,9 +212,8 @@ void GenEgress::travereObjEcho(Message *message, json j, vector<string> path)
                 }
                 else if (type == "integer") {
                     in_arg = "int " + var;
-
-                    stmt = "memcpy(" + var + CPP + ", " + var + ", sizeof(int));\n";
-                    stmts.push_back(stmt);
+//                    stmt = "memcpy(" + var + CPP + ", " + var + ", sizeof(int));\n";
+//                    stmts.push_back(stmt);
                 }
                 else if (type == "number") {
                     in_arg = "double " + var;
