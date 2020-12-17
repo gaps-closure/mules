@@ -919,7 +919,6 @@ int GenEgress::open(const XdccFlow &xdccFlow)
 {
     remoteEnclaves.clear();
 
-    setXdccFlow(xdccFlow);
     populateRemoteEnclaves(xdccFlow);
     genCombo(xdccFlow);
 

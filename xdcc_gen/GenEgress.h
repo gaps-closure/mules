@@ -11,8 +11,6 @@ private:
     map<string, set<string>> msgToEnclaves;  // message name to list of dst enclaves
     map<string, string> combo;   // msg_remote to cle def
 
-    XdccFlow xdccFlow;
-
 public:
     GenEgress(const string& path, const string& filename, const string& header) : Gen(path, filename, header) {
     }
@@ -23,14 +21,6 @@ public:
 
     set<string> & getRemoteEnclaves() {
         return remoteEnclaves;
-    }
-
-    const XdccFlow& getXdccFlow() const {
-        return xdccFlow;
-    }
-
-    void setXdccFlow(const XdccFlow &xdccFlow) {
-        this->xdccFlow = xdccFlow;
     }
 
 protected:
