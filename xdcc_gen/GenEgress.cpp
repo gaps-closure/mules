@@ -937,7 +937,8 @@ int GenEgress::open(const XdccFlow &xdccFlow)
     genfile << "/* Messages in system */" << endl;
     genfile << "#define ALL_MSGS_LIST";
     bool first = true;
-    for (auto const& message : myMessages) {
+    for (auto const& m : xdccFlow.getMessages()) {
+        Message *message = (Message *) m.second;
         string msgName = message->getName();
         if (!first)
             genfile << ",";
@@ -947,8 +948,9 @@ int GenEgress::open(const XdccFlow &xdccFlow)
     genfile << endl << endl;
 
     genfile << "/* _local_X is 1 if X is local, else 0 */\n";
-    for (auto message : myMessages) {
+    for (auto m : xdccFlow.getMessages()) {
         bool local = true;
+        Message *message = (Message *) m.second;
         string msg_name = message->getName();
         map<string, set<string>>::iterator it = msgToEnclaves.find(msg_name);
         if (it != msgToEnclaves.end() && it->second.size() > 0)
@@ -960,7 +962,8 @@ int GenEgress::open(const XdccFlow &xdccFlow)
     genfile << endl;
 
     genfile << "/* _topic_X is 1 if X is a msg_name, else 0 */\n";
-    for (auto const& message : myMessages) {
+    for (auto const& m : xdccFlow.getMessages()) {
+        Message *message = (Message *) m.second;
         genfile << "#define _topic_" + message->getName() + " " + (message->isTopic() ? "1" : "0") << endl;
     }
     genfile << endl;

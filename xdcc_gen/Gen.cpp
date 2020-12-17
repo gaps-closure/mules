@@ -42,7 +42,8 @@ void Gen::generate(XdccFlow &xdccFlow)
 {
     setMessageLocal(xdccFlow);
 
-    if (myMessages.empty()) {
+    if (xdccFlow.getMessages().empty()) {
+        wprintf("empty messages block");
         return;
     }
     open(xdccFlow);
@@ -132,7 +133,6 @@ string Gen::getField(json js, string field, Message *message,
 
 void Gen::setMessageLocal(XdccFlow &xdccFlow)
 {
-    myMessages.clear();
     string enclave = config.getEnclave();
 
     for (auto const &msg_map : xdccFlow.getMessages()) {
@@ -160,6 +160,5 @@ void Gen::setMessageLocal(XdccFlow &xdccFlow)
             cout << "message " << msgName << " is " << (local ? "" : "not ")
                     << "local" << endl;
         message->setLocal(local);
-        myMessages.insert(message);
     }
 }

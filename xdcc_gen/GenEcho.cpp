@@ -416,19 +416,18 @@ void GenEcho::genUnmarshal(Message *message)
 
 int GenEcho::gen(XdccFlow& xdccFlow)
 {
-    for (auto const& m : myMessages) {
+    for (auto const& m : xdccFlow.getMessages()) {
         json schemaJson;
-
-        Message *message = (Message *) m;
+        Message *message = (Message *) m.second;
 
         beginFunc(schemaJson, message);
         traverseEcho(schemaJson, (Message *) message);
-        genEcho((Message *) message);
+        genEcho(message);
         endOfFunc();
 
         beginFunc(schemaJson, message);
         traverseUnmarshal(schemaJson, (Message *) message);
-        genUnmarshal((Message *) message);
+        genUnmarshal(message);
         endOfFunc();
     }
     return 0;

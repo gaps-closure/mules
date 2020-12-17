@@ -27,7 +27,6 @@ protected:
     ofstream headerfile;
     std::set<string> varSet;
     int var_count = 1;
-    set<const Message*> myMessages;
 
     vector<string> copies;
     vector<string> stmts;
