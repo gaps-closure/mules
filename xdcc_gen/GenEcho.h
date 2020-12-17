@@ -18,7 +18,7 @@ private:
     vector<string> in_args;
     vector<string> out_args;
 
-    void beginFunc(Message *message, json& schemaJson);
+    void beginFunc(json& schemaJson, Message *message);
 
     void traverseEcho(json &schemaJson, Message *message);
     void traverseArrayEcho(Message *message, string arrayName, json j, vector<string> path, string numElements);

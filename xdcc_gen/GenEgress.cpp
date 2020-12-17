@@ -232,12 +232,9 @@ void GenEgress::travereObjEcho(Message *message, json j, vector<string> path)
     }
 }
 
-void GenEgress::traverseEcho(Message *message)
+void GenEgress::traverseEcho(json &schemaJson, Message *message)
 {
     try {
-        json schemaJson;
-        beginFunc(message, schemaJson);
-
         vector<string> path;
 
         string type = getField(schemaJson, "type", message, path);
@@ -493,12 +490,9 @@ void GenEgress::traverseObjEgress(Message *message, json j, vector<string> path)
     }
 }
 
-void GenEgress::traverseEgress(Message *message)
+void GenEgress::traverseEgress(json &schemaJson, Message *message)
 {
    try {
-       json schemaJson;
-       beginFunc(message, schemaJson);
-
        vector<string> path;
 
        string type = getField(schemaJson, "type", message, path);
@@ -517,7 +511,7 @@ void GenEgress::traverseEgress(Message *message)
    }
 }
 
-void GenEgress::beginFunc(Message *message, json& schemaJson)
+void GenEgress::beginFunc(json& schemaJson, Message *message)
 {
     copies.clear();
     stmts.clear();
@@ -694,7 +688,11 @@ int GenEgress::gen(XdccFlow& xdccFlow)
 
     for (auto const &msg_map : xdccFlow.getMessages()) {
         Message *message = (Message*) msg_map.second;
-        traverseEcho(message);
+
+        json schemaJson;
+        beginFunc(schemaJson, message);
+
+        traverseEcho(schemaJson, message);
 
         string msg_name = message->getName();
 
@@ -717,7 +715,9 @@ int GenEgress::gen(XdccFlow& xdccFlow)
                 }
             }
         }
-        traverseEgress(message);
+
+        beginFunc(schemaJson, message);
+        traverseEgress(schemaJson, message);
         genEgress(message);
         endOfFunc();
     }
@@ -890,7 +890,10 @@ void GenEgress::annotations(const XdccFlow &xdccFlow)
             continue;
         }
         Message *message = (Message *) it->second;
-        traverseEcho(message);  // to get in_args.size()
+
+        json schemaJson;
+        beginFunc(schemaJson, message);
+        traverseEcho(schemaJson, message);  // to get in_args.size()
 
         int idx = 0;
         json combined;

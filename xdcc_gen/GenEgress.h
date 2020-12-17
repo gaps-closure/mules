@@ -42,18 +42,18 @@ protected:
     void genCombo(const XdccFlow &xdccFlow);
     void populateRemoteEnclaves(const XdccFlow &xdccFlow);
 
-    void beginFunc(Message *message, json& schemaJson);
+    void beginFunc(json& schemaJson, Message *message);
 
     void annotations(const XdccFlow &xdccFlow);
 
-    void traverseEgress(Message *message);
+    void traverseEgress(json &schemaJson, Message *message);
     void traverseArrayEgress(Message *message, string arrayName, json j, vector<string> path, string numElements);
     void traverseObjEgress(Message *message, json j, vector<string> path);
 
     void genFlowToRemote(string msg_name, string remote);
     void genEgress(Message *message);
 
-    void traverseEcho(Message *message);
+    void traverseEcho(json &schemaJson, Message *message);
     void traverseArrayEcho(Message *message, string arrayName, json j, vector<string> path, string numElements);
     void travereObjEcho(Message *message, json j, vector<string> path);
 

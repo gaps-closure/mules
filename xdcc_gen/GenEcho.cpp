@@ -421,12 +421,12 @@ int GenEcho::gen(XdccFlow& xdccFlow)
 
         Message *message = (Message *) m;
 
-        beginFunc(message, schemaJson);
+        beginFunc(schemaJson, message);
         traverseEcho(schemaJson, (Message *) message);
         genEcho((Message *) message);
         endOfFunc();
 
-        beginFunc(message, schemaJson);
+        beginFunc(schemaJson, message);
         traverseUnmarshal(schemaJson, (Message *) message);
         genUnmarshal((Message *) message);
         endOfFunc();
@@ -434,7 +434,7 @@ int GenEcho::gen(XdccFlow& xdccFlow)
     return 0;
 }
 
-void GenEcho::beginFunc(Message *message, json& schemaJson)
+void GenEcho::beginFunc(json& schemaJson, Message *message)
 {
     copies.clear();
     stmts.clear();
