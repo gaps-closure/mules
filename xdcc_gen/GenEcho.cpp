@@ -434,24 +434,6 @@ int GenEcho::gen(XdccFlow& xdccFlow)
     return 0;
 }
 
-void GenEcho::beginFunc(json& schemaJson, Message *message)
-{
-    copies.clear();
-    stmts.clear();
-    in_args.clear();
-    out_args.clear();
-
-    string msg_name = message->getName();
-
-    std::ifstream schemaStream(message->getSchemaFile());
-    if (schemaStream.fail()) {
-        eprintf("%s does not exist", message->getSchemaFile().c_str());
-        throw DataException("");
-    }
-    schemaStream >> schemaJson;
-    schemaStream.close();
-}
-
 int GenEcho::open(const XdccFlow &xdccFlow)
 {
     genfile << "#include <amqm/AMQManager.h>\n"

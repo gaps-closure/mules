@@ -13,13 +13,6 @@ public:
     int close();
 
 private:
-    vector<string> copies;
-    vector<string> stmts;
-    vector<string> in_args;
-    vector<string> out_args;
-
-    void beginFunc(json& schemaJson, Message *message);
-
     void traverseEcho(json &schemaJson, Message *message);
     void traverseArrayEcho(Message *message, string arrayName, json j, vector<string> path, string numElements);
     void traverseObjEcho(Message *message, json j, vector<string> path);

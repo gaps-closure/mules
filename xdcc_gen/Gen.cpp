@@ -50,6 +50,24 @@ void Gen::generate(XdccFlow &xdccFlow)
     close();
 }
 
+void Gen::beginFunc(json& schemaJson, Message *message)
+{
+    copies.clear();
+    stmts.clear();
+    in_args.clear();
+    out_args.clear();
+
+    string msg_name = message->getName();
+
+    std::ifstream schemaStream(message->getSchemaFile());
+    if (schemaStream.fail()) {
+        eprintf("%s does not exist", message->getSchemaFile().c_str());
+        throw DataException("");
+    }
+    schemaStream >> schemaJson;
+    schemaStream.close();
+}
+
 void Gen::endOfFunc()
 {
     varSet.clear();

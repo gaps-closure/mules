@@ -11,11 +11,6 @@ private:
     map<string, set<string>> msgToEnclaves;  // message name to list of dst enclaves
     map<string, string> combo;   // msg_remote to cle def
 
-    vector<string> copies;
-    vector<string> stmts;
-    vector<string> in_args;
-    vector<string> out_args;
-
     XdccFlow xdccFlow;
 
 public:
@@ -41,8 +36,6 @@ public:
 protected:
     void genCombo(const XdccFlow &xdccFlow);
     void populateRemoteEnclaves(const XdccFlow &xdccFlow);
-
-    void beginFunc(json& schemaJson, Message *message);
 
     void annotations(const XdccFlow &xdccFlow);
 

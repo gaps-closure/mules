@@ -29,6 +29,11 @@ protected:
     int var_count = 1;
     set<const Message*> myMessages;
 
+    vector<string> copies;
+    vector<string> stmts;
+    vector<string> in_args;
+    vector<string> out_args;
+
 public:
     virtual int gen(XdccFlow &xdccFlow) = 0;
     virtual int open(const XdccFlow &xdccFlow) = 0;
@@ -41,6 +46,7 @@ public:
 
     void generate(XdccFlow &xdccFlow);
 
+    void beginFunc(json& schemaJson, Message *message);
     void endOfFunc();
 
     int genVar(string &key);
