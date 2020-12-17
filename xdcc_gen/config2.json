@@ -1,0 +1,7 @@
+{
+    "egressDir": "/home/tchen/gaps/build/apps/eop1/xdcc/egress_xdcc/xdcc_autogen",
+    "ingressDir": "/home/tchen/gaps/build/apps/eop1/xdcc/ingress_xdcc/xdcc_autogen",
+    "echoDir": "/home/tchen/gaps/build/apps/eop1/xdcc/xdcc_echo",
+    "enclave": "purple",
+    "xdccFlow": "xdcc_flow_ngc_purple.json"
+}
