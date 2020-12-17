@@ -546,22 +546,6 @@
             }            
         },
         {
-            "cle-label": "PNT_ORANGE_BLUE",
-            "cle-json": {
-               "level":"orange",
-               "cdf":[
-                  {
-                     "remotelevel":"blue",
-                     "direction":"ingress",
-                     "guarddirective":{
-                        "operation":"allow",
-                        "oneway":true
-                     }
-                  }
-               ]
-            }            
-        },
-        {
             "cle-label": "RECEIVE_EOIR_DETECTIONS_PURPLE_PURPLE",
             "cle-json": {
                "level":"purple",
