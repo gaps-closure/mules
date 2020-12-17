@@ -25,7 +25,7 @@
 				"$id": "#root/items/TGT_ISRM_ID", 
 				"title": "Tgt_isrm_id", 
 				"type": "string",
-				"maxLength": 42,
+				"maxLength": 32,
 				"default": "",
 				"examples": [
 					"241058"
@@ -54,7 +54,7 @@
 				"$id": "#root/items/classification", 
 				"title": "Classification", 
 				"type": "string",
-				"maxLength": 43,
+				"maxLength": 64,
 				"default": "",
 				"examples": [
 					"person\r"

@@ -22,7 +22,7 @@
 					"$id": "#root/missionPlan/missionPlanId", 
 					"title": "Missionplanid", 
 					"type": "string",
-                    "maxLength": 33,
+                                        "maxLength": 32,
 					"default": "",
 					"examples": [
 						"id"
@@ -60,7 +60,7 @@
 										"$id": "#root/missionPlan/sensorPlan/actions/items/actionId", 
 										"title": "Actionid", 
 										"type": "string",
-                                        "maxLength": 34,
+                                                                                "maxLength": 32,
 										"default": "",
 										"examples": [
 											"ac1"
@@ -71,7 +71,7 @@
 										"$id": "#root/missionPlan/sensorPlan/actions/items/actionType", 
 										"title": "Actiontype", 
 										"type": "string",
-                                        "maxLength": 35,
+                                                                                "maxLength": 32,
 										"default": "",
 										"examples": [
 											"find"
@@ -82,7 +82,7 @@
 										"$id": "#root/missionPlan/sensorPlan/actions/items/wayPointId", 
 										"title": "Waypointid", 
 										"type": "string",
-                                        "maxLength": 36,
+                                                                                "maxLength": 32,
 										"default": "",
 										"examples": [
 											"wp1"
@@ -106,7 +106,7 @@
 							"$id": "#root/missionPlan/sensorPlan/sensorPlanId", 
 							"title": "Sensorplanid", 
 							"type": "string",
-                            "maxLength": 37,
+                                                        "maxLength": 32,
 							"default": "",
 							"examples": [
 								"id"
@@ -117,7 +117,7 @@
 							"$id": "#root/missionPlan/sensorPlan/vehiclePlanId", 
 							"title": "Vehicleplanid", 
 							"type": "string",
-                            "maxLength": 38,
+                                                        "maxLength": 32,
 							"default": "",
 							"examples": [
 								"id"
@@ -150,7 +150,7 @@
 							"$id": "#root/missionPlan/vehiclePlan/vehiclePlanId", 
 							"title": "Vehicleplanid", 
 							"type": "string",
-                            "maxLength": 39,
+                                                        "maxLength": 32,
 							"default": "",
 							"examples": [
 								"id"
@@ -178,7 +178,7 @@
 										"$id": "#root/missionPlan/vehiclePlan/wayPoints/items/wayPointId", 
 										"title": "Waypointid", 
 										"type": "string",
-                                        "maxLength": 40,
+                                                                                "maxLength": 32,
 										"default": "",
 										"examples": [
 											"wp0"

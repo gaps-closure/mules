@@ -126,7 +126,7 @@
         },
         {
             "flowId": 3003,            
-            "message": "receiveISRMDetections",
+            "message": "recieveISRMDetections",
             "label": "RECEIVE_ISRM_DETECTIONS_ORANGE_ORANGE"
         },
         {
@@ -245,7 +245,7 @@
             "schemaFile": "schema/updateMissionPlan_schema.json"
         },
         {
-            "name": "receiveISRMDetections",
+            "name": "recieveISRMDetections",
             "topic": true,
             "schemaType": "JSONSchema",
             "schemaFile": "schema/receiveISRMDetections_schema.json"

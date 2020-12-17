@@ -42,7 +42,7 @@
 				"$id": "#root/items/classification", 
 				"title": "Classification", 
 				"type": "string",
-	            "maxLength": 31,
+	                        "maxLength": 64,
 				"default": "",
 				"examples": [
 					"Military_Vehicle"

@@ -12,7 +12,7 @@
 			"$id": "#root/phase", 
 			"title": "Phase", 
 			"type": "string",
-			"maxLength": 129,
+			"maxLength": 32,
 			"default": "",
 			"examples": [
 				"find"
