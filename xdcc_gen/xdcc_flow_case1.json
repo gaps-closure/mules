@@ -580,7 +580,7 @@
         {
             "cle-label": "RECEIVE_RDR_DETECTIONS_GREEN_GREEN",
             "cle-json": {
-                "level": "orange",
+                "level": "green",
                 "cdf": [
                     {
                         "remotelevel": "green",

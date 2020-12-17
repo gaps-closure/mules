@@ -46,7 +46,7 @@
         {
             "flowId": 1002,            
             "message": "component_heartbeats",
-            "label": "COMPONENT_HEARTBEATS_ORANGE_PURPLE"
+            "label": "COMPONENT_HEARTBEATS_ORANGE_ORANGE"
         },
         {
             "flowId": 1003,            
@@ -56,7 +56,7 @@
         {
             "flowId": 1004,            
             "message": "component_heartbeats",
-            "label": "COMPONENT_HEARTBEATS_ORANGE_PURPLE"
+            "label": "COMPONENT_HEARTBEATS_ORANGE_ORANGE"
         },
         {
             "flowId": 1005,            
@@ -66,7 +66,7 @@
         {
             "flowId": 1006,            
             "message": "updateMissionPlan",
-            "label": "UPDATE_MISSION_PLAN_ORANGE_PURPLE"
+            "label": "UPDATE_MISSION_PLAN_ORANGE_ORANGE"
         },
         {
             "flowId": 1007,            
@@ -76,17 +76,17 @@
         {
             "flowId": 1008,            
             "message": "updateMissionPlan",
-            "label": "UPDATE_MISSION_PLAN_ORANGE_PURPLE"
+            "label": "UPDATE_MISSION_PLAN_ORANGE_ORANGE"
         },
         {
             "flowId": 2004,            
             "message": "pnt",
-            "label": "PNT_ORANGE_PURPLE"
+            "label": "PNT_ORANGE_ORANGE"
         },
         {
             "flowId": 2005,            
             "message": "requestISRMDetections",
-            "label": "REQUEST_ISRM_DETECTIONS_ORANGE_PURPLE"
+            "label": "REQUEST_ISRM_DETECTIONS_ORANGE_ORANGE"
         },
         {
             "flowId": 2991,            
@@ -96,7 +96,7 @@
         {
             "flowId": 2993,            
             "message": "component_heartbeats",
-            "label": "COMPONENT_HEARTBEATS_ORANGE_PURPLE"
+            "label": "COMPONENT_HEARTBEATS_ORANGE_ORANGE"
         },
         {
             "flowId": 2994,            
@@ -106,47 +106,47 @@
         {
             "flowId": 2995,            
             "message": "component_heartbeats",
-            "label": "COMPONENT_HEARTBEATS_ORANGE_PURPLE"
+            "label": "COMPONENT_HEARTBEATS_ORANGE_ORANGE"
         },
         {
             "flowId": 3001,            
             "message": "requestEOIRDetections",
-            "label": "REQUEST_EOIR_DETECTIONS_PURPLE_PURPLE"
+            "label": "REQUEST_EOIR_DETECTIONS_ORANGE_PURPLE"
         },
         {
             "flowId": 3002,            
             "message": "requestRDRDetections",
-            "label": "REQUEST_RDR_DETECTIONS_PURPLE_PURPLE"
+            "label": "REQUEST_RDR_DETECTIONS_ORANGE_ORANGE"
         },
         {
             "flowId": 3003,            
             "message": "receiveISRMDetections",
-            "label": "RECEIVE_ISRM_DETECTIONS_PURPLE_ORANGE"
+            "label": "RECEIVE_ISRM_DETECTIONS_ORANGE_ORANGE"
         },
         {
             "flowId": 3991,            
             "message": "component_heartbeats",
-            "label": "COMPONENT_HEARTBEATS_PURPLE_ORANGE"
+            "label": "COMPONENT_HEARTBEATS_ORANGE_ORANGE"
         },
         {
             "flowId": 3992,            
             "message": "component_heartbeats",
-            "label": "COMPONENT_HEARTBEATS_PURPLE_ORANGE"
+            "label": "COMPONENT_HEARTBEATS_ORANGE_ORANGE"
         },
         {
             "flowId": 3994,            
             "message": "component_heartbeats",
-            "label": "COMPONENT_HEARTBEATS_PURPLE_PURPLE"
+            "label": "COMPONENT_HEARTBEATS_ORANGE_PURPLE"
         },
         {
             "flowId": 3995,            
             "message": "component_heartbeats",
-            "label": "COMPONENT_HEARTBEATS_PURPLE_PURPLE"
+            "label": "COMPONENT_HEARTBEATS_ORANGE_ORANGE"
         },
         {
             "flowId": 4001,            
             "message": "recieveEOIRDetections",
-            "label": "RECEIVE_EOIR_DETECTIONS_PURPLE_PURPLE"
+            "label": "RECEIVE_EOIR_DETECTIONS_PURPLE_ORANGE"
         },
         {
             "flowId": 4991,            
@@ -161,37 +161,37 @@
         {
             "flowId": 4993,            
             "message": "component_heartbeats",
-            "label": "COMPONENT_HEARTBEATS_PURPLE_PURPLE"
+            "label": "COMPONENT_HEARTBEATS_PURPLE_ORANGE"
         },
         {
             "flowId": 4995,            
             "message": "component_heartbeats",
-            "label": "COMPONENT_HEARTBEATS_PURPLE_PURPLE"
+            "label": "COMPONENT_HEARTBEATS_PURPLE_ORANGE"
         },
         {
             "flowId": 5001,            
             "message": "component_heartbeats",
-            "label": "COMPONENT_HEARTBEATS_PURPLE_ORANGE"
+            "label": "COMPONENT_HEARTBEATS_ORANGE_ORANGE"
         },
         {
             "flowId": 5002,            
             "message": "recieveRDRDetections",
-            "label": "RECEIVE_RDR_DETECTIONS_PURPLE_PURPLE"
+            "label": "RECEIVE_RDR_DETECTIONS_ORANGE_ORANGE"
         },
         {
             "flowId": 5992,            
             "message": "component_heartbeats",
-            "label": "COMPONENT_HEARTBEATS_PURPLE_ORANGE"
+            "label": "COMPONENT_HEARTBEATS_ORANGE_ORANGE"
         },
         {
             "flowId": 5993,            
             "message": "component_heartbeats",
-            "label": "COMPONENT_HEARTBEATS_PURPLE_PURPLE"
+            "label": "COMPONENT_HEARTBEATS_ORANGE_ORANGE"
         },
         {
             "flowId": 5994,            
             "message": "component_heartbeats",
-            "label": "COMPONENT_HEARTBEATS_PURPLE_PURPLE"
+            "label": "COMPONENT_HEARTBEATS_ORANGE_PURPLE"
         },
         {
             "flowId": 6001,            
@@ -201,7 +201,7 @@
         {
             "flowId": 6002,            
             "message": "groundMovers",
-            "label": "GROUND_MOVERS_PURPLE_PURPLE"
+            "label": "GROUND_MOVERS_PURPLE_ORANGE"
         }
     ],
     "messages": [
@@ -280,18 +280,18 @@
                         },
                         "argtaints": [
                             [ "COMPONENT_HEARTBEATS_ORANGE_ORANGE" ],
+                            [ "COMPONENT_HEARTBEATS_ORANGE_ORANGE" ],
                             [ "COMPONENT_HEARTBEATS_PURPLE_ORANGE" ],
-                            [ "COMPONENT_HEARTBEATS_PURPLE_ORANGE" ],
-                            [ "COMPONENT_HEARTBEATS_PURPLE_ORANGE" ],
+                            [ "COMPONENT_HEARTBEATS_ORANGE_ORANGE" ],
 
                             [ "COMPONENT_HEARTBEATS_ORANGE_ORANGE" ],
+                            [ "COMPONENT_HEARTBEATS_ORANGE_ORANGE" ],
                             [ "COMPONENT_HEARTBEATS_ORANGE_PURPLE" ],
-                            [ "COMPONENT_HEARTBEATS_ORANGE_PURPLE" ],
-                            [ "COMPONENT_HEARTBEATS_ORANGE_PURPLE" ],
+                            [ "COMPONENT_HEARTBEATS_ORANGE_ORANGE" ],
+                            [ "UPDATE_MISSION_PLAN_ORANGE_ORANGE" ],
                             [ "UPDATE_MISSION_PLAN_ORANGE_ORANGE" ],
                             [ "UPDATE_MISSION_PLAN_ORANGE_PURPLE" ],
-                            [ "UPDATE_MISSION_PLAN_ORANGE_PURPLE" ],
-                            [ "UPDATE_MISSION_PLAN_ORANGE_PURPLE" ]
+                            [ "UPDATE_MISSION_PLAN_ORANGE_ORANGE" ]
                         ],
                         "codtaints": [
                         ],
@@ -315,17 +315,17 @@
                         "argtaints": [
                             [ "COMPONENT_HEARTBEATS_ORANGE_ORANGE" ],
                             [ "UPDATE_MISSION_PLAN_ORANGE_ORANGE" ],
-                            [ "RECEIVE_ISRM_DETECTIONS_PURPLE_ORANGE" ],
+                            [ "RECEIVE_ISRM_DETECTIONS_ORANGE_ORANGE" ],
+                            [ "COMPONENT_HEARTBEATS_ORANGE_ORANGE" ],
                             [ "COMPONENT_HEARTBEATS_PURPLE_ORANGE" ],
-                            [ "COMPONENT_HEARTBEATS_PURPLE_ORANGE" ],
-                            [ "COMPONENT_HEARTBEATS_PURPLE_ORANGE" ],
+                            [ "COMPONENT_HEARTBEATS_ORANGE_ORANGE" ],
 
-                            [ "PNT_ORANGE_PURPLE" ],
-                            [ "REQUEST_ISRM_DETECTIONS_ORANGE_PURPLE" ],
+                            [ "PNT_ORANGE_ORANGE" ],
+                            [ "REQUEST_ISRM_DETECTIONS_ORANGE_ORANGE" ],
+                            [ "COMPONENT_HEARTBEATS_ORANGE_ORANGE" ],
                             [ "COMPONENT_HEARTBEATS_ORANGE_ORANGE" ],
                             [ "COMPONENT_HEARTBEATS_ORANGE_PURPLE" ],
-                            [ "COMPONENT_HEARTBEATS_ORANGE_PURPLE" ],
-                            [ "COMPONENT_HEARTBEATS_ORANGE_PURPLE" ]
+                            [ "COMPONENT_HEARTBEATS_ORANGE_ORANGE" ]
                         ],
                         "codtaints": [
                         ],
@@ -347,22 +347,22 @@
                             "operation": "allow"
                         },
                         "argtaints": [
-                            [ "COMPONENT_HEARTBEATS_ORANGE_PURPLE" ],
-                            [ "UPDATE_MISSION_PLAN_ORANGE_PURPLE" ],
-                            [ "REQUEST_ISRM_DETECTIONS_ORANGE_PURPLE" ],
-                            [ "COMPONENT_HEARTBEATS_ORANGE_PURPLE" ],
-                            [ "RECEIVE_EOIR_DETECTIONS_PURPLE_PURPLE" ],
-                            [ "COMPONENT_HEARTBEATS_PURPLE_PURPLE" ],
-                            [ "RECEIVE_RDR_DETECTIONS_PURPLE_PURPLE" ],
-                            [ "COMPONENT_HEARTBEATS_PURPLE_PURPLE" ],
+                            [ "COMPONENT_HEARTBEATS_ORANGE_ORANGE" ],
+                            [ "UPDATE_MISSION_PLAN_ORANGE_ORANGE" ],
+                            [ "REQUEST_ISRM_DETECTIONS_ORANGE_ORANGE" ],
+                            [ "COMPONENT_HEARTBEATS_ORANGE_ORANGE" ],
+                            [ "RECEIVE_EOIR_DETECTIONS_PURPLE_ORANGE" ],
+                            [ "COMPONENT_HEARTBEATS_PURPLE_ORANGE" ],
+                            [ "RECEIVE_RDR_DETECTIONS_ORANGE_ORANGE" ],
+                            [ "COMPONENT_HEARTBEATS_ORANGE_ORANGE" ],
                             
-                            [ "REQUEST_EOIR_DETECTIONS_PURPLE_PURPLE" ],
-                            [ "REQUEST_RDR_DETECTIONS_PURPLE_PURPLE" ],
-                            [ "RECEIVE_ISRM_DETECTIONS_PURPLE_ORANGE" ],
-                            [ "COMPONENT_HEARTBEATS_PURPLE_ORANGE" ],
-                            [ "COMPONENT_HEARTBEATS_PURPLE_ORANGE" ],
-                            [ "COMPONENT_HEARTBEATS_PURPLE_PURPLE" ],
-                            [ "COMPONENT_HEARTBEATS_PURPLE_PURPLE" ]
+                            [ "REQUEST_EOIR_DETECTIONS_ORANGE_PURPLE" ],
+                            [ "REQUEST_RDR_DETECTIONS_ORANGE_ORANGE" ],
+                            [ "RECEIVE_ISRM_DETECTIONS_ORANGE_ORANGE" ],
+                            [ "COMPONENT_HEARTBEATS_ORANGE_ORANGE" ],
+                            [ "COMPONENT_HEARTBEATS_ORANGE_ORANGE" ],
+                            [ "COMPONENT_HEARTBEATS_ORANGE_PURPLE" ],
+                            [ "COMPONENT_HEARTBEATS_ORANGE_ORANGE" ]
                         ],
                         "codtaints": [
                         ],
@@ -387,16 +387,16 @@
                             [ "COMPONENT_HEARTBEATS_ORANGE_PURPLE" ],
                             [ "UPDATE_MISSION_PLAN_ORANGE_PURPLE" ],
                             [ "COMPONENT_HEARTBEATS_ORANGE_PURPLE" ],
-                            [ "REQUEST_EOIR_DETECTIONS_PURPLE_PURPLE" ],
-                            [ "COMPONENT_HEARTBEATS_PURPLE_PURPLE" ],
-                            [ "COMPONENT_HEARTBEATS_PURPLE_PURPLE" ],
+                            [ "REQUEST_EOIR_DETECTIONS_ORANGE_PURPLE" ],
+                            [ "COMPONENT_HEARTBEATS_ORANGE_PURPLE" ],
+                            [ "COMPONENT_HEARTBEATS_ORANGE_PURPLE" ],
                             [ "GROUND_MOVERS_PURPLE_PURPLE" ],
                             
-                            [ "RECEIVE_EOIR_DETECTIONS_PURPLE_PURPLE" ],
+                            [ "RECEIVE_EOIR_DETECTIONS_PURPLE_ORANGE" ],
                             [ "COMPONENT_HEARTBEATS_PURPLE_ORANGE" ],
                             [ "COMPONENT_HEARTBEATS_PURPLE_ORANGE" ],
-                            [ "COMPONENT_HEARTBEATS_PURPLE_PURPLE" ],
-                            [ "COMPONENT_HEARTBEATS_PURPLE_PURPLE" ]
+                            [ "COMPONENT_HEARTBEATS_PURPLE_ORANGE" ],
+                            [ "COMPONENT_HEARTBEATS_PURPLE_ORANGE" ]
                         ],
                         "codtaints": [
                         ],
@@ -418,20 +418,20 @@
                             "operation": "allow"
                         },
                         "argtaints": [
-                            [ "COMPONENT_HEARTBEATS_ORANGE_PURPLE" ],
-                            [ "UPDATE_MISSION_PLAN_ORANGE_PURPLE" ],
-                            [ "PNT_ORANGE_PURPLE" ],
-                            [ "COMPONENT_HEARTBEATS_ORANGE_PURPLE" ],
-                            [ "REQUEST_RDR_DETECTIONS_PURPLE_PURPLE" ],
-                            [ "COMPONENT_HEARTBEATS_PURPLE_PURPLE" ],
-                            [ "COMPONENT_HEARTBEATS_PURPLE_PURPLE" ],
-                            [ "GROUND_MOVERS_PURPLE_PURPLE" ],
+                            [ "COMPONENT_HEARTBEATS_ORANGE_ORANGE" ],
+                            [ "UPDATE_MISSION_PLAN_ORANGE_ORANGE" ],
+                            [ "PNT_ORANGE_ORANGE" ],
+                            [ "COMPONENT_HEARTBEATS_ORANGE_ORANGE" ],
+                            [ "REQUEST_RDR_DETECTIONS_ORANGE_ORANGE" ],
+                            [ "COMPONENT_HEARTBEATS_ORANGE_ORANGE" ],
+                            [ "COMPONENT_HEARTBEATS_PURPLE_ORANGE" ],
+                            [ "GROUND_MOVERS_PURPLE_ORANGE" ],
                             
-                            [ "COMPONENT_HEARTBEATS_PURPLE_ORANGE" ],
-                            [ "RECEIVE_RDR_DETECTIONS_PURPLE_PURPLE" ],
-                            [ "COMPONENT_HEARTBEATS_PURPLE_ORANGE" ],
-                            [ "COMPONENT_HEARTBEATS_PURPLE_PURPLE" ],
-                            [ "COMPONENT_HEARTBEATS_PURPLE_PURPLE" ]
+                            [ "COMPONENT_HEARTBEATS_ORANGE_ORANGE" ],
+                            [ "RECEIVE_RDR_DETECTIONS_ORANGE_ORANGE" ],
+                            [ "COMPONENT_HEARTBEATS_ORANGE_ORANGE" ],
+                            [ "COMPONENT_HEARTBEATS_ORANGE_ORANGE" ],
+                            [ "COMPONENT_HEARTBEATS_ORANGE_PURPLE" ]
                         ],
                         "codtaints": [
                         ],
@@ -455,7 +455,7 @@
                         "argtaints": [
                                 
                             [ "GROUND_MOVERS_PURPLE_PURPLE" ],
-                            [ "GROUND_MOVERS_PURPLE_PURPLE" ]
+                            [ "GROUND_MOVERS_PURPLE_ORANGE" ]
                         ],
                         "codtaints": [
                         ],
@@ -465,22 +465,6 @@
                 ]
             }
         },
-        {
-            "cle-label": "COMPONENT_HEARTBEATS_PURPLE_PURPLE",
-            "cle-json": {
-               "level":"purple",
-               "cdf":[
-                  {
-                     "remotelevel":"purple",
-                     "direction":"ingress",
-                     "guarddirective":{
-                        "operation":"allow",
-                        "oneway":true
-                     }
-                  }
-               ]
-            }
-        },        
         {
             "cle-label": "COMPONENT_HEARTBEATS_ORANGE_ORANGE",
             "cle-json": {
@@ -530,12 +514,12 @@
             }
         },
         {
-            "cle-label": "PNT_ORANGE_PURPLE",
+            "cle-label": "PNT_ORANGE_ORANGE",
             "cle-json": {
                "level":"orange",
                "cdf":[
                   {
-                     "remotelevel":"purple",
+                     "remotelevel":"orange",
                      "direction":"ingress",
                      "guarddirective":{
                         "operation":"allow",
@@ -546,39 +530,7 @@
             }            
         },
         {
-            "cle-label": "PNT_ORANGE_BLUE",
-            "cle-json": {
-               "level":"orange",
-               "cdf":[
-                  {
-                     "remotelevel":"blue",
-                     "direction":"ingress",
-                     "guarddirective":{
-                        "operation":"allow",
-                        "oneway":true
-                     }
-                  }
-               ]
-            }            
-        },
-        {
-            "cle-label": "RECEIVE_EOIR_DETECTIONS_PURPLE_PURPLE",
-            "cle-json": {
-               "level":"purple",
-               "cdf":[
-                  {
-                     "remotelevel":"purple",
-                     "direction":"ingress",
-                     "guarddirective":{
-                        "operation":"allow",
-                        "oneway":true
-                     }
-                  }
-               ]
-            }
-        },
-        {
-            "cle-label": "RECEIVE_ISRM_DETECTIONS_PURPLE_ORANGE",
+            "cle-label": "RECEIVE_EOIR_DETECTIONS_PURPLE_ORANGE",
             "cle-json": {
                "level":"purple",
                "cdf":[
@@ -594,27 +546,12 @@
             }
         },
         {
-            "cle-label": "RECEIVE_RDR_DETECTIONS_PURPLE_PURPLE",
+            "cle-label": "RECEIVE_ISRM_DETECTIONS_ORANGE_ORANGE",
             "cle-json": {
-                "level": "purple",
-                "cdf": [
-                    {
-                        "remotelevel": "purple",
-                        "direction": "egress",
-                        "guarddirective": {
-                            "operation": "allow"
-                        }
-                    }
-                ]
-            }
-        },
-        {
-            "cle-label": "REQUEST_EOIR_DETECTIONS_PURPLE_PURPLE",
-            "cle-json": {
-               "level":"purple",
+               "level":"orange",
                "cdf":[
                   {
-                     "remotelevel":"purple",
+                     "remotelevel":"orange",
                      "direction":"ingress",
                      "guarddirective":{
                         "operation":"allow",
@@ -625,7 +562,22 @@
             }
         },
         {
-            "cle-label": "REQUEST_ISRM_DETECTIONS_ORANGE_PURPLE",
+            "cle-label": "RECEIVE_RDR_DETECTIONS_ORANGE_ORANGE",
+            "cle-json": {
+                "level": "orange",
+                "cdf": [
+                    {
+                        "remotelevel": "orange",
+                        "direction": "egress",
+                        "guarddirective": {
+                            "operation": "allow"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "cle-label": "REQUEST_EOIR_DETECTIONS_ORANGE_PURPLE",
             "cle-json": {
                "level":"orange",
                "cdf":[
@@ -641,12 +593,28 @@
             }
         },
         {
-            "cle-label": "REQUEST_RDR_DETECTIONS_PURPLE_PURPLE",
+            "cle-label": "REQUEST_ISRM_DETECTIONS_ORANGE_ORANGE",
             "cle-json": {
-               "level":"purple",
+               "level":"orange",
                "cdf":[
                   {
-                     "remotelevel":"purple",
+                     "remotelevel":"orange",
+                     "direction":"ingress",
+                     "guarddirective":{
+                        "operation":"allow",
+                        "oneway":true
+                     }
+                  }
+               ]
+            }
+        },
+        {
+            "cle-label": "REQUEST_RDR_DETECTIONS_ORANGE_ORANGE",
+            "cle-json": {
+               "level":"orange",
+               "cdf":[
+                  {
+                     "remotelevel":"orange",
                      "direction":"ingress",
                      "guarddirective":{
                         "operation":"allow",
@@ -695,6 +663,22 @@
                "cdf":[
                   {
                      "remotelevel":"purple",
+                     "direction":"ingress",
+                     "guarddirective":{
+                        "operation":"allow",
+                        "oneway":true
+                     }
+                  }
+               ]
+            }
+        },
+        {
+            "cle-label": "GROUND_MOVERS_PURPLE_ORANGE",
+            "cle-json": {
+               "level":"purple",
+               "cdf":[
+                  {
+                     "remotelevel":"orange",
                      "direction":"ingress",
                      "guarddirective":{
                         "operation":"allow",

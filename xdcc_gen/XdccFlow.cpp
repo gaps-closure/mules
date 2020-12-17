@@ -386,8 +386,8 @@ void verifyComponent(const XdccFlow& xdccFlow)
                 else {
                     string cdfTaint = oneArg[0];
                     if (mytaints[i].compare(cdfTaint)) {
-                        eprintf("taints mismatched taints for the %d argument of %s: %s v.s. %s\n",
-                                i, comp_name.c_str(), cdfTaint.c_str(), mytaints[i].c_str());
+                        eprintf("taints mismatched for the %dth argument of %s: %s v.s. %s\n",
+                                i + 1, comp_name.c_str(), cdfTaint.c_str(), mytaints[i].c_str());
                     }
                 }
             }
