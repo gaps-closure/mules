@@ -328,7 +328,7 @@ Cle* XdccFlow::find_cle(string &label) const
     return (Cle*) it->second;
 }
 
-void verifyComponent(const XdccFlow& xdccFlow)
+void verifyComponent(const XdccFlow& xdccFlow, set<string>& refedLabels)
 {
     map<string, Cle*> cles = xdccFlow.getCles();
     map<int, Flow *> flows = xdccFlow.getFlows();
@@ -336,9 +336,12 @@ void verifyComponent(const XdccFlow& xdccFlow)
     for (auto const topoMap : xdccFlow.getTopology()) {
         Component *component = (Component *) topoMap.second;
         string comp_name = component->getComponent();
+        string comp_label = component->getLabel();
+
+        refedLabels.insert(comp_label);
 
         vector<vector<string>> argtaints;
-        map<string, Cle *>::const_iterator itCle = cles.find(component->getLabel());
+        map<string, Cle *>::const_iterator itCle = cles.find(comp_label);
         if (itCle == cles.end()) {
             eprintf("undefined CLE %s for component %s", component->getLabel().c_str(), comp_name.c_str());
         }
@@ -397,7 +400,8 @@ void verifyComponent(const XdccFlow& xdccFlow)
 
 bool XdccFlow::verify() const
 {
-    verifyComponent(*this);
+    set<string> refedLabels;
+    verifyComponent(*this, refedLabels);
 
     for (auto const flow_map : flows) {
         Flow *flow = (Flow*) flow_map.second;
@@ -406,6 +410,8 @@ bool XdccFlow::verify() const
         bool foundIn = false;
         bool foundOut = false;
 
+        // check if the flow appear exactly once in the inFlows of a component and
+        // exactly once in the outFlow of another component
         for (auto const topoMap : topology) {
             Component *component = (Component *) topoMap.second;
             string comp_name = component->getComponent();
@@ -436,16 +442,29 @@ bool XdccFlow::verify() const
             eprintf("Flow %d must appear exactly once in inFlows and outFlows of two components", flowId);
         }
 
+        // check if the flow's specified message is defined in the messages block
         string msgName = flow->getMessage();
-
         map<string, Message *>::const_iterator it = messages.find(msgName);
         if (it == messages.end()) {
             eprintf("undefined message %s for flow %d", msgName.c_str(), flowId);
         }
 
-        map<string, Cle *>::const_iterator it2 = cles.find(flow->getLabel());
+        // check if the flow's specified label is defined in the cles block
+        string flowLabel = flow->getLabel();
+        refedLabels.insert(flowLabel);
+        map<string, Cle *>::const_iterator it2 = cles.find(flowLabel);
         if (it2 == cles.end()) {
-            eprintf("undefined CLE %s for flow %d", flow->getLabel().c_str(), flowId);
+            eprintf("undefined CLE %s for flow %d", flowLabel.c_str(), flowId);
+        }
+    }
+
+    for (auto const cle_map : cles) {
+        Cle *cle = (Cle *) cle_map.second;
+        string cleLabel = cle->getLabel();
+
+        set<string>::const_iterator it = refedLabels.find(cleLabel);
+        if (it == refedLabels.end()) {
+            wprintf("CLE %s is defined but not used", cleLabel.c_str());
         }
     }
 
