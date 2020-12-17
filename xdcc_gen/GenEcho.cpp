@@ -18,12 +18,6 @@ using json = nlohmann::json;
 #include "GenEcho.h"
 #include "XdccException.h"
 
-const int INDENT = 4;
-
-#define TAB_1 string(INDENT, ' ')
-#define TAB_2 string(2 * INDENT, ' ')
-#define TAB_3 string(3 * INDENT, ' ')
-
 /******************************
  * echo
  */
@@ -154,11 +148,8 @@ void GenEcho::traverseObjEcho(Message *message, json j, vector<string> path)
     }
 }
 
-void GenEcho::traverseEcho(Message *message)
+void GenEcho::traverseEcho(json &schemaJson, Message *message)
 {
-    json schemaJson;
-    beginFunc(message, schemaJson);
-
     try {
         vector<string> path;
 
@@ -356,11 +347,8 @@ void GenEcho::traverseObjUnmarshal(Message *message, json j, vector<string> path
     }
 }
 
-void GenEcho::traverseUnmarshal(Message *message)
+void GenEcho::traverseUnmarshal(json &schemaJson, Message *message)
 {
-   json schemaJson;
-   beginFunc(message, schemaJson);
-
    try {
        vector<string> path;
 
@@ -384,8 +372,6 @@ void GenEcho::traverseUnmarshal(Message *message)
 void GenEcho::genUnmarshal(Message *message)
 {
    try {
-       vector<string> path;
-
        string signature;
        signature = "void unmarshal_" + message->getName() + "(\n"
                + "    char *jstr,\n"
@@ -430,12 +416,18 @@ void GenEcho::genUnmarshal(Message *message)
 
 int GenEcho::gen(XdccFlow& xdccFlow)
 {
-    for (auto const& message : myMessages) {
-        traverseEcho((Message *) message);
+    for (auto const& m : myMessages) {
+        json schemaJson;
+
+        Message *message = (Message *) m;
+
+        beginFunc(message, schemaJson);
+        traverseEcho(schemaJson, (Message *) message);
         genEcho((Message *) message);
         endOfFunc();
 
-        traverseUnmarshal((Message *) message);
+        beginFunc(message, schemaJson);
+        traverseUnmarshal(schemaJson, (Message *) message);
         genUnmarshal((Message *) message);
         endOfFunc();
     }

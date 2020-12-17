@@ -20,14 +20,14 @@ private:
 
     void beginFunc(Message *message, json& schemaJson);
 
-    void traverseEcho(Message *message);
+    void traverseEcho(json &schemaJson, Message *message);
     void traverseArrayEcho(Message *message, string arrayName, json j, vector<string> path, string numElements);
     void traverseObjEcho(Message *message, json j, vector<string> path);
 
     void genEcho(Message *message);
     void genUnmarshal(Message *message);
 
-    void traverseUnmarshal(Message *message);
+    void traverseUnmarshal(json &schemaJson, Message *message);
     void traverseArrayUnmarshal(Message *message, string arrayName, json j, vector<string> path, string numElements);
     void traverseObjUnmarshal(Message *message, json j, vector<string> path);
 };

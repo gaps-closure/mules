@@ -4,7 +4,7 @@
 	"$id": "https://example.com/object1601910091.json", 
 	"title": "Root", 
 	"type": "array",
-	"numElements": 3,
+	"numElements": 25,
 	"default": [],
 	"items":{
 		"$id": "#root/items", 
