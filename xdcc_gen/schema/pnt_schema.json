@@ -1,23 +1,22 @@
 {
 	"definitions": {},
 	"$schema": "http://json-schema.org/draft-07/schema#", 
-	"$id": "https://example.com/object1601910491.json", 
+	"$id": "https://example.com/object1608294277.json", 
 	"title": "Root", 
 	"type": "object",
 	"required": [
-		"bearing",
+		"alt",
 		"lat",
 		"lon",
-		"speed",
-		"vehicleID"
+		"time"
 	],
 	"properties": {
-		"bearing": {
-			"$id": "#root/bearing", 
-			"title": "Bearing", 
+		"alt": {
+			"$id": "#root/alt", 
+			"title": "Alt", 
 			"type": "number",
 			"examples": [
-				307.858
+				0.1
 			],
 			"default": 0.0
 		},
@@ -26,7 +25,7 @@
 			"title": "Lat", 
 			"type": "number",
 			"examples": [
-				32.716
+				29.50464225007952
 			],
 			"default": 0.0
 		},
@@ -35,25 +34,16 @@
 			"title": "Lon", 
 			"type": "number",
 			"examples": [
-				-117.161
+				-116.00761807405785
 			],
 			"default": 0.0
 		},
-		"speed": {
-			"$id": "#root/speed", 
-			"title": "Speed", 
-			"type": "number",
-			"examples": [
-				55.1008
-			],
-			"default": 0.0
-		},
-		"vehicleID": {
-			"$id": "#root/vehicleID:", 
-			"title": "Vehicleid:", 
+		"time": {
+			"$id": "#root/time", 
+			"title": "Time", 
 			"type": "integer",
 			"examples": [
-				317426
+				1608250052
 			],
 			"default": 0
 		}

@@ -1,7 +1,7 @@
 {
 	"definitions": {},
 	"$schema": "http://json-schema.org/draft-07/schema#", 
-	"$id": "https://example.com/object1601910091.json", 
+	"$id": "https://example.com/object1608293658.json", 
 	"title": "Root", 
 	"type": "array",
 	"numElements": 25,
@@ -12,20 +12,32 @@
 		"type": "object",
 		"required": [
 			"TGT_ISRM_ID",
+			"alt",
 			"bearing",
 			"classification",
 			"confidence",
-			"speed",
-			"x",
-			"y"
+			"lat",
+			"lon",
+			"speed"
 		],
 		"properties": {
 			"TGT_ISRM_ID": {
 				"$id": "#root/items/TGT_ISRM_ID", 
 				"title": "Tgt_isrm_id", 
+				"type": "string",
+			        "maxLength": 32,
+				"default": "",
+				"examples": [
+					"355586"
+				],
+				"pattern": "^.*$"
+			},
+			"alt": {
+				"$id": "#root/items/alt", 
+				"title": "Alt", 
 				"type": "integer",
 				"examples": [
-					1
+					0
 				],
 				"default": 0
 			},
@@ -34,9 +46,9 @@
 				"title": "Bearing", 
 				"type": "number",
 				"examples": [
-					-1
+					237.98623638133768
 				],
-				"default": 0
+				"default": 0.0
 			},
 			"classification": {
 				"$id": "#root/items/classification", 
@@ -45,43 +57,43 @@
 	                        "maxLength": 64,
 				"default": "",
 				"examples": [
-					"Military_Vehicle"
+					"person"
 				],
 				"pattern": "^.*$"
 			},
 			"confidence": {
 				"$id": "#root/items/confidence", 
 				"title": "Confidence", 
-				"type": "integer",
+				"type": "number",
 				"examples": [
-					60
+					0.8435034155845642
 				],
-				"default": 0
+				"default": 0.0
+			},
+			"lat": {
+				"$id": "#root/items/lat", 
+				"title": "Lat", 
+				"type": "number",
+				"examples": [
+					30.687774320048185
+				],
+				"default": 0.0
+			},
+			"lon": {
+				"$id": "#root/items/lon", 
+				"title": "Lon", 
+				"type": "number",
+				"examples": [
+					-117.21310154166385
+				],
+				"default": 0.0
 			},
 			"speed": {
 				"$id": "#root/items/speed", 
 				"title": "Speed", 
 				"type": "number",
 				"examples": [
-					-1
-				],
-				"default": 0
-			},
-			"x": {
-				"$id": "#root/items/x", 
-				"title": "X", 
-				"type": "number",
-				"examples": [
-					-4.7
-				],
-				"default": 0.0
-			},
-			"y": {
-				"$id": "#root/items/y", 
-				"title": "Y", 
-				"type": "number",
-				"examples": [
-					-69.4
+					112.92731367797232
 				],
 				"default": 0.0
 			}
