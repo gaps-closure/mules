@@ -1,0 +1,3760 @@
+MPX: Ready
+Executing..
+Elapsed Time: 0s
+Current Location: [29.5, -116]
+Bearing: 0
+Plan ID: id
+ID: wp0
+Next Waypoint: [lat: 29.8, lon: -116.5, alt: -116.5]
+Remaining Distance: 0 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+Executing..
+Elapsed Time: 1s
+Current Location: [29.5, -116]
+Bearing: 0
+Plan ID: id
+ID: wp0
+Next Waypoint: [lat: 29.8, lon: -116.5, alt: -116.5]
+Remaining Distance: 0 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.1,
+  "lat": 29.50464225007952,
+  "lon": -116.00761807405785,
+  "time": 1608250052
+}
+Executing..
+Elapsed Time: 2s
+Current Location: [29.5046, -116.008]
+Bearing: 305
+Plan ID: id
+ID: wp0
+Next Waypoint: [lat: 29.8, lon: -116.5, alt: -116.5]
+Remaining Distance: 57.8144 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.1,
+  "lat": 29.50928450011801,
+  "lon": -116.01523649743795,
+  "time": 1608250053
+}
+Executing..
+Elapsed Time: 3s
+Current Location: [29.5093, -116.015]
+Bearing: 305
+Plan ID: id
+ID: wp0
+Next Waypoint: [lat: 29.8, lon: -116.5, alt: -116.5]
+Remaining Distance: 56.9144 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.1,
+  "lat": 29.513926750115452,
+  "lon": -116.02285527022232,
+  "time": 1608250054
+}
+Executing..
+Elapsed Time: 4s
+Current Location: [29.5139, -116.023]
+Bearing: 305
+Plan ID: id
+ID: wp0
+Next Waypoint: [lat: 29.8, lon: -116.5, alt: -116.5]
+Remaining Distance: 56.0144 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.1,
+  "lat": 29.51856900007185,
+  "lon": -116.03047439249308,
+  "time": 1608250055
+}
+Executing..
+Elapsed Time: 5s
+Current Location: [29.5186, -116.03]
+Bearing: 305
+Plan ID: id
+ID: wp0
+Next Waypoint: [lat: 29.8, lon: -116.5, alt: -116.5]
+Remaining Distance: 55.1144 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.1,
+  "lat": 29.523211249987206,
+  "lon": -116.03809386433224,
+  "time": 1608250056
+}
+Executing..
+Elapsed Time: 6s
+Current Location: [29.5232, -116.038]
+Bearing: 305
+Plan ID: id
+ID: wp0
+Next Waypoint: [lat: 29.8, lon: -116.5, alt: -116.5]
+Remaining Distance: 54.2144 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.1,
+  "lat": 29.527853499861507,
+  "lon": -116.04571368582197,
+  "time": 1608250057
+}
+Executing..
+Elapsed Time: 7s
+Current Location: [29.5279, -116.046]
+Bearing: 305
+Plan ID: id
+ID: wp0
+Next Waypoint: [lat: 29.8, lon: -116.5, alt: -116.5]
+Remaining Distance: 53.3144 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.1,
+  "lat": 29.532495749694753,
+  "lon": -116.05333385704436,
+  "time": 1608250058
+}
+Executing..
+Elapsed Time: 8s
+Current Location: [29.5325, -116.053]
+Bearing: 305
+Plan ID: id
+ID: wp0
+Next Waypoint: [lat: 29.8, lon: -116.5, alt: -116.5]
+Remaining Distance: 52.4144 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.1,
+  "lat": 29.537137999486937,
+  "lon": -116.06095437808153,
+  "time": 1608250059
+}
+Executing..
+Elapsed Time: 9s
+Current Location: [29.5371, -116.061]
+Bearing: 305
+Plan ID: id
+ID: wp0
+Next Waypoint: [lat: 29.8, lon: -116.5, alt: -116.5]
+Remaining Distance: 51.5145 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.1,
+  "lat": 29.541780249238066,
+  "lon": -116.06857524901562,
+  "time": 1608250060
+}
+Executing..
+Elapsed Time: 10s
+Current Location: [29.5418, -116.069]
+Bearing: 305
+Plan ID: id
+ID: wp0
+Next Waypoint: [lat: 29.8, lon: -116.5, alt: -116.5]
+Remaining Distance: 50.6145 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.1,
+  "lat": 29.54642249894813,
+  "lon": -116.07619646992882,
+  "time": 1608250061
+}
+Executing..
+Elapsed Time: 11s
+Current Location: [29.5464, -116.076]
+Bearing: 305
+Plan ID: id
+ID: wp0
+Next Waypoint: [lat: 29.8, lon: -116.5, alt: -116.5]
+Remaining Distance: 49.7145 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.1,
+  "lat": 29.551064748617122,
+  "lon": -116.0838180409033,
+  "time": 1608250062
+}
+Executing..
+Elapsed Time: 12s
+Current Location: [29.5511, -116.084]
+Bearing: 305
+Plan ID: id
+ID: wp0
+Next Waypoint: [lat: 29.8, lon: -116.5, alt: -116.5]
+Remaining Distance: 48.8145 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.1,
+  "lat": 29.555706998245036,
+  "lon": -116.09143996202123,
+  "time": 1608250063
+}
+Executing..
+Elapsed Time: 13s
+Current Location: [29.5557, -116.091]
+Bearing: 305
+Plan ID: id
+ID: wp0
+Next Waypoint: [lat: 29.8, lon: -116.5, alt: -116.5]
+Remaining Distance: 47.9145 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.1,
+  "lat": 29.560349247831873,
+  "lon": -116.09906223336485,
+  "time": 1608250064
+}
+Executing..
+Elapsed Time: 14s
+Current Location: [29.5603, -116.099]
+Bearing: 305
+Plan ID: id
+ID: wp0
+Next Waypoint: [lat: 29.8, lon: -116.5, alt: -116.5]
+Remaining Distance: 47.0145 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.1,
+  "lat": 29.56499149737763,
+  "lon": -116.10668485501637,
+  "time": 1608250065
+}
+Executing..
+Elapsed Time: 15s
+Current Location: [29.565, -116.107]
+Bearing: 305
+Plan ID: id
+ID: wp0
+Next Waypoint: [lat: 29.8, lon: -116.5, alt: -116.5]
+Remaining Distance: 46.1146 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.1,
+  "lat": 29.569633746882307,
+  "lon": -116.11430782705804,
+  "time": 1608250066
+}
+Executing..
+Elapsed Time: 16s
+Current Location: [29.5696, -116.114]
+Bearing: 305
+Plan ID: id
+ID: wp0
+Next Waypoint: [lat: 29.8, lon: -116.5, alt: -116.5]
+Remaining Distance: 45.2146 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.1,
+  "lat": 29.574275996345897,
+  "lon": -116.12193114957213,
+  "time": 1608250067
+}
+Executing..
+Elapsed Time: 17s
+Current Location: [29.5743, -116.122]
+Bearing: 305
+Plan ID: id
+ID: wp0
+Next Waypoint: [lat: 29.8, lon: -116.5, alt: -116.5]
+Remaining Distance: 44.3146 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.1,
+  "lat": 29.578918245768396,
+  "lon": -116.12955482264087,
+  "time": 1608250068
+}
+Executing..
+Elapsed Time: 18s
+Current Location: [29.5789, -116.13]
+Bearing: 305
+Plan ID: id
+ID: wp0
+Next Waypoint: [lat: 29.8, lon: -116.5, alt: -116.5]
+Remaining Distance: 43.4146 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.1,
+  "lat": 29.58356049514979,
+  "lon": -116.13717884634661,
+  "time": 1608250069
+}
+Executing..
+Elapsed Time: 19s
+Current Location: [29.5836, -116.137]
+Bearing: 305
+Plan ID: id
+ID: wp0
+Next Waypoint: [lat: 29.8, lon: -116.5, alt: -116.5]
+Remaining Distance: 42.5146 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.1,
+  "lat": 29.588202744490093,
+  "lon": -116.1448032207716,
+  "time": 1608250070
+}
+Executing..
+Elapsed Time: 20s
+Current Location: [29.5882, -116.145]
+Bearing: 305
+Plan ID: id
+ID: wp0
+Next Waypoint: [lat: 29.8, lon: -116.5, alt: -116.5]
+Remaining Distance: 41.6147 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.1,
+  "lat": 29.59284499378929,
+  "lon": -116.1524279459982,
+  "time": 1608250071
+}
+Executing..
+Elapsed Time: 21s
+Current Location: [29.5928, -116.152]
+Bearing: 305
+Plan ID: id
+ID: wp0
+Next Waypoint: [lat: 29.8, lon: -116.5, alt: -116.5]
+Remaining Distance: 40.7147 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.1,
+  "lat": 29.597487243047375,
+  "lon": -116.16005302210871,
+  "time": 1608250072
+}
+Executing..
+Elapsed Time: 22s
+Current Location: [29.5975, -116.16]
+Bearing: 305
+Plan ID: id
+ID: wp0
+Next Waypoint: [lat: 29.8, lon: -116.5, alt: -116.5]
+Remaining Distance: 39.8147 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.1,
+  "lat": 29.602129492264346,
+  "lon": -116.16767844918552,
+  "time": 1608250073
+}
+Executing..
+Elapsed Time: 23s
+Current Location: [29.6021, -116.168]
+Bearing: 305
+Plan ID: id
+ID: wp0
+Next Waypoint: [lat: 29.8, lon: -116.5, alt: -116.5]
+Remaining Distance: 38.9148 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.1,
+  "lat": 29.606771741440205,
+  "lon": -116.17530422731099,
+  "time": 1608250074
+}
+Executing..
+Elapsed Time: 24s
+Current Location: [29.6068, -116.175]
+Bearing: 305
+Plan ID: id
+ID: wp0
+Next Waypoint: [lat: 29.8, lon: -116.5, alt: -116.5]
+Remaining Distance: 38.0148 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.1,
+  "lat": 29.611413990574942,
+  "lon": -116.18293035656751,
+  "time": 1608250075
+}
+Executing..
+Elapsed Time: 25s
+Current Location: [29.6114, -116.183]
+Bearing: 305
+Plan ID: id
+ID: wp0
+Next Waypoint: [lat: 29.8, lon: -116.5, alt: -116.5]
+Remaining Distance: 37.1148 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.1,
+  "lat": 29.61605623966856,
+  "lon": -116.19055683703748,
+  "time": 1608250076
+}
+Executing..
+Elapsed Time: 26s
+Current Location: [29.6161, -116.191]
+Bearing: 305
+Plan ID: id
+ID: wp0
+Next Waypoint: [lat: 29.8, lon: -116.5, alt: -116.5]
+Remaining Distance: 36.2149 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.1,
+  "lat": 29.62069848872105,
+  "lon": -116.19818366880331,
+  "time": 1608250077
+}
+Executing..
+Elapsed Time: 27s
+Current Location: [29.6207, -116.198]
+Bearing: 305
+Plan ID: id
+ID: wp0
+Next Waypoint: [lat: 29.8, lon: -116.5, alt: -116.5]
+Remaining Distance: 35.3149 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.1,
+  "lat": 29.625340737732415,
+  "lon": -116.20581085194745,
+  "time": 1608250078
+}
+Executing..
+Elapsed Time: 28s
+Current Location: [29.6253, -116.206]
+Bearing: 305
+Plan ID: id
+ID: wp0
+Next Waypoint: [lat: 29.8, lon: -116.5, alt: -116.5]
+Remaining Distance: 34.415 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.1,
+  "lat": 29.62998298670264,
+  "lon": -116.2134383865523,
+  "time": 1608250079
+}
+Executing..
+Elapsed Time: 29s
+Current Location: [29.63, -116.213]
+Bearing: 305
+Plan ID: id
+ID: wp0
+Next Waypoint: [lat: 29.8, lon: -116.5, alt: -116.5]
+Remaining Distance: 33.515 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.1,
+  "lat": 29.634625235631724,
+  "lon": -116.22106627270038,
+  "time": 1608250080
+}
+Executing..
+Elapsed Time: 30s
+Current Location: [29.6346, -116.221]
+Bearing: 305
+Plan ID: id
+ID: wp0
+Next Waypoint: [lat: 29.8, lon: -116.5, alt: -116.5]
+Remaining Distance: 32.615 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.1,
+  "lat": 29.63926748451967,
+  "lon": -116.22869451047416,
+  "time": 1608250081
+}
+Executing..
+Elapsed Time: 31s
+Current Location: [29.6393, -116.229]
+Bearing: 305
+Plan ID: id
+ID: wp0
+Next Waypoint: [lat: 29.8, lon: -116.5, alt: -116.5]
+Remaining Distance: 31.7151 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.1,
+  "lat": 29.64390973336647,
+  "lon": -116.23632309995614,
+  "time": 1608250082
+}
+Executing..
+Elapsed Time: 32s
+Current Location: [29.6439, -116.236]
+Bearing: 305
+Plan ID: id
+ID: wp0
+Next Waypoint: [lat: 29.8, lon: -116.5, alt: -116.5]
+Remaining Distance: 30.8152 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.1,
+  "lat": 29.648551982172126,
+  "lon": -116.24395204122882,
+  "time": 1608250083
+}
+Executing..
+Elapsed Time: 33s
+Current Location: [29.6486, -116.244]
+Bearing: 305
+Plan ID: id
+ID: wp0
+Next Waypoint: [lat: 29.8, lon: -116.5, alt: -116.5]
+Remaining Distance: 29.9152 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.1,
+  "lat": 29.653194230936624,
+  "lon": -116.25158133437473,
+  "time": 1608250084
+}
+Executing..
+Elapsed Time: 34s
+Current Location: [29.6532, -116.252]
+Bearing: 305
+Plan ID: id
+ID: wp0
+Next Waypoint: [lat: 29.8, lon: -116.5, alt: -116.5]
+Remaining Distance: 29.0153 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.1,
+  "lat": 29.657836479659963,
+  "lon": -116.25921097947642,
+  "time": 1608250085
+}
+Executing..
+Elapsed Time: 35s
+Current Location: [29.6578, -116.259]
+Bearing: 305
+Plan ID: id
+ID: wp0
+Next Waypoint: [lat: 29.8, lon: -116.5, alt: -116.5]
+Remaining Distance: 28.1154 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.1,
+  "lat": 29.662478728342144,
+  "lon": -116.26684097661645,
+  "time": 1608250086
+}
+Executing..
+Elapsed Time: 36s
+Current Location: [29.6625, -116.267]
+Bearing: 305
+Plan ID: id
+ID: wp0
+Next Waypoint: [lat: 29.8, lon: -116.5, alt: -116.5]
+Remaining Distance: 27.2154 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.1,
+  "lat": 29.667120976983167,
+  "lon": -116.27447132587741,
+  "time": 1608250087
+}
+Executing..
+Elapsed Time: 37s
+Current Location: [29.6671, -116.274]
+Bearing: 305
+Plan ID: id
+ID: wp0
+Next Waypoint: [lat: 29.8, lon: -116.5, alt: -116.5]
+Remaining Distance: 26.3155 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.1,
+  "lat": 29.671763225583014,
+  "lon": -116.28210202734186,
+  "time": 1608250088
+}
+Executing..
+Elapsed Time: 38s
+Current Location: [29.6718, -116.282]
+Bearing: 305
+Plan ID: id
+ID: wp0
+Next Waypoint: [lat: 29.8, lon: -116.5, alt: -116.5]
+Remaining Distance: 25.4156 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.1,
+  "lat": 29.676405474141692,
+  "lon": -116.28973308109245,
+  "time": 1608250089
+}
+Executing..
+Elapsed Time: 39s
+Current Location: [29.6764, -116.29]
+Bearing: 305
+Plan ID: id
+ID: wp0
+Next Waypoint: [lat: 29.8, lon: -116.5, alt: -116.5]
+Remaining Distance: 24.5157 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.1,
+  "lat": 29.681047722659187,
+  "lon": -116.2973644872118,
+  "time": 1608250090
+}
+Executing..
+Elapsed Time: 40s
+Current Location: [29.681, -116.297]
+Bearing: 305
+Plan ID: id
+ID: wp0
+Next Waypoint: [lat: 29.8, lon: -116.5, alt: -116.5]
+Remaining Distance: 23.6158 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.1,
+  "lat": 29.685689971135503,
+  "lon": -116.30499624578253,
+  "time": 1608250091
+}
+Executing..
+Elapsed Time: 41s
+Current Location: [29.6857, -116.305]
+Bearing: 305
+Plan ID: id
+ID: wp0
+Next Waypoint: [lat: 29.8, lon: -116.5, alt: -116.5]
+Remaining Distance: 22.7159 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.1,
+  "lat": 29.690332219570642,
+  "lon": -116.31262835688733,
+  "time": 1608250092
+}
+Executing..
+Elapsed Time: 42s
+Current Location: [29.6903, -116.313]
+Bearing: 305
+Plan ID: id
+ID: wp0
+Next Waypoint: [lat: 29.8, lon: -116.5, alt: -116.5]
+Remaining Distance: 21.816 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.1,
+  "lat": 29.694974467964595,
+  "lon": -116.32026082060884,
+  "time": 1608250093
+}
+Executing..
+Elapsed Time: 43s
+Current Location: [29.695, -116.32]
+Bearing: 304
+Plan ID: id
+ID: wp0
+Next Waypoint: [lat: 29.8, lon: -116.5, alt: -116.5]
+Remaining Distance: 20.9162 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.1,
+  "lat": 29.699500292208445,
+  "lon": -116.32798574091868,
+  "time": 1608250094
+}
+Executing..
+Elapsed Time: 44s
+Current Location: [29.6995, -116.328]
+Bearing: 304
+Plan ID: id
+ID: wp0
+Next Waypoint: [lat: 29.8, lon: -116.5, alt: -116.5]
+Remaining Distance: 20.0162 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.1,
+  "lat": 29.704026116411164,
+  "lon": -116.33571100931069,
+  "time": 1608250095
+}
+Executing..
+Elapsed Time: 45s
+Current Location: [29.704, -116.336]
+Bearing: 304
+Plan ID: id
+ID: wp0
+Next Waypoint: [lat: 29.8, lon: -116.5, alt: -116.5]
+Remaining Distance: 19.1162 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.1,
+  "lat": 29.708551940572743,
+  "lon": -116.3434366258644,
+  "time": 1608250096
+}
+Executing..
+Elapsed Time: 46s
+Current Location: [29.7086, -116.343]
+Bearing: 304
+Plan ID: id
+ID: wp0
+Next Waypoint: [lat: 29.8, lon: -116.5, alt: -116.5]
+Remaining Distance: 18.2162 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.1,
+  "lat": 29.713077764693175,
+  "lon": -116.35116259065941,
+  "time": 1608250097
+}
+Executing..
+Elapsed Time: 47s
+Current Location: [29.7131, -116.351]
+Bearing: 304
+Plan ID: id
+ID: wp0
+Next Waypoint: [lat: 29.8, lon: -116.5, alt: -116.5]
+Remaining Distance: 17.3162 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.1,
+  "lat": 29.71760358877246,
+  "lon": -116.35888890377535,
+  "time": 1608250098
+}
+Executing..
+Elapsed Time: 48s
+Current Location: [29.7176, -116.359]
+Bearing: 304
+Plan ID: id
+ID: wp0
+Next Waypoint: [lat: 29.8, lon: -116.5, alt: -116.5]
+Remaining Distance: 16.4162 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.1,
+  "lat": 29.7221294128106,
+  "lon": -116.3666155652918,
+  "time": 1608250099
+}
+Executing..
+Elapsed Time: 49s
+Current Location: [29.7221, -116.367]
+Bearing: 304
+Plan ID: id
+ID: wp0
+Next Waypoint: [lat: 29.8, lon: -116.5, alt: -116.5]
+Remaining Distance: 15.5162 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.1,
+  "lat": 29.726655236807577,
+  "lon": -116.37434257528844,
+  "time": 1608250100
+}
+Executing..
+Elapsed Time: 50s
+Current Location: [29.7267, -116.374]
+Bearing: 304
+Plan ID: id
+ID: wp0
+Next Waypoint: [lat: 29.8, lon: -116.5, alt: -116.5]
+Remaining Distance: 14.6162 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.1,
+  "lat": 29.73118106076339,
+  "lon": -116.38206993384487,
+  "time": 1608250101
+}
+Executing..
+Elapsed Time: 51s
+Current Location: [29.7312, -116.382]
+Bearing: 304
+Plan ID: id
+ID: wp0
+Next Waypoint: [lat: 29.8, lon: -116.5, alt: -116.5]
+Remaining Distance: 13.7162 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.1,
+  "lat": 29.73570688467805,
+  "lon": -116.38979764104079,
+  "time": 1608250102
+}
+Executing..
+Elapsed Time: 52s
+Current Location: [29.7357, -116.39]
+Bearing: 304
+Plan ID: id
+ID: wp0
+Next Waypoint: [lat: 29.8, lon: -116.5, alt: -116.5]
+Remaining Distance: 12.8162 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.1,
+  "lat": 29.740232708551538,
+  "lon": -116.39752569695585,
+  "time": 1608250103
+}
+Executing..
+Elapsed Time: 53s
+Current Location: [29.7402, -116.398]
+Bearing: 304
+Plan ID: id
+ID: wp0
+Next Waypoint: [lat: 29.8, lon: -116.5, alt: -116.5]
+Remaining Distance: 11.9162 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.1,
+  "lat": 29.744758532383862,
+  "lon": -116.4052541016698,
+  "time": 1608250104
+}
+Executing..
+Elapsed Time: 54s
+Current Location: [29.7448, -116.405]
+Bearing: 304
+Plan ID: id
+ID: wp0
+Next Waypoint: [lat: 29.8, lon: -116.5, alt: -116.5]
+Remaining Distance: 11.0162 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.1,
+  "lat": 29.749284356175,
+  "lon": -116.41298285526227,
+  "time": 1608250105
+}
+Executing..
+Elapsed Time: 55s
+Current Location: [29.7493, -116.413]
+Bearing: 304
+Plan ID: id
+ID: wp0
+Next Waypoint: [lat: 29.8, lon: -116.5, alt: -116.5]
+Remaining Distance: 10.1162 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.1,
+  "lat": 29.753810179924965,
+  "lon": -116.42071195781303,
+  "time": 1608250106
+}
+Executing..
+Elapsed Time: 56s
+Current Location: [29.7538, -116.421]
+Bearing: 304
+Plan ID: id
+ID: wp0
+Next Waypoint: [lat: 29.8, lon: -116.5, alt: -116.5]
+Remaining Distance: 9.21617 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.1,
+  "lat": 29.758336003633758,
+  "lon": -116.42844140940178,
+  "time": 1608250107
+}
+Executing..
+Elapsed Time: 57s
+Current Location: [29.7583, -116.428]
+Bearing: 304
+Plan ID: id
+ID: wp0
+Next Waypoint: [lat: 29.8, lon: -116.5, alt: -116.5]
+Remaining Distance: 8.31617 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.1,
+  "lat": 29.76286182730136,
+  "lon": -116.43617121010836,
+  "time": 1608250108
+}
+Executing..
+Elapsed Time: 58s
+Current Location: [29.7629, -116.436]
+Bearing: 304
+Plan ID: id
+ID: wp0
+Next Waypoint: [lat: 29.8, lon: -116.5, alt: -116.5]
+Remaining Distance: 7.41618 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.1,
+  "lat": 29.767387650927773,
+  "lon": -116.44390136001243,
+  "time": 1608250109
+}
+Executing..
+Elapsed Time: 59s
+Current Location: [29.7674, -116.444]
+Bearing: 304
+Plan ID: id
+ID: wp0
+Next Waypoint: [lat: 29.8, lon: -116.5, alt: -116.5]
+Remaining Distance: 6.51618 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.1,
+  "lat": 29.771913474512992,
+  "lon": -116.4516318591939,
+  "time": 1608250110
+}
+Executing..
+Elapsed Time: 60s
+Current Location: [29.7719, -116.452]
+Bearing: 304
+Plan ID: id
+ID: wp0
+Next Waypoint: [lat: 29.8, lon: -116.5, alt: -116.5]
+Remaining Distance: 5.61618 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.1,
+  "lat": 29.77643929805702,
+  "lon": -116.45936270773247,
+  "time": 1608250111
+}
+Executing..
+Elapsed Time: 61s
+Current Location: [29.7764, -116.459]
+Bearing: 304
+Plan ID: id
+ID: wp0
+Next Waypoint: [lat: 29.8, lon: -116.5, alt: -116.5]
+Remaining Distance: 4.71619 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.1,
+  "lat": 29.780965121559845,
+  "lon": -116.46709390570797,
+  "time": 1608250112
+}
+Executing..
+Elapsed Time: 62s
+Current Location: [29.781, -116.467]
+Bearing: 304
+Plan ID: id
+ID: wp0
+Next Waypoint: [lat: 29.8, lon: -116.5, alt: -116.5]
+Remaining Distance: 3.8162 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.1,
+  "lat": 29.785490945021465,
+  "lon": -116.47482545320027,
+  "time": 1608250113
+}
+Executing..
+Elapsed Time: 63s
+Current Location: [29.7855, -116.475]
+Bearing: 304
+Plan ID: id
+ID: wp0
+Next Waypoint: [lat: 29.8, lon: -116.5, alt: -116.5]
+Remaining Distance: 2.91622 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.1,
+  "lat": 29.790016768441873,
+  "lon": -116.48255735028918,
+  "time": 1608250114
+}
+Executing..
+Elapsed Time: 64s
+Current Location: [29.79, -116.483]
+Bearing: 304
+Plan ID: id
+ID: wp0
+Next Waypoint: [lat: 29.8, lon: -116.5, alt: -116.5]
+Remaining Distance: 2.01625 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.1,
+  "lat": 29.794542591821077,
+  "lon": -116.49028959705458,
+  "time": 1608250115
+}
+Executing..
+Elapsed Time: 65s
+Current Location: [29.7945, -116.49]
+Bearing: 303
+Plan ID: id
+ID: wp0
+Next Waypoint: [lat: 29.8, lon: -116.5, alt: -116.5]
+Remaining Distance: 1.11634 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.1,
+  "lat": 29.798950612425248,
+  "lon": -116.49811203320927,
+  "time": 1608250116
+}
+Executing..
+Elapsed Time: 66s
+Current Location: [29.8024, -116.507]
+Bearing: 303
+Plan ID: id
+ID: wp1
+Next Waypoint: [lat: 30, lon: -117, alt: -117]
+Remaining Distance: 0.216339 km
+Speed: 0.9 km/s
+Phase: find
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.2,
+  "lat": 29.80579132971559,
+  "lon": -116.51501950244246,
+  "time": 1608250117
+}
+Executing..
+Elapsed Time: 67s
+Current Location: [29.8058, -116.515]
+Bearing: 295
+Plan ID: id
+ID: wp1
+Next Waypoint: [lat: 30, lon: -117, alt: -117]
+Remaining Distance: 51.4949 km
+Speed: 0.9 km/s
+Phase: find
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.2,
+  "lat": 29.80921168830491,
+  "lon": -116.52347367071158,
+  "time": 1608250118
+}
+Executing..
+Elapsed Time: 68s
+Current Location: [29.8092, -116.523]
+Bearing: 295
+Plan ID: id
+ID: wp1
+Next Waypoint: [lat: 30, lon: -117, alt: -117]
+Remaining Distance: 50.5949 km
+Speed: 0.9 km/s
+Phase: find
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.2,
+  "lat": 29.812632046856997,
+  "lon": -116.53192812814889,
+  "time": 1608250119
+}
+Executing..
+Elapsed Time: 69s
+Current Location: [29.8126, -116.532]
+Bearing: 295
+Plan ID: id
+ID: wp1
+Next Waypoint: [lat: 30, lon: -117, alt: -117]
+Remaining Distance: 49.6949 km
+Speed: 0.9 km/s
+Phase: find
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.2,
+  "lat": 29.81605240537185,
+  "lon": -116.54038287480434,
+  "time": 1608250120
+}
+Executing..
+Elapsed Time: 70s
+Current Location: [29.8161, -116.54]
+Bearing: 295
+Plan ID: id
+ID: wp1
+Next Waypoint: [lat: 30, lon: -117, alt: -117]
+Remaining Distance: 48.7949 km
+Speed: 0.9 km/s
+Phase: find
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.2,
+  "lat": 29.819472763849458,
+  "lon": -116.54883791072778,
+  "time": 1608250121
+}
+Executing..
+Elapsed Time: 71s
+Current Location: [29.8195, -116.549]
+Bearing: 295
+Plan ID: id
+ID: wp1
+Next Waypoint: [lat: 30, lon: -117, alt: -117]
+Remaining Distance: 47.8949 km
+Speed: 0.9 km/s
+Phase: find
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.2,
+  "lat": 29.82289312228982,
+  "lon": -116.55729323596924,
+  "time": 1608250122
+}
+Executing..
+Elapsed Time: 72s
+Current Location: [29.8229, -116.557]
+Bearing: 295
+Plan ID: id
+ID: wp1
+Next Waypoint: [lat: 30, lon: -117, alt: -117]
+Remaining Distance: 46.9949 km
+Speed: 0.9 km/s
+Phase: find
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.2,
+  "lat": 29.826313480692942,
+  "lon": -116.56574885057854,
+  "time": 1608250123
+}
+Executing..
+Elapsed Time: 73s
+Current Location: [29.8263, -116.566]
+Bearing: 295
+Plan ID: id
+ID: wp1
+Next Waypoint: [lat: 30, lon: -117, alt: -117]
+Remaining Distance: 46.0949 km
+Speed: 0.9 km/s
+Phase: find
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.2,
+  "lat": 29.829733839058818,
+  "lon": -116.57420475460569,
+  "time": 1608250124
+}
+Executing..
+Elapsed Time: 74s
+Current Location: [29.8297, -116.574]
+Bearing: 295
+Plan ID: id
+ID: wp1
+Next Waypoint: [lat: 30, lon: -117, alt: -117]
+Remaining Distance: 45.1949 km
+Speed: 0.9 km/s
+Phase: find
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.2,
+  "lat": 29.833154197387444,
+  "lon": -116.58266094810061,
+  "time": 1608250125
+}
+Executing..
+Elapsed Time: 75s
+Current Location: [29.8332, -116.583]
+Bearing: 295
+Plan ID: id
+ID: wp1
+Next Waypoint: [lat: 30, lon: -117, alt: -117]
+Remaining Distance: 44.2949 km
+Speed: 0.9 km/s
+Phase: find
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.2,
+  "lat": 29.83657455567881,
+  "lon": -116.59111743111326,
+  "time": 1608250126
+}
+Executing..
+Elapsed Time: 76s
+Current Location: [29.8366, -116.591]
+Bearing: 295
+Plan ID: id
+ID: wp1
+Next Waypoint: [lat: 30, lon: -117, alt: -117]
+Remaining Distance: 43.3949 km
+Speed: 0.9 km/s
+Phase: find
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.2,
+  "lat": 29.83999491393292,
+  "lon": -116.59957420369359,
+  "time": 1608250127
+}
+Executing..
+Elapsed Time: 77s
+Current Location: [29.84, -116.6]
+Bearing: 295
+Plan ID: id
+ID: wp1
+Next Waypoint: [lat: 30, lon: -117, alt: -117]
+Remaining Distance: 42.4949 km
+Speed: 0.9 km/s
+Phase: find
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.2,
+  "lat": 29.843415272149777,
+  "lon": -116.60803126589161,
+  "time": 1608250128
+}
+Executing..
+Elapsed Time: 78s
+Current Location: [29.8434, -116.608]
+Bearing: 295
+Plan ID: id
+ID: wp1
+Next Waypoint: [lat: 30, lon: -117, alt: -117]
+Remaining Distance: 41.5949 km
+Speed: 0.9 km/s
+Phase: find
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.2,
+  "lat": 29.846835630329373,
+  "lon": -116.61648861775723,
+  "time": 1608250129
+}
+Executing..
+Elapsed Time: 79s
+Current Location: [29.8468, -116.616]
+Bearing: 295
+Plan ID: id
+ID: wp1
+Next Waypoint: [lat: 30, lon: -117, alt: -117]
+Remaining Distance: 40.6949 km
+Speed: 0.9 km/s
+Phase: find
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.2,
+  "lat": 29.850255988471705,
+  "lon": -116.62494625934048,
+  "time": 1608250130
+}
+Executing..
+Elapsed Time: 80s
+Current Location: [29.8503, -116.625]
+Bearing: 295
+Plan ID: id
+ID: wp1
+Next Waypoint: [lat: 30, lon: -117, alt: -117]
+Remaining Distance: 39.7949 km
+Speed: 0.9 km/s
+Phase: find
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.2,
+  "lat": 29.853676346576766,
+  "lon": -116.63340419069132,
+  "time": 1608250131
+}
+Executing..
+Elapsed Time: 81s
+Current Location: [29.8537, -116.633]
+Bearing: 295
+Plan ID: id
+ID: wp1
+Next Waypoint: [lat: 30, lon: -117, alt: -117]
+Remaining Distance: 38.8949 km
+Speed: 0.9 km/s
+Phase: find
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.2,
+  "lat": 29.85709670464457,
+  "lon": -116.64186241185978,
+  "time": 1608250132
+}
+Executing..
+Elapsed Time: 82s
+Current Location: [29.8571, -116.642]
+Bearing: 295
+Plan ID: id
+ID: wp1
+Next Waypoint: [lat: 30, lon: -117, alt: -117]
+Remaining Distance: 37.9949 km
+Speed: 0.9 km/s
+Phase: find
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.2,
+  "lat": 29.8605170626751,
+  "lon": -116.65032092289583,
+  "time": 1608250133
+}
+Executing..
+Elapsed Time: 83s
+Current Location: [29.8605, -116.65]
+Bearing: 295
+Plan ID: id
+ID: wp1
+Next Waypoint: [lat: 30, lon: -117, alt: -117]
+Remaining Distance: 37.0949 km
+Speed: 0.9 km/s
+Phase: find
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.2,
+  "lat": 29.86393742066835,
+  "lon": -116.65877972384949,
+  "time": 1608250134
+}
+Executing..
+Elapsed Time: 84s
+Current Location: [29.8639, -116.659]
+Bearing: 295
+Plan ID: id
+ID: wp1
+Next Waypoint: [lat: 30, lon: -117, alt: -117]
+Remaining Distance: 36.1949 km
+Speed: 0.9 km/s
+Phase: find
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.2,
+  "lat": 29.867357778624328,
+  "lon": -116.66723881477077,
+  "time": 1608250135
+}
+Executing..
+Elapsed Time: 85s
+Current Location: [29.8674, -116.667]
+Bearing: 295
+Plan ID: id
+ID: wp1
+Next Waypoint: [lat: 30, lon: -117, alt: -117]
+Remaining Distance: 35.2949 km
+Speed: 0.9 km/s
+Phase: find
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.2,
+  "lat": 29.87077813654303,
+  "lon": -116.67569819570971,
+  "time": 1608250136
+}
+Executing..
+Elapsed Time: 86s
+Current Location: [29.8708, -116.676]
+Bearing: 295
+Plan ID: id
+ID: wp1
+Next Waypoint: [lat: 30, lon: -117, alt: -117]
+Remaining Distance: 34.3949 km
+Speed: 0.9 km/s
+Phase: find
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.2,
+  "lat": 29.874198494424448,
+  "lon": -116.68415786671636,
+  "time": 1608250137
+}
+Executing..
+Elapsed Time: 87s
+Current Location: [29.8742, -116.684]
+Bearing: 295
+Plan ID: id
+ID: wp1
+Next Waypoint: [lat: 30, lon: -117, alt: -117]
+Remaining Distance: 33.4949 km
+Speed: 0.9 km/s
+Phase: find
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.2,
+  "lat": 29.877618852268583,
+  "lon": -116.69261782784073,
+  "time": 1608250138
+}
+Executing..
+Elapsed Time: 88s
+Current Location: [29.8776, -116.693]
+Bearing: 295
+Plan ID: id
+ID: wp1
+Next Waypoint: [lat: 30, lon: -117, alt: -117]
+Remaining Distance: 32.595 km
+Speed: 0.9 km/s
+Phase: find
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.2,
+  "lat": 29.881039210075432,
+  "lon": -116.7010780791329,
+  "time": 1608250139
+}
+Executing..
+Elapsed Time: 89s
+Current Location: [29.881, -116.701]
+Bearing: 295
+Plan ID: id
+ID: wp1
+Next Waypoint: [lat: 30, lon: -117, alt: -117]
+Remaining Distance: 31.695 km
+Speed: 0.9 km/s
+Phase: find
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.2,
+  "lat": 29.884459567844996,
+  "lon": -116.70953862064289,
+  "time": 1608250140
+}
+Executing..
+Elapsed Time: 90s
+Current Location: [29.8845, -116.71]
+Bearing: 295
+Plan ID: id
+ID: wp1
+Next Waypoint: [lat: 30, lon: -117, alt: -117]
+Remaining Distance: 30.795 km
+Speed: 0.9 km/s
+Phase: find
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.2,
+  "lat": 29.887879925577266,
+  "lon": -116.71799945242074,
+  "time": 1608250141
+}
+Executing..
+Elapsed Time: 91s
+Current Location: [29.8879, -116.718]
+Bearing: 295
+Plan ID: id
+ID: wp1
+Next Waypoint: [lat: 30, lon: -117, alt: -117]
+Remaining Distance: 29.895 km
+Speed: 0.9 km/s
+Phase: find
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.2,
+  "lat": 29.891300283272248,
+  "lon": -116.72646057451655,
+  "time": 1608250142
+}
+Executing..
+Elapsed Time: 92s
+Current Location: [29.8913, -116.726]
+Bearing: 295
+Plan ID: id
+ID: wp1
+Next Waypoint: [lat: 30, lon: -117, alt: -117]
+Remaining Distance: 28.995 km
+Speed: 0.9 km/s
+Phase: find
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.2,
+  "lat": 29.89472064092993,
+  "lon": -116.73492198698042,
+  "time": 1608250143
+}
+Executing..
+Elapsed Time: 93s
+Current Location: [29.8947, -116.735]
+Bearing: 295
+Plan ID: id
+ID: wp1
+Next Waypoint: [lat: 30, lon: -117, alt: -117]
+Remaining Distance: 28.095 km
+Speed: 0.9 km/s
+Phase: find
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.2,
+  "lat": 29.8981409985503,
+  "lon": -116.7433836898624,
+  "time": 1608250144
+}
+Executing..
+Elapsed Time: 94s
+Current Location: [29.8981, -116.743]
+Bearing: 295
+Plan ID: id
+ID: wp1
+Next Waypoint: [lat: 30, lon: -117, alt: -117]
+Remaining Distance: 27.195 km
+Speed: 0.9 km/s
+Phase: find
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.2,
+  "lat": 29.901561356133378,
+  "lon": -116.75184568321258,
+  "time": 1608250145
+}
+Executing..
+Elapsed Time: 95s
+Current Location: [29.9016, -116.752]
+Bearing: 295
+Plan ID: id
+ID: wp1
+Next Waypoint: [lat: 30, lon: -117, alt: -117]
+Remaining Distance: 26.295 km
+Speed: 0.9 km/s
+Phase: find
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.2,
+  "lat": 29.904981713679152,
+  "lon": -116.76030796708108,
+  "time": 1608250146
+}
+Executing..
+Elapsed Time: 96s
+Current Location: [29.905, -116.76]
+Bearing: 295
+Plan ID: id
+ID: wp1
+Next Waypoint: [lat: 30, lon: -117, alt: -117]
+Remaining Distance: 25.3951 km
+Speed: 0.9 km/s
+Phase: find
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.2,
+  "lat": 29.90840207118762,
+  "lon": -116.76877054151797,
+  "time": 1608250147
+}
+Executing..
+Elapsed Time: 97s
+Current Location: [29.9084, -116.769]
+Bearing: 295
+Plan ID: id
+ID: wp1
+Next Waypoint: [lat: 30, lon: -117, alt: -117]
+Remaining Distance: 24.4951 km
+Speed: 0.9 km/s
+Phase: find
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.2,
+  "lat": 29.91182242865878,
+  "lon": -116.7772334065734,
+  "time": 1608250148
+}
+Executing..
+Elapsed Time: 98s
+Current Location: [29.9118, -116.777]
+Bearing: 295
+Plan ID: id
+ID: wp1
+Next Waypoint: [lat: 30, lon: -117, alt: -117]
+Remaining Distance: 23.5951 km
+Speed: 0.9 km/s
+Phase: find
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.2,
+  "lat": 29.915242786092634,
+  "lon": -116.78569656229746,
+  "time": 1608250149
+}
+Executing..
+Elapsed Time: 99s
+Current Location: [29.9152, -116.786]
+Bearing: 295
+Plan ID: id
+ID: wp1
+Next Waypoint: [lat: 30, lon: -117, alt: -117]
+Remaining Distance: 22.6951 km
+Speed: 0.9 km/s
+Phase: find
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.2,
+  "lat": 29.91866314348916,
+  "lon": -116.79416000874029,
+  "time": 1608250150
+}
+Executing..
+Elapsed Time: 100s
+Current Location: [29.9187, -116.794]
+Bearing: 295
+Plan ID: id
+ID: wp1
+Next Waypoint: [lat: 30, lon: -117, alt: -117]
+Remaining Distance: 21.7951 km
+Speed: 0.9 km/s
+Phase: find
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.2,
+  "lat": 29.922083500848373,
+  "lon": -116.80262374595202,
+  "time": 1608250151
+}
+Executing..
+Elapsed Time: 101s
+Current Location: [29.9221, -116.803]
+Bearing: 295
+Plan ID: id
+ID: wp1
+Next Waypoint: [lat: 30, lon: -117, alt: -117]
+Remaining Distance: 20.8952 km
+Speed: 0.9 km/s
+Phase: find
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.2,
+  "lat": 29.925503858170266,
+  "lon": -116.81108777398279,
+  "time": 1608250152
+}
+Executing..
+Elapsed Time: 102s
+Current Location: [29.9255, -116.811]
+Bearing: 295
+Plan ID: id
+ID: wp1
+Next Waypoint: [lat: 30, lon: -117, alt: -117]
+Remaining Distance: 19.9952 km
+Speed: 0.9 km/s
+Phase: find
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.2,
+  "lat": 29.928924215454842,
+  "lon": -116.81955209288276,
+  "time": 1608250153
+}
+Executing..
+Elapsed Time: 103s
+Current Location: [29.9289, -116.82]
+Bearing: 295
+Plan ID: id
+ID: wp1
+Next Waypoint: [lat: 30, lon: -117, alt: -117]
+Remaining Distance: 19.0952 km
+Speed: 0.9 km/s
+Phase: find
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.2,
+  "lat": 29.93234457270209,
+  "lon": -116.82801670270206,
+  "time": 1608250154
+}
+Executing..
+Elapsed Time: 104s
+Current Location: [29.9323, -116.828]
+Bearing: 295
+Plan ID: id
+ID: wp1
+Next Waypoint: [lat: 30, lon: -117, alt: -117]
+Remaining Distance: 18.1953 km
+Speed: 0.9 km/s
+Phase: find
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.2,
+  "lat": 29.935764929912008,
+  "lon": -116.83648160349087,
+  "time": 1608250155
+}
+Executing..
+Elapsed Time: 105s
+Current Location: [29.9358, -116.836]
+Bearing: 295
+Plan ID: id
+ID: wp1
+Next Waypoint: [lat: 30, lon: -117, alt: -117]
+Remaining Distance: 17.2953 km
+Speed: 0.9 km/s
+Phase: find
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.2,
+  "lat": 29.939185287084598,
+  "lon": -116.84494679529938,
+  "time": 1608250156
+}
+Executing..
+Elapsed Time: 106s
+Current Location: [29.9392, -116.845]
+Bearing: 295
+Plan ID: id
+ID: wp1
+Next Waypoint: [lat: 30, lon: -117, alt: -117]
+Remaining Distance: 16.3953 km
+Speed: 0.9 km/s
+Phase: find
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.2,
+  "lat": 29.942605644219856,
+  "lon": -116.85341227817771,
+  "time": 1608250157
+}
+Executing..
+Elapsed Time: 107s
+Current Location: [29.9426, -116.853]
+Bearing: 295
+Plan ID: id
+ID: wp1
+Next Waypoint: [lat: 30, lon: -117, alt: -117]
+Remaining Distance: 15.4954 km
+Speed: 0.9 km/s
+Phase: find
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.2,
+  "lat": 29.946026001317787,
+  "lon": -116.8618780521761,
+  "time": 1608250158
+}
+Executing..
+Elapsed Time: 108s
+Current Location: [29.946, -116.862]
+Bearing: 295
+Plan ID: id
+ID: wp1
+Next Waypoint: [lat: 30, lon: -117, alt: -117]
+Remaining Distance: 14.5955 km
+Speed: 0.9 km/s
+Phase: find
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.2,
+  "lat": 29.949446358378374,
+  "lon": -116.8703441173447,
+  "time": 1608250159
+}
+Executing..
+Elapsed Time: 109s
+Current Location: [29.9494, -116.87]
+Bearing: 295
+Plan ID: id
+ID: wp1
+Next Waypoint: [lat: 30, lon: -117, alt: -117]
+Remaining Distance: 13.6955 km
+Speed: 0.9 km/s
+Phase: find
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.2,
+  "lat": 29.95286671540162,
+  "lon": -116.87881047373374,
+  "time": 1608250160
+}
+Executing..
+Elapsed Time: 110s
+Current Location: [29.9529, -116.879]
+Bearing: 295
+Plan ID: id
+ID: wp1
+Next Waypoint: [lat: 30, lon: -117, alt: -117]
+Remaining Distance: 12.7956 km
+Speed: 0.9 km/s
+Phase: find
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.2,
+  "lat": 29.956287072387525,
+  "lon": -116.8872771213934,
+  "time": 1608250161
+}
+Executing..
+Elapsed Time: 111s
+Current Location: [29.9563, -116.887]
+Bearing: 295
+Plan ID: id
+ID: wp1
+Next Waypoint: [lat: 30, lon: -117, alt: -117]
+Remaining Distance: 11.8957 km
+Speed: 0.9 km/s
+Phase: find
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.2,
+  "lat": 29.95970742933608,
+  "lon": -116.89574406037391,
+  "time": 1608250162
+}
+Executing..
+Elapsed Time: 112s
+Current Location: [29.9597, -116.896]
+Bearing: 295
+Plan ID: id
+ID: wp1
+Next Waypoint: [lat: 30, lon: -117, alt: -117]
+Remaining Distance: 10.9958 km
+Speed: 0.9 km/s
+Phase: find
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.2,
+  "lat": 29.963127786247288,
+  "lon": -116.90421129072551,
+  "time": 1608250163
+}
+Executing..
+Elapsed Time: 113s
+Current Location: [29.9631, -116.904]
+Bearing: 294
+Plan ID: id
+ID: wp1
+Next Waypoint: [lat: 30, lon: -117, alt: -117]
+Remaining Distance: 10.0959 km
+Speed: 0.9 km/s
+Phase: find
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.2,
+  "lat": 29.966419594635326,
+  "lon": -116.91274642212093,
+  "time": 1608250164
+}
+Executing..
+Elapsed Time: 114s
+Current Location: [29.9664, -116.913]
+Bearing: 294
+Plan ID: id
+ID: wp1
+Next Waypoint: [lat: 30, lon: -117, alt: -117]
+Remaining Distance: 9.19594 km
+Speed: 0.9 km/s
+Phase: find
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.2,
+  "lat": 29.96971140298685,
+  "lon": -116.92128183627082,
+  "time": 1608250165
+}
+Executing..
+Elapsed Time: 115s
+Current Location: [29.9697, -116.921]
+Bearing: 294
+Plan ID: id
+ID: wp1
+Next Waypoint: [lat: 30, lon: -117, alt: -117]
+Remaining Distance: 8.29594 km
+Speed: 0.9 km/s
+Phase: find
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.2,
+  "lat": 29.973003211301833,
+  "lon": -116.92981753322213,
+  "time": 1608250166
+}
+Executing..
+Elapsed Time: 116s
+Current Location: [29.973, -116.93]
+Bearing: 294
+Plan ID: id
+ID: wp1
+Next Waypoint: [lat: 30, lon: -117, alt: -117]
+Remaining Distance: 7.39594 km
+Speed: 0.9 km/s
+Phase: find
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.2,
+  "lat": 29.976295019580295,
+  "lon": -116.93835351302172,
+  "time": 1608250167
+}
+Executing..
+Elapsed Time: 117s
+Current Location: [29.9763, -116.938]
+Bearing: 294
+Plan ID: id
+ID: wp1
+Next Waypoint: [lat: 30, lon: -117, alt: -117]
+Remaining Distance: 6.49594 km
+Speed: 0.9 km/s
+Phase: find
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.2,
+  "lat": 29.97958682782222,
+  "lon": -116.94688977571653,
+  "time": 1608250168
+}
+Executing..
+Elapsed Time: 118s
+Current Location: [29.9796, -116.947]
+Bearing: 294
+Plan ID: id
+ID: wp1
+Next Waypoint: [lat: 30, lon: -117, alt: -117]
+Remaining Distance: 5.59594 km
+Speed: 0.9 km/s
+Phase: find
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.2,
+  "lat": 29.982878636027607,
+  "lon": -116.9554263213535,
+  "time": 1608250169
+}
+Executing..
+Elapsed Time: 119s
+Current Location: [29.9829, -116.955]
+Bearing: 294
+Plan ID: id
+ID: wp1
+Next Waypoint: [lat: 30, lon: -117, alt: -117]
+Remaining Distance: 4.69594 km
+Speed: 0.9 km/s
+Phase: find
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.2,
+  "lat": 29.98617044419646,
+  "lon": -116.96396314997958,
+  "time": 1608250170
+}
+Executing..
+Elapsed Time: 120s
+Current Location: [29.9862, -116.964]
+Bearing: 294
+Plan ID: id
+ID: wp1
+Next Waypoint: [lat: 30, lon: -117, alt: -117]
+Remaining Distance: 3.79594 km
+Speed: 0.9 km/s
+Phase: find
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.2,
+  "lat": 29.989462252328764,
+  "lon": -116.97250026164166,
+  "time": 1608250171
+}
+Executing..
+Elapsed Time: 121s
+Current Location: [29.9895, -116.973]
+Bearing: 294
+Plan ID: id
+ID: wp1
+Next Waypoint: [lat: 30, lon: -117, alt: -117]
+Remaining Distance: 2.89594 km
+Speed: 0.9 km/s
+Phase: find
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.2,
+  "lat": 29.992754060424534,
+  "lon": -116.98103765638672,
+  "time": 1608250172
+}
+Executing..
+Elapsed Time: 122s
+Current Location: [29.9928, -116.981]
+Bearing: 294
+Plan ID: id
+ID: wp1
+Next Waypoint: [lat: 30, lon: -117, alt: -117]
+Remaining Distance: 1.99594 km
+Speed: 0.9 km/s
+Phase: find
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.2,
+  "lat": 29.99604586848376,
+  "lon": -116.98957533426172,
+  "time": 1608250173
+}
+Executing..
+Elapsed Time: 123s
+Current Location: [29.996, -116.99]
+Bearing: 294
+Plan ID: id
+ID: wp1
+Next Waypoint: [lat: 30, lon: -117, alt: -117]
+Remaining Distance: 1.09595 km
+Speed: 0.9 km/s
+Phase: find
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.2,
+  "lat": 29.999337676506432,
+  "lon": -116.99811329531357,
+  "time": 1608250174
+}
+@@@ requestISRMDetections {
+  "phase": "find"
+}
+[{"TGT_ISRM_ID":"355586","alt":0.0,"bearing":-1.0,"classification":"person\r","confidence":0.8435034155845642,"lat":30.69738894691726,"lon":-117.19521803573252,"speed":-1.0},{"TGT_ISRM_ID":"293127","alt":0.0,"bearing":-1.0,"classification":"car\r","confidence":0.8304253816604614,"lat":32.73780527115163,"lon":-117.12953061075143,"speed":-1.0}]
+ID: 355586
+Speed: -1
+Bearing: -1
+X: 30.6974
+Y: -117.195
+Z: 0
+Classification: person
+Confidence : 0.843503
+ID: 293127
+Speed: -1
+Bearing: -1
+X: 32.7378
+Y: -117.13
+Z: 0
+Classification: car
+Confidence : 0.830425
+----------------------
+Executing..
+Elapsed Time: 124s
+Current Location: [30.004, -117.006]
+Bearing: 293
+Plan ID: id
+ID: wp2
+Next Waypoint: [lat: 30.3, lon: -117.5, alt: -117.5]
+Remaining Distance: 0.196045 km
+Speed: 0.9 km/s
+Phase: fix
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.3,
+  "lat": 30.00862216775251,
+  "lon": -117.013425897467,
+  "time": 1608250175
+}
+Executing..
+Elapsed Time: 125s
+Current Location: [30.0086, -117.013]
+Bearing: 305
+Plan ID: id
+ID: wp2
+Next Waypoint: [lat: 30.3, lon: -117.5, alt: -117.5]
+Remaining Distance: 56.9067 km
+Speed: 0.9 km/s
+Phase: fix
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.3,
+  "lat": 30.013264413313376,
+  "lon": -117.02108273598759,
+  "time": 1608250176
+}
+Executing..
+Elapsed Time: 126s
+Current Location: [30.0133, -117.021]
+Bearing: 305
+Plan ID: id
+ID: wp2
+Next Waypoint: [lat: 30.3, lon: -117.5, alt: -117.5]
+Remaining Distance: 56.0067 km
+Speed: 0.9 km/s
+Phase: fix
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.3,
+  "lat": 30.01790665883279,
+  "lon": -117.02873993291585,
+  "time": 1608250177
+}
+Executing..
+Elapsed Time: 127s
+Current Location: [30.0179, -117.029]
+Bearing: 305
+Plan ID: id
+ID: wp2
+Next Waypoint: [lat: 30.3, lon: -117.5, alt: -117.5]
+Remaining Distance: 55.1067 km
+Speed: 0.9 km/s
+Phase: fix
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.3,
+  "lat": 30.022548904310742,
+  "lon": -117.03639748833557,
+  "time": 1608250178
+}
+Executing..
+Elapsed Time: 128s
+Current Location: [30.0225, -117.036]
+Bearing: 305
+Plan ID: id
+ID: wp2
+Next Waypoint: [lat: 30.3, lon: -117.5, alt: -117.5]
+Remaining Distance: 54.2067 km
+Speed: 0.9 km/s
+Phase: fix
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.3,
+  "lat": 30.027191149747228,
+  "lon": -117.04405540233063,
+  "time": 1608250179
+}
+Executing..
+Elapsed Time: 129s
+Current Location: [30.0272, -117.044]
+Bearing: 305
+Plan ID: id
+ID: wp2
+Next Waypoint: [lat: 30.3, lon: -117.5, alt: -117.5]
+Remaining Distance: 53.3067 km
+Speed: 0.9 km/s
+Phase: fix
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.3,
+  "lat": 30.03183339514225,
+  "lon": -117.05171367498487,
+  "time": 1608250180
+}
+Executing..
+Elapsed Time: 130s
+Current Location: [30.0318, -117.052]
+Bearing: 305
+Plan ID: id
+ID: wp2
+Next Waypoint: [lat: 30.3, lon: -117.5, alt: -117.5]
+Remaining Distance: 52.4067 km
+Speed: 0.9 km/s
+Phase: fix
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.3,
+  "lat": 30.036475640495812,
+  "lon": -117.05937230638216,
+  "time": 1608250181
+}
+Executing..
+Elapsed Time: 131s
+Current Location: [30.0365, -117.059]
+Bearing: 305
+Plan ID: id
+ID: wp2
+Next Waypoint: [lat: 30.3, lon: -117.5, alt: -117.5]
+Remaining Distance: 51.5067 km
+Speed: 0.9 km/s
+Phase: fix
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.3,
+  "lat": 30.041117885807886,
+  "lon": -117.06703129660639,
+  "time": 1608250182
+}
+Executing..
+Elapsed Time: 132s
+Current Location: [30.0411, -117.067]
+Bearing: 305
+Plan ID: id
+ID: wp2
+Next Waypoint: [lat: 30.3, lon: -117.5, alt: -117.5]
+Remaining Distance: 50.6067 km
+Speed: 0.9 km/s
+Phase: fix
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.3,
+  "lat": 30.045760131078488,
+  "lon": -117.07469064574144,
+  "time": 1608250183
+}
+Executing..
+Elapsed Time: 133s
+Current Location: [30.0458, -117.075]
+Bearing: 305
+Plan ID: id
+ID: wp2
+Next Waypoint: [lat: 30.3, lon: -117.5, alt: -117.5]
+Remaining Distance: 49.7067 km
+Speed: 0.9 km/s
+Phase: fix
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.3,
+  "lat": 30.050402376307606,
+  "lon": -117.08235035387129,
+  "time": 1608250184
+}
+Executing..
+Elapsed Time: 134s
+Current Location: [30.0504, -117.082]
+Bearing: 305
+Plan ID: id
+ID: wp2
+Next Waypoint: [lat: 30.3, lon: -117.5, alt: -117.5]
+Remaining Distance: 48.8067 km
+Speed: 0.9 km/s
+Phase: fix
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.3,
+  "lat": 30.05504462149524,
+  "lon": -117.09001042107982,
+  "time": 1608250185
+}
+Executing..
+Elapsed Time: 135s
+Current Location: [30.055, -117.09]
+Bearing: 305
+Plan ID: id
+ID: wp2
+Next Waypoint: [lat: 30.3, lon: -117.5, alt: -117.5]
+Remaining Distance: 47.9067 km
+Speed: 0.9 km/s
+Phase: fix
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.3,
+  "lat": 30.05968686664139,
+  "lon": -117.09767084745103,
+  "time": 1608250186
+}
+Executing..
+Elapsed Time: 136s
+Current Location: [30.0597, -117.098]
+Bearing: 305
+Plan ID: id
+ID: wp2
+Next Waypoint: [lat: 30.3, lon: -117.5, alt: -117.5]
+Remaining Distance: 47.0067 km
+Speed: 0.9 km/s
+Phase: fix
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.3,
+  "lat": 30.064329111746034,
+  "lon": -117.10533163306884,
+  "time": 1608250187
+}
+Executing..
+Elapsed Time: 137s
+Current Location: [30.0643, -117.105]
+Bearing: 305
+Plan ID: id
+ID: wp2
+Next Waypoint: [lat: 30.3, lon: -117.5, alt: -117.5]
+Remaining Distance: 46.1068 km
+Speed: 0.9 km/s
+Phase: fix
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.3,
+  "lat": 30.068971356809186,
+  "lon": -117.11299277801733,
+  "time": 1608250188
+}
+Executing..
+Elapsed Time: 138s
+Current Location: [30.069, -117.113]
+Bearing: 305
+Plan ID: id
+ID: wp2
+Next Waypoint: [lat: 30.3, lon: -117.5, alt: -117.5]
+Remaining Distance: 45.2068 km
+Speed: 0.9 km/s
+Phase: fix
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.3,
+  "lat": 30.073613601830836,
+  "lon": -117.12065428238043,
+  "time": 1608250189
+}
+Executing..
+Elapsed Time: 139s
+Current Location: [30.0736, -117.121]
+Bearing: 305
+Plan ID: id
+ID: wp2
+Next Waypoint: [lat: 30.3, lon: -117.5, alt: -117.5]
+Remaining Distance: 44.3068 km
+Speed: 0.9 km/s
+Phase: fix
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.3,
+  "lat": 30.07825584681099,
+  "lon": -117.12831614624217,
+  "time": 1608250190
+}
+Executing..
+Elapsed Time: 140s
+Current Location: [30.0783, -117.128]
+Bearing: 305
+Plan ID: id
+ID: wp2
+Next Waypoint: [lat: 30.3, lon: -117.5, alt: -117.5]
+Remaining Distance: 43.4068 km
+Speed: 0.9 km/s
+Phase: fix
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.3,
+  "lat": 30.082898091749627,
+  "lon": -117.13597836968658,
+  "time": 1608250191
+}
+Executing..
+Elapsed Time: 141s
+Current Location: [30.0829, -117.136]
+Bearing: 305
+Plan ID: id
+ID: wp2
+Next Waypoint: [lat: 30.3, lon: -117.5, alt: -117.5]
+Remaining Distance: 42.5068 km
+Speed: 0.9 km/s
+Phase: fix
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.3,
+  "lat": 30.08754033664675,
+  "lon": -117.14364095279772,
+  "time": 1608250192
+}
+Executing..
+Elapsed Time: 142s
+Current Location: [30.0875, -117.144]
+Bearing: 305
+Plan ID: id
+ID: wp2
+Next Waypoint: [lat: 30.3, lon: -117.5, alt: -117.5]
+Remaining Distance: 41.6068 km
+Speed: 0.9 km/s
+Phase: fix
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.3,
+  "lat": 30.09218258150236,
+  "lon": -117.1513038956597,
+  "time": 1608250193
+}
+Executing..
+Elapsed Time: 143s
+Current Location: [30.0922, -117.151]
+Bearing: 305
+Plan ID: id
+ID: wp2
+Next Waypoint: [lat: 30.3, lon: -117.5, alt: -117.5]
+Remaining Distance: 40.7068 km
+Speed: 0.9 km/s
+Phase: fix
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.3,
+  "lat": 30.09682482631645,
+  "lon": -117.15896719835656,
+  "time": 1608250194
+}
+Executing..
+Elapsed Time: 144s
+Current Location: [30.0968, -117.159]
+Bearing: 305
+Plan ID: id
+ID: wp2
+Next Waypoint: [lat: 30.3, lon: -117.5, alt: -117.5]
+Remaining Distance: 39.8068 km
+Speed: 0.9 km/s
+Phase: fix
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.3,
+  "lat": 30.10146707108901,
+  "lon": -117.16663086097243,
+  "time": 1608250195
+}
+Executing..
+Elapsed Time: 145s
+Current Location: [30.1015, -117.167]
+Bearing: 305
+Plan ID: id
+ID: wp2
+Next Waypoint: [lat: 30.3, lon: -117.5, alt: -117.5]
+Remaining Distance: 38.9069 km
+Speed: 0.9 km/s
+Phase: fix
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.3,
+  "lat": 30.106109315820056,
+  "lon": -117.17429488359143,
+  "time": 1608250197
+}
+Executing..
+Elapsed Time: 146s
+Current Location: [30.1061, -117.174]
+Bearing: 305
+Plan ID: id
+ID: wp2
+Next Waypoint: [lat: 30.3, lon: -117.5, alt: -117.5]
+Remaining Distance: 38.0069 km
+Speed: 0.9 km/s
+Phase: fix
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.3,
+  "lat": 30.110751560509556,
+  "lon": -117.18195926629767,
+  "time": 1608250198
+}
+Executing..
+Elapsed Time: 147s
+Current Location: [30.1108, -117.182]
+Bearing: 305
+Plan ID: id
+ID: wp2
+Next Waypoint: [lat: 30.3, lon: -117.5, alt: -117.5]
+Remaining Distance: 37.1069 km
+Speed: 0.9 km/s
+Phase: fix
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.3,
+  "lat": 30.115393805157524,
+  "lon": -117.18962400917532,
+  "time": 1608250199
+}
+Executing..
+Elapsed Time: 148s
+Current Location: [30.1154, -117.19]
+Bearing: 305
+Plan ID: id
+ID: wp2
+Next Waypoint: [lat: 30.3, lon: -117.5, alt: -117.5]
+Remaining Distance: 36.2069 km
+Speed: 0.9 km/s
+Phase: fix
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.3,
+  "lat": 30.12003604976395,
+  "lon": -117.19728911230858,
+  "time": 1608250200
+}
+Executing..
+Elapsed Time: 149s
+Current Location: [30.12, -117.197]
+Bearing: 305
+Plan ID: id
+ID: wp2
+Next Waypoint: [lat: 30.3, lon: -117.5, alt: -117.5]
+Remaining Distance: 35.3069 km
+Speed: 0.9 km/s
+Phase: fix
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.3,
+  "lat": 30.124678294328838,
+  "lon": -117.2049545757816,
+  "time": 1608250201
+}
+Executing..
+Elapsed Time: 150s
+Current Location: [30.1247, -117.205]
+Bearing: 305
+Plan ID: id
+ID: wp2
+Next Waypoint: [lat: 30.3, lon: -117.5, alt: -117.5]
+Remaining Distance: 34.407 km
+Speed: 0.9 km/s
+Phase: fix
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.3,
+  "lat": 30.129320538852177,
+  "lon": -117.2126203996786,
+  "time": 1608250202
+}
+Executing..
+Elapsed Time: 151s
+Current Location: [30.1293, -117.213]
+Bearing: 305
+Plan ID: id
+ID: wp2
+Next Waypoint: [lat: 30.3, lon: -117.5, alt: -117.5]
+Remaining Distance: 33.507 km
+Speed: 0.9 km/s
+Phase: fix
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.3,
+  "lat": 30.133962783333953,
+  "lon": -117.22028658408378,
+  "time": 1608250203
+}
+Executing..
+Elapsed Time: 152s
+Current Location: [30.134, -117.22]
+Bearing: 305
+Plan ID: id
+ID: wp2
+Next Waypoint: [lat: 30.3, lon: -117.5, alt: -117.5]
+Remaining Distance: 32.607 km
+Speed: 0.9 km/s
+Phase: fix
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.3,
+  "lat": 30.138605027774183,
+  "lon": -117.2279531290814,
+  "time": 1608250204
+}
+Executing..
+Elapsed Time: 153s
+Current Location: [30.1386, -117.228]
+Bearing: 305
+Plan ID: id
+ID: wp2
+Next Waypoint: [lat: 30.3, lon: -117.5, alt: -117.5]
+Remaining Distance: 31.707 km
+Speed: 0.9 km/s
+Phase: fix
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.3,
+  "lat": 30.143247272172854,
+  "lon": -117.2356200347557,
+  "time": 1608250205
+}
+Executing..
+Elapsed Time: 154s
+Current Location: [30.1432, -117.236]
+Bearing: 305
+Plan ID: id
+ID: wp2
+Next Waypoint: [lat: 30.3, lon: -117.5, alt: -117.5]
+Remaining Distance: 30.8071 km
+Speed: 0.9 km/s
+Phase: fix
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.3,
+  "lat": 30.14788951652996,
+  "lon": -117.24328730119096,
+  "time": 1608250206
+}
+Executing..
+Elapsed Time: 155s
+Current Location: [30.1479, -117.243]
+Bearing: 305
+Plan ID: id
+ID: wp2
+Next Waypoint: [lat: 30.3, lon: -117.5, alt: -117.5]
+Remaining Distance: 29.9071 km
+Speed: 0.9 km/s
+Phase: fix
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.3,
+  "lat": 30.152531760845502,
+  "lon": -117.25095492847144,
+  "time": 1608250207
+}
+Executing..
+Elapsed Time: 156s
+Current Location: [30.1525, -117.251]
+Bearing: 305
+Plan ID: id
+ID: wp2
+Next Waypoint: [lat: 30.3, lon: -117.5, alt: -117.5]
+Remaining Distance: 29.0071 km
+Speed: 0.9 km/s
+Phase: fix
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.3,
+  "lat": 30.15717400511946,
+  "lon": -117.25862291668146,
+  "time": 1608250208
+}
+Executing..
+Elapsed Time: 157s
+Current Location: [30.1572, -117.259]
+Bearing: 305
+Plan ID: id
+ID: wp2
+Next Waypoint: [lat: 30.3, lon: -117.5, alt: -117.5]
+Remaining Distance: 28.1072 km
+Speed: 0.9 km/s
+Phase: fix
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.3,
+  "lat": 30.161816249351855,
+  "lon": -117.26629126590535,
+  "time": 1608250209
+}
+Executing..
+Elapsed Time: 158s
+Current Location: [30.1618, -117.266]
+Bearing: 305
+Plan ID: id
+ID: wp2
+Next Waypoint: [lat: 30.3, lon: -117.5, alt: -117.5]
+Remaining Distance: 27.2072 km
+Speed: 0.9 km/s
+Phase: fix
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.3,
+  "lat": 30.166458493542663,
+  "lon": -117.27395997622746,
+  "time": 1608250210
+}
+Executing..
+Elapsed Time: 159s
+Current Location: [30.1665, -117.274]
+Bearing: 305
+Plan ID: id
+ID: wp2
+Next Waypoint: [lat: 30.3, lon: -117.5, alt: -117.5]
+Remaining Distance: 26.3073 km
+Speed: 0.9 km/s
+Phase: fix
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.3,
+  "lat": 30.171100737691887,
+  "lon": -117.28162904773211,
+  "time": 1608250211
+}
+Executing..
+Elapsed Time: 160s
+Current Location: [30.1711, -117.282]
+Bearing: 305
+Plan ID: id
+ID: wp2
+Next Waypoint: [lat: 30.3, lon: -117.5, alt: -117.5]
+Remaining Distance: 25.4073 km
+Speed: 0.9 km/s
+Phase: fix
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.3,
+  "lat": 30.175742981799537,
+  "lon": -117.2892984805037,
+  "time": 1608250212
+}
+Executing..
+Elapsed Time: 161s
+Current Location: [30.1757, -117.289]
+Bearing: 305
+Plan ID: id
+ID: wp2
+Next Waypoint: [lat: 30.3, lon: -117.5, alt: -117.5]
+Remaining Distance: 24.5074 km
+Speed: 0.9 km/s
+Phase: fix
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.3,
+  "lat": 30.18038522586558,
+  "lon": -117.2969682746266,
+  "time": 1608250213
+}
+Executing..
+Elapsed Time: 162s
+Current Location: [30.1804, -117.297]
+Bearing: 305
+Plan ID: id
+ID: wp2
+Next Waypoint: [lat: 30.3, lon: -117.5, alt: -117.5]
+Remaining Distance: 23.6074 km
+Speed: 0.9 km/s
+Phase: fix
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.3,
+  "lat": 30.18502746989004,
+  "lon": -117.30463843018521,
+  "time": 1608250214
+}
+Executing..
+Elapsed Time: 163s
+Current Location: [30.185, -117.305]
+Bearing: 305
+Plan ID: id
+ID: wp2
+Next Waypoint: [lat: 30.3, lon: -117.5, alt: -117.5]
+Remaining Distance: 22.7075 km
+Speed: 0.9 km/s
+Phase: fix
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.3,
+  "lat": 30.189669713872895,
+  "lon": -117.31230894726393,
+  "time": 1608250215
+}
+Executing..
+Elapsed Time: 164s
+Current Location: [30.1897, -117.312]
+Bearing: 305
+Plan ID: id
+ID: wp2
+Next Waypoint: [lat: 30.3, lon: -117.5, alt: -117.5]
+Remaining Distance: 21.8075 km
+Speed: 0.9 km/s
+Phase: fix
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.3,
+  "lat": 30.194311957814154,
+  "lon": -117.31997982594726,
+  "time": 1608250216
+}
+Executing..
+Elapsed Time: 165s
+Current Location: [30.1943, -117.32]
+Bearing: 305
+Plan ID: id
+ID: wp2
+Next Waypoint: [lat: 30.3, lon: -117.5, alt: -117.5]
+Remaining Distance: 20.9076 km
+Speed: 0.9 km/s
+Phase: fix
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.3,
+  "lat": 30.198954201713804,
+  "lon": -117.32765106631958,
+  "time": 1608250217
+}
+Executing..
+Elapsed Time: 166s
+Current Location: [30.199, -117.328]
+Bearing: 305
+Plan ID: id
+ID: wp2
+Next Waypoint: [lat: 30.3, lon: -117.5, alt: -117.5]
+Remaining Distance: 20.0077 km
+Speed: 0.9 km/s
+Phase: fix
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.3,
+  "lat": 30.203596445571836,
+  "lon": -117.33532266846541,
+  "time": 1608250218
+}
+Executing..
+Elapsed Time: 167s
+Current Location: [30.2036, -117.335]
+Bearing: 305
+Plan ID: id
+ID: wp2
+Next Waypoint: [lat: 30.3, lon: -117.5, alt: -117.5]
+Remaining Distance: 19.1078 km
+Speed: 0.9 km/s
+Phase: fix
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.3,
+  "lat": 30.20823868938826,
+  "lon": -117.34299463246921,
+  "time": 1608250219
+}
+Executing..
+Elapsed Time: 168s
+Current Location: [30.2082, -117.343]
+Bearing: 305
+Plan ID: id
+ID: wp2
+Next Waypoint: [lat: 30.3, lon: -117.5, alt: -117.5]
+Remaining Distance: 18.2079 km
+Speed: 0.9 km/s
+Phase: fix
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.3,
+  "lat": 30.212880933163067,
+  "lon": -117.35066695841549,
+  "time": 1608250220
+}
+Executing..
+Elapsed Time: 169s
+Current Location: [30.2129, -117.351]
+Bearing: 305
+Plan ID: id
+ID: wp2
+Next Waypoint: [lat: 30.3, lon: -117.5, alt: -117.5]
+Remaining Distance: 17.308 km
+Speed: 0.9 km/s
+Phase: fix
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.3,
+  "lat": 30.217523176896243,
+  "lon": -117.35833964638879,
+  "time": 1608250221
+}
+Executing..
+Elapsed Time: 170s
+Current Location: [30.2175, -117.358]
+Bearing: 305
+Plan ID: id
+ID: wp2
+Next Waypoint: [lat: 30.3, lon: -117.5, alt: -117.5]
+Remaining Distance: 16.4081 km
+Speed: 0.9 km/s
+Phase: fix
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.3,
+  "lat": 30.222165420587796,
+  "lon": -117.3660126964736,
+  "time": 1608250222
+}
+Executing..
+Elapsed Time: 171s
+Current Location: [30.2222, -117.366]
+Bearing: 304
+Plan ID: id
+ID: wp2
+Next Waypoint: [lat: 30.3, lon: -117.5, alt: -117.5]
+Remaining Distance: 15.5083 km
+Speed: 0.9 km/s
+Phase: fix
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.3,
+  "lat": 30.22669124001464,
+  "lon": -117.37377870231326,
+  "time": 1608250223
+}
+Executing..
+Elapsed Time: 172s
+Current Location: [30.2267, -117.374]
+Bearing: 304
+Plan ID: id
+ID: wp2
+Next Waypoint: [lat: 30.3, lon: -117.5, alt: -117.5]
+Remaining Distance: 14.6083 km
+Speed: 0.9 km/s
+Phase: fix
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.3,
+  "lat": 30.231217059399906,
+  "lon": -117.38154506560709,
+  "time": 1608250224
+}
+Executing..
+Elapsed Time: 173s
+Current Location: [30.2312, -117.382]
+Bearing: 304
+Plan ID: id
+ID: wp2
+Next Waypoint: [lat: 30.3, lon: -117.5, alt: -117.5]
+Remaining Distance: 13.7083 km
+Speed: 0.9 km/s
+Phase: fix
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.3,
+  "lat": 30.23574287874359,
+  "lon": -117.3893117864364,
+  "time": 1608250225
+}
+Executing..
+Elapsed Time: 174s
+Current Location: [30.2357, -117.389]
+Bearing: 304
+Plan ID: id
+ID: wp2
+Next Waypoint: [lat: 30.3, lon: -117.5, alt: -117.5]
+Remaining Distance: 12.8083 km
+Speed: 0.9 km/s
+Phase: fix
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.3,
+  "lat": 30.24026869804568,
+  "lon": -117.39707886488259,
+  "time": 1608250226
+}
+Executing..
+Elapsed Time: 175s
+Current Location: [30.2403, -117.397]
+Bearing: 304
+Plan ID: id
+ID: wp2
+Next Waypoint: [lat: 30.3, lon: -117.5, alt: -117.5]
+Remaining Distance: 11.9083 km
+Speed: 0.9 km/s
+Phase: fix
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.3,
+  "lat": 30.244794517306193,
+  "lon": -117.40484630102706,
+  "time": 1608250227
+}
+Executing..
+Elapsed Time: 176s
+Current Location: [30.2448, -117.405]
+Bearing: 304
+Plan ID: id
+ID: wp2
+Next Waypoint: [lat: 30.3, lon: -117.5, alt: -117.5]
+Remaining Distance: 11.0083 km
+Speed: 0.9 km/s
+Phase: fix
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.3,
+  "lat": 30.249320336525102,
+  "lon": -117.41261409495124,
+  "time": 1608250228
+}
+Executing..
+Elapsed Time: 177s
+Current Location: [30.2493, -117.413]
+Bearing: 304
+Plan ID: id
+ID: wp2
+Next Waypoint: [lat: 30.3, lon: -117.5, alt: -117.5]
+Remaining Distance: 10.1083 km
+Speed: 0.9 km/s
+Phase: fix
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.3,
+  "lat": 30.25384615570244,
+  "lon": -117.42038224673652,
+  "time": 1608250229
+}
+Executing..
+Elapsed Time: 178s
+Current Location: [30.2538, -117.42]
+Bearing: 304
+Plan ID: id
+ID: wp2
+Next Waypoint: [lat: 30.3, lon: -117.5, alt: -117.5]
+Remaining Distance: 9.20826 km
+Speed: 0.9 km/s
+Phase: fix
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.3,
+  "lat": 30.25837197483816,
+  "lon": -117.42815075646439,
+  "time": 1608250230
+}
+Executing..
+Elapsed Time: 179s
+Current Location: [30.2584, -117.428]
+Bearing: 304
+Plan ID: id
+ID: wp2
+Next Waypoint: [lat: 30.3, lon: -117.5, alt: -117.5]
+Remaining Distance: 8.30826 km
+Speed: 0.9 km/s
+Phase: fix
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.3,
+  "lat": 30.262897793932293,
+  "lon": -117.43591962421628,
+  "time": 1608250231
+}
+Executing..
+Elapsed Time: 180s
+Current Location: [30.2629, -117.436]
+Bearing: 304
+Plan ID: id
+ID: wp2
+Next Waypoint: [lat: 30.3, lon: -117.5, alt: -117.5]
+Remaining Distance: 7.40827 km
+Speed: 0.9 km/s
+Phase: fix
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.3,
+  "lat": 30.267423612984803,
+  "lon": -117.4436888500737,
+  "time": 1608250232
+}
+Executing..
+Elapsed Time: 181s
+Current Location: [30.2674, -117.444]
+Bearing: 304
+Plan ID: id
+ID: wp2
+Next Waypoint: [lat: 30.3, lon: -117.5, alt: -117.5]
+Remaining Distance: 6.50827 km
+Speed: 0.9 km/s
+Phase: fix
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.3,
+  "lat": 30.271949431995715,
+  "lon": -117.4514584341181,
+  "time": 1608250233
+}
+Executing..
+Elapsed Time: 182s
+Current Location: [30.2719, -117.451]
+Bearing: 304
+Plan ID: id
+ID: wp2
+Next Waypoint: [lat: 30.3, lon: -117.5, alt: -117.5]
+Remaining Distance: 5.60827 km
+Speed: 0.9 km/s
+Phase: fix
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.3,
+  "lat": 30.27647525096501,
+  "lon": -117.459228376431,
+  "time": 1608250234
+}
+Executing..
+Elapsed Time: 183s
+Current Location: [30.2765, -117.459]
+Bearing: 304
+Plan ID: id
+ID: wp2
+Next Waypoint: [lat: 30.3, lon: -117.5, alt: -117.5]
+Remaining Distance: 4.70828 km
+Speed: 0.9 km/s
+Phase: fix
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.3,
+  "lat": 30.281001069892696,
+  "lon": -117.46699867709397,
+  "time": 1608250235
+}
+Executing..
+Elapsed Time: 184s
+Current Location: [30.281, -117.467]
+Bearing: 304
+Plan ID: id
+ID: wp2
+Next Waypoint: [lat: 30.3, lon: -117.5, alt: -117.5]
+Remaining Distance: 3.80829 km
+Speed: 0.9 km/s
+Phase: fix
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.3,
+  "lat": 30.28552688877875,
+  "lon": -117.4747693361885,
+  "time": 1608250236
+}
+Executing..
+Elapsed Time: 185s
+Current Location: [30.2855, -117.475]
+Bearing: 304
+Plan ID: id
+ID: wp2
+Next Waypoint: [lat: 30.3, lon: -117.5, alt: -117.5]
+Remaining Distance: 2.90831 km
+Speed: 0.9 km/s
+Phase: fix
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.3,
+  "lat": 30.29005270762319,
+  "lon": -117.48254035379614,
+  "time": 1608250237
+}
+Executing..
+Elapsed Time: 186s
+Current Location: [30.2901, -117.483]
+Bearing: 304
+Plan ID: id
+ID: wp2
+Next Waypoint: [lat: 30.3, lon: -117.5, alt: -117.5]
+Remaining Distance: 2.00834 km
+Speed: 0.9 km/s
+Phase: fix
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.3,
+  "lat": 30.294578526425994,
+  "lon": -117.4903117299985,
+  "time": 1608250238
+}
+Executing..
+Elapsed Time: 187s
+Current Location: [30.2946, -117.49]
+Bearing: 303
+Plan ID: id
+ID: wp2
+Next Waypoint: [lat: 30.3, lon: -117.5, alt: -117.5]
+Remaining Distance: 1.10842 km
+Speed: 0.9 km/s
+Phase: fix
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.3,
+  "lat": 30.29898654234638,
+  "lon": -117.49817375904293,
+  "time": 1608250239
+}
+@@@ requestISRMDetections {
+  "phase": "fix"
+}
+[{"TGT_ISRM_ID":"355586","alt":0.0,"bearing":237.98623638133768,"classification":"person\r","confidence":0.8435034155845642,"lat":30.687774320048185,"lon":-117.21310154166385,"speed":112.92731367797232},{"TGT_ISRM_ID":"293127","alt":0.0,"bearing":50.26230304960208,"classification":"car\r","confidence":0.8304253816604614,"lat":32.74936743790192,"lon":-117.11299499098978,"speed":112.60642434450348}]
+ID: 355586
+Speed: 112.927
+Bearing: 237.986
+X: 30.6974
+Y: -117.195
+Z: 0
+Classification: person
+Confidence : 0.843503
+ID: 293127
+Speed: 112.606
+Bearing: 50.2623
+X: 32.7378
+Y: -117.13
+Z: 0
+Classification: car
+Confidence : 0.830425
+----------------------
+Executing..
+Elapsed Time: 188s
+Current Location: [30.3052, -117.504]
+Bearing: 303
+Plan ID: id
+ID: wp3
+Next Waypoint: [lat: 30.5, lon: -117.7, alt: -117.7]
+Remaining Distance: 0.208422 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.4,
+  "lat": 30.31138683196761,
+  "lon": -117.51022639208605,
+  "time": 1608250240
+}
+Executing..
+Elapsed Time: 189s
+Current Location: [30.3114, -117.51]
+Bearing: 320
+Plan ID: id
+ID: wp3
+Next Waypoint: [lat: 30.5, lon: -117.7, alt: -117.7]
+Remaining Distance: 27.7684 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.4,
+  "lat": 30.31758697672678,
+  "lon": -117.51625328052323,
+  "time": 1608250241
+}
+Executing..
+Elapsed Time: 190s
+Current Location: [30.3176, -117.516]
+Bearing: 320
+Plan ID: id
+ID: wp3
+Next Waypoint: [lat: 30.5, lon: -117.7, alt: -117.7]
+Remaining Distance: 26.8685 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.4,
+  "lat": 30.32378712145164,
+  "lon": -117.52228055039593,
+  "time": 1608250242
+}
+Executing..
+Elapsed Time: 191s
+Current Location: [30.3238, -117.522]
+Bearing: 320
+Plan ID: id
+ID: wp3
+Next Waypoint: [lat: 30.5, lon: -117.7, alt: -117.7]
+Remaining Distance: 25.9686 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.4,
+  "lat": 30.329987266142197,
+  "lon": -117.52830820182301,
+  "time": 1608250243
+}
+Executing..
+Elapsed Time: 192s
+Current Location: [30.33, -117.528]
+Bearing: 319
+Plan ID: id
+ID: wp3
+Next Waypoint: [lat: 30.5, lon: -117.7, alt: -117.7]
+Remaining Distance: 25.0688 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.4,
+  "lat": 30.336095661848592,
+  "lon": -117.53446068792773,
+  "time": 1608250244
+}
+Executing..
+Elapsed Time: 193s
+Current Location: [30.3361, -117.534]
+Bearing: 319
+Plan ID: id
+ID: wp3
+Next Waypoint: [lat: 30.5, lon: -117.7, alt: -117.7]
+Remaining Distance: 24.1688 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.4,
+  "lat": 30.342204057519762,
+  "lon": -117.54061355793841,
+  "time": 1608250245
+}
+Executing..
+Elapsed Time: 194s
+Current Location: [30.3422, -117.541]
+Bearing: 319
+Plan ID: id
+ID: wp3
+Next Waypoint: [lat: 30.5, lon: -117.7, alt: -117.7]
+Remaining Distance: 23.2688 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.4,
+  "lat": 30.348312453155717,
+  "lon": -117.54676681197292,
+  "time": 1608250246
+}
+Executing..
+Elapsed Time: 195s
+Current Location: [30.3483, -117.547]
+Bearing: 319
+Plan ID: id
+ID: wp3
+Next Waypoint: [lat: 30.5, lon: -117.7, alt: -117.7]
+Remaining Distance: 22.3688 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.4,
+  "lat": 30.354420848756444,
+  "lon": -117.55292045014909,
+  "time": 1608250247
+}
+Executing..
+Elapsed Time: 196s
+Current Location: [30.3544, -117.553]
+Bearing: 319
+Plan ID: id
+ID: wp3
+Next Waypoint: [lat: 30.5, lon: -117.7, alt: -117.7]
+Remaining Distance: 21.4688 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.4,
+  "lat": 30.360529244321942,
+  "lon": -117.55907447258485,
+  "time": 1608250248
+}
+Executing..
+Elapsed Time: 197s
+Current Location: [30.3605, -117.559]
+Bearing: 319
+Plan ID: id
+ID: wp3
+Next Waypoint: [lat: 30.5, lon: -117.7, alt: -117.7]
+Remaining Distance: 20.5688 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.4,
+  "lat": 30.3666376398522,
+  "lon": -117.56522887939816,
+  "time": 1608250249
+}
+Executing..
+Elapsed Time: 198s
+Current Location: [30.3666, -117.565]
+Bearing: 319
+Plan ID: id
+ID: wp3
+Next Waypoint: [lat: 30.5, lon: -117.7, alt: -117.7]
+Remaining Distance: 19.6688 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.4,
+  "lat": 30.372746035347216,
+  "lon": -117.571383670707,
+  "time": 1608250250
+}
+Executing..
+Elapsed Time: 199s
+Current Location: [30.3727, -117.571]
+Bearing: 319
+Plan ID: id
+ID: wp3
+Next Waypoint: [lat: 30.5, lon: -117.7, alt: -117.7]
+Remaining Distance: 18.7688 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.4,
+  "lat": 30.378854430806985,
+  "lon": -117.57753884662935,
+  "time": 1608250251
+}
+Executing..
+Elapsed Time: 200s
+Current Location: [30.3789, -117.578]
+Bearing: 319
+Plan ID: id
+ID: wp3
+Next Waypoint: [lat: 30.5, lon: -117.7, alt: -117.7]
+Remaining Distance: 17.8688 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.4,
+  "lat": 30.384962826231504,
+  "lon": -117.58369440728329,
+  "time": 1608250252
+}
+Executing..
+Elapsed Time: 201s
+Current Location: [30.385, -117.584]
+Bearing: 319
+Plan ID: id
+ID: wp3
+Next Waypoint: [lat: 30.5, lon: -117.7, alt: -117.7]
+Remaining Distance: 16.9688 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.4,
+  "lat": 30.391071221620773,
+  "lon": -117.58985035278688,
+  "time": 1608250253
+}
+Executing..
+Elapsed Time: 202s
+Current Location: [30.3911, -117.59]
+Bearing: 319
+Plan ID: id
+ID: wp3
+Next Waypoint: [lat: 30.5, lon: -117.7, alt: -117.7]
+Remaining Distance: 16.0688 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.4,
+  "lat": 30.397179616974775,
+  "lon": -117.59600668325817,
+  "time": 1608250254
+}
+Executing..
+Elapsed Time: 203s
+Current Location: [30.3972, -117.596]
+Bearing: 319
+Plan ID: id
+ID: wp3
+Next Waypoint: [lat: 30.5, lon: -117.7, alt: -117.7]
+Remaining Distance: 15.1688 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.4,
+  "lat": 30.403288012293512,
+  "lon": -117.60216339881535,
+  "time": 1608250255
+}
+Executing..
+Elapsed Time: 204s
+Current Location: [30.4033, -117.602]
+Bearing: 319
+Plan ID: id
+ID: wp3
+Next Waypoint: [lat: 30.5, lon: -117.7, alt: -117.7]
+Remaining Distance: 14.2688 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.4,
+  "lat": 30.40939640757698,
+  "lon": -117.60832049957656,
+  "time": 1608250256
+}
+Executing..
+Elapsed Time: 205s
+Current Location: [30.4094, -117.608]
+Bearing: 319
+Plan ID: id
+ID: wp3
+Next Waypoint: [lat: 30.5, lon: -117.7, alt: -117.7]
+Remaining Distance: 13.3688 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.4,
+  "lat": 30.415504802825193,
+  "lon": -117.61447798565999,
+  "time": 1608250257
+}
+Executing..
+Elapsed Time: 206s
+Current Location: [30.4155, -117.614]
+Bearing: 319
+Plan ID: id
+ID: wp3
+Next Waypoint: [lat: 30.5, lon: -117.7, alt: -117.7]
+Remaining Distance: 12.4688 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.4,
+  "lat": 30.421613198038113,
+  "lon": -117.62063585718387,
+  "time": 1608250258
+}
+Executing..
+Elapsed Time: 207s
+Current Location: [30.4216, -117.621]
+Bearing: 319
+Plan ID: id
+ID: wp3
+Next Waypoint: [lat: 30.5, lon: -117.7, alt: -117.7]
+Remaining Distance: 11.5688 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.4,
+  "lat": 30.42772159321576,
+  "lon": -117.62679411426645,
+  "time": 1608250259
+}
+Executing..
+Elapsed Time: 208s
+Current Location: [30.4277, -117.627]
+Bearing: 319
+Plan ID: id
+ID: wp3
+Next Waypoint: [lat: 30.5, lon: -117.7, alt: -117.7]
+Remaining Distance: 10.6688 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.4,
+  "lat": 30.43382998835812,
+  "lon": -117.63295275702602,
+  "time": 1608250260
+}
+Executing..
+Elapsed Time: 209s
+Current Location: [30.4338, -117.633]
+Bearing: 319
+Plan ID: id
+ID: wp3
+Next Waypoint: [lat: 30.5, lon: -117.7, alt: -117.7]
+Remaining Distance: 9.76877 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.4,
+  "lat": 30.439938383465194,
+  "lon": -117.6391117855809,
+  "time": 1608250261
+}
+Executing..
+Elapsed Time: 210s
+Current Location: [30.4399, -117.639]
+Bearing: 319
+Plan ID: id
+ID: wp3
+Next Waypoint: [lat: 30.5, lon: -117.7, alt: -117.7]
+Remaining Distance: 8.86878 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.4,
+  "lat": 30.446046778536967,
+  "lon": -117.64527120004942,
+  "time": 1608250262
+}
+Executing..
+Elapsed Time: 211s
+Current Location: [30.446, -117.645]
+Bearing: 319
+Plan ID: id
+ID: wp3
+Next Waypoint: [lat: 30.5, lon: -117.7, alt: -117.7]
+Remaining Distance: 7.96878 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.4,
+  "lat": 30.452155173573455,
+  "lon": -117.65143100054999,
+  "time": 1608250263
+}
+Executing..
+Elapsed Time: 212s
+Current Location: [30.4522, -117.651]
+Bearing: 319
+Plan ID: id
+ID: wp3
+Next Waypoint: [lat: 30.5, lon: -117.7, alt: -117.7]
+Remaining Distance: 7.06878 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.4,
+  "lat": 30.458263568574633,
+  "lon": -117.65759118720098,
+  "time": 1608250264
+}
+Executing..
+Elapsed Time: 213s
+Current Location: [30.4583, -117.658]
+Bearing: 319
+Plan ID: id
+ID: wp3
+Next Waypoint: [lat: 30.5, lon: -117.7, alt: -117.7]
+Remaining Distance: 6.16879 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.4,
+  "lat": 30.464371963540504,
+  "lon": -117.66375176012086,
+  "time": 1608250265
+}
+Executing..
+Elapsed Time: 214s
+Current Location: [30.4644, -117.664]
+Bearing: 319
+Plan ID: id
+ID: wp3
+Next Waypoint: [lat: 30.5, lon: -117.7, alt: -117.7]
+Remaining Distance: 5.26879 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.4,
+  "lat": 30.470480358471058,
+  "lon": -117.66991271942814,
+  "time": 1608250266
+}
+Executing..
+Elapsed Time: 215s
+Current Location: [30.4705, -117.67]
+Bearing: 319
+Plan ID: id
+ID: wp3
+Next Waypoint: [lat: 30.5, lon: -117.7, alt: -117.7]
+Remaining Distance: 4.3688 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.4,
+  "lat": 30.476588753366304,
+  "lon": -117.67607406524122,
+  "time": 1608250267
+}
+Executing..
+Elapsed Time: 216s
+Current Location: [30.4766, -117.676]
+Bearing: 319
+Plan ID: id
+ID: wp3
+Next Waypoint: [lat: 30.5, lon: -117.7, alt: -117.7]
+Remaining Distance: 3.46882 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.4,
+  "lat": 30.482697148226222,
+  "lon": -117.68223579767871,
+  "time": 1608250268
+}
+Executing..
+Elapsed Time: 217s
+Current Location: [30.4827, -117.682]
+Bearing: 319
+Plan ID: id
+ID: wp3
+Next Waypoint: [lat: 30.5, lon: -117.7, alt: -117.7]
+Remaining Distance: 2.56884 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.4,
+  "lat": 30.488805543050812,
+  "lon": -117.68839791685919,
+  "time": 1608250269
+}
+Executing..
+Elapsed Time: 218s
+Current Location: [30.4888, -117.688]
+Bearing: 319
+Plan ID: id
+ID: wp3
+Next Waypoint: [lat: 30.5, lon: -117.7, alt: -117.7]
+Remaining Distance: 1.66889 km
+Speed: 0.9 km/s
+Phase: N/A
+-----------------------------------
+@@@ updateMissionPlan {
+  "alt": 0.4,
+  "lat": 30.49491393784008,
+  "lon": -117.6945604229012,
+  "time": 1608250270
+}

@@ -1,0 +1,47 @@
+EOIR: Ready
+[ WARN:0] global /home/tchen/gaps/build/apps/eop1/MA_v1.0_src/gaps.ma.dependencies/deps/opencv/opencv/modules/dnn/src/dnn.cpp (1427) setUpNet DNN: OpenCL target is not supported with current OpenCL device (tested with GPUs only), switching to CPU.
+end of video
+@@@ recieveEOIRDetections [
+  {
+    "TGT_ISRM_ID": "355586",
+    "alt": 0.0,
+    "bearing": -1.0,
+    "classification": "person\r",
+    "confidence": 0.8435034155845642,
+    "lat": 30.69738894691726,
+    "lon": -117.19521803573252,
+    "speed": -1.0
+  },
+  {
+    "TGT_ISRM_ID": "293127",
+    "alt": 0.0,
+    "bearing": -1.0,
+    "classification": "car\r",
+    "confidence": 0.8304253816604614,
+    "lat": 32.73780527115163,
+    "lon": -117.12953061075143,
+    "speed": -1.0
+  }
+]
+@@@ recieveEOIRDetections [
+  {
+    "TGT_ISRM_ID": "355586",
+    "alt": 0.0,
+    "bearing": -1.0,
+    "classification": "person\r",
+    "confidence": 0.8435034155845642,
+    "lat": 30.687774320048185,
+    "lon": -117.21310154166385,
+    "speed": -1.0
+  },
+  {
+    "TGT_ISRM_ID": "293127",
+    "alt": 0.0,
+    "bearing": -1.0,
+    "classification": "car\r",
+    "confidence": 0.8304253816604614,
+    "lat": 32.74936743790192,
+    "lon": -117.11299499098978,
+    "speed": -1.0
+  }
+]

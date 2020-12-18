@@ -1,0 +1,65 @@
+ISRM: Ready
+@@@ requestRDRDetections {
+  "phase": "find"
+}
+@@@ requestEOIRDetections {
+  "phase": "find"
+}
+@@@ requestEOIRDetections and requestRDRDetections
+{
+  "phase": "find"
+}
+@@@ recieveISRMDetections [
+  {
+    "TGT_ISRM_ID": "355586",
+    "alt": 0.0,
+    "bearing": -1.0,
+    "classification": "person\r",
+    "confidence": 0.8435034155845642,
+    "lat": 30.69738894691726,
+    "lon": -117.19521803573252,
+    "speed": -1.0
+  },
+  {
+    "TGT_ISRM_ID": "293127",
+    "alt": 0.0,
+    "bearing": -1.0,
+    "classification": "car\r",
+    "confidence": 0.8304253816604614,
+    "lat": 32.73780527115163,
+    "lon": -117.12953061075143,
+    "speed": -1.0
+  }
+]
+@@@ requestRDRDetections {
+  "phase": "fix"
+}
+@@@ requestEOIRDetections {
+  "phase": "fix"
+}
+@@@ requestEOIRDetections and requestRDRDetections
+{
+  "phase": "fix"
+}
+@@@ recieveISRMDetections [
+  {
+    "TGT_ISRM_ID": "355586",
+    "alt": 0.0,
+    "bearing": 237.98623638133768,
+    "classification": "person\r",
+    "confidence": 0.8435034155845642,
+    "lat": 30.687774320048185,
+    "lon": -117.21310154166385,
+    "speed": 112.92731367797232
+  },
+  {
+    "TGT_ISRM_ID": "293127",
+    "alt": 0.0,
+    "bearing": 50.26230304960208,
+    "classification": "car\r",
+    "confidence": 0.8304253816604614,
+    "lat": 32.74936743790192,
+    "lon": -117.11299499098978,
+    "speed": 112.60642434450348
+  }
+]
