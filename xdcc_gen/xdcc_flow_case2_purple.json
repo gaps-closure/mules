@@ -756,22 +756,6 @@
             }
         },
         {
-            "cle-label": "UPDATE_MISSION_PLAN_ORANGE_PURPLE",
-            "cle-json": {
-               "level":"orange",
-               "cdf":[
-                  {
-                     "remotelevel":"purple",
-                     "direction":"ingress",
-                     "guarddirective":{
-                        "operation":"allow",
-                        "oneway":true
-                     }
-                  }
-               ]
-            }
-        },
-        {
             "cle-label": "UPDATE_MISSION_PLAN_XD_ORANGE_PURPLE",
             "cle-json": {
                "level":"orange",
