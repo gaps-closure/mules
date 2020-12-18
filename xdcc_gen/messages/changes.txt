@@ -1,8 +1,0 @@
-From v0.7 to v1.0
-  - recieveEOIRDetections did not exist
-  - recieveRDRDetections did not exist
-  - recieveISRMDetections
-      * add alt (double)
-      * (x, y, z) become (lat, lon, alt)
-      * changed TGT_ISRM_ID from int to string
-      * changed confidence from int to double
