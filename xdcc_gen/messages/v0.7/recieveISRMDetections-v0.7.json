@@ -1,0 +1,92 @@
+[
+    {
+        "TGT_ISRM_ID": 1,
+        "bearing": -1.0,
+        "classification": "Military_Vehicle",
+        "confidence": 60,
+        "speed": -1.0,
+        "x": -4.7,
+        "y": -69.4
+    },
+    {
+        "TGT_ISRM_ID": 2,
+        "bearing": -1.0,
+        "classification": "Military_Vehicle",
+        "confidence": 13,
+        "speed": -1.0,
+        "x": 11.2,
+        "y": -8.1
+    },
+    {
+        "TGT_ISRM_ID": 3,
+        "bearing": -1.0,
+        "classification": "Military_Vehicle",
+        "confidence": 29,
+        "speed": -1.0,
+        "x": 20.5,
+        "y": 67.1
+    },
+    {
+        "TGT_ISRM_ID": 4,
+        "bearing": -1.0,
+        "classification": "Military_Vehicle",
+        "confidence": 69,
+        "speed": -1.0,
+        "x": -43.2,
+        "y": -121.0
+    },
+    {
+        "TGT_ISRM_ID": 5,
+        "bearing": -1.0,
+        "classification": "Military_Vehicle",
+        "confidence": 92,
+        "speed": -1.0,
+        "x": -15.3,
+        "y": -59.9
+    },
+    {
+        "TGT_ISRM_ID": 6,
+        "bearing": -1.0,
+        "classification": "Standard_Vehicle",
+        "confidence": 54,
+        "speed": -1.0,
+        "x": -60.5,
+        "y": -98.1
+    },
+    {
+        "TGT_ISRM_ID": 7,
+        "bearing": -1.0,
+        "classification": "Standard_Vehicle",
+        "confidence": 22,
+        "speed": -1.0,
+        "x": 68.3,
+        "y": -27.4
+    },
+    {
+        "TGT_ISRM_ID": 8,
+        "bearing": -1.0,
+        "classification": "Standard_Vehicle",
+        "confidence": 45,
+        "speed": -1.0,
+        "x": -26.5,
+        "y": -161.0
+    },
+    {
+        "TGT_ISRM_ID": 9,
+        "bearing": -1.0,
+        "classification": "Military_Vehicle",
+        "confidence": 55,
+        "speed": -1.0,
+        "x": -68.3,
+        "y": -21.6
+    },
+    {
+        "TGT_ISRM_ID": 10,
+        "bearing": -1.0,
+        "classification": "Standard_Vehicle",
+        "confidence": 12,
+        "speed": -1.0,
+        "x": 12.0,
+        "y": -21.3
+    }
+]
