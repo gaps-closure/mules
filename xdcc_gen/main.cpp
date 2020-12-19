@@ -34,15 +34,15 @@ void from_json(const json& j, Config& config)
 static void print_usage(char *cmd)
 {
     cout << cmd << endl
-         << "  -e \t egress output directory" << endl
-         << "  -i \t ingress output directory" << endl
-         << "  -k \t echo output directory" << endl
-         << "  -f \t input JSON file" << endl
-         << "  -c \t configuration file" << endl
-         << "  -d \t" << endl
-         << "  -v \t" << endl
-         << "  -h \t print this message and exit" << endl
+         << "  -e/--egress \t egress output directory" << endl
+         << "  -i/--ingress \t ingress output directory" << endl
+         << "  -k/--echo \t echo output directory" << endl
+         << "  -f/--design \t design JSON file" << endl
+         << "  -n/--enclave \t enclave (e.g. purple)" << endl
+         << "  -c/--config \t configuration file" << endl
+         << "  -h/--help \t print this message and exit" << endl
          ;
+    
     exit(0);
 }
 
@@ -54,6 +54,9 @@ static int parse_cmdline(int argc, char *argv[])
         {"egress",   required_argument, 0, 'e'},
         {"ingress",  required_argument, 0, 'i'},
         {"echo",     required_argument, 0, 'k'},
+        {"design",   required_argument, 0, 'f'},
+        {"enclave",  required_argument, 0, 'n'},
+
         {"config",   required_argument, 0, 'c'},
         {"verbose",  no_argument,       0, 'v'},
         {"debug",    no_argument,       0, 'd'},
@@ -63,7 +66,7 @@ static int parse_cmdline(int argc, char *argv[])
 
     vector<char *> dirs;
     int option_index = 0;
-    while ((c = getopt_long(argc, argv, "hdve:i:k:f:c:", long_options, &option_index)) != -1) {
+    while ((c = getopt_long(argc, argv, "hdve:i:k:f:n:c:", long_options, &option_index)) != -1) {
        switch (c) {
           case 'e':
              config.setEgressDir(optarg);
@@ -73,6 +76,12 @@ static int parse_cmdline(int argc, char *argv[])
              break;
           case 'k':
              config.setEchoDir(optarg);
+             break;
+          case 'f':
+             config.setXdccFlow(optarg);
+             break;
+          case 'n':
+             config.setEnclave(optarg);
              break;
           case 'c': {
               std::ifstream jStream(optarg);
@@ -102,6 +111,10 @@ static int parse_cmdline(int argc, char *argv[])
 
 int main(int argc, char **argv)
 {
+    if (argc == 1) {
+        print_usage(argv[0]);
+        exit(1);
+    }
     int index = parse_cmdline(argc, argv);
 
     XdccFlow xdccFlow(config.getXdccFlow());
@@ -117,7 +130,6 @@ int main(int argc, char **argv)
     for (auto e : remote_enclaves) { // TODO: this will only work if there is just one remote enclave
         string enclave = e;
         boost::to_lower(enclave);
-
         config.setEnclave(enclave);
         genIngress.generate(xdccFlow);
     }
