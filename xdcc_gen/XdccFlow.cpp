@@ -286,6 +286,8 @@ XdccFlow::XdccFlow(const string &filename)
                 cles[label] = cle;
             }
         }
+        else if (!key.compare("comment")) {
+        }
         else {
             eprintf("unrecognized key %s", key.c_str());
         }
