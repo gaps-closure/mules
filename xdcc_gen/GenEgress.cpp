@@ -783,11 +783,12 @@ void GenEgress::genCombo(const XdccFlow& xdccFlow)
     set<string> genedLabels;
     for (auto const flow_map : xdccFlow.getFlows()) {
         Flow *flow = (Flow*) flow_map.second;
-        if (genedLabels.find(flow->getLabel()) != genedLabels.end()) // already generated
-            continue;
-        genedLabels.insert(flow->getLabel());
-
         string msgName = flow->getMessage();
+
+        string k = msgName + "___" + flow->getLabel();
+        if (genedLabels.find(k) != genedLabels.end()) // already generated
+            continue;
+        genedLabels.insert(k);
 
         map<string, set<string>>::iterator it = msgToEnclaves.find(msgName);
         if (it == msgToEnclaves.end()) {
