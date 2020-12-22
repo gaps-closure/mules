@@ -1,7 +1,0 @@
-{
-    "egressDir": "/tmp/egress_xdcc/xdcc_autogen",
-    "ingressDir": "/tmp/ingress_xdcc/xdcc_autogen",
-    "echoDir": "/tmp/xdcc_echo",
-    "enclave": "purple",
-    "xdccFlow": "xdcc_flow_case1_purple.json"
-}
