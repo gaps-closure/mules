@@ -515,9 +515,14 @@ void GenEgress::genFlowToRemote(string msg_name, string remote)
 {
     genfile << TAB_1 << "{" << endl;
 
-    string key = remote + "_SHAREABLE";
+    string my_enclave = config.getEnclave();
+
+    string my_enclave_u = my_enclave;
+    boost::to_upper(my_enclave_u);
+
+    string key = my_enclave_u + "_SHAREABLE";
     boost::to_upper(key);
-    string suffix = "_" + remote;
+    string suffix = "_" + my_enclave;
 
     genfile << "#pragma cle begin " <<  key << endl;
     for (std::vector<string>::iterator it = stmts.begin(); it != stmts.end(); ++it) {
@@ -571,12 +576,17 @@ void GenEgress::genEgress(Message *message)
        genfile << "int egress_" + msg_name + "(char *jstr)" << endl
                << "{" << endl;
 
+       string my_enclave = config.getEnclave();
+
+       string my_enclave_u = my_enclave;
+       boost::to_upper(my_enclave_u);
+
        if (message->isLocal()) {
            for (auto remote : remoteEnclaves) {
                string remote_u = remote;
                boost::to_upper(remote_u);
 
-               genfile << "#pragma cle begin " << remote_u << "_SHAREABLE" << endl;
+               genfile << "#pragma cle begin " << my_enclave_u << "_SHAREABLE" << endl;
            }
            genfile << TAB_1 << "int ret = 0;" << endl;
 
@@ -584,7 +594,7 @@ void GenEgress::genEgress(Message *message)
                string remote_u = remote;
                boost::to_upper(remote_u);
 
-               genfile << "#pragma cle end " << remote_u << "_SHAREABLE" << endl;
+               genfile << "#pragma cle end " << my_enclave_u << "_SHAREABLE" << endl;
            }
 
            genfile << TAB_1 << "return ret;" << endl
@@ -600,7 +610,7 @@ void GenEgress::genEgress(Message *message)
        if (singleRemote) {
            string theRemote;
            for (auto const remote : remotes) {
-               key = remote + "_SHAREABLE";
+               key = my_enclave_u + "_SHAREABLE";
                boost::to_upper(key);
            }
            genfile << "#pragma cle begin " <<  key << endl;
@@ -850,10 +860,10 @@ void GenEgress::annotations(const XdccFlow &xdccFlow)
         string remote_u = remote;
         boost::to_upper(remote_u);
 
-        genfile << "#pragma cle def " << remote_u << "_SHAREABLE {\\" << endl
-                << "  \"level\": \"" << remote << "\",\\" << endl
+        genfile << "#pragma cle def " << my_enclave_u << "_SHAREABLE {\\" << endl
+                << "  \"level\": \"" << my_enclave << "\",\\" << endl
                 << "  \"cdf\": [\\" << endl
-                << "    {\"remotelevel\":\"" << my_enclave << "\", \\" << endl
+                << "    {\"remotelevel\":\"" << remote << "\", \\" << endl
                 << "     \"direction\": \"egress\", \\" << endl
                 << "     \"guarddirective\": { \"operation\": \"allow\"}}\\" << endl
                 << " ] }" << endl;
@@ -901,9 +911,14 @@ void GenEgress::annotations(const XdccFlow &xdccFlow)
             }
             combined["cdf"][idx] = js["cdf"][0];
 
+            // TODO: generalize to multiple remotes
+            combined["level"] = remote;
+            combined["cdf"][0]["remotelevel"] = my_enclave;
+
             first = false;
             idx++;
         }
+
         if (c.second.size() > 0) {
             string cdfstr = combined.dump(2);
             findAndReplaceAll(cdfstr, "\n", " \\\n ");
@@ -978,13 +993,18 @@ int GenEgress::close()
       << "int main() {" << endl
       ;
 
+   string my_enclave = config.getEnclave();
+
+   string my_enclave_u = my_enclave;
+   boost::to_upper(my_enclave_u);
+
    for (auto remote : remoteEnclaves) {
        string remote_u = remote;
        boost::to_upper(remote_u);
 
-       genfile << "#pragma cle begin " << remote_u << "_SHAREABLE" << endl;
+       genfile << "#pragma cle begin " << my_enclave_u << "_SHAREABLE" << endl;
        genfile << "    int i = 100;" << endl;
-       genfile << "#pragma cle end " << remote_u << "_SHAREABLE" << endl;
+       genfile << "#pragma cle end " << my_enclave_u << "_SHAREABLE" << endl;
    }
 
    genfile
