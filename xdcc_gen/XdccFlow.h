@@ -17,61 +17,51 @@ extern int verbose;
 
 class Flow {
 private:
-    int dataId;
+    int flowId;
     string message;
     string label;
-    string fromComponent;
-    string toComponent;
 
 public:
     Flow(nlohmann::basic_json<> value);
 
-	const int getDataId() const {
-		return dataId;
-	}
+    const int getFlowId() const {
+        return flowId;
+    }
 
-	const string& getFromComponent() const {
-		return fromComponent;
-	}
+    const string& getLabel() const {
+        return label;
+    }
 
-	const string& getLabel() const {
-		return label;
-	}
-
-	const string& getMessage() const {
-		return message;
-	}
-
-	const string& getToComponent() const {
-		return toComponent;
-	}
+    const string& getMessage() const {
+        return message;
+    }
 };
 
 class Component {
 private:
     string component;
     string label;
-    vector<int> inMessages;
-    vector<int> outMessages;
+    vector<int> inFlows;
+    vector<int> outFlows;
 
 public:
     Component(nlohmann::basic_json<> value);
 
-	const string& getComponent() const {
-		return component;
-	}
+    const string& getComponent() const {
+        return component;
+    }
 
-	const vector<int>& getInMessages() const {
-		return inMessages;
-	}
+    const vector<int>& getInFlows() const {
+        return inFlows;
+    }
 
-	const string& getLabel() const {
-		return label;
-	}
+    const string& getLabel() const {
+        return label;
+    }
 
-	const vector<int>& getOutMessages() const {
-		return outMessages;
-	}
+    const vector<int>& getOutFlows() const {
+        return outFlows;
+    }
 };
 
 class Message {
@@ -81,33 +71,38 @@ private:
     string schemaType;
     bool topic;
     bool local = false;
+    map<string, vector<Flow *>> outFlows;  // component to flows from that component
 
 public:
     Message(nlohmann::basic_json<> value);
 
-	const string& getName() const {
-		return name;
-	}
+    const string& getName() const {
+        return name;
+    }
 
-	const string& getSchemaFile() const {
-		return schemaFile;
-	}
+    const string& getSchemaFile() const {
+        return schemaFile;
+    }
 
-	const string& getSchemaType() const {
-		return schemaType;
-	}
+    const string& getSchemaType() const {
+        return schemaType;
+    }
 
-	bool isTopic() const {
-		return topic;
-	}
+    bool isTopic() const {
+        return topic;
+    }
 
-	bool isLocal() const {
-		return local;
-	}
+    bool isLocal() const {
+        return local;
+    }
 
-	void setLocal(bool local = false) {
-		this->local = local;
-	}
+    void setLocal(bool local = false) {
+        this->local = local;
+    }
+
+    const map<string, vector<Flow *>>& getOutFlows() const {
+        return outFlows;
+    }
 };
 
 class GuardDirective
@@ -204,11 +199,11 @@ public:
         return level + " -> " + cdf[0].getRemoteLevel();
     }
 
-    string getLevel() {
+    string getLevel() const {
         return level;
     }
 
-    vector<Cdf>& getCdf() {
+    vector<Cdf> getCdf() const {
         return cdf;
     }
 
@@ -231,15 +226,15 @@ public:
     Cle(nlohmann::basic_json<> value);
     
     ~Cle() {
-	}
+    }
 
-	const CleJson& getCleJson() const {
-		return cleJson;
-	}
+    const CleJson& getCleJson() const {
+        return cleJson;
+    }
 
-	const string& getLabel() const {
-		return label;
-	}
+    const string& getLabel() const {
+        return label;
+    }
 };
 
 class XdccFlow {
@@ -250,6 +245,9 @@ public:
     map<int, Flow * > flows;
     map<string, Cle*> cles;
 
+    XdccFlow() {
+    }
+
     XdccFlow(const string &filename);
 
     /**
@@ -258,20 +256,23 @@ public:
     Cdf *find_cle(string level, string remote) const;
 
     Cle *find_cle(const Flow *flow) const;
+    Cle* find_cle(string &label) const;
 
-	const map<string, Cle*>& getCles() const {
-		return cles;
-	}
+    bool verify() const;
 
-	const map<int, Flow*>& getFlows() const {
-		return flows;
-	}
+    const map<string, Cle*>& getCles() const {
+        return cles;
+    }
 
-	const map<string, Message*>& getMessages() const {
-		return messages;
-	}
+    const map<int, Flow*>& getFlows() const {
+        return flows;
+    }
 
-	const map<string, Component*>& getTopology() const {
-		return topology;
-	}
+    const map<string, Message*>& getMessages() const {
+        return messages;
+    }
+
+    const map<string, Component*>& getTopology() const {
+        return topology;
+    }
 };

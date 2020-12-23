@@ -5,8 +5,8 @@ CXXFLAGS += -g $(LLVMFLAGS) -std=c++14 -lboost_system -lboost_filesystem
 
 OBJ = \
 	main.o \
-	gen_echo.o \
-	gen_egress.o \
+	GenEcho.o \
+	GenEgress.o \
 	util.o \
 	Gen.o \
 	XdccFlow.o
