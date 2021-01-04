@@ -18,9 +18,8 @@ EXEC = xdcc_gen
 
 TEST_EXEC = test_code_gen
 TEST_INCLUDE = \
-	-I../build/apps/eop1/MA_v0.7_dist/MA_v0.7_src/include \
-	-I/usr/local/include/activemq-cpp-3.9.5 \
-	-I/usr/local/apr/include/apr-1
+	-I$(PINSTALL)/include/activemq-cpp-3.9.5 \
+	-I/usr/include/apr-1.0
 
 default: all
 
