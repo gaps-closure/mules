@@ -872,17 +872,15 @@ void GenEgress::annotations(const XdccFlow &xdccFlow)
             combined["level"] = remote;
             combined["cdf"][0]["remotelevel"] = my_enclave;
 
-            first = false;
-            idx++;
-        }
-
-        if (c.second.size() > 0) {
             string cdfstr = combined.dump(2);
             findAndReplaceAll(cdfstr, "\n", " \\\n ");
 
             genfile << "#pragma cle def XDLINKAGE_ECHO_"
                     << msg_name_u << " "
                     << cdfstr << endl << endl;
+
+            first = false;
+            idx++;
         }
         endOfFunc();
     }
