@@ -511,6 +511,7 @@ void GenEgress::traverseEgress(json &schemaJson, Message *message)
    }
 }
 
+// obsolete
 void GenEgress::genFlowToRemote(string msg_name, string remote)
 {
     genfile << TAB_1 << "{" << endl;
@@ -559,19 +560,6 @@ void GenEgress::genEgress(Message *message)
 {
    try {
        string msg_name = message->getName();
-       bool singleRemote = false;
-       set<string> remotes;
-
-       map<string, set<string>>::iterator it = msgToEnclaves.find(msg_name);
-       if (it == msgToEnclaves.end()) {
-           singleRemote = true;
-       }
-       else {
-           remotes = it->second;
-           singleRemote = (remotes.size() == 1);
-       }
-       // if the message flows to only one remote enclave, then
-       // there is no need to fan out (echo_*_common() and related are not generated
 
        genfile << "int egress_" + msg_name + "(char *jstr)" << endl
                << "{" << endl;
@@ -603,7 +591,6 @@ void GenEgress::genEgress(Message *message)
        }
        genfile << "#pragma cle end " <<  key << endl;
 
-
        genfile << endl
                << TAB_1 << "if (_local_" + msg_name + ")" << endl
                << TAB_2 << "return 0;" << endl
@@ -618,33 +605,20 @@ void GenEgress::genEgress(Message *message)
        genfile << endl
                << TAB_1 << ");" << endl;
 
-
-       if (singleRemote) {
-           genfile << TAB_1 << "if (fromRemote == 0) {" << endl;
-           genfile << TAB_2 << "echo_" << msg_name << "(" << endl;
-           bool first = true;
-           for (std::vector<string>::iterator it = out_args.begin(); it != out_args.end(); ++it) {
-               if (!first)
-                   genfile << ",\n";
-               string stmt = *it;
-               findAndReplaceAll(stmt, WCARD, "");
-               genfile << TAB_3 << stmt;
-               first = false;
-           }
-           genfile << endl << TAB_2 << ");" << endl;
-           genfile << TAB_1 << "}" << endl;
+       genfile << TAB_1 << "if (fromRemote == 0) {" << endl;
+       genfile << TAB_2 << "echo_" << msg_name << "(" << endl;
+       bool first = true;
+       for (std::vector<string>::iterator it = out_args.begin(); it != out_args.end(); ++it) {
+           if (!first)
+               genfile << ",\n";
+           string stmt = *it;
+           findAndReplaceAll(stmt, WCARD, "");
+           genfile << TAB_3 << stmt;
+           first = false;
        }
-       else { // need separate annotations
-           genfile << TAB_1 << "if (fromRemote != 0)" << endl
-                   << TAB_2 << "return 0;" << endl
-                   << endl;
+       genfile << endl << TAB_2 << ");" << endl;
+       genfile << TAB_1 << "}" << endl;
 
-           string my_enclave = config.getEnclave();
-           for (auto const remote : remotes) {
-               if (my_enclave.compare(remote))
-                   genFlowToRemote(msg_name, remote);
-           }
-       }
        genfile << TAB_1 << "return 0;" << endl
                << "}" << endl
                << endl;
@@ -836,19 +810,22 @@ void GenEgress::annotations(const XdccFlow &xdccFlow)
 
     genfile << "#pragma cle def " + my_enclave_u + " {\"level\":\"" + my_enclave + "\"}" << endl << endl;
 
+    genfile << "#pragma cle def " << my_enclave_u << "_SHAREABLE {\\" << endl
+            << "  \"level\": \"" << my_enclave << "\",\\" << endl
+            << "  \"cdf\": [\\" << endl;
+    bool first = true;
     for (auto remote : remoteEnclaves) {
         string remote_u = remote;
         boost::to_upper(remote_u);
-
-        genfile << "#pragma cle def " << my_enclave_u << "_SHAREABLE {\\" << endl
-                << "  \"level\": \"" << my_enclave << "\",\\" << endl
-                << "  \"cdf\": [\\" << endl
-                << "    {\"remotelevel\":\"" << remote << "\", \\" << endl
+        if (!first)
+            genfile << "," << endl;
+        genfile << "    {\"remotelevel\":\"" << remote << "\", \\" << endl
                 << "     \"direction\": \"egress\", \\" << endl
-                << "     \"guarddirective\": { \"operation\": \"allow\"}}\\" << endl
-                << " ] }" << endl;
+                << "     \"guarddirective\": { \"operation\": \"allow\"}}\\";
+        first = false;
     }
-    genfile << endl;
+    genfile << "\n ] }" << endl
+            << endl;
 
     map<string, Message *> msg_map = xdccFlow.getMessages();
 
