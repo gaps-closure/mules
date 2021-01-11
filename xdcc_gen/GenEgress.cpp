@@ -581,23 +581,12 @@ void GenEgress::genEgress(Message *message)
        string my_enclave_u = my_enclave;
        boost::to_upper(my_enclave_u);
 
+       string key = my_enclave_u + "_SHAREABLE";
        if (message->isLocal()) {
-           for (auto remote : remoteEnclaves) {
-               string remote_u = remote;
-               boost::to_upper(remote_u);
-
-               genfile << "#pragma cle begin " << my_enclave_u << "_SHAREABLE" << endl;
-           }
-           genfile << TAB_1 << "int ret = 0;" << endl;
-
-           for (auto remote : remoteEnclaves) {
-               string remote_u = remote;
-               boost::to_upper(remote_u);
-
-               genfile << "#pragma cle end " << my_enclave_u << "_SHAREABLE" << endl;
-           }
-
-           genfile << TAB_1 << "return ret;" << endl
+           genfile << "#pragma cle begin " << key << endl
+                   << TAB_1 << "int ret = 0;" << endl
+                   << "#pragma cle end " << key << endl
+                   << TAB_1 << "return ret;" << endl
                    << "}" << endl
                    << endl;
            return;
@@ -606,22 +595,13 @@ void GenEgress::genEgress(Message *message)
        genfile << TAB_1 << "int fromRemote;" << endl
                << endl;
 
-       string key;
-       if (singleRemote) {
-           string theRemote;
-           for (auto const remote : remotes) {
-               key = my_enclave_u + "_SHAREABLE";
-               boost::to_upper(key);
-           }
-           genfile << "#pragma cle begin " <<  key << endl;
-       }
+       genfile << "#pragma cle begin " <<  key << endl;
        for (std::vector<string>::iterator it = stmts.begin(); it != stmts.end(); ++it) {
            string stmt = *it;
            findAndReplaceAll(stmt, WCARD, "");
            genfile << TAB_1 << stmt << endl;
        }
-       if (singleRemote)
-           genfile << "#pragma cle end " <<  key << endl;
+       genfile << "#pragma cle end " <<  key << endl;
 
 
        genfile << endl
