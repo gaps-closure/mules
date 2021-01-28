@@ -19,6 +19,7 @@ EXEC = xdcc_gen
 TEST_EXEC = test_code_gen
 TEST_INCLUDE = \
 	-I$(PINSTALL)/include/activemq-cpp-3.9.5 \
+	-I./include \
 	-I/usr/include/apr-1.0
 
 default: all
