@@ -41,7 +41,7 @@ if [ -z "$idir" -o -z "$odir" ]; then
 fi
 
 SUFFIX=".json"
-jsons=($idir*$SUFFIX)
+jsons=($idir/*$SUFFIX)
 suffix_len=${#SUFFIX}
 prefix_len=${#idir}
 let to_rm=$prefix_len+$suffix_len
@@ -55,7 +55,7 @@ do
         continue
     fi
     
-    genson $j | jq . > $odir/${file}_schema.json
+    genson $j | jq . > $odir${file}_schema.json
 done
 
 exit
