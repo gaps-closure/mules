@@ -28,6 +28,7 @@ def get_args():
   p = ArgumentParser(description='CLOSURE Mess Flow Design Spec Quick and Dirty Visualization')
   p.add_argument('-f', '--file', required=False, type=str, default='design_spec.json', help='Input file (design_spec.json)')
   p.add_argument('-s', '--suppress_messages', required=False, type=str, default='component_heartbeats', help='Comma-separated messages to suppress (component_heartbeats)')
+  p.add_argument('-p', '--port', required=False, type=int, default=11358, help='Port for web application (11358)')
   return p.parse_args()
 
 if __name__ == '__main__':
@@ -49,4 +50,4 @@ if __name__ == '__main__':
       style={'width': '1400px', 'height': '800px'}
     )
   ])
-  app.run_server(debug=True)
+  app.run_server(debug=True,port=args.port,host='0.0.0.0')
