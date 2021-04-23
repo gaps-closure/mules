@@ -28,4 +28,4 @@ handle_opts "$@"
 
 echo "BUILD=${BUILD}"
 
-echo "Nothing to do"
+make -C xdcc_gen
