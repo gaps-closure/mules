@@ -1,36 +1,68 @@
-# Placeholder for Java CLE
+# CLOSURE CLE Specification for Java
 
-There are only two new annotation types in Java CLE: cle and cle-def
+## Syntax
 
-@interface cle {String label();}
-// Applies to program elements TBD (instances, fields, methods)
+As with the C version, we can define or apply an annotation.
 
-How to associate json={...} with the annotation instance @cle(label="FOO")?
+The definition of a CLE annotation connects a CLELABEL with a CLE-JSON. The CLEJSON schema is common across languages, currently Java, C/C++, and message-flow design. The `@interface CLELABEL` is used to declare a new CLE label, and the `@cledef` annotation on this interface declaration associates a CLEJSON with the CLELABEL as below. 
 
+```
+// Annotation type declaration for cledef to be moved to a common library
 public @interface cledef { String json(); }
 
-@cledef(json="{}")   // CLE-JSON or 1-to-1 equivalent annotation contains level, cdfs, taints etc. 
-@interface ORANGE_SHAREABLE  
+@cledef(json="{\"level\": \"orange\"}"); 
+@interface ORANGE_SHAREABLE
+```
 
-// Developer annotates thus ...
+The json string can either be a "stringified" JSON or multiline JSON using a text block in JDK 13 and higher.
 
-Class FUBAR;
+```
+// In JDK 13 and higher
+@cledef(json="""
+   {
+     "level": "orange"
+   }
+   """); 
+@interface ORANGE_SHAREABLE
+```
 
-@ORANGE_SHAREABLE
-FUBAR foo;
+This is equivalent to the `#pragma cle def CLELABEL CLEJSON' in CLE for C/C++.
 
-What can we annotate?
-  -- class instances
-  -- fields
-  -- methods
+A CLE annotation is a Java annotation which has been annotated with a '@cledef' and other Java annotations can co-exist.
 
-What are the rules for inheritance and polymorphism
+Once a CLE annotation has been defined, it can be applied to program elements as below.
 
-To be correct in the partitioned code
-  All fields in an instance must have the same label as that of the instance (or must be coerced through a blessed method)
-  All methods in an instance must have the same level as that of the instance
-  All parameters and return values involving invocation of this method must honor the allowed taints
-  Any label coercion must occur through a blessed method
-  An annotated method cannot exist in any instance (of any class) in another enclave
+```
+Class FUBAR { ... };
+
+...
+  // inside method body of some other class
+  @ORANGE_SHAREABLE
+  FUBAR foo;
+...
+
+```
+ 
+When applying a CLE annotation `@CLELABEL` is analogous to `#pragma cle CLELABEL' in C/C++. In the case of Java,the next line version is supported, block annotation version (with begin and end) is not supported.
+
+Local variables (primitives or Class instances), fields, and methods can be annotated using CLE.  Method annotations will include allowed taints on parameters and return values. 
+
+ - Position 1: any class member that is annotated must be final
+    * the annotation will be inherited by all subclass instances
+    * the annotation does not apply to methods of superclasses
+ - Position 2: non-final class members can be annotated, but upon overriding, the member must be re-annotated and if method, its body must be audited 
+    * classes in the hierarchy in-between inherit the parent's annotation on the method
+    
+Position 1 seems easier to argue correctness for, but is restriuctive for the developer. To be revisited.
+
+## Implications for partitioned code
+In a correct partitioning the following must hold.
+
+All instances of a class with an annotated member must be assigned to the corresponding enclave. All members of an instance (including inherited ones) must have the same level.
+
+Only control-flow cut can be a XD-RPC-wrapped method invocation, and only data-flow cut can be paramters and return values for such a method invocation.   All parameters and return values involving invocation of this method must honor the allowed taints.
+
+Taint flow needs to be defined in terms of Java System Dependency Graph or other such formalism. Except for edges in the cut, the endpoints of an edge must have the same label, and any label coercion must occur through a blessed method.
+
 
 
