@@ -134,7 +134,7 @@
                 "cache":{
                     "description": "Enable cache functionality",
                     "type": "boolean",
-                    "default": true
+                    "default": false
                 },
                 "cache_size":{
                     "description": "Cache size if cache enabled",
