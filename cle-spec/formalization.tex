@@ -12,21 +12,24 @@
 
 \section{Introduction}
 \section{CLE Types Grammar}
-The following is a small grammar for CLE types $\tau$.  
+The following is a small grammar for CLE types $\tau$. 
+$l$ and $r$ represent levels and can be thought of as arbitrary identifiers.
 
 \begin{center}
 \begin{tabular}{ l r }
-    $\tau$ $\Coloneqq$ $\mu$ $\mid$ $\sigma$
+    $\tau, \pi, \gamma$ $\Coloneqq$ l $\mu$ $\mid$ l $\sigma$
     & cle type \\ 
-    $\mu$ $\Coloneqq$ $\omega$ ($\sigma_1, \dots, \sigma_n$) $\rightarrow_\phi$ $\theta$ $\mid$ $\mu$ $\cup$ $\omega$ ($\sigma_1, \dots, \sigma_n$) $\rightarrow_\phi$ $\theta$    
-    & cle function type \\
-    $\sigma, \phi, \theta$ $\Coloneqq$ $\omega$ $\mid$ $\sigma \cup \omega$ 
-    & cle var type \\
-    $\omega$ $\Coloneqq$ $l \leftarrow r$ & cross domain flow
+    $\mu$ $\Coloneqq$ $r$ ($\sigma_1, \dots, \sigma_n$) $\rightarrow_\phi$ $\theta$ $\mid$ $\mu$ $\cup$ $r$ ($\sigma_1, \dots, \sigma_n$) $\rightarrow_\phi$ $\theta$    
+    & cle function cdf \\
+    $\sigma, \phi, \theta$ $\Coloneqq$ $\epsilon$ $\mid$ $\sigma \cup r$ 
+    & cle var cdf \\
 \end{tabular}
 \end{center}
 
 \section{LLVM core grammar}
+
+TODO: Change this to make sense
+
 The following source grammar represents an idealized subset of LLVM. 
 Many operations are missing, but every missing operation can either be constructed from multiple instructions or is irrelevant to the CLE type inference and checking. 
 The rules for cle types in the core grammar should represent the small grammar cle types above.
@@ -144,31 +147,42 @@ My references for the grammar construction is from this\footnote{\url{https://li
 
 <unit-type> ::= `unit'
 
-<cle-type> ::= <cle-fn-type> \alt <cle-var-type> 
+<cle-type> ::= <level> <cle-fn-cdf> \alt <level> <cle-var-cdf> 
 
-<cle-fn-type> ::= 
-    <cle-fn-type> `|' <cdf> `(' <cle-args> `)' `['<cle-var-type>`]' `->' <cle-var-type>
-    \alt <cdf> `(' <cle-args> `)' `['<cle-var-type>`]' `->' <cle-var-type>
+<cle-fn-cdf> ::= 
+    <cle-fn-cdf> `|' <level> `(' <cle-args> `)' `['<cle-var-cdf>`]' `->' <cle-var-cdf>
+    \alt <level> `(' <cle-args> `)' `['<cle-var-cdf>`]' `->' <cle-var-cdf>
 
 
-<cle-args> ::= <cle-args>, <cle-var-type> \alt empty
+<cle-args> ::= <cle-args>, <cle-var-cdf> \alt empty
 
-<cle-var-type> ::=  <cle-var-type> `|' <cdf> \alt empty 
-
-<cdf> ::= <level> `<-|' <level> 
+<cle-var-cdf> ::=  <cle-var-cdf> `|' <level> \alt empty 
 
 \end{grammar}
 
 \section{Small examples}
 
+This global viarable is in level purple, and is not shareable.
 \begin{verbatim}
 @foo : i64 + "purple" = 1;
 \end{verbatim}
 
 
+This global variable is in level orange, and is shareable with purple.
+\begin{verbatim}
+@foo : i64 + "orange" "purple" = 1;
+\end{verbatim}
+
+
+The following function is in level "orange", and has a cdf with remote level "purple".
+The first argument is not shareable, 
+the second argument is shareable with purple. 
+Any variable bound in the body must not be shareable, as well as the return type.
+
+Here I added `empty' in-place of empty fields for clarity. 
 \begin{verbatim}
 define @average(%0, %1) : (double, double) -> double
- + "orange" <-| "purple" ("orange", "orange" | "orange" <-| "purple") ["orange"] -> "orange"  
+ + "orange" "purple" (empty, "purple") [empty] -> empty
       
 {
    %2 : double + "orange" = %0 + %1;
@@ -178,27 +192,31 @@ define @average(%0, %1) : (double, double) -> double
 \end{verbatim}
 
 \section{Type rules}
-
-Here we assume all functions and global variables have cle types associated with them. We will focus on how to infer such types in the next section. There are several types of judgements, each of which is enumerated as follows:
-
+Here we assume all functions and global variables have cle types associated with them.  We will focus on how to infer such types in the next section.
+CLE is a flow-sensitive model and the types of variables may change as the program is checked.
+To reason through this in the system, a type judgement will also include an output context, which may be used in the conclusions of judgements.
 Note: Contexts will need to be indexable by level, i.e. every context maps levels to a list of names for that level.
 TODO: provide a way to filter contexts by level and to combine contexts.
 
+There are several types of judgements, each of which is enumerated below:
+
 \subsection{Judgements}
 \begin{enumerate}
-    \item $\Gamma \vdash e : \tau, \Gamma'$. Top-level entity $e$ has cle type $\tau$ producing a new context $\Gamma'$
-    \item $\Gamma \vdash b :_\phi \sigma, \Gamma'$. Basic block or set of basic blocks $b$ has cle var type $\phi$ for all variables bound in instructions and var type $\sigma$ for terminator producing $\Gamma'$.
+    \item $\Gamma \vdash e : \tau, \Gamma'$. Top-level entity $e$ has type $\tau$ producing a new context $\Gamma'$
+    \item $\Gamma \vdash b :_\pi \gamma, \Gamma'$. Basic block or set of basic blocks $b$ has type $\pi$ for all variables bound in instructions, type $\gamma$ for the terminator and produces a new context $\Gamma'$.
 \end{enumerate}
 
 \subsection{Rules for top-level entities}
 
 \[    
 \begin{prooftree}
-    \infer0[global-decl]{\Gamma \vdash @x : \tau, \Gamma}
+    \hypo{\tau = l\ \sigma}
+    \infer1[global-decl]{\Gamma \vdash @x : \tau, \Gamma}
 \end{prooftree}
 \qquad
 \begin{prooftree}
-    \infer0[global-def]{\Gamma \vdash @x = c : \tau, \Gamma}
+    \hypo{\tau = l\ \sigma}
+    \infer1[global-def]{\Gamma \vdash @x = c : \tau, \Gamma}
 \end{prooftree}
 \]
 
@@ -206,35 +224,22 @@ TODO: provide a way to filter contexts by level and to combine contexts.
 \begin{prooftree}
     \hypo{
     \begin{matrix}
-        \Gamma, @f : \tau, \%1 : \sigma_{11}, \ldots, \%n: \sigma_{1n} \vdash body :_{\phi_1} \theta_1, \Gamma'_1 \\
+        \Gamma, @f : \tau, \%1 : r_1\ \sigma_{11}, \ldots, \%n: r_1\ \sigma_{1n} \vdash body :_{(l\ \phi_1)} l\ \theta_1, \Gamma'_1 \\
         \vdots \\
-        \Gamma, @f : \tau, \%1 : \sigma_{m1}, \ldots, \%n: \sigma_{mn} \vdash body :_{\phi_m} \theta_m, \Gamma'_m \\
-        \tau = \bigcup_{k=1}^m \omega_k (\sigma_{k1}, \dots, \sigma_{kn}) \rightarrow_{\phi_k} \theta_k
+        \Gamma, @f : \tau, \%1 : r_m\ \sigma_{m1}, \ldots, \%n: r_m\ \sigma_{mn} \vdash body :_{(l\ \phi_m)} l\ \theta_m, \Gamma'_m \\
+        \tau = l\ \bigcup_{k=1}^m r_k (\sigma_{k1}, \dots, \sigma_{kn}) \rightarrow_{\phi_k} \theta_k
     \end{matrix}
     }
-    \infer1[fn-def]{\Gamma \vdash @f(\%1, \dots \%n)\ \{ body \} : \tau, \text{combine}(\Gamma'_1, \dots, \Gamma'_m) \setminus \{ @f, \sigma_{11}, \dots, \sigma_{mn} \}  }
+    \infer1[fn-def]{\Gamma \vdash @f(\%1, \dots \%n)\ \{ body \} : \tau, \text{combine}(\Gamma'_1, \dots, \Gamma'_m) \setminus \{ @f, \%1, ..., \%n \}  }
     
 \end{prooftree}
 \]
 
 \[
 \begin{prooftree}
-    \infer0[fn-decl]{\Gamma \vdash @f : (t_1, \ldots, t_n) \rightarrow t + \tau}
+    \hypo{\tau = l\ \mu}
+    \infer1[fn-decl]{\Gamma \vdash @f : \tau, \Gamma}
 \end{prooftree}
 \]
-
-
-\begin{comment}
-\infer{\Gamma \vdash i : \tau}{%
-    \Gamma\vdash hasFunction(i) \neq \varnothing 
-    & \deduce{
-        \Gamma, arg_0 : \tau, \dots, arg_n : \tau \vdash
-        \forall j. hasSource(j) = i \implies j : \tau 
-        }{
-        \Gamma \vdash hasParam(i, arg_{0\dots n}) = true
-        }
-}
-\end{comment}
-
 
 \end{document}
