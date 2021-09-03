@@ -1,0 +1,256 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+
+\title{CLE Type System}
+\author{Benjamin Flin}
+\date{August 2021}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amssymb, proof, comment, syntax, url, amsthm, ebproof}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+
+\section{Source grammar}
+The following source grammar represents an idealized subset of LLVM. 
+Many operations are missing, but every missing operation can either be constructed from multiple instructions or is irrelevant to the CLE type inference and checking. My references for the grammar construction is from the VELLVM\footnote{\url{https://github.com/vellvm/vellvm}} project as well as some other\footnote{\url{https://lists.llvm.org/pipermail/llvm-dev/2018-June/123851.html}} resources.
+
+\begin{grammar}
+
+<prog> ::= empty
+\alt <prog> <top-level-entity> 
+
+<top-level-entity> ::= <fun-def>
+\alt <fun-decl>
+\alt <global-def>
+\alt <global-decl>
+
+<global-def> ::= <global-ident> : <type> `=' <const>`;'
+
+<global-decl> ::= <global-ident> : <type> `;'
+
+<fun-def> ::= `define' <global-ident>`(' <params> `)' : <type> <func-body>
+
+<fun-decl> ::= `declare' <global-ident>`(' <params> `)' : <type> `;' 
+
+<params> ::= empty
+\alt <param-list>
+
+<param-list> ::= <local-ident>
+\alt <param-list>`,' <local-ident> 
+
+<global-ident> ::= `@'<ident>
+
+<local-ident> ::= `\%'<ident>
+
+<func-body> ::= `{' <block-list> `}'
+
+<block-list> ::= <block>
+\alt <block-list> <block>
+
+<block> ::= <ident>`:' <instructions> <terminator>
+
+<instructions> ::= empty
+\alt <instructions> <instruction>`;'
+
+<instruction> ::= <store-instr> 
+\alt <load-instr>
+\alt <alloca-instr>
+\alt <gep-instr>
+\alt <call-instr> 
+\alt <binary-instr>
+\alt <cast-instr>
+\alt <const-instr>
+
+<terminator> ::= <br-term>
+\alt <ret-term> 
+
+<decl> ::= <local-ident> : <type>
+
+<store-instr> ::= `store' <value>, <local-ident>
+
+<load-instr> ::= <decl> `=' `load' <value>, <local-ident>
+
+<alloca-instr> ::= <decl> `=' `alloca' <llvm-type> 
+
+<call-instr> ::= <decl> `=' <global-ident>`(' <params> `)'  
+
+<gep-instr> ::= <decl> `=' `gep' <local-ident>`,' <nats> 
+
+<binary-instr> ::= <decl> `=' <value> <binop> <value> 
+
+<cast-instr> ::= <decl> `=' `cast' <local-ident> <llvm-type>  
+
+<nats> ::= <nat>
+\alt <nat>, <nats> 
+
+<br-term> ::= `br' <local-ident>, <local-ident>, <local-ident> 
+<ret-term> ::= `ret' <local-ident> 
+
+<value> ::= <const>
+\alt <local-ident>
+\alt <global-ident>
+
+<const> ::= <integer-literal>
+\alt <bool-literal>
+\alt <float-literal>
+\alt <unit-literal>
+\alt <struct-const>
+\alt <array-const>
+
+<type> ::= <llvm-type> `+' <cle-type>
+\alt <llvm-type>
+
+<llvm-type> ::= <int-type>
+\alt <float-type>
+\alt <unit-type> 
+\alt <array-type>
+\alt <pointer-type>
+\alt <struct-type>
+\alt <function-type>
+
+<function-type> ::= `(' <llvm-type-list> `)' `->' <llvm-type>
+
+<array-type> ::= `[' <nat> `x' <llvm-type> `]'
+
+<pointer-type> ::= <llvm-type>`*'
+
+<struct-type> ::= `{' <llvm-type-list> `}'
+
+<llvm-type-list> ::= <llvm-type>
+\alt <llvm-type-list>`,' <llvm-type>
+
+<int-type> ::= `i'<nat>
+
+<float-type> ::= `float' 
+\alt `double'
+
+<unit-type> ::= `unit'
+
+<cle-type> ::= <cle-function-type> 
+\alt <cle-var-type>
+\alt <cle-union>
+\alt `Tag' <tag-type> <global-ident>
+
+<cle-function-type> ::= `CLE' <level> `[' <fun-cdfs> `]'
+
+<cle-var-type> ::= `CLE' <level> 
+\alt `CLE' <level> `[' <var-cdfs> `]'
+
+<tag-type> ::= `request' 
+\alt `response'
+
+<fun-cdfs> ::= <fun-cdf> 
+\alt <fun-cdfs> <fun-cdf>
+
+<var-cdfs> ::= <var-cdf> 
+\alt <var-cdfs> <var-cdf>
+
+<fun-cdf> ::= `CDF' <level> <taints> \ldots   
+
+<var-cdf> ::= `CDF' <level> \ldots   
+
+<taints> ::= `Taints' `[' <taint-list> `]' <taint-union> <taint-union>
+
+<taint-list> ::= <cle-type>
+\alt <taint-list>`,' <cle-type>
+
+<cle-union-type> ::= <cle-type>
+\alt <cle-union-type> `|' <cle-type> 
+
+<level> ::= string
+
+\end{grammar}
+
+\section{Small examples}
+
+\begin{verbatim}
+define @average(%0, %1) : (double, double) -> double {
+   %2 : double;
+   %2 = %0 + %1;
+   %3 = %2 / 2.0;
+   ret %3
+}
+\end{verbatim}
+
+\begin{verbatim}
+@foo : i64 + CLE "purple" = 1;
+\end{verbatim}
+
+
+\begin{verbatim}
+define @average(%0, %1) : (double, double) -> double
+ + CLE "purple" 
+    [ CDF "orange"
+        ( 
+        Taints [ Tag "request" @average, Tag "request" @average ] 
+            (CLE [] | CLE "purple" [CDF "orange"])
+            (Tag "response" @average)
+        )    
+    ]  
+{
+   %2 : double + CLE "purple" [CDF "orange"] = %0 + %1;
+   %3 : double + CLE "purple" [CDF "orange"] = %2 / 2.0;
+   ret %3
+}
+\end{verbatim}
+
+\section{Type rules}
+
+Here we assume all functions and global variables have cle types associated with them. We will focus on how to infer such types in the next section. There are several types of judgements, each of which is enumerated as follows:
+
+\subsection{Judgements}
+\begin{enumerate}
+    \item $\Gamma \vdash e : t + \tau$. Top-level entity $e$ has type $t + \tau$
+    \item $\Gamma \vdash b : (s, t + \tau)$. Basic block or set of basic blocks $b$ has cle type $s$ for all instructions and type $t + \tau$ for terminator
+\end{enumerate}
+
+\subsection{Rules for top-level entities}
+
+\[    
+\begin{prooftree}
+    \infer0[global-decl]{\Gamma \vdash @x : t + \tau}
+\end{prooftree}
+\qquad
+\begin{prooftree}
+    \infer0[global-def]{\Gamma \vdash @x = c : t + \tau}
+\end{prooftree}
+\]
+
+\[
+\begin{prooftree}
+    \hypo{
+    \begin{matrix}
+        \Gamma, @f : (t_1, \ldots, t_n) \rightarrow t + \tau, x_1 : t_1 + a_{11}, \ldots, x_n: t_n + a_{1n} \vdash body : (c_1, t + r_1) \\
+        \vdots \\
+        \Gamma, @f : (t_1, \ldots, t_n) \rightarrow t + \tau, x_1 : t_1 + a_{k1}, \ldots, x_n: t_n + a_{kn} \vdash body : (c_k, t + r_k) \\
+        \tau = \text{CLE}\ l\ [\text{CDF}\ l_1\ (\text{Taints}\ \vec{a_1}\ c_1\ r_1), \dots, \text{CDF}\ l_k\ (\text{Taints}\ \vec{a_k}\ c_k\ r_k)]
+    \end{matrix}
+    }
+    \infer1[fn-def]{\Gamma \vdash @f(\%0, \dots \%n)\ \{ body \} : (t_1, \ldots, t_n) \rightarrow t + \tau}
+\end{prooftree}
+\]
+
+\[
+\begin{prooftree}
+    \infer0[fn-decl]{\Gamma \vdash @f : (t_1, \ldots, t_n) \rightarrow t + \tau}
+\end{prooftree}
+\]
+
+
+\begin{comment}
+\infer{\Gamma \vdash i : \tau}{%
+    \Gamma\vdash hasFunction(i) \neq \varnothing 
+    & \deduce{
+        \Gamma, arg_0 : \tau, \dots, arg_n : \tau \vdash
+        \forall j. hasSource(j) = i \implies j : \tau 
+        }{
+        \Gamma \vdash hasParam(i, arg_{0\dots n}) = true
+        }
+}
+\end{comment}
+
+
+\end{document}
