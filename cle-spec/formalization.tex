@@ -17,18 +17,13 @@ $l$ and $r$ represent levels and can be thought of as arbitrary identifiers.
 
 \begin{center}
 \begin{tabular}{ l r }
-    $\tau, \pi, \gamma$ $\Coloneqq$ l $\mu$ $\mid$ l $\sigma$
-    & cle type \\ 
-    $\mu$ $\Coloneqq$ $r$ ($\sigma_1, \dots, \sigma_n$) $\rightarrow_\phi$ $\theta$ $\mid$ $\mu$ $\cup$ $r$ ($\sigma_1, \dots, \sigma_n$) $\rightarrow_\phi$ $\theta$    
-    & cle function cdf \\
-    $\sigma, \phi, \theta$ $\Coloneqq$ $\epsilon$ $\mid$ $\sigma \cup r$ 
-    & cle var cdf \\
+    $\tau, \pi, \gamma$ $\Coloneqq$ l $\sigma$ $\mid$ l $\sigma$ ($\alpha_1$, $\dots$, $\alpha_n$) $\rightarrow_\phi$ $\theta$ & cle type \\
+    $\sigma, \phi, \theta, \alpha, \beta$ $\Coloneqq$ $\epsilon$ $\mid$ $\sigma$ $+$ $r$ & remote levels \\
 \end{tabular}
 \end{center}
+Note: remote levels are treated as sets.
 
 \section{LLVM core grammar}
-
-TODO: Change this to make sense
 
 The following source grammar represents an idealized subset of LLVM. 
 Many operations are missing, but every missing operation can either be constructed from multiple instructions or is irrelevant to the CLE type inference and checking. 
@@ -147,16 +142,12 @@ My references for the grammar construction is from this\footnote{\url{https://li
 
 <unit-type> ::= `unit'
 
-<cle-type> ::= <level> <cle-fn-cdf> \alt <level> <cle-var-cdf> 
+<cle-type> ::= <level> <remote-levels> 
+\alt <level> <remote-levels> `(' <cle-args> `)' `[' <remote-levels> `]' `->' <remote-levels> 
 
-<cle-fn-cdf> ::= 
-    <cle-fn-cdf> `|' <level> `(' <cle-args> `)' `['<cle-var-cdf>`]' `->' <cle-var-cdf>
-    \alt <level> `(' <cle-args> `)' `['<cle-var-cdf>`]' `->' <cle-var-cdf>
+<cle-args> ::= <cle-args>, <remote-levels> \alt empty
 
-
-<cle-args> ::= <cle-args>, <cle-var-cdf> \alt empty
-
-<cle-var-cdf> ::=  <cle-var-cdf> `|' <level> \alt empty 
+<remote-levels> ::=  <remote-levels> `+' <level> \alt empty 
 
 \end{grammar}
 
@@ -195,15 +186,17 @@ define @average(%0, %1) : (double, double) -> double
 Here we assume all functions and global variables have cle types associated with them.  We will focus on how to infer such types in the next section.
 CLE is a flow-sensitive model and the types of variables may change as the program is checked.
 To reason through this in the system, a type judgement will also include an output context, which may be used in the conclusions of judgements.
-Note: Contexts will need to be indexable by level, i.e. every context maps levels to a list of names for that level.
-TODO: provide a way to filter contexts by level and to combine contexts.
 
 There are several types of judgements, each of which is enumerated below:
 
 \subsection{Judgements}
 \begin{enumerate}
-    \item $\Gamma \vdash e : \tau, \Gamma'$. Top-level entity $e$ has type $\tau$ producing a new context $\Gamma'$
-    \item $\Gamma \vdash b :_\pi \gamma, \Gamma'$. Basic block or set of basic blocks $b$ has type $\pi$ for all variables bound in instructions, type $\gamma$ for the terminator and produces a new context $\Gamma'$.
+    \item $\Gamma \vdash e : \tau$. 
+    Top-level entity $e$ has type $\tau$. Top-level judgements are not flow-sensitive. 
+    \item $\Gamma \vdash b :_\pi \gamma, \Gamma'$. 
+    Basic block or set of basic blocks $b$ has type $\pi$ for all variables bound in instructions, type $\gamma$ for the terminator and produces a new context $\Gamma'$.
+    \item $\Gamma \vdash t :_\pi \gamma, \Gamma'$. 
+    Terminator $t$ has type $\gamma$ and all referenced basic blocks, $b$ are given type $_\pi \gamma$.
 \end{enumerate}
 
 \subsection{Rules for top-level entities}
@@ -211,12 +204,12 @@ There are several types of judgements, each of which is enumerated below:
 \[    
 \begin{prooftree}
     \hypo{\tau = l\ \sigma}
-    \infer1[global-decl]{\Gamma \vdash @x : \tau, \Gamma}
+    \infer1[global-decl]{\Gamma \vdash @x : \tau}
 \end{prooftree}
 \qquad
 \begin{prooftree}
     \hypo{\tau = l\ \sigma}
-    \infer1[global-def]{\Gamma \vdash @x = c : \tau, \Gamma}
+    \infer1[global-def]{\Gamma \vdash @x = c : \tau}
 \end{prooftree}
 \]
 
@@ -224,22 +217,105 @@ There are several types of judgements, each of which is enumerated below:
 \begin{prooftree}
     \hypo{
     \begin{matrix}
-        \Gamma, @f : \tau, \%1 : r_1\ \sigma_{11}, \ldots, \%n: r_1\ \sigma_{1n} \vdash body :_{(l\ \phi_1)} l\ \theta_1, \Gamma'_1 \\
-        \vdots \\
-        \Gamma, @f : \tau, \%1 : r_m\ \sigma_{m1}, \ldots, \%n: r_m\ \sigma_{mn} \vdash body :_{(l\ \phi_m)} l\ \theta_m, \Gamma'_m \\
-        \tau = l\ \bigcup_{k=1}^m r_k (\sigma_{k1}, \dots, \sigma_{kn}) \rightarrow_{\phi_k} \theta_k
+        \Gamma, @f : \tau, \%1 : l\ \alpha_1, \ldots, \%n: l\ \alpha \vdash body :_{(l\ \phi_m)} l\ \theta_m, \Gamma' \\
+        \tau = l\ \sigma\ (\alpha_1, \dots, \alpha_n) \rightarrow_\phi \theta
     \end{matrix}
     }
-    \infer1[fn-def]{\Gamma \vdash @f(\%1, \dots \%n)\ \{ body \} : \tau, \text{combine}(\Gamma'_1, \dots, \Gamma'_m) \setminus \{ @f, \%1, ..., \%n \}  }
+    \infer1[fn-def]{\Gamma \vdash @f(\%1, \dots \%n)\ \{ body \} : \tau}
     
 \end{prooftree}
 \]
 
 \[
 \begin{prooftree}
-    \hypo{\tau = l\ \mu}
+    \hypo{\tau = l\ \sigma\ (\alpha_1, \dots, \alpha_n) \rightarrow_\phi \theta}
     \infer1[fn-decl]{\Gamma \vdash @f : \tau, \Gamma}
 \end{prooftree}
 \]
+
+\subsection{Rules for basic blocks and instruction lists}
+
+\[
+\begin{prooftree} 
+    \hypo{\Gamma \vdash b :_\pi \gamma, \Gamma'}
+    \hypo{\Gamma', \%b :_\pi \gamma \vdash bbs :_\pi \gamma, \Gamma''}
+    \infer2[fn-body]{\Gamma \vdash b\ bbs :_\pi \gamma, \Gamma''}
+\end{prooftree} 
+\]
+
+
+\[
+\begin{prooftree} 
+    \hypo{\Gamma \vdash instrs : \pi, \Gamma'}
+    \hypo{\Gamma' \vdash term :_\pi \gamma, \Gamma''}
+    \infer2[bb-unknown]{\Gamma \vdash \%b: instrs\ term :_\pi \gamma, \Gamma''}
+\end{prooftree} 
+\]
+
+
+\[
+\begin{prooftree} 
+    \hypo{\Gamma(\%b) =_\pi \gamma} 
+    \infer1[bb-known]{\Gamma \vdash \%b: instrs\ term :_\pi \gamma, \Gamma''}
+\end{prooftree} 
+\]
+
+
+\[
+\begin{prooftree} 
+    \hypo{\Gamma \vdash instr : \pi, \Gamma'}
+    \hypo{\Gamma' \vdash instrs : \pi, \Gamma''}
+    \infer2[instrs]{\Gamma \vdash instr; instrs : \pi, \Gamma''}
+\end{prooftree} 
+\]
+
+\subsection{Rules for special instructions and terminators}
+
+\[
+\begin{prooftree}
+    \hypo{\Gamma(\%1) = l\ \alpha_1, \dots, \Gamma(\%n) = l\ \alpha_n}
+    \hypo{
+        \begin{matrix}
+            \Gamma(@f) = l\ \sigma\ (\beta_1, \dots, \beta_n) \rightarrow_\phi \theta \\
+            \gamma = l\ \theta 
+        \end{matrix}}
+    \hypo{
+        \begin{matrix}
+        \alpha_1 \cap \beta_1 \neq \epsilon \\
+        \vdots \\
+        \alpha_n \cap \beta_n \neq \epsilon
+        \end{matrix}
+    }
+    \infer3[call]{\Gamma \vdash \text{call } @f(\%1, \dots, \%n) : \pi, \Gamma, \%1: l\ \alpha_1 \cap \beta_1, \dots, \%n: l\ \alpha_n \cap \beta_n}
+\end{prooftree}
+\]
+
+\[
+\begin{prooftree}
+    \hypo{\Gamma(\%1) = l\ \alpha_1, \dots, \Gamma(\%n) = l\ \alpha_n}
+    \hypo{\Gamma(@f) = r\ \sigma\ (\beta_1, \dots, \beta_n) \rightarrow_\phi \theta}
+    \hypo{l \neq r}
+    \hypo{l \in \sigma}
+    \infer4[xd-call]{\Gamma \vdash \text{call } @f(\%1, \dots, \%n) : \pi, \Gamma}
+\end{prooftree}
+\]
+
+\[
+\begin{prooftree}
+    \hypo{\Gamma(\%a) = l\ \sigma = \gamma}
+    \hypo{\Gamma \vdash \%b_1 :_\pi \gamma, \Gamma'} 
+    \hypo{\Gamma \vdash \%b_2 :_\pi \gamma, \Gamma''} 
+    \infer3[break]{\Gamma \vdash \text{br }\%a, \%b_1, \%b_2 :_\pi \gamma, \Gamma' \cap \Gamma''}
+\end{prooftree}
+\]
+
+\[
+\begin{prooftree}
+    \hypo{\Gamma(\%a) = \gamma}
+    \infer1[ret]{\Gamma \vdash \text{ret }\%a :_\pi \gamma, \Gamma}
+\end{prooftree}
+\]
+
+
 
 \end{document}
