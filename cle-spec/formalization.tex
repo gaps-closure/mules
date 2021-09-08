@@ -4,6 +4,8 @@
 \title{CLE Type System}
 \author{Benjamin Flin}
 \date{August 2021}
+
+\newcommand{\vertrule}[1][1ex]{\rule{.4pt}{#1}}
 \usepackage[T1]{fontenc}
 \usepackage{amsmath, amssymb, proof, comment, syntax, url, amsthm, ebproof, mathtools}
 \begin{document}
@@ -17,11 +19,12 @@ $l$ and $r$ represent levels and can be thought of as arbitrary identifiers.
 
 \begin{center}
 \begin{tabular}{ l r }
-    $\tau, \pi, \gamma$ $\Coloneqq$ l $\sigma$ $\mid$ l $\sigma$ ($\alpha_1$, $\dots$, $\alpha_n$) $\rightarrow_\phi$ $\theta$ & cle type \\
-    $\sigma, \phi, \theta, \alpha, \beta$ $\Coloneqq$ $\epsilon$ $\mid$ $\sigma$ $+$ $r$ & remote levels \\
+    $\tau, \pi, \gamma$ $\Coloneqq$ l $\phi$ $\bigl\vert$ l $\sigma$ ($\alpha_1$, $\dots$, $\alpha_n$) $\rightarrow_\phi$ $\theta$ & cle type \\
+    $\alpha, \beta, \phi, \theta, \omega$ $\Coloneqq$ $\sigma$ $\bigl\vert$ $\sigma$ $\vertrule[1.5ex]$ $\phi$ & taints \\
+    $\sigma$ $\Coloneqq$ $\epsilon$ $\bigl\vert$ $\sigma$ $+$ $r$ & remote levels \\
 \end{tabular}
 \end{center}
-Note: remote levels are treated as sets.
+Note: remote levels are treated as sets. Taints are treated as sets of remotelevels (i.e., sets of sets of identifiers).
 
 \section{LLVM core grammar}
 
@@ -143,9 +146,11 @@ My references for the grammar construction is from this\footnote{\url{https://li
 <unit-type> ::= `unit'
 
 <cle-type> ::= <level> <remote-levels> 
-\alt <level> <remote-levels> `(' <cle-args> `)' `[' <remote-levels> `]' `->' <remote-levels> 
+\alt <level> <remote-levels> `(' <cle-args> `)' `[' <taints> `]' `->' <taints> 
 
-<cle-args> ::= <cle-args>, <remote-levels> \alt empty
+<cle-args> ::= <cle-args>, <taints> \alt empty
+
+<taints> ::=  <taints> `|' <remote-levels> \alt <taints> 
 
 <remote-levels> ::=  <remote-levels> `+' <level> \alt empty 
 
@@ -164,16 +169,15 @@ This global variable is in level orange, and is shareable with purple.
 @foo : i64 + "orange" "purple" = 1;
 \end{verbatim}
 
-
-The following function is in level "orange", and has a cdf with remote level "purple".
+The following function has a proposed type \texttt{"orange" "purple" (empty, "purple" | empty) [empty] -> empty}.
+It is in level "orange", and is callable from remote level "purple".
 The first argument is not shareable, 
-the second argument is shareable with purple. 
+the second argument is either shareable with purple or not shareable. 
 Any variable bound in the body must not be shareable, as well as the return type.
 
-Here I added `empty' in-place of empty fields for clarity. 
 \begin{verbatim}
 define @average(%0, %1) : (double, double) -> double
- + "orange" "purple" (empty, "purple") [empty] -> empty
+ + "orange" "purple" (empty, "purple" | empty) [empty] -> empty
       
 {
    %2 : double + "orange" = %0 + %1;
@@ -203,12 +207,12 @@ There are several types of judgements, each of which is enumerated below:
 
 \[    
 \begin{prooftree}
-    \hypo{\tau = l\ \sigma}
+    \hypo{\tau = l\ \phi}
     \infer1[global-decl]{\Gamma \vdash @x : \tau}
 \end{prooftree}
 \qquad
 \begin{prooftree}
-    \hypo{\tau = l\ \sigma}
+    \hypo{\tau = l\ \phi}
     \infer1[global-def]{\Gamma \vdash @x = c : \tau}
 \end{prooftree}
 \]
@@ -217,19 +221,21 @@ There are several types of judgements, each of which is enumerated below:
 \begin{prooftree}
     \hypo{
     \begin{matrix}
-        \Gamma, @f : \tau, \%1 : l\ \alpha_1, \ldots, \%n: l\ \alpha \vdash body :_{(l\ \phi_m)} l\ \theta_m, \Gamma' \\
+        \Gamma[@f \mapsto \tau, \%1 \mapsto l\ \alpha_1, \ldots, \%n \mapsto l\ \alpha_n] \vdash body :_{(l\ \phi_m)} l\ \theta_m, \Gamma' \\
         \tau = l\ \sigma\ (\alpha_1, \dots, \alpha_n) \rightarrow_\phi \theta
     \end{matrix}
     }
-    \infer1[fn-def]{\Gamma \vdash @f(\%1, \dots \%n)\ \{ body \} : \tau}
+    \infer1[fn-def]{\Gamma \vdash @f(\%1, \dots \%n) : \tau\ \{ body \} : \Gamma'(@f)  }
     
 \end{prooftree}
 \]
 
 \[
 \begin{prooftree}
-    \hypo{\tau = l\ \sigma\ (\alpha_1, \dots, \alpha_n) \rightarrow_\phi \theta}
-    \infer1[fn-decl]{\Gamma \vdash @f : \tau, \Gamma}
+    \hypo{
+    \Gamma(@f) = l\ \sigma\ (\alpha_1, \dots, \alpha_n) \rightarrow_\phi \theta
+    }
+    \infer1[fn-def-known]{\Gamma \vdash @f(\%1, \dots \%n) : \tau\ \{ body \} : \Gamma(@f)  }
 \end{prooftree}
 \]
 
@@ -276,17 +282,21 @@ There are several types of judgements, each of which is enumerated below:
     \hypo{\Gamma(\%1) = l\ \alpha_1, \dots, \Gamma(\%n) = l\ \alpha_n}
     \hypo{
         \begin{matrix}
-            \Gamma(@f) = l\ \sigma\ (\beta_1, \dots, \beta_n) \rightarrow_\phi \theta \\
-            \gamma = l\ \theta 
+            \Gamma \vdash @f : l\ \sigma\ (\beta_1, \dots, \beta_n) \rightarrow_\phi \theta \\
+            \omega \cap \theta \neq \varnothing
         \end{matrix}}
     \hypo{
         \begin{matrix}
-        \alpha_1 \cap \beta_1 \neq \epsilon \\
+        \alpha_1 \cap \beta_1 \neq \varnothing \\
         \vdots \\
-        \alpha_n \cap \beta_n \neq \epsilon
+        \alpha_n \cap \beta_n \neq \varnothing
         \end{matrix}
     }
-    \infer3[call]{\Gamma \vdash \text{call } @f(\%1, \dots, \%n) : \pi, \Gamma, \%1: l\ \alpha_1 \cap \beta_1, \dots, \%n: l\ \alpha_n \cap \beta_n}
+    \infer3[call]{
+    \begin{matrix}
+        \Gamma \vdash \%a = \text{call } @f(\%1, \dots, \%n) : l\ \omega, \\
+        \Gamma[\%a \mapsto l\ \omega \cap \theta, @f \mapsto (\alpha_1 \cap \beta_1, \dots, \alpha_n \cap \beta_n) \rightarrow_\phi \theta, \%1 \mapsto l\ \alpha_1 \cap \beta_1, \dots, \%n \mapsto l\ \alpha_n \cap \beta_n]
+    \end{matrix}}
 \end{prooftree}
 \]
 
@@ -302,7 +312,7 @@ There are several types of judgements, each of which is enumerated below:
 
 \[
 \begin{prooftree}
-    \hypo{\Gamma(\%a) = l\ \sigma = \gamma}
+    \hypo{\Gamma(\%a) = \gamma}
     \hypo{\Gamma \vdash \%b_1 :_\pi \gamma, \Gamma'} 
     \hypo{\Gamma \vdash \%b_2 :_\pi \gamma, \Gamma''} 
     \infer3[break]{\Gamma \vdash \text{br }\%a, \%b_1, \%b_2 :_\pi \gamma, \Gamma' \cap \Gamma''}
@@ -316,6 +326,61 @@ There are several types of judgements, each of which is enumerated below:
 \end{prooftree}
 \]
 
+\subsection{Operations on contexts, taints and remotelevels }
+
+The following operations turn taints and remotelevels into
+sets of sets and sets respectively.
+\[
+\begin{prooftree}
+    \infer0[set-epsilon]{S(\epsilon) = \varnothing}
+\end{prooftree}
+\]
+
+\[
+\begin{prooftree}
+    \hypo{S(\sigma) = A} 
+    \infer1[set-plus]{S(\sigma + r) = A \cup \{r\}}
+\end{prooftree}
+\]
+
+\[
+\begin{prooftree}
+    \hypo{S(\sigma) = A} 
+    \infer1[set-taint1]{S(\phi = \sigma) = \{A\}}
+\end{prooftree}
+\]
+
+\[
+\begin{prooftree}
+    \hypo{S(\phi) = A}
+    \hypo{S(\sigma) = B}
+    \infer2[set-taint-many]{S(\phi \mid \sigma) = A \cup \{B\}}
+\end{prooftree}
+\]
+
+$S^{-1}$ is ommitted, but can be thought as a inverse transformation from sets 
+back to taints and remotelevels.
+
+
+\[
+\begin{prooftree}
+    \hypo{S(\sigma_1) = A}
+    \hypo{S(\sigma_2) = B}
+    \infer2[intersect-level]{\sigma_1 \cap \sigma_2 = A \cap B}
+\end{prooftree}
+\]
+
+
+\[
+\begin{prooftree}
+    \hypo{S(\phi_1) = A}
+    \hypo{S(\phi_2) = B}
+    \infer2[intersect-taint]{\phi_1 \cap \phi_2 = A \cap B}
+\end{prooftree}
+\]
+
+Intersection on contexts is defined as a map merge with any overlapping types being
+intersected.
 
 
 \end{document}
