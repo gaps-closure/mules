@@ -185,9 +185,6 @@ define @average(%0, %1) : (double, double) -> double
 
 \section{Type rules}
 Here we assume all functions and global variables have cle types associated with them.  We will focus on how to infer such types in the next section.
-CLE is a flow-sensitive model and the types of variables may change as the program is checked.
-To reason through this in the system, a type judgement will also include an output context, which may be used in the conclusions of judgements.
-
 There are several types of judgements, each of which is enumerated below:
 
 \subsection{Judgements}
@@ -222,7 +219,7 @@ There are several types of judgements, each of which is enumerated below:
         \tau = l\ \sigma\ (\alpha_1, \dots, \alpha_n) \rightarrow_\phi \theta
     \end{matrix}
     }
-    \infer1[fn-def]{\Gamma \vdash @f(\%1, \dots \%n)\ \{ body \} : \tau}
+    \infer1[fn-def]{\Gamma \vdash @f(\%1, \dots, \%n)\ \{ body \} : \tau}
     
 \end{prooftree}
 \]
@@ -232,7 +229,7 @@ There are several types of judgements, each of which is enumerated below:
     \hypo{
     \Gamma(@f) = \tau = l\ \sigma\ (\alpha_1, \dots, \alpha_n) \rightarrow_\phi \theta
     }
-    \infer1[fn-def-known]{\Gamma \vdash @f(\%1, \dots \%n)\ \{ body \} : \tau}
+    \infer1[fn-def-known]{\Gamma \vdash @f(\%1, \dots, \%n)\ \{ body \} : \tau}
 \end{prooftree}
 \]
 
@@ -267,8 +264,8 @@ There are several types of judgements, each of which is enumerated below:
 \[
 \begin{prooftree} 
     \hypo{\Gamma \vdash instr : \pi}
-    \hypo{\Gamma' \vdash instrs : \pi}
-    \infer2[instrs]{\Gamma \vdash instr; instrs : \pi}
+    \hypo{\Gamma[\%a \mapsto \pi] \vdash instrs : \pi}
+    \infer2[instrs]{\Gamma \vdash \%a = instr; instrs : \pi}
 \end{prooftree} 
 \]
 
@@ -278,7 +275,7 @@ There are several types of judgements, each of which is enumerated below:
 \begin{prooftree}
     \hypo{\Gamma(\%1) = l\ \alpha_1, \dots, \Gamma(\%n) = l\ \alpha_n}
     \hypo{\Gamma \vdash @f : l\ \sigma\ (\alpha_1, \dots, \alpha_n) \rightarrow_\phi \theta}
-    \infer2[call]{\Gamma \vdash \%a = \text{call } @f(\%1, \dots, \%n) : l\ \theta}
+    \infer2[call]{\Gamma \vdash \text{call } @f(\%1, \dots, \%n) : l\ \theta}
 \end{prooftree}
 \]
 
@@ -305,6 +302,21 @@ There are several types of judgements, each of which is enumerated below:
 \begin{prooftree}
     \hypo{\Gamma(\%a) = \gamma}
     \infer1[ret]{\Gamma \vdash \text{ret }\%a :_\pi \gamma}
+\end{prooftree}
+\]
+
+\subsection{General rule for instructions}
+
+The rules for all other instructions
+can be derived from general instruction form which takes in
+a number of arguments:
+$$\text{instr}\ \%a_1, \dots, \%a_n$$
+Thus,
+
+\[
+\begin{prooftree}
+    \hypo{\Gamma(\%a_1) = \dots = \Gamma(\%a_n) = \pi}
+    \infer1[ret]{\Gamma \vdash \text{instr}\ \%a_1, \dots \%a_n : \pi}
 \end{prooftree}
 \]
 
