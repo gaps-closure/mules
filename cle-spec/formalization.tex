@@ -19,12 +19,11 @@ $l$ and $r$ represent levels and can be thought of as arbitrary identifiers.
 
 \begin{center}
 \begin{tabular}{ l r }
-    $\tau, \pi, \gamma$ $\Coloneqq$ l $\phi$ $\bigl\vert$ l $\sigma$ ($\alpha_1$, $\dots$, $\alpha_n$) $\rightarrow_\phi$ $\theta$ & cle type \\
-    $\alpha, \beta, \phi, \theta, \omega$ $\Coloneqq$ $\sigma$ $\bigl\vert$ $\sigma$ $\vertrule[1.5ex]$ $\phi$ & taints \\
-    $\sigma$ $\Coloneqq$ $\epsilon$ $\bigl\vert$ $\sigma$ $+$ $r$ & remote levels \\
+    $\tau, \pi, \gamma$ $\Coloneqq$ l $\sigma$ $\bigl\vert$ l $\sigma$ ($\alpha_1$, $\dots$, $\alpha_n$) $\rightarrow_\phi$ $\theta$ & cle type \\
+    $\alpha, \beta, \theta, \sigma$ $\Coloneqq$ $\epsilon$ $\bigl\vert$ $\sigma$ $+$ $r$ & remote levels \\
 \end{tabular}
 \end{center}
-Note: remote levels are treated as sets. Taints are treated as sets of remotelevels (i.e., sets of sets of identifiers).
+Note: remote levels are treated as sets. 
 
 \section{LLVM core grammar}
 
@@ -146,11 +145,9 @@ My references for the grammar construction is from this\footnote{\url{https://li
 <unit-type> ::= `unit'
 
 <cle-type> ::= <level> <remote-levels> 
-\alt <level> <remote-levels> `(' <cle-args> `)' `[' <taints> `]' `->' <taints> 
+\alt <level> <remote-levels> `(' <cle-args> `)' `[' <remote-levels> `]' `->' <remote-levels> 
 
-<cle-args> ::= <cle-args>, <taints> \alt empty
-
-<taints> ::=  <taints> `|' <remote-levels> \alt <taints> 
+<cle-args> ::= <cle-args>, <remote-levels> \alt empty
 
 <remote-levels> ::=  <remote-levels> `+' <level> \alt empty 
 
@@ -172,12 +169,12 @@ This global variable is in level orange, and is shareable with purple.
 The following function has a proposed type \texttt{"orange" "purple" (empty, "purple" | empty) [empty] -> empty}.
 It is in level "orange", and is callable from remote level "purple".
 The first argument is not shareable, 
-the second argument is either shareable with purple or not shareable. 
+and the second argument is shareable with purple. 
 Any variable bound in the body must not be shareable, as well as the return type.
 
 \begin{verbatim}
 define @average(%0, %1) : (double, double) -> double
- + "orange" "purple" (empty, "purple" | empty) [empty] -> empty
+ + "orange" "purple" (empty, "purple" + empty) [empty] -> empty
       
 {
    %2 : double + "orange" = %0 + %1;
@@ -196,10 +193,10 @@ There are several types of judgements, each of which is enumerated below:
 \subsection{Judgements}
 \begin{enumerate}
     \item $\Gamma \vdash e : \tau$. 
-    Top-level entity $e$ has type $\tau$. Top-level judgements are not flow-sensitive. 
-    \item $\Gamma \vdash b :_\pi \gamma, \Gamma'$. 
-    Basic block or set of basic blocks $b$ has type $\pi$ for all variables bound in instructions, type $\gamma$ for the terminator and produces a new context $\Gamma'$.
-    \item $\Gamma \vdash t :_\pi \gamma, \Gamma'$. 
+    Top-level entity $e$ has type $\tau$. 
+    \item $\Gamma \vdash b :_\pi \gamma$. 
+    Basic block or set of basic blocks $b$ has type $\pi$ for all variables bound in instructions, type $\gamma$ for the terminator.
+    \item $\Gamma \vdash t :_\pi \gamma$. 
     Terminator $t$ has type $\gamma$ and all referenced basic blocks, $b$ are given type $_\pi \gamma$.
 \end{enumerate}
 
@@ -207,12 +204,12 @@ There are several types of judgements, each of which is enumerated below:
 
 \[    
 \begin{prooftree}
-    \hypo{\tau = l\ \phi}
+    \hypo{\tau = l\ \sigma}
     \infer1[global-decl]{\Gamma \vdash @x : \tau}
 \end{prooftree}
 \qquad
 \begin{prooftree}
-    \hypo{\tau = l\ \phi}
+    \hypo{\tau = l\ \sigma}
     \infer1[global-def]{\Gamma \vdash @x = c : \tau}
 \end{prooftree}
 \]
@@ -221,11 +218,11 @@ There are several types of judgements, each of which is enumerated below:
 \begin{prooftree}
     \hypo{
     \begin{matrix}
-        \Gamma[@f \mapsto \tau, \%1 \mapsto l\ \alpha_1, \ldots, \%n \mapsto l\ \alpha_n] \vdash body :_{(l\ \phi_m)} l\ \theta_m, \Gamma' \\
+        \Gamma[@f \mapsto \tau, \%1 \mapsto l\ \alpha_1, \ldots, \%n \mapsto l\ \alpha_n] \vdash body :_{(l\ \phi)} l\ \theta \\
         \tau = l\ \sigma\ (\alpha_1, \dots, \alpha_n) \rightarrow_\phi \theta
     \end{matrix}
     }
-    \infer1[fn-def]{\Gamma \vdash @f(\%1, \dots \%n) : \tau\ \{ body \} : \Gamma'(@f)  }
+    \infer1[fn-def]{\Gamma \vdash @f(\%1, \dots \%n)\ \{ body \} : \tau}
     
 \end{prooftree}
 \]
@@ -233,9 +230,9 @@ There are several types of judgements, each of which is enumerated below:
 \[
 \begin{prooftree}
     \hypo{
-    \Gamma(@f) = l\ \sigma\ (\alpha_1, \dots, \alpha_n) \rightarrow_\phi \theta
+    \Gamma(@f) = \tau = l\ \sigma\ (\alpha_1, \dots, \alpha_n) \rightarrow_\phi \theta
     }
-    \infer1[fn-def-known]{\Gamma \vdash @f(\%1, \dots \%n) : \tau\ \{ body \} : \Gamma(@f)  }
+    \infer1[fn-def-known]{\Gamma \vdash @f(\%1, \dots \%n)\ \{ body \} : \tau}
 \end{prooftree}
 \]
 
@@ -243,18 +240,18 @@ There are several types of judgements, each of which is enumerated below:
 
 \[
 \begin{prooftree} 
-    \hypo{\Gamma \vdash b :_\pi \gamma, \Gamma'}
-    \hypo{\Gamma', \%b :_\pi \gamma \vdash bbs :_\pi \gamma, \Gamma''}
-    \infer2[fn-body]{\Gamma \vdash b\ bbs :_\pi \gamma, \Gamma''}
+    \hypo{\Gamma \vdash b :_\pi \gamma}
+    \hypo{\Gamma', \%b :_\pi \gamma \vdash bbs :_\pi \gamma}
+    \infer2[fn-body]{\Gamma \vdash b\ bbs :_\pi \gamma}
 \end{prooftree} 
 \]
 
 
 \[
 \begin{prooftree} 
-    \hypo{\Gamma \vdash instrs : \pi, \Gamma'}
-    \hypo{\Gamma' \vdash term :_\pi \gamma, \Gamma''}
-    \infer2[bb-unknown]{\Gamma \vdash \%b: instrs\ term :_\pi \gamma, \Gamma''}
+    \hypo{\Gamma \vdash instrs : \pi}
+    \hypo{\Gamma' \vdash term :_\pi \gamma}
+    \infer2[bb-unknown]{\Gamma \vdash \%b: instrs\ term :_\pi \gamma}
 \end{prooftree} 
 \]
 
@@ -262,16 +259,16 @@ There are several types of judgements, each of which is enumerated below:
 \[
 \begin{prooftree} 
     \hypo{\Gamma(\%b) =_\pi \gamma} 
-    \infer1[bb-known]{\Gamma \vdash \%b: instrs\ term :_\pi \gamma, \Gamma''}
+    \infer1[bb-known]{\Gamma \vdash \%b: instrs\ term :_\pi \gamma}
 \end{prooftree} 
 \]
 
 
 \[
 \begin{prooftree} 
-    \hypo{\Gamma \vdash instr : \pi, \Gamma'}
-    \hypo{\Gamma' \vdash instrs : \pi, \Gamma''}
-    \infer2[instrs]{\Gamma \vdash instr; instrs : \pi, \Gamma''}
+    \hypo{\Gamma \vdash instr : \pi}
+    \hypo{\Gamma' \vdash instrs : \pi}
+    \infer2[instrs]{\Gamma \vdash instr; instrs : \pi}
 \end{prooftree} 
 \]
 
@@ -280,107 +277,35 @@ There are several types of judgements, each of which is enumerated below:
 \[
 \begin{prooftree}
     \hypo{\Gamma(\%1) = l\ \alpha_1, \dots, \Gamma(\%n) = l\ \alpha_n}
-    \hypo{
-        \begin{matrix}
-            \Gamma \vdash @f : l\ \sigma\ (\beta_1, \dots, \beta_n) \rightarrow_\phi \theta \\
-            \omega \cap \theta \neq \varnothing
-        \end{matrix}}
-    \hypo{
-        \begin{matrix}
-        \alpha_1 \cap \beta_1 \neq \varnothing \\
-        \vdots \\
-        \alpha_n \cap \beta_n \neq \varnothing
-        \end{matrix}
-    }
-    \infer3[call]{
-    \begin{matrix}
-        \Gamma \vdash \%a = \text{call } @f(\%1, \dots, \%n) : l\ \omega, \\
-        \Gamma[\%a \mapsto l\ \omega \cap \theta, @f \mapsto (\alpha_1 \cap \beta_1, \dots, \alpha_n \cap \beta_n) \rightarrow_\phi \theta, \%1 \mapsto l\ \alpha_1 \cap \beta_1, \dots, \%n \mapsto l\ \alpha_n \cap \beta_n]
-    \end{matrix}}
+    \hypo{\Gamma \vdash @f : l\ \sigma\ (\alpha_1, \dots, \alpha_n) \rightarrow_\phi \theta}
+    \infer2[call]{\Gamma \vdash \%a = \text{call } @f(\%1, \dots, \%n) : l\ \theta}
 \end{prooftree}
 \]
 
 \[
 \begin{prooftree}
     \hypo{\Gamma(\%1) = l\ \alpha_1, \dots, \Gamma(\%n) = l\ \alpha_n}
-    \hypo{\Gamma(@f) = r\ \sigma\ (\beta_1, \dots, \beta_n) \rightarrow_\phi \theta}
+    \hypo{\Gamma \vdash @f : r\ \sigma\ (\beta_1, \dots, \beta_n) \rightarrow_\phi \theta}
     \hypo{l \neq r}
     \hypo{l \in \sigma}
-    \infer4[xd-call]{\Gamma \vdash \text{call } @f(\%1, \dots, \%n) : \pi, \Gamma}
+    \infer4[xd-call]{\Gamma \vdash \text{call } @f(\%1, \dots, \%n) : \pi}
 \end{prooftree}
 \]
 
 \[
 \begin{prooftree}
     \hypo{\Gamma(\%a) = \gamma}
-    \hypo{\Gamma \vdash \%b_1 :_\pi \gamma, \Gamma'} 
-    \hypo{\Gamma \vdash \%b_2 :_\pi \gamma, \Gamma''} 
-    \infer3[break]{\Gamma \vdash \text{br }\%a, \%b_1, \%b_2 :_\pi \gamma, \Gamma' \cap \Gamma''}
+    \hypo{\Gamma \vdash \%b_1 :_\pi \gamma} 
+    \hypo{\Gamma \vdash \%b_2 :_\pi \gamma} 
+    \infer3[break]{\Gamma \vdash \text{br }\%a, \%b_1, \%b_2 :_\pi \gamma}
 \end{prooftree}
 \]
 
 \[
 \begin{prooftree}
     \hypo{\Gamma(\%a) = \gamma}
-    \infer1[ret]{\Gamma \vdash \text{ret }\%a :_\pi \gamma, \Gamma}
+    \infer1[ret]{\Gamma \vdash \text{ret }\%a :_\pi \gamma}
 \end{prooftree}
 \]
-
-\subsection{Operations on contexts, taints and remotelevels }
-
-The following operations turn taints and remotelevels into
-sets of sets and sets respectively.
-\[
-\begin{prooftree}
-    \infer0[set-epsilon]{S(\epsilon) = \varnothing}
-\end{prooftree}
-\]
-
-\[
-\begin{prooftree}
-    \hypo{S(\sigma) = A} 
-    \infer1[set-plus]{S(\sigma + r) = A \cup \{r\}}
-\end{prooftree}
-\]
-
-\[
-\begin{prooftree}
-    \hypo{S(\sigma) = A} 
-    \infer1[set-taint1]{S(\phi = \sigma) = \{A\}}
-\end{prooftree}
-\]
-
-\[
-\begin{prooftree}
-    \hypo{S(\phi) = A}
-    \hypo{S(\sigma) = B}
-    \infer2[set-taint-many]{S(\phi \mid \sigma) = A \cup \{B\}}
-\end{prooftree}
-\]
-
-$S^{-1}$ is ommitted, but can be thought as a inverse transformation from sets 
-back to taints and remotelevels.
-
-
-\[
-\begin{prooftree}
-    \hypo{S(\sigma_1) = A}
-    \hypo{S(\sigma_2) = B}
-    \infer2[intersect-level]{\sigma_1 \cap \sigma_2 = A \cap B}
-\end{prooftree}
-\]
-
-
-\[
-\begin{prooftree}
-    \hypo{S(\phi_1) = A}
-    \hypo{S(\phi_2) = B}
-    \infer2[intersect-taint]{\phi_1 \cap \phi_2 = A \cap B}
-\end{prooftree}
-\]
-
-Intersection on contexts is defined as a map merge with any overlapping types being
-intersected.
-
 
 \end{document}
