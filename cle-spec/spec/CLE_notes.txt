@@ -1,0 +1,51 @@
+CLE Notes:
+
+* All symbols and keywords in CLE are distinct and cannot be reused: case sensitive
+* Enclave: a memory isolated computing environment with names such as ENCLAVE_ORANGE_0
+* Level: a sensitivity level for which we use color names as identifiers such as green, orange, etc.
+* An enclave operates at a single level
+* Multiple enclaves may operate at the same level (e.g. ENCLAVE_ORANGE_WESTCOAST, ENCLAVE_ORANGE_WESTCOAST_GPU, ENCLAVE_ORANGE_EASTCOAST)
+
+* An annotation includes a CLE-label and an associated CLE-JSON
+* A CLE-label (e.g. ORANGE_SHAREABLE) is a symbol that represents certain cross domain security constraints which are specified in the associated JSON
+* The associated CLE-JSON specifies security constraints to be defined later 
+
+* There are two types of annotations:
+1) Node Annotations
+    * Developer can apply at most one node annotation to a local or a global variable
+2) Function Annotations   
+    * Developer can apply at most one function annotation to a function
+    * Function annotations can only be applied to functions
+    
+* We anticipate a small number of functions and variables will be annotated
+* Annoted functions are expected to be audited
+
+CLE-JSON contents:
+    level: specifies the program element assigned to an enclave with the designated level 
+    cdf: array of cdf elements which contain
+        * remotelevel: a level of a potential peer domain
+            * For a node annotation, constrains whether data can flow from level to remotelevel
+            * For a function annotation, constrains whether the function can be called cross domain from remotelevel
+        * guardoperation: allow, redact, deny
+            * deny is provided as a convenience 
+        * direction: ingress, egress, bidirectional
+            * Direction is ignored for now. Intended to signal push vs. pull of data
+        * oneway: bool
+            * Signals if true there is a data diode between level and remotelevel
+            * Implication: When applied to function annotations, cross domain invocations cannot use returned data
+            * For level equal to remotelevel, does not make sense to set oneway to true
+        * argtaints: a list of sets of CLE-labels where the length of the list is the number of parameters
+            * Only applies to function annotations
+            * The respective elements of the list correspond to the respective parameters of the function
+            * The argument passed to the corresponding parameters must have a (potentially inferred) CLE-Label that matches one of the labels specified in the set 
+        * rettaints: (To be continued...)
+
+
+
+* There can be at most 1 cdf element per remotelevel within a CLE-JSON of an annotation 
+* There can be a cdf element with level equal to remotelevel
+* If the cdf for a remotelevel is missing, it is equivalent to deny
+* Every cdf element in a function annotation must contain argtaints, codtaints, and rettaints.
+* Variable argument functions are not supported, only for annotated functions. Other functions can have variable arity.
+
+
