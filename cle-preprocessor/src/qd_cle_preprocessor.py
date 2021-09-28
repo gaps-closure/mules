@@ -11,6 +11,7 @@ import sys
 import os
 import os.path
 import jsonschema
+import pickle
 
 # Invoke libclang tokenizer
 def cindex_tokenizer(f,a):
@@ -112,7 +113,7 @@ def validate_cle(tree_entry, schema):
   return(tree_entry[4])
 
 # Based on transformed tree create modified source and mappings file
-def source_transform(infile,ttree,astyle, schema):
+def source_transform(infile,ttree,astyle, schema, produce_pickle):
   # Collect cledefs and dump
   if(schema is None):
     #schema check is disabled
@@ -124,51 +125,75 @@ def source_transform(infile,ttree,astyle, schema):
     json.dump(defs,mapf,indent=2)
 
   curline = 0
+  offset = 0
+  offsetDic = {}
   with open(infile) as inf:
     fn,fe = os.path.splitext(infile)
     with open(fn + '.mod' + fe,'w') as ouf:
-      for x in sorted(ttree, key=lambda x: x[1]):
-        if x[0] == 'clebegin':
-          while curline < x[1] - 1: 
+      with open(fn + '.offset.txt','w') as offsetf:
+        for x in sorted(ttree, key=lambda x: x[1]):
+          if x[0] == 'clebegin':
+            while curline < x[1] - 1: 
+              ouf.write(inf.readline())
+              curline += 1
+              offsetf.write(f"({curline+offset},{curline})\n")
+              offsetDic[curline+offset] = curline
+            if astyle == 'naive' or astyle == 'both':
+              ouf.write('#pragma clang attribute push (__attribute__((annotate("')
+              ouf.write(x[3])
+              ouf.write('"))), apply_to = any(function,type_alias,record,enum,variable(unless(is_parameter)),field))')
+              ouf.write('\n')
+              offset+=1
+              offsetf.write(f"({curline+offset},{curline+1})\n")
+            if astyle == 'type' or astyle == 'both':
+              ouf.write('#pragma clang attribute push (__attribute__((type_annotate("')
+              ouf.write(x[3])
+              ouf.write('"))), apply_to = any(function,type_alias,record,enum,variable(unless(is_parameter)),field))')
+              ouf.write('\n')
+              offset+=1
+              offsetf.write(f"({curline+offset},{curline+1})\n")
             ouf.write(inf.readline())
             curline += 1
-          if astyle == 'naive' or astyle == 'both':
-            ouf.write('#pragma clang attribute push (__attribute__((annotate("')
-            ouf.write(x[3])
-            ouf.write('"))), apply_to = any(function,type_alias,record,enum,variable(unless(is_parameter)),field))')
-            ouf.write('\n')
-          if astyle == 'type' or astyle == 'both':
-            ouf.write('#pragma clang attribute push (__attribute__((type_annotate("')
-            ouf.write(x[3])
-            ouf.write('"))), apply_to = any(function,type_alias,record,enum,variable(unless(is_parameter)),field))')
-            ouf.write('\n')
-          ouf.write(inf.readline())
+            offsetf.write(f"({curline+offset},{curline})\n")
+            offsetDic[curline+offset] = curline
+          elif x[0] == 'cleend':
+            while curline < x[1]: 
+              ouf.write(inf.readline())
+              curline += 1
+              offsetf.write(f"({curline+offset},{curline})\n")
+              offsetDic[curline+offset] = curline
+            if astyle == 'naive' or astyle == 'both':
+              ouf.write('#pragma clang attribute pop\n')
+              offset+=1
+              offsetf.write(f"({curline+offset},{curline})\n")
+              offsetDic[curline+offset] = curline
+            if astyle == 'type' or astyle == 'both':
+              ouf.write('#pragma clang attribute pop\n')
+              offset+=1
+              offsetf.write(f"({curline+offset},{curline})\n")
+              offsetDic[curline+offset] = curline
+          elif x[0] == 'cleappnl':
+            while curline < x[1]: 
+              ouf.write(inf.readline())
+              curline += 1
+              offsetf.write(f"({curline+offset},{curline})\n")
+              offsetDic[curline+offset] = curline
+            # XXX: Ought to get extent of next statement from AST
+            # and wrap pragma clang push/pop around it, but it is
+            # tricky. For example, what should we do if nwhat follows
+            # is a namespace, assignment or aribtrary statement vs. 
+            # a typedef/class/struct/variable declaration? 
+            print('cleappnl not implemented:', x)
+          else:
+            pass
+        # Copy remaining lines if any
+        for line in inf: 
+          ouf.write(line)
           curline += 1
-        elif x[0] == 'cleend':
-          while curline < x[1]: 
-            ouf.write(inf.readline())
-            curline += 1
-          if astyle == 'naive' or astyle == 'both':
-            ouf.write('#pragma clang attribute pop\n')
-          if astyle == 'type' or astyle == 'both':
-            ouf.write('#pragma clang attribute pop\n')
-        elif x[0] == 'cleappnl':
-          while curline < x[1]: 
-            ouf.write(inf.readline())
-            curline += 1
-          # XXX: Ought to get extent of next statement from AST
-          # and wrap pragma clang push/pop around it, but it is
-          # tricky. For example, what should we do if nwhat follows
-          # is a namespace, assignment or aribtrary statement vs. 
-          # a typedef/class/struct/variable declaration? 
-          print('cleappnl not implemented:', x)
-        else:
-          pass
-      # Copy remaining lines if any
-      for line in inf: 
-        ouf.write(line)
-        curline += 1
-    
+          offsetf.write(f"({curline+offset},{curline})\n")
+          offsetDic[curline+offset] = curline
+  if(produce_pickle):
+    pickle.dump( offsetDic, open( fn + fe + ".offset.pkl", "wb" ) )
 # Parse command line argumets
 def get_args():
   p = ArgumentParser(description='CLOSURE Language Extensions Preprocessor')
@@ -184,6 +209,9 @@ def get_args():
                  help='override the location of the of the schema if required')
   p.add_argument('-L', '--liberal',help="Liberal mode: disable cle schema check",
                  default=False, action='store_true') 
+  p.add_argument('-P', '--pickle',help="Produce pickle file with map of offsets.",
+                 default=False, action='store_true') 
+  
   return p.parse_args()
 
 def get_cle_schema(schema_location):
@@ -239,7 +267,7 @@ def main():
   for x in ttree: print(x)
 
   try:
-    source_transform(args.file, ttree, args.annotation_style, schema)
+    source_transform(args.file, ttree, args.annotation_style, schema, args.pickle)
   except jsonschema.exceptions.ValidationError as schemaerr:
     print(schemaerr)
     sys.exit(-1)
