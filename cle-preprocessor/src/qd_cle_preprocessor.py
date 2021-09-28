@@ -193,7 +193,7 @@ def source_transform(infile,ttree,astyle, schema, produce_pickle):
           offsetf.write(f"({curline+offset},{curline})\n")
           offsetDic[curline+offset] = curline
   if(produce_pickle):
-    pickle.dump( offsetDic, open( fn + fe + ".offset.pkl", "wb" ) )
+    pickle.dump( offsetDic, open( fn + ".mod" + fe + ".offset.pkl", "wb" ) )
 # Parse command line argumets
 def get_args():
   p = ArgumentParser(description='CLOSURE Language Extensions Preprocessor')
