@@ -137,9 +137,9 @@ def source_transform(infile,ttree,astyle, schema, args):
     fn = Path(infile)
     fe = fn.suffix 
     opath = Path(args.output) 
-    ofn = opath / fn.with_suffix('.mod.c') 
+    ofn = opath / fn.with_suffix('.mod.c').name
   
-    with open(opath / fn.with_suffix('.mod.c'), 'w') as ouf:
+    with open(ofn, 'w') as ouf:
       with open(opath / fn.with_suffix('.offset.txt').name,'w') as offsetf:
         for x in sorted(ttree, key=lambda x: x[1]):
           if x[0] == 'clebegin':
