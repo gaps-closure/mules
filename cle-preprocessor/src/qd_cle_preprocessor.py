@@ -113,7 +113,8 @@ def validate_cle(tree_entry, schema):
   return(tree_entry[4])
 
 # Based on transformed tree create modified source and mappings file
-def source_transform(infile,ttree,astyle, schema, produce_pickle):
+def source_transform(infile,ttree,astyle, schema, args):
+  produce_pickle = args.pickle
   # Collect cledefs and dump
   if(schema is None):
     #schema check is disabled
@@ -121,7 +122,10 @@ def source_transform(infile,ttree,astyle, schema, produce_pickle):
   else:
     defs = [{"cle-label": x[3], "cle-json": validate_cle(x,schema)} for x in ttree if x[0] == 'cledef']
 
-  with open(infile + ".clemap.json", 'w') as mapf:
+  jsonfile = infile
+  if args.output:
+      jsonfile = args.json + os.path.basename(infile)
+  with open(jsonfile + ".clemap.json", 'w') as mapf:
     json.dump(defs,mapf,indent=2)
 
   curline = 0
@@ -129,6 +133,10 @@ def source_transform(infile,ttree,astyle, schema, produce_pickle):
   offsetDic = {}
   with open(infile) as inf:
     fn,fe = os.path.splitext(infile)
+
+    if args.output:
+      fn = args.output + os.path.basename(infile)
+  
     with open(fn + '.mod' + fe,'w') as ouf:
       with open(fn + '.offset.txt','w') as offsetf:
         for x in sorted(ttree, key=lambda x: x[1]):
@@ -137,7 +145,7 @@ def source_transform(infile,ttree,astyle, schema, produce_pickle):
               ouf.write(inf.readline())
               curline += 1
               offsetf.write(f"({curline+offset},{curline})\n")
-              offsetDic[curline+offset] = curline
+              offsetDic[(fn + '.mod' + fe,curline+offset)] = (fn + '.mod' + fe,curline)
             if astyle == 'naive' or astyle == 'both':
               ouf.write('#pragma clang attribute push (__attribute__((annotate("')
               ouf.write(x[3])
@@ -145,6 +153,7 @@ def source_transform(infile,ttree,astyle, schema, produce_pickle):
               ouf.write('\n')
               offset+=1
               offsetf.write(f"({curline+offset},{curline+1})\n")
+              offsetDic[(fn + '.mod' + fe,curline+offset)] = (fn + '.mod' + fe,curline)
             if astyle == 'type' or astyle == 'both':
               ouf.write('#pragma clang attribute push (__attribute__((type_annotate("')
               ouf.write(x[3])
@@ -152,32 +161,33 @@ def source_transform(infile,ttree,astyle, schema, produce_pickle):
               ouf.write('\n')
               offset+=1
               offsetf.write(f"({curline+offset},{curline+1})\n")
+              offsetDic[(fn + '.mod' + fe,curline+offset)] = (fn + '.mod' + fe,curline)
             ouf.write(inf.readline())
             curline += 1
             offsetf.write(f"({curline+offset},{curline})\n")
-            offsetDic[curline+offset] = curline
+            offsetDic[(fn + '.mod' + fe,curline+offset)] = (fn + '.mod' + fe,curline)
           elif x[0] == 'cleend':
             while curline < x[1]: 
               ouf.write(inf.readline())
               curline += 1
               offsetf.write(f"({curline+offset},{curline})\n")
-              offsetDic[curline+offset] = curline
+              offsetDic[(fn + '.mod' + fe,curline+offset)] = (fn + '.mod' + fe,curline)
             if astyle == 'naive' or astyle == 'both':
               ouf.write('#pragma clang attribute pop\n')
               offset+=1
               offsetf.write(f"({curline+offset},{curline})\n")
-              offsetDic[curline+offset] = curline
+              offsetDic[(fn + '.mod' + fe,curline+offset)] = (fn + '.mod' + fe,curline)
             if astyle == 'type' or astyle == 'both':
               ouf.write('#pragma clang attribute pop\n')
               offset+=1
               offsetf.write(f"({curline+offset},{curline})\n")
-              offsetDic[curline+offset] = curline
+              offsetDic[(fn + '.mod' + fe,curline+offset)] = (fn + '.mod' + fe,curline)
           elif x[0] == 'cleappnl':
             while curline < x[1]: 
               ouf.write(inf.readline())
               curline += 1
               offsetf.write(f"({curline+offset},{curline})\n")
-              offsetDic[curline+offset] = curline
+              offsetDic[(fn + '.mod' + fe,curline+offset)] = (fn + '.mod' + fe,curline)
             # XXX: Ought to get extent of next statement from AST
             # and wrap pragma clang push/pop around it, but it is
             # tricky. For example, what should we do if nwhat follows
@@ -191,7 +201,7 @@ def source_transform(infile,ttree,astyle, schema, produce_pickle):
           ouf.write(line)
           curline += 1
           offsetf.write(f"({curline+offset},{curline})\n")
-          offsetDic[curline+offset] = curline
+          offsetDic[(fn + '.mod' + fe,curline+offset)] = (fn + '.mod' + fe,curline)
   if(produce_pickle):
     pickle.dump( offsetDic, open( fn + ".mod" + fe + ".offset.pkl", "wb" ) )
 # Parse command line argumets
@@ -211,6 +221,8 @@ def get_args():
                  default=False, action='store_true') 
   p.add_argument('-P', '--pickle',help="Produce pickle file with map of offsets.",
                  default=False, action='store_true') 
+  p.add_argument('-o', '--output', type=str, help='Input file')
+  p.add_argument('-J', '--json', type=str, help='Input file')
   
   return p.parse_args()
 
@@ -267,7 +279,7 @@ def main():
   for x in ttree: print(x)
 
   try:
-    source_transform(args.file, ttree, args.annotation_style, schema, args.pickle)
+    source_transform(args.file, ttree, args.annotation_style, schema, args)
   except jsonschema.exceptions.ValidationError as schemaerr:
     print(schemaerr)
     sys.exit(-1)
