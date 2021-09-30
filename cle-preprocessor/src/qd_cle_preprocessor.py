@@ -135,7 +135,8 @@ def source_transform(infile,ttree,astyle, schema, args):
     fn,fe = os.path.splitext(infile)
 
     if args.output:
-      fn = args.output + os.path.basename(infile)
+      fn,fe = os.path.splitext(os.path.basename(infile))
+      fn = args.output + fn
   
     with open(fn + '.mod' + fe,'w') as ouf:
       with open(fn + '.offset.txt','w') as offsetf:
@@ -145,7 +146,7 @@ def source_transform(infile,ttree,astyle, schema, args):
               ouf.write(inf.readline())
               curline += 1
               offsetf.write(f"({curline+offset},{curline})\n")
-              offsetDic[(fn + '.mod' + fe,curline+offset)] = (fn + '.mod' + fe,curline)
+              offsetDic[(fn + '.mod' + fe,curline+offset)] = (fn  + fe,curline)
             if astyle == 'naive' or astyle == 'both':
               ouf.write('#pragma clang attribute push (__attribute__((annotate("')
               ouf.write(x[3])
@@ -153,7 +154,7 @@ def source_transform(infile,ttree,astyle, schema, args):
               ouf.write('\n')
               offset+=1
               offsetf.write(f"({curline+offset},{curline+1})\n")
-              offsetDic[(fn + '.mod' + fe,curline+offset)] = (fn + '.mod' + fe,curline)
+              offsetDic[(fn + '.mod' + fe,curline+offset)] = (fn  + fe,curline)
             if astyle == 'type' or astyle == 'both':
               ouf.write('#pragma clang attribute push (__attribute__((type_annotate("')
               ouf.write(x[3])
@@ -161,33 +162,33 @@ def source_transform(infile,ttree,astyle, schema, args):
               ouf.write('\n')
               offset+=1
               offsetf.write(f"({curline+offset},{curline+1})\n")
-              offsetDic[(fn + '.mod' + fe,curline+offset)] = (fn + '.mod' + fe,curline)
+              offsetDic[(fn + '.mod' + fe,curline+offset)] = (fn  + fe,curline)
             ouf.write(inf.readline())
             curline += 1
             offsetf.write(f"({curline+offset},{curline})\n")
-            offsetDic[(fn + '.mod' + fe,curline+offset)] = (fn + '.mod' + fe,curline)
+            offsetDic[(fn + '.mod' + fe,curline+offset)] = (fn  + fe,curline)
           elif x[0] == 'cleend':
             while curline < x[1]: 
               ouf.write(inf.readline())
               curline += 1
               offsetf.write(f"({curline+offset},{curline})\n")
-              offsetDic[(fn + '.mod' + fe,curline+offset)] = (fn + '.mod' + fe,curline)
+              offsetDic[(fn + '.mod' + fe,curline+offset)] = (fn  + fe,curline)
             if astyle == 'naive' or astyle == 'both':
               ouf.write('#pragma clang attribute pop\n')
               offset+=1
               offsetf.write(f"({curline+offset},{curline})\n")
-              offsetDic[(fn + '.mod' + fe,curline+offset)] = (fn + '.mod' + fe,curline)
+              offsetDic[(fn + '.mod' + fe,curline+offset)] = (fn  + fe,curline)
             if astyle == 'type' or astyle == 'both':
               ouf.write('#pragma clang attribute pop\n')
               offset+=1
               offsetf.write(f"({curline+offset},{curline})\n")
-              offsetDic[(fn + '.mod' + fe,curline+offset)] = (fn + '.mod' + fe,curline)
+              offsetDic[(fn + '.mod' + fe,curline+offset)] = (fn  + fe,curline)
           elif x[0] == 'cleappnl':
             while curline < x[1]: 
               ouf.write(inf.readline())
               curline += 1
               offsetf.write(f"({curline+offset},{curline})\n")
-              offsetDic[(fn + '.mod' + fe,curline+offset)] = (fn + '.mod' + fe,curline)
+              offsetDic[(fn + '.mod' + fe,curline+offset)] = (fn  + fe,curline)
             # XXX: Ought to get extent of next statement from AST
             # and wrap pragma clang push/pop around it, but it is
             # tricky. For example, what should we do if nwhat follows
@@ -201,7 +202,7 @@ def source_transform(infile,ttree,astyle, schema, args):
           ouf.write(line)
           curline += 1
           offsetf.write(f"({curline+offset},{curline})\n")
-          offsetDic[(fn + '.mod' + fe,curline+offset)] = (fn + '.mod' + fe,curline)
+          offsetDic[(fn + '.mod' + fe,curline+offset)] = (fn  + fe,curline)
   if(produce_pickle):
     pickle.dump( offsetDic, open( fn + ".mod" + fe + ".offset.pkl", "wb" ) )
 # Parse command line argumets
