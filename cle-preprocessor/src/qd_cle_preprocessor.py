@@ -124,10 +124,10 @@ def source_transform(infile,ttree,astyle, schema, args):
   else:
     defs = [{"cle-label": x[3], "cle-json": validate_cle(x,schema)} for x in ttree if x[0] == 'cledef']
 
-  jsonfile = infile
-  if args.output:
-      jsonfile = args.json + os.path.basename(infile)
-  with open(jsonfile + ".clemap.json", 'w') as mapf:
+  jsonfile = \
+    Path(args.output) / Path(infile).with_suffix('.clemap.json').name if args.output \
+    else Path(infile).with_suffix('.clemap.json')
+  with open(Path(jsonfile), 'w') as mapf:
     json.dump(defs,mapf,indent=2)
 
   curline = 0
@@ -223,8 +223,7 @@ def get_args():
                  default=False, action='store_true') 
   p.add_argument('-P', '--pickle',help="Produce pickle file with map of offsets.",
                  default=False, action='store_true') 
-  p.add_argument('-o', '--output', type=str, help='Input file')
-  p.add_argument('-J', '--json', type=str, help='Input file')
+  p.add_argument('-o', '--output', type=str, help='Output directory')
   
   return p.parse_args()
 
