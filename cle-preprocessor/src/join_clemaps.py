@@ -2,13 +2,12 @@ import sys
 import json
 
 def main(oname, inlist):
-    all = {}#obj by 'cle-label'
+    all = {}
     for inf in inlist:
-        with open(inf + ".clemap.json") as f:
+        with open(inf) as f:
             in_one = json.load(f)
             for obj in in_one:
                 all[obj['cle-label']] = obj
-    #print(json.dumps(list(all.values()), indent=2))
     with open(oname, "w") as of:
         json.dump(list(all.values()), of, indent=2)
             
