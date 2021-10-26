@@ -3,6 +3,7 @@ import argparse
 from dataclasses import dataclass
 from shutil import copyfile
 from pathlib import Path
+from typing import Dict, Type
 import build
 
 def install_xdcc_gen(out: Path) -> None:
@@ -28,15 +29,22 @@ def install_schema_gen(out: Path) -> None:
 class Args:
     output: Path
 
+def install(args: Type[Args]) -> Dict[str, str]:
+    install_xdcc_gen(args.output)
+    install_schema(args.output)
+    install_schema_gen(args.output)
+    return {
+        "PATH": f"{args.output}/bin" 
+    }
+
+
 def main() -> None: 
     parser = argparse.ArgumentParser('install.py') 
     parser.add_argument('--output', '-o', default=False, help="Output directory", type=Path, required=True)
     args = parser.parse_args(namespace=Args)
     args.output.mkdir(parents=True, exist_ok=True)
     build.build()
-    install_xdcc_gen(args.output)
-    install_schema(args.output)
-    install_schema_gen(args.output)
+    install(args)
     
 if __name__ == '__main__':
     main()
