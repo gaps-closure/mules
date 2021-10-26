@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from shutil import copyfile
 from pathlib import Path
 from typing import Dict, Type
+import os
 import build
 
 def install_xdcc_gen(out: Path) -> None:
@@ -11,6 +12,7 @@ def install_xdcc_gen(out: Path) -> None:
     out_bin = out / 'bin' 
     out_bin.mkdir(parents=True, exist_ok=True)
     copyfile(path / 'xdcc_gen', out_bin / 'xdcc_gen')
+    os.chmod(out_bin / 'xdcc_gen', 0o755)
 
 def install_schema(out: Path) -> None:
     path = Path('cle-spec/schema')
@@ -23,6 +25,7 @@ def install_schema_gen(out: Path) -> None:
     out_bin = out / 'bin' 
     out_bin.mkdir(parents=True, exist_ok=True)
     copyfile(path / 'schema_gen.sh', out_bin / 'schema_gen.sh')
+    os.chmod(out_bin / 'schema_gen.sh', 0o755)
 
 
 @dataclass
