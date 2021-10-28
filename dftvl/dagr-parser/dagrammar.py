@@ -63,8 +63,12 @@ BLOCK:              /block/
 COMMENT:            /[ \t]*--[^\r\n]*(\r|\r\n|\n)/
 CONNECT:            /connect/
 DELIM:              /[ \t\f\r\n]+/
+DIGIT:              /[0-9]/
+DOT:                /\./ 
+DQUOTE:             /\"/
 ENTRY:              /entry/
 EXIT:               /exit/
+FALSE:              /false/
 GLOBAL:             /global/
 HARDWARE:           /hardware/
 PIPE:               /\|/
@@ -77,8 +81,10 @@ PROFILE:            /profile/
 RBRACE:             /\}/
 RULE:               /rule/
 SEMI:               /;/ 
+SQUOTE:             /\'/
 TABLE:              /table/
 TRANSIT:            /=>/
+TRUE:               /true/
 '''
 
 #----------------------------------------------------------------------------------------------
@@ -127,10 +133,7 @@ COLONCOLON:         /::/
 COMMA:              /,/ 
 CONTEXT:            /context:/
 CREATE:             /create/
-DIGIT:              /[0-9]/
 DIV:                /\// 
-DOT:                /\./ 
-DQUOTE:             /\"/
 EACH:               /(for )?each( of the)?/
 EIGHT:              /eight/
 EIGHTH:             /eighth/
@@ -139,7 +142,6 @@ ELSE:               /(else)|(otherwise)/
 END:                /end/
 EQUALS:             /(=)|((is )?equal to)/
 EXACTLY:            /exactly/
-FALSE:              /false/
 FIFTH:              /fifth/
 FIRST:              /first/
 FIVE:               /five/
@@ -194,7 +196,6 @@ SEVEN:              /seven/
 SEVENTH:            /seventh/
 SIX:                /six/
 SIXTH:              /sixth/
-SQUOTE:             /\'/
 SUMOF:              /sum of/
 TEN:                /ten/
 TENTH:              /tenth/
@@ -205,7 +206,6 @@ THIRD:              /third/
 THREE:              /three/
 TIMES:              /\*/ 
 TO:                 /to/
-TRUE:               /true/
 TWO:                /two/
 UNIQUE:             /unique/
 USES:               /uses/
