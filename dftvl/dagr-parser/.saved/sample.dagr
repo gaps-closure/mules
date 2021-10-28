@@ -1,0 +1,49 @@
+-- must be specified first
+-- profile specifies hardware capability and global variables
+profile PROF1 {
+  hardware MIND;    -- use MIND hardware
+  global   FPCON;
+  global   OCONUS;
+}
+
+-- must be specified second
+-- setup pipeline topology 
+-- entry and exit mandatory 
+-- optional conditions determine which edge is taken from a block 
+-- pipeline topology must be acyclic, no back-edges 
+-- multiple next blocks may be allowed: parallel fork-join workflows
+pipeline P1 {
+  entry => B1;
+  B1    => B2   | datatype is SVG;
+  B1    => exit | datatype is not SVG;
+  B2    => exit;
+}
+
+-- each ruleblock is a set of named rules
+-- block B1 handles numeric and string fields 
+block B1 {
+  redact_altitude;
+  drop_blacklisted;
+}
+
+rule redact_altitude {
+  whatevr;
+}
+
+rule drop_blacklisted {
+  whatevr;
+}
+
+-- block B2 handles image processing
+block B2 {
+  pixelate_sensitive_region;
+  reduce_resolution;
+}
+
+rule pixelate_sensitive_region {
+  whatevr;
+}
+
+rule reduce_resolution {
+  whatevr;
+}

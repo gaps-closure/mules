@@ -1,0 +1,3 @@
+profile PROF1 { hardware MIND; }
+pipeline P1 { entry => exit; }
+
