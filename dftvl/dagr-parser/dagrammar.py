@@ -25,8 +25,12 @@ dagrval:            identifier | string | number | bool
 string:             dquotedstring | squotedstring
 number:             integer | float
 
-// rexpr:              if condition then action (elsif condition then action)* (else action)*
-rexpr:              expr
+// rexpr:              ant sat elif* (alt)?
+// elif:               celse d* cif d* rexpr
+rexpr:              ant sat (alt)?
+ant:                cif   d* condition 
+sat:                cthen d* action
+alt:                celse d* action
 
 condition:          expr 
 action:             expr 
@@ -52,10 +56,15 @@ integer:            MINUS? DIGIT+
 float:    	    MINUS? DIGIT+ DOT DIGIT+
 bool:               TRUE | FALSE
 identifier:         BACKQUOTE? ALPHA ADM?
+cif:                IF
+cthen:              THEN
+celse:              ELSE
 '''
 
 #----------------------------------------------------------------------------------------------
 TOKENS = r'''
+COLON:              /:/ 
+
 ADM:                /[a-zA-Z0-9_]+/
 ALPHA:              /[a-zA-Z]/
 BACKQUOTE:          /`/
@@ -66,11 +75,13 @@ DELIM:              /[ \t\f\r\n]+/
 DIGIT:              /[0-9]/
 DOT:                /\./ 
 DQUOTE:             /\"/
+ELSE:               /(else)|(otherwise)/
 ENTRY:              /entry/
 EXIT:               /exit/
 FALSE:              /false/
 GLOBAL:             /global/
 HARDWARE:           /hardware/
+IF:                 /if/
 PIPE:               /\|/
 LBRACE:             /\{/
 MINUS:              /-/ 
@@ -83,6 +94,7 @@ RULE:               /rule/
 SEMI:               /;/ 
 SQUOTE:             /\'/
 TABLE:              /table/
+THEN:               /then/
 TRANSIT:            /=>/
 TRUE:               /true/
 '''
@@ -99,6 +111,7 @@ DAGR_GRAMMAR = RULES + TOKENS + DIRECTIVES
 NOTUSED = r'''
 idstep:             (BACKQUOTE)? (ADM)+
 complexid:          identifier (COLONCOLON identifier)* (DOT idstep)*
+
 propertyname:       LBRACE (NONRBRACEST)+ RBRACE
 operatorname:       LBRACKET (NONRBRACKST)+ RBRACKET
 
@@ -138,7 +151,6 @@ EACH:               /(for )?each( of the)?/
 EIGHT:              /eight/
 EIGHTH:             /eighth/
 ELEMENTS:           /elements/
-ELSE:               /(else)|(otherwise)/
 END:                /end/
 EQUALS:             /(=)|((is )?equal to)/
 EXACTLY:            /exactly/
@@ -152,7 +164,6 @@ FROM:               /from/
 GREATEREQ:          /(>=)|((is )?greater than or equal to)|((is )?after or on)/
 GREATER:            /(>)|((is )?greater than)|((is )?after)/
 HASHAVE:            /(has)|(have)|(is)|(are)/
-IF:                 /if/
 IFF:                /only if/
 IMPLIES:            /implies/
 INCOLLECTION:       /in the collection/
@@ -200,7 +211,6 @@ SUMOF:              /sum of/
 TEN:                /ten/
 TENTH:              /tenth/
 THAT:               /that/
-THEN:               /then/
 THEREIS:            /there (is)|(are)/
 THIRD:              /third/
 THREE:              /three/

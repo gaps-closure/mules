@@ -31,9 +31,13 @@ class DAGRTransformer(Transformer):
   def pipetok(self, items):      return self._ign()
   def rblktok(self, items):      return self._ign()
   def rdeftok(self, items):      return self._ign()
+  def cif(self, items):          return self._ign()
+  def cthen(self, items):        return self._ign()
+  def celse(self, items):        return self._ign()
   def d(self, items):            return self._ign()
 
   def identifier(self, items):   return Token('ID', self._hlp(items))
+  def integer(self, items):      return Token('INT', self._hlp(items))
 
   #def pfx(self, items):      return items[0].value.extent.start.line
   #def foo(self, items):      return [i for s in items for i in s]

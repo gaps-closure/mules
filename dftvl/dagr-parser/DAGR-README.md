@@ -74,7 +74,7 @@ parse and transform complex data formats--should be supported.
 * Each rule has a condition (match) part and an action (apply) part
 * Variables can be declared scope within a rule, within a rule block, or within a pipeline
 * Structured English-like syntax similar to [Natural Rule Language](http://nrl.sourceforge.net)
-* Initial impleemntation using Python Lark parsing library
+* Initial implementation using Python Lark parsing library
 
 We may develop a verifiable implementation in [Idris](https://www.idris-lang.org) so that formal properties 
 about the type system and decidability can be investigated, while generating code in C or Javascript. This is

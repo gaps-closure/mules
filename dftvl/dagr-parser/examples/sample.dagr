@@ -46,21 +46,28 @@ table sample_acl {
 }
 
 rule redact_altitude {
-  whatevr;
+  if 
+    whatevr 
+  then 
+    nop;
 }
 
 rule drop_blacklisted {
-  whatevr;
+  if 
+    whatevr 
+  then 
+    nop;
 }
 
 rule apply_dtable {
-  whatevr;
+  if whatevr then nop else nop;
 }
 
 rule pixelate_sensitive_region {
-  whatevr;
+  if whatevr then nop else nop;
 }
 
 rule reduce_resolution {
-  whatevr;
+  if whatevr then nop otherwise nop;
 }
+
