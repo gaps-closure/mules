@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- This example demonstrates a trivial IP watch-list -->
+<!-- @formatid is set to "watch-list-043" to demonstrate how additional
+     semantics about this document could be conveyed assuming both
+     parties understood it-->
+<IODEF-Document version="1.00" lang="en" formatid="watch-list-043"
+  xmlns="urn:ietf:params:xml:ns:iodef-1.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="urn:ietf:params:xml:schema:iodef-1.0">
+  <Incident purpose="reporting" restriction="private">
+    <IncidentID name="csirt.example.com">908711</IncidentID>
+    <ReportTime>2006-08-01T00:00:00-05:00</ReportTime>
+    <Description>Watch-list of known bad IPs or networks</Description>
+    <Assessment>
+      <Impact type="admin" completion="succeeded" />
+      <Impact type="recon" completion="succeeded" />
+    </Assessment>
+    <Contact type="organization" role="creator">
+      <ContactName>CSIRT for example.com</ContactName>
+      <Email>contact@csirt.example.com</Email>
+    </Contact>
+    <!-- Separate <EventData> used to convey different <Expectation> -->
+    <EventData>
+      <Flow>
+        <System category="source">
+          <Node>
+            <Address category="ipv4-addr">192.0.2.53</Address>
+          </Node>
+          <Description>Source of numerous attacks</Description>
+        </System>
+      </Flow>
+      <!-- Expectation class indicating that sender of list would like
+           to be notified if activity from the host is seen -->
+      <Expectation action="contact-sender" />
+    </EventData>
+    <EventData>
+      <Flow>
+        <System category="source">
+          <Node>
+            <Address category="ipv4-net">192.0.2.16/28</Address>
+          </Node>
+          <Description>
+            Source of heavy scanning over past 1-month
+          </Description>
+        </System>
+      </Flow>
+      <Flow>
+        <System category="source">
+          <Node>
+            <Address category="ipv4-addr">192.0.2.241</Address>
+          </Node>
+          <Description>C2 IRC server</Description>
+        </System>
+      </Flow>
+      <!-- Expectation class recommends that these networks
+           be filtered -->
+      <Expectation action="block-host" />
+    </EventData>
+  </Incident>
+</IODEF-Document>
