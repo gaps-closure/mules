@@ -22,6 +22,7 @@ mv ietf src
 
 ```
 ant 
+java -classpath ./dist/IODEF_DAGRDFDLTEST.jar TestDFDLAutogen worm.xml 
 ```
  
 

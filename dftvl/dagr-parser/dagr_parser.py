@@ -3,6 +3,7 @@ from   argparse      import ArgumentParser
 from   lark          import Lark, Tree
 from   lark.visitors import Transformer
 from   lark.lexer    import Lexer, Token
+from   lark.visitors import Discard
 from   dagrammar     import DAGR_GRAMMAR
 
 #---------------------------------------------------------------------------------------------------
@@ -16,49 +17,39 @@ def dagr_parser():
 
 class DAGRTransformer(Transformer):
   def _hlp(self, items):         return ''.join([x for x in items if isinstance(x, Token)])
-  def _ign(self):                return Token('IGNORE', '')
 
-  def guard(self, items):        return self._ign()
-  def arrow(self, items):        return self._ign()
-  def sdelim(self, items):       return self._ign()
-  def tdelim(self, items):       return self._ign()
-  def bstart(self, items):       return self._ign()
-  def bend(self, items):         return self._ign()
-  def profile(self, items):      return self._ign()
-  def pipeline(self, items):     return self._ign()
-  def ruleblk(self, items):      return self._ign()
-  def proftok(self, items):      return self._ign()
-  def pipetok(self, items):      return self._ign()
-  def rblktok(self, items):      return self._ign()
-  def rdeftok(self, items):      return self._ign()
-  def cif(self, items):          return self._ign()
-  def cthen(self, items):        return self._ign()
-  def celse(self, items):        return self._ign()
-  def d(self, items):            return self._ign()
+  def guard(self, items):        return Discard();
+  def arrow(self, items):        return Discard();
+  def sdelim(self, items):       return Discard();
+  def tdelim(self, items):       return Discard();
+  def bstart(self, items):       return Discard();
+  def bend(self, items):         return Discard();
+  def profile(self, items):      return Discard();
+  def pipeline(self, items):     return Discard();
+  def ruleblk(self, items):      return Discard();
+  def proftok(self, items):      return Discard();
+  def pipetok(self, items):      return Discard();
+  def rblktok(self, items):      return Discard();
+  def rdeftok(self, items):      return Discard();
+  def cif(self, items):          return Discard();
+  def cthen(self, items):        return Discard();
+  def celse(self, items):        return Discard();
+  def d(self, items):            return Discard();
 
   def identifier(self, items):   return Token('ID', self._hlp(items))
   def integer(self, items):      return Token('INT', self._hlp(items))
 
-  #def pfx(self, items):      return items[0].value.extent.start.line
-  #def foo(self, items):      return [i for s in items for i in s]
-  #def cledef(self, items):   return [['cledef'] + items]
-
-
 #---------------------------------------------------------------------------------------------------
 if __name__ == '__main__':
-  args   = get_args()
-  print('Options selected:')
+  args = get_args()
+  print('Invocation options selected:')
   for x in vars(args).items(): print('  %s: %s' % x)
+  with open(args.file, 'r') as inf: instr = inf.read()
 
-  with open(args.file, 'r') as inf:
-    instr = inf.read()
+  ast = dagr_parser().parser.parse(instr)
+  tst = DAGRTransformer().transform(ast)
+  for n in tst.iter_subtrees_topdown(): 
+    if isinstance(n, Tree): n.children = list(filter(lambda x: not(isinstance(x,Discard)), n.children))
+  print(tst.pretty())
 
-  tree = dagr_parser().parser.parse(instr)
-  #print(tree)
-  #print(tree.pretty())
-  #for n in tree.iter_subtrees_topdown(): print(n.data)
-
-  ttree  = DAGRTransformer().transform(tree)
-  #print(ttree)
-  print(ttree.pretty())
 
