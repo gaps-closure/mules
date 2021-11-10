@@ -6,4 +6,5 @@ z
 log/
 build/
 cle/dist/
+dftvl/dagr-parser/tests/iodef/dist/
 __pycache__/
