@@ -25,8 +25,6 @@ dagrval:            identifier | string | number | bool
 string:             dquotedstring | squotedstring
 number:             integer | float
 
-// rexpr:              ant sat elif* (alt)?
-// elif:               celse d* cif d* rexpr
 rexpr:              ant sat (alt)?
 ant:                cif   d* condition 
 sat:                cthen d* action
