@@ -15,19 +15,19 @@
 \section{Introduction}
 \section{CLE Types Grammar}
 The following is a small grammar for CLE types $\tau$. 
-$l$ and $r$ represent levels and can be thought of as arbitrary identifiers.
+$l$ and $r$ represent enclaves and can be thought of as arbitrary identifiers.
 
 \begin{center}
 \begin{tabular}{ l r }
     $\tau, \pi, \gamma$ $\Coloneqq$ l $\sigma$ $\bigl\vert$ l $\sigma$ ($\alpha_1$, $\dots$, $\alpha_n$) $\rightarrow_\phi$ $\theta$ & cle type \\
-    $\alpha, \beta, \theta, \sigma$ $\Coloneqq$ $\epsilon$ $\bigl\vert$ $\sigma$ $+$ $r$ & remote levels \\
 \end{tabular}
 \end{center}
-Note: remote levels are treated as sets. 
+
+$\alpha, \beta, \theta, \sigma$ are sets of remote enclaves. 
 
 \section{LLVM core grammar}
 
-The following source grammar represents an idealized subset of LLVM. 
+The following source grammar represents an idealized subset of LLVM and teletyped versions of the types described above. 
 Many operations are missing, but every missing operation can either be constructed from multiple instructions or is irrelevant to the CLE type inference and checking. 
 The rules for cle types in the core grammar should represent the small grammar cle types above.
 My references for the grammar construction is from this\footnote{\url{https://lists.llvm.org/pipermail/llvm-dev/2018-June/123851.html}} mail resource.
@@ -144,30 +144,30 @@ My references for the grammar construction is from this\footnote{\url{https://li
 
 <unit-type> ::= `unit'
 
-<cle-type> ::= <level> <remote-levels> 
-\alt <level> <remote-levels> `(' <cle-args> `)' `[' <remote-levels> `]' `->' <remote-levels> 
+<cle-type> ::= <enclave> <remote-enclaves> 
+\alt <enclave> <remote-enclaves> `(' <cle-args> `)' `[' <remote-enclaves> `]' `->' <remote-enclaves> 
 
-<cle-args> ::= <cle-args>, <remote-levels> \alt empty
+<cle-args> ::= <cle-args>, <remote-enclaves> \alt empty
 
-<remote-levels> ::=  <remote-levels> `+' <level> \alt empty 
+<remote-enclaves> ::=  <remote-enclaves> `+' <enclave> \alt empty 
 
 \end{grammar}
 
 \section{Small examples}
 
-This global viarable is in level purple, and is not shareable.
+This global viarable is in enclave purple, and is not shareable.
 \begin{verbatim}
 @foo : i64 + "purple" = 1;
 \end{verbatim}
 
 
-This global variable is in level orange, and is shareable with purple.
+This global variable is in enclave orange, and is shareable with enclave purple.
 \begin{verbatim}
 @foo : i64 + "orange" "purple" = 1;
 \end{verbatim}
 
 The following function has a proposed type \texttt{"orange" "purple" (empty, "purple" | empty) [empty] -> empty}.
-It is in level "orange", and is callable from remote level "purple".
+It is in enclave "orange", and is callable from remote enclave "purple".
 The first argument is not shareable, 
 and the second argument is shareable with purple. 
 Any variable bound in the body must not be shareable, as well as the return type.
@@ -190,7 +190,7 @@ There are several types of judgements, each of which is enumerated below:
 \subsection{Judgements}
 \begin{enumerate}
     \item $\Gamma \vdash e : \tau$. 
-    Top-level entity $e$ has type $\tau$. 
+    Top-level entity or instruction $e$ has type $\tau$. 
     \item $\Gamma \vdash b :_\pi \gamma$. 
     Basic block or set of basic blocks $b$ has type $\pi$ for all variables bound in instructions, type $\gamma$ for the terminator.
     \item $\Gamma \vdash t :_\pi \gamma$. 
