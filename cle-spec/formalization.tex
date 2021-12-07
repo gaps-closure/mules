@@ -162,9 +162,39 @@ Thus,
 \end{prooftree}
 \]
 
+\section{Conversion from CLE label and enclave assignments}
 
-\section{Conversion from CLE annotations}
+\subsection{Enclaves vs. Levels}
+The CLE JSON annotations deal in terms of levels, while the type system operates
+on enclaves. Since every enclave resides at a level, we can understand a level as
+a set of enclaves.
 
+\subsection{Annotated function assignments}
+We start with unannotated function $f$ is assigned a label $q$ and enclave $l$.
+Immediately, we know $f$ must have a type $l\ \delta$.
+To find $\delta$ we do the following: 
+\begin{enumerate}
+    \item Lookup $q$'s corresponding cle json in the cle map. 
+    \item For every cdf inside $q$'s definition
+    \item For each remote level in the cdfs for $q$, we lookup the argtaints, 
+    codtaints and rettaints labels and expand their corresponding levels into sets of remote enclaves.
+    For argtaints, we obtain a set of enclaves for each argument $\alpha_1, \dots, \alpha_n$. 
+    For codtaints and rettaints, we obtaint two sets $\phi$ and $\theta$ for codtaints and rettaints 
+    respectively. 
+    \item For each remote level, we obtain a set of remote enclaves $E$. For each enclave $r$ in $E$,
+    we construct a $\mu = r\ (\alpha_1, \dots, \alpha_n) \rightarrow_\phi \theta$.
+\end{enumerate}
 
+\subsection{Unannotated function assignments}
+Unannotated functions can only be called within an enclave. Thus,
+every unannotated function $f$ in enclave $l$ has type $l\ \delta$ where 
+$\delta = \{ l\ (\alpha_1, \dots, \alpha_n) \rightarrow_\phi \theta \}$,
+assuming there is some way to obtain $\alpha_1, \dots, \alpha_n, \phi, \theta$.
+
+\subsection{Global variables}
+A global variable $g$ in enclave $l$ will have type $l\ \sigma$. 
+To determine $\sigma$, we lookup the remote levels in the cdfs for $g$
+and expand to get a set of enclaves for each remote level. Then $\sigma$ is 
+the union of these sets.
 
 \end{document}
