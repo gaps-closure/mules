@@ -15,173 +15,24 @@
 \section{Introduction}
 \section{CLE Types Grammar}
 The following is a small grammar for CLE types $\tau$. 
-$l$ and $r$ represent levels and can be thought of as arbitrary identifiers.
-
+$l$ and $r$ represent enclaves and can be thought of as arbitrary identifiers.
+$\alpha, \beta, \theta, \sigma$ are sets of remote enclaves, while $\delta$ is a set of $\mu$.
 \begin{center}
 \begin{tabular}{ l r }
-    $\tau, \pi, \gamma$ $\Coloneqq$ l $\sigma$ $\bigl\vert$ l $\sigma$ ($\alpha_1$, $\dots$, $\alpha_n$) $\rightarrow_\phi$ $\theta$ & cle type \\
-    $\alpha, \beta, \theta, \sigma$ $\Coloneqq$ $\epsilon$ $\bigl\vert$ $\sigma$ $+$ $r$ & remote levels \\
+    $\tau, \pi, \gamma$ $\Coloneqq$ $l\ \sigma$ $\bigl\vert$ $l\ \delta$ \\
+    $\mu$ $\Coloneqq$ $r$ ($\alpha_1$, $\dots$, $\alpha_n$) $\rightarrow_\phi$ $\theta$ \\
 \end{tabular}
 \end{center}
-Note: remote levels are treated as sets. 
-
-\section{LLVM core grammar}
-
-The following source grammar represents an idealized subset of LLVM. 
-Many operations are missing, but every missing operation can either be constructed from multiple instructions or is irrelevant to the CLE type inference and checking. 
-The rules for cle types in the core grammar should represent the small grammar cle types above.
-My references for the grammar construction is from this\footnote{\url{https://lists.llvm.org/pipermail/llvm-dev/2018-June/123851.html}} mail resource.
-
-\begin{grammar}
-
-<prog> ::= empty
-\alt <prog> <top-level-entity> 
-
-<top-level-entity> ::= <fun-def>
-\alt <fun-decl>
-\alt <global-def>
-\alt <global-decl>
-
-<global-def> ::= <global-ident> : <type> `=' <const>`;'
-
-<global-decl> ::= <global-ident> : <type> `;'
-
-<fun-def> ::= `define' <global-ident>`(' <params> `)' : <type> <func-body>
-
-<fun-decl> ::= `declare' <global-ident>`(' <params> `)' : <type> `;' 
-
-<params> ::= empty
-\alt <param-list>
-
-<param-list> ::= <local-ident>
-\alt <param-list>`,' <local-ident> 
-
-<global-ident> ::= `@'<ident>
-
-<local-ident> ::= `\%'<ident>
-
-<func-body> ::= `{' <block-list> `}'
-
-<block-list> ::= <block>
-\alt <block-list> <block>
-
-<block> ::= <ident>`:' <instructions> <terminator>
-
-<instructions> ::= empty
-\alt <instructions> <instruction>`;'
-
-<instruction> ::= <store-instr> 
-\alt <load-instr>
-\alt <alloca-instr>
-\alt <gep-instr>
-\alt <call-instr> 
-\alt <binary-instr>
-\alt <cast-instr>
-\alt <const-instr>
-
-<terminator> ::= <br-term>
-\alt <ret-term> 
-
-<decl> ::= <local-ident> : <type>
-
-<store-instr> ::= `store' <value>, <local-ident>
-
-<load-instr> ::= <decl> `=' `load' <value>, <local-ident>
-
-<alloca-instr> ::= <decl> `=' `alloca' <llvm-type> 
-
-<call-instr> ::= <decl> `=' <global-ident>`(' <params> `)'  
-
-<gep-instr> ::= <decl> `=' `gep' <local-ident>`,' <nats> 
-
-<binary-instr> ::= <decl> `=' <value> <binop> <value> 
-
-<cast-instr> ::= <decl> `=' `cast' <local-ident> <llvm-type>  
-
-<nats> ::= <nat>
-\alt <nat>, <nats> 
-
-<br-term> ::= `br' <local-ident>, <local-ident>, <local-ident> 
-<ret-term> ::= `ret' <local-ident> 
-
-<value> ::= <const>
-\alt <local-ident>
-\alt <global-ident>
-
-<const> ::= <integer-literal>
-\alt <bool-literal>
-\alt <float-literal>
-\alt <unit-literal>
-\alt <struct-const>
-\alt <array-const>
-
-<type> ::= <llvm-type> `+' <cle-type>
-\alt <llvm-type>
-
-<llvm-type> ::= <int-type>
-\alt <float-type>
-\alt <unit-type> 
-\alt <array-type>
-\alt <pointer-type>
-\alt <struct-type>
-\alt <function-type>
-
-<function-type> ::= `(' <llvm-type-list> `)' `->' <llvm-type>
-
-<array-type> ::= `[' <nat> `x' <llvm-type> `]'
-
-<pointer-type> ::= <llvm-type>`*'
-
-<struct-type> ::= `{' <llvm-type-list> `}'
-
-<llvm-type-list> ::= <llvm-type>
-\alt <llvm-type-list>`,' <llvm-type>
-
-<int-type> ::= `i'<nat>
-
-<float-type> ::= `float' 
-\alt `double'
-
-<unit-type> ::= `unit'
-
-<cle-type> ::= <level> <remote-levels> 
-\alt <level> <remote-levels> `(' <cle-args> `)' `[' <remote-levels> `]' `->' <remote-levels> 
-
-<cle-args> ::= <cle-args>, <remote-levels> \alt empty
-
-<remote-levels> ::=  <remote-levels> `+' <level> \alt empty 
-
-\end{grammar}
-
-\section{Small examples}
-
-This global viarable is in level purple, and is not shareable.
-\begin{verbatim}
-@foo : i64 + "purple" = 1;
-\end{verbatim}
 
 
-This global variable is in level orange, and is shareable with purple.
-\begin{verbatim}
-@foo : i64 + "orange" "purple" = 1;
-\end{verbatim}
+$l\ \sigma$ describes a variable in enclave $l$ which can be shared with enclaves inside $\sigma$. 
+The inhabitants of $l\ \delta$ are functions in the enclave $l$. For every $r\ (\alpha_1, \dots, \alpha_n) \rightarrow_\phi \theta \in \delta$
+every function whose type is $l\ \delta$ can be called from an enclave r with
+arguments whose shareability is $\alpha_1, \dots, \alpha_n$, whose function body can share with $\phi$ and whose
+return is able to be shared with $\theta$.
 
-The following function has a proposed type \texttt{"orange" "purple" (empty, "purple" | empty) [empty] -> empty}.
-It is in level "orange", and is callable from remote level "purple".
-The first argument is not shareable, 
-and the second argument is shareable with purple. 
-Any variable bound in the body must not be shareable, as well as the return type.
-
-\begin{verbatim}
-define @average(%0, %1) : (double, double) -> double
- + "orange" "purple" (empty, "purple" + empty) [empty] -> empty
-      
-{
-   %2 : double + "orange" = %0 + %1;
-   %3 : double + "orange" = %2 / 2.0;
-   ret %3
-}
-\end{verbatim}
+The terms of the inhabitants of these types are an idealized subset of llvm, where the only control flow instructions
+are breaks and function calls. 
 
 \section{Type rules}
 Here we assume all functions and global variables have cle types associated with them.  We will focus on how to infer such types in the next section.
@@ -190,7 +41,7 @@ There are several types of judgements, each of which is enumerated below:
 \subsection{Judgements}
 \begin{enumerate}
     \item $\Gamma \vdash e : \tau$. 
-    Top-level entity $e$ has type $\tau$. 
+    Top-level entity or instruction $e$ has type $\tau$. 
     \item $\Gamma \vdash b :_\pi \gamma$. 
     Basic block or set of basic blocks $b$ has type $\pi$ for all variables bound in instructions, type $\gamma$ for the terminator.
     \item $\Gamma \vdash t :_\pi \gamma$. 
@@ -215,11 +66,11 @@ There are several types of judgements, each of which is enumerated below:
 \begin{prooftree}
     \hypo{
     \begin{matrix}
+        \forall (r\ (\alpha_1, \dots, \alpha_n) \rightarrow_\phi \theta) \in \delta. \ 
         \Gamma[@f \mapsto \tau, \%1 \mapsto l\ \alpha_1, \ldots, \%n \mapsto l\ \alpha_n] \vdash body :_{(l\ \phi)} l\ \theta \\
-        \tau = l\ \sigma\ (\alpha_1, \dots, \alpha_n) \rightarrow_\phi \theta
     \end{matrix}
     }
-    \infer1[fn-def]{\Gamma \vdash @f(\%1, \dots, \%n)\ \{ body \} : \tau}
+    \infer1[fn-def]{\Gamma \vdash @f(\%1, \dots, \%n)\ \{ body \} : l\ \delta}
     
 \end{prooftree}
 \]
@@ -227,7 +78,7 @@ There are several types of judgements, each of which is enumerated below:
 \[
 \begin{prooftree}
     \hypo{
-    \Gamma(@f) = \tau = l\ \sigma\ (\alpha_1, \dots, \alpha_n) \rightarrow_\phi \theta
+    \Gamma(@f) = \tau = l\ \delta
     }
     \infer1[fn-def-known]{\Gamma \vdash @f(\%1, \dots, \%n)\ \{ body \} : \tau}
 \end{prooftree}
@@ -238,7 +89,7 @@ There are several types of judgements, each of which is enumerated below:
 \[
 \begin{prooftree} 
     \hypo{\Gamma \vdash b :_\pi \gamma}
-    \hypo{\Gamma', \%b :_\pi \gamma \vdash bbs :_\pi \gamma}
+    \hypo{\Gamma, \%b :_\pi \gamma \vdash bbs :_\pi \gamma}
     \infer2[fn-body]{\Gamma \vdash b\ bbs :_\pi \gamma}
 \end{prooftree} 
 \]
@@ -247,7 +98,7 @@ There are several types of judgements, each of which is enumerated below:
 \[
 \begin{prooftree} 
     \hypo{\Gamma \vdash instrs : \pi}
-    \hypo{\Gamma' \vdash term :_\pi \gamma}
+    \hypo{\Gamma \vdash term :_\pi \gamma}
     \infer2[bb-unknown]{\Gamma \vdash \%b: instrs\ term :_\pi \gamma}
 \end{prooftree} 
 \]
@@ -274,18 +125,9 @@ There are several types of judgements, each of which is enumerated below:
 \[
 \begin{prooftree}
     \hypo{\Gamma(\%1) = l\ \alpha_1, \dots, \Gamma(\%n) = l\ \alpha_n}
-    \hypo{\Gamma \vdash @f : l\ \sigma\ (\alpha_1, \dots, \alpha_n) \rightarrow_\phi \theta}
-    \infer2[call]{\Gamma \vdash \text{call } @f(\%1, \dots, \%n) : l\ \theta}
-\end{prooftree}
-\]
-
-\[
-\begin{prooftree}
-    \hypo{\Gamma(\%1) = l\ \alpha_1, \dots, \Gamma(\%n) = l\ \alpha_n}
-    \hypo{\Gamma \vdash @f : r\ \sigma\ (\beta_1, \dots, \beta_n) \rightarrow_\phi \theta}
-    \hypo{l \neq r}
-    \hypo{l \in \sigma}
-    \infer4[xd-call]{\Gamma \vdash \text{call } @f(\%1, \dots, \%n) : \pi}
+    \hypo{l\ (\alpha_1, \dots, \alpha_n) \rightarrow_\phi \theta \in \delta}
+    \hypo{\Gamma \vdash @f : r\ \delta}
+    \infer3[call]{\Gamma \vdash \text{call } @f(\%1, \dots, \%n) : l\ \theta}
 \end{prooftree}
 \]
 
@@ -319,5 +161,40 @@ Thus,
     \infer1[ret]{\Gamma \vdash \text{instr}\ \%a_1, \dots \%a_n : \pi}
 \end{prooftree}
 \]
+
+\section{Conversion from CLE label and enclave assignments}
+
+\subsection{Enclaves vs. Levels}
+The CLE JSON annotations deal in terms of levels, while the type system operates
+on enclaves. Since every enclave resides at a level, we can understand a level as
+a set of enclaves.
+
+\subsection{Annotated function assignments}
+We start with unannotated function $f$ is assigned a label $q$ and enclave $l$.
+Immediately, we know $f$ must have a type $l\ \delta$.
+To find $\delta$ we do the following: 
+\begin{enumerate}
+    \item Lookup $q$'s corresponding cle json in the cle map. 
+    \item For every cdf inside $q$'s definition
+    \item For each remote level in the cdfs for $q$, we lookup the argtaints, 
+    codtaints and rettaints labels and expand their corresponding levels into sets of remote enclaves.
+    For argtaints, we obtain a set of enclaves for each argument $\alpha_1, \dots, \alpha_n$. 
+    For codtaints and rettaints, we obtaint two sets $\phi$ and $\theta$ for codtaints and rettaints 
+    respectively. 
+    \item For each remote level, we obtain a set of remote enclaves $E$. For each enclave $r$ in $E$,
+    we construct a $\mu = r\ (\alpha_1, \dots, \alpha_n) \rightarrow_\phi \theta$.
+\end{enumerate}
+
+\subsection{Unannotated function assignments}
+Unannotated functions can only be called within an enclave. Thus,
+every unannotated function $f$ in enclave $l$ has type $l\ \delta$ where 
+$\delta = \{ l\ (\alpha_1, \dots, \alpha_n) \rightarrow_\phi \theta \}$,
+assuming there is some way to obtain $\alpha_1, \dots, \alpha_n, \phi, \theta$.
+
+\subsection{Global variables}
+A global variable $g$ in enclave $l$ will have type $l\ \sigma$. 
+To determine $\sigma$, we lookup the remote levels in the cdfs for $g$
+and expand to get a set of enclaves for each remote level. Then $\sigma$ is 
+the union of these sets.
 
 \end{document}
