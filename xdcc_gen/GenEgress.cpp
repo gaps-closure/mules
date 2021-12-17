@@ -930,20 +930,8 @@ void GenEgress::annotations(const XdccFlow &xdccFlow)
             combined["cdf"][0]["codtaints"] = jsonObjects;
             idx++;
 
-            combined["cdf"][idx] = js["cdf"][1];
+            combined["cdf"][idx] = combined["cdf"][0];
             combined["cdf"][idx]["remotelevel"] = remote;
-            combined["cdf"][idx]["direction"] = combined["cdf"][0]["direction"];
-            combined["cdf"][idx]["guarddirective"] = combined["cdf"][0]["guarddirective"];
-            combined["cdf"][idx]["argtaints"] = combined["cdf"][0]["argtaints"];
-            combined["cdf"][idx]["rettaints"] = combined["cdf"][0]["rettaints"];
-//            for (int i = 0; i < in_args.size(); i++) {
-//                auto jsonObjects = json::array();
-//                jsonObjects.push_back("TAG_REQUEST_ECHO_" + msg_name_u);
-//                combined["cdf"][idx]["argtaints"][i] = jsonObjects;
-//            }
-            auto jsonObjects2 = json::array();
-            jsonObjects2.push_back(remote_u + "_SHAREABLE");
-            combined["cdf"][idx]["codtaints"] = jsonObjects2;
 
             first = false;
             idx++;
