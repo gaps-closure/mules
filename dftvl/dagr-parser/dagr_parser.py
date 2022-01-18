@@ -6,11 +6,17 @@ from   lark.visitors import Transformer, Interpreter
 from   lark.lexer    import Lexer, Token
 from   lark.visitors import Discard
 from   dagrammar     import DAGR_GRAMMAR
+from   pybackend     import python_backend
 
 #---------------------------------------------------------------------------------------------------
 def get_args(showargs=False):
-  p = ArgumentParser(description='DFDL-Aware Gaur Rules Parser')
-  p.add_argument('-f', '--file', required=True, type=str, help='Input file')
+  p = ArgumentParser(description='DFDL-Aware Guard Rules Parser')
+  p.add_argument('-d', '--dftvl_file',  required=True,  type=str, help='Input DFTVL specification')
+  p.add_argument('-s', '--schema_file', required=True,  type=str, help='Input Schema')
+  p.add_argument('-o', '--output_file', required=False, type=str, default='gen.py', help='Output filename [gen.py]')
+  p.add_argument('-D', '--dftvl_lang',  required=False, type=str, default='DAGR', help='DFTVL language [DAGR]')
+  p.add_argument('-S', '--schema_lang', required=False, type=str, default='DFDL', help='Schema language [DFDL]')
+  p.add_argument('-T', '--target_lang', required=False, type=str, default='Python', help='Target for compiler [Python]')
   args = p.parse_args()
   if showargs:
     print('Invoked with following options: ')
@@ -48,7 +54,7 @@ def gc1(t,d):
   l = list(t.find_data(d))
   return l[0].children if len(l) == 1 else []
   
-class DAGRProcessor():
+class Frontend_DAGR():
   def __init__(self,tree,discard=True,showast=True,pretty=True): 
     if discard:
       for n in tree.iter_subtrees_topdown(): 
@@ -66,13 +72,37 @@ class DAGRProcessor():
     self.rules    = { gs1(p,'rulename') : gc1(p,'rexpr') for p in tree.find_data('ruledef') }
 
 #---------------------------------------------------------------------------------------------------
+
+class Backend_Python():
+  def compile(self, dagr_ir, out): 
+    with open(out, 'w') as of:
+      of.print('#!/usr/bin/env python3')
+      pass
+
+#---------------------------------------------------------------------------------------------------
 if __name__ == '__main__':
   args   = get_args(showargs=True)
-  parser = Lark(DAGR_GRAMMAR, start='spec', parser='lalr', lexer='contextual', transformer=CleanTokens())
-  with open(args.file, 'r') as inf: ast = parser.parse(inf.read())
-  proc   = DAGRProcessor(ast, discard=True, showast=True, pretty=True)
 
-  PrettyPrinter().pprint(proc.pipeline)
-  PrettyPrinter().pprint(proc.ruleblks)
-  PrettyPrinter().pprint(proc.rules)
-   
+  if args.schema_lang == 'DFDL':
+    pass
+  elif args.schema_lang == 'XSD':
+    raise Exception('Not yet implemented:' + args.schema_lang)
+  else:
+    raise Exception('Unsupported schema language:' + args.schema_lang)
+
+  if args.dftvl_lang == 'DAGR':
+    parser = Lark(DAGR_GRAMMAR, start='spec', parser='lalr', lexer='contextual', transformer=CleanTokens())
+    with open(args.dftvl_file, 'r') as inf: ast = parser.parse(inf.read())
+    dagr_ir = Frontend_DAGR(ast, discard=True, showast=True, pretty=True)
+  else:
+    raise Exception('Unsupportd DFTVL language:' + args.dftvl_lang)
+
+  PrettyPrinter().pprint(dagr_ir.pipeline)
+  PrettyPrinter().pprint(dagr_ir.ruleblks)
+  PrettyPrinter().pprint(dagr_ir.rules)
+
+  if args.target_lang == 'Python':
+    with open(args.output_file, 'w') as f: f.write(python_backend(dagr_ir))
+  else:
+    raise Exception('Unsupported compilation target:' + args.target_lang)
+
