@@ -9,16 +9,17 @@ from   dagrammar     import DAGR_GRAMMAR
 from   pybackend     import python_backend
 
 #---------------------------------------------------------------------------------------------------
-def get_args(showargs=False):
+def get_args():
   p = ArgumentParser(description='DFDL-Aware Guard Rules Parser')
   p.add_argument('-d', '--dftvl_file',  required=True,  type=str, help='Input DFTVL specification')
   p.add_argument('-s', '--schema_file', required=True,  type=str, help='Input Schema')
   p.add_argument('-o', '--output_file', required=False, type=str, default='gen.py', help='Output filename [gen.py]')
+  p.add_argument('-v', '--verbose',     action='store_true', help='Verbose [False]')
   p.add_argument('-D', '--dftvl_lang',  required=False, type=str, default='DAGR', help='DFTVL language [DAGR]')
   p.add_argument('-S', '--schema_lang', required=False, type=str, default='DFDL', help='Schema language [DFDL]')
   p.add_argument('-T', '--target_lang', required=False, type=str, default='Python', help='Target for compiler [Python]')
   args = p.parse_args()
-  if showargs:
+  if args.verbose:
     print('Invoked with following options: ')
     for x in vars(args).items(): print(' --%s %s' % x)
     print('')
@@ -71,17 +72,14 @@ class Frontend_DAGR():
                       for p in tree.find_data('pipeblk') }
     self.rules    = { gs1(p,'rulename') : gc1(p,'rexpr') for p in tree.find_data('ruledef') }
 
-#---------------------------------------------------------------------------------------------------
-
-class Backend_Python():
-  def compile(self, dagr_ir, out): 
-    with open(out, 'w') as of:
-      of.print('#!/usr/bin/env python3')
-      pass
+    if showast:
+      PrettyPrinter().pprint(self.pipeline)
+      PrettyPrinter().pprint(self.ruleblks)
+      PrettyPrinter().pprint(self.rules)
 
 #---------------------------------------------------------------------------------------------------
 if __name__ == '__main__':
-  args   = get_args(showargs=True)
+  args   = get_args()
 
   if args.schema_lang == 'DFDL':
     pass
@@ -93,16 +91,12 @@ if __name__ == '__main__':
   if args.dftvl_lang == 'DAGR':
     parser = Lark(DAGR_GRAMMAR, start='spec', parser='lalr', lexer='contextual', transformer=CleanTokens())
     with open(args.dftvl_file, 'r') as inf: ast = parser.parse(inf.read())
-    dagr_ir = Frontend_DAGR(ast, discard=True, showast=True, pretty=True)
+    dagr_ir = Frontend_DAGR(ast, discard=True, showast=args.verbose, pretty=True)
   else:
     raise Exception('Unsupportd DFTVL language:' + args.dftvl_lang)
 
-  PrettyPrinter().pprint(dagr_ir.pipeline)
-  PrettyPrinter().pprint(dagr_ir.ruleblks)
-  PrettyPrinter().pprint(dagr_ir.rules)
-
   if args.target_lang == 'Python':
-    with open(args.output_file, 'w') as f: f.write(python_backend(dagr_ir))
+    python_backend(dagr_ir, args.output_file)
   else:
     raise Exception('Unsupported compilation target:' + args.target_lang)
 

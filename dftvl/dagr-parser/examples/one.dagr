@@ -1,0 +1,18 @@
+profile PROF1 { hardware MIND; }
+
+pipeline P1 {
+  entry => B1;
+  B1    => exit;
+}
+
+block B1 {
+  redact_altitude;
+}
+
+rule redact_altitude {
+  if 
+    whatevr 
+  then 
+    nop;
+}
+
