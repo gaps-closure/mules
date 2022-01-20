@@ -2,9 +2,10 @@
 
 import sys
 import zmq
-from time      import sleep
-from queue     import Queue
-from threading import Thread
+import xml.etree.ElementTree as     ET
+from   time                  import sleep
+from   queue                 import Queue
+from   threading             import Thread
 
 ZMQ_IN_URI  = 'ipc:///tmp/dagr_in'
 ZMQ_OUT_URI = 'ipc:///tmp/dagr_out'
@@ -32,8 +33,8 @@ class Block(Thread):
         for b in self.nexthop(odata):
           b.input(odata) # forward to first match only
           break
-      except:
-        pass
+      except Exception as e:
+        print('Block ' + self.blkname + ': '  + str(e))
 
 class ExitBlock(Block):
   def addNexthop(self, block, expr): pass
@@ -42,8 +43,12 @@ class ExitBlock(Block):
     socket  = context.socket(zmq.PUB)
     socket.bind(ZMQ_OUT_URI)
     while True:
-      try:    socket.send(self.queue.get())
-      except: pass
+      try:    
+        tree = self.queue.get()
+        data = ET.tostring(tree)
+        socket.send(data)
+      except Exception as e: 
+        print('Block ' + self.blkname + ': '  + str(e))
 
 class EntryBlock(Block):
   def input(self, data): pass
@@ -56,9 +61,11 @@ class EntryBlock(Block):
       try:    
         data = socket.recv()
         for b in self.nexthop(data):
-          b.input(data) # forward to first match only
-          break
-      except: pass
+          tree = ET.fromstring(data)
+          b.input(tree) 
+          break  # forward only to first matching neighbor 
+      except Exception as e: 
+        print('Block ' + self.blkname + ': '  + str(e))
 
 class Engine:
   def __init__(self):
