@@ -113,13 +113,35 @@ Install the lark parser library.
 sudo -H pip3 install lark-parser==0.11.1
 ```
 
-Optionally, install GHC and Idris.
+Install GHC and Idris optionally; these may be used in the future to develop a verified version of the DAGR parser.
 
 ```
-sudo apt install ghc
-sudo apt install libgmp-dev
-sudo apt install cabal-install
+sudo apt install ghc libgmp-dev cabal-install
 cabal update
 cabal install idris
+```
+
+Install the 0MQ library as below and then build and install the `zc` utility from 
+[https://github.com/hdhaussy/zc/](https://github.com/hdhaussy/zc/)
+
+```
+sudo apt install libzmq3-dev
+```
+
+To test the parser and a generated Python engine, open three terminals.
+In the first terminal, generate Python code from a DFDL and DAGR specification, and then run the generated engine.
+```
+python3 dagr_parser.py -v -s examples/gmabw.dfdl.xsd -d examples/zero.dagr 
+python3 gen.py
+```
+
+In the second terminal, listen to the output over 0MQ to the engine.
+```
+zc -n1 SUB ipc:///tmp/dagr_out
+```
+
+In the third terminal, send a sample input infoset over 0MQ to the engine.
+```
+cat examples/bw_write_221.infoset | zc -n1 PUB ipc:///tmp/dagr_in 
 ```
 
