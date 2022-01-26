@@ -27,11 +27,15 @@ class Block(Thread):
     while True:
       try:
         odata = self.queue.get()
-        idata = odata 
-        for r in self.rules: odata = r(idata)
-        for b in self.nexthop(odata):
-          b.input(odata) # forward to first match only
-          break
+        idata = odata
+        for r in self.rules: 
+          if idata is None: break
+          odata = r(idata)
+          idata = odata 
+        if odata:
+          for b in self.nexthop(odata):
+            b.input(odata) 
+            break  # forward to first match only
       except Exception as e:
         print('Block ' + self.blkname + ': '  + str(e))
 

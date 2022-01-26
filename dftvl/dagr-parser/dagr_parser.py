@@ -64,11 +64,6 @@ class Frontend_DAGR():
     if discard:
       for n in tree.iter_subtrees_topdown(): 
         if isinstance(n, Tree): n.children = list(filter(lambda x: not(isinstance(x,Discard)), n.children))
-    if verbosity > 0: 
-      print('-----------------------------------------------')
-      print('Abstract Syntax Tree from Parser:')
-      print('-----------------------------------------------')
-      print(tree.pretty() if verbosity <= 2 else tree)
 
     self.profile  = list(tree.find_data('profblk'))
     self.pipeline = { gs1(p,'pipename') : [(gs2(x,'srcblk'), gs2(x,'dstblk'), gc1(x,'condition')) 
@@ -79,6 +74,17 @@ class Frontend_DAGR():
                                            [gv1(r, 'dagrval') for r in t.find_data('trow')])
                       for t in tree.find_data('tbldef') }
     self.rules    = { gs1(p,'rulename') : gc1(p,'rexpr') for p in tree.find_data('ruledef') }
+
+    for bname,rules in self.ruleblks.items():
+      for rname in rules:
+        if rname not in self.rules:
+          raise Exception('Missing definition for rule %s needed by block %s' % (rname,bname))
+
+    if verbosity > 0: 
+      print('-----------------------------------------------')
+      print('Abstract Syntax Tree from Parser:')
+      print('-----------------------------------------------')
+      print(tree.pretty() if verbosity <= 2 else tree)
 
     if verbosity > 1:
       print('-----------------------------------------------')
