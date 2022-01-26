@@ -4,7 +4,7 @@ profile PROF1 {
 }
 
 pipeline P1 {
-  entry => B1;
+  entry => B1 | (document matches './/gma:SDHBWPDU');
   B1    => exit;
 }
 
@@ -23,7 +23,7 @@ table gaps_acl {
 
 rule redact_altitude {
   if 
-    whatevr 
+    (whatevr matches whatevr)
   then 
     nop;
 }
@@ -34,7 +34,7 @@ rule apply_acl {
     --gma::GapsPdu/gma::SDHBWPDU/gma::SDHBWHeader/tags == gaps_acl.sec and
     --gma::GapsPdu/gma:SDHBWPDU/gma:SDHBWHeader/tagt == gaps_acl.typ
   if 
-    whatevr 
+    (whatevr matches whatevr)
   then 
     nop;
 }

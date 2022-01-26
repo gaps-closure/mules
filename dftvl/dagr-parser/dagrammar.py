@@ -15,6 +15,10 @@ profelt:            device d+ dagrval
 connector:          srcblk d* arrow d* dstblk (d* guard d* condition)?
 thdr:               tdelim (tdelim d* colname d*)+ tdelim tdelim
 trow:               tdelim (tdelim d* dagrval d*)+ tdelim tdelim
+rexpr:              ant d+ sat (d+ alt)?
+ant:                cif   d* condition 
+sat:                cthen d* action
+alt:                celse d* action
 profname:           identifier
 pipename:           identifier 
 rblkname:           identifier 
@@ -25,14 +29,11 @@ srcblk:             rblkname | terminii
 dstblk:             rblkname | terminii
 dagrval:            identifier | dquotedstring | squotedstring | integer | float | bool
 
-rexpr:              ant sat (alt)?
-ant:                cif   d* condition 
-sat:                cthen d* action
-alt:                celse d* action
+condition:          lparen d* subject (d+ binop d+ object)? d* rparen
+subject:            condition | dagrval | document
+object:             condition | dagrval | document
 
-condition:          expr 
-action:             expr 
-expr:               (identifier d*)+
+action:             dagrval
 
 d:                  DELIM
 proftok:            PROFILE
@@ -59,14 +60,18 @@ identifier:         BACKQUOTE? ALPHA ADM?
 cif:                IF
 cthen:              THEN
 celse:              ELSE
+document:           DOCUMENT
+lparen:             LPAREN
+rparen:             RPAREN
+binop:              MATCHES | NOTMATCHES | EQUALS | NOTEQUALS | AND | OR
 '''
 
 #----------------------------------------------------------------------------------------------
 TOKENS = r'''
 COLON:              /:/ 
-
 ADM:                /[a-zA-Z0-9_]+/
 ALPHA:              /[a-zA-Z]/
+AND:                /and/
 BACKQUOTE:          /`/
 BLOCK:              /block/
 COMMENT:            /[ \t]*--[^\r\n]*(\r|\r\n|\n)/
@@ -74,23 +79,31 @@ CONNECT:            /connect/
 DEVICE:             /device/
 DELIM:              /[ \t\f\r\n]+/
 DIGIT:              /[0-9]/
+DOCUMENT:           /document/
 DOT:                /\./ 
 DQUOTE:             /\"/
 ELSE:               /(else)|(otherwise)/
 ENTRY:              /entry/
+EQUALS:             /(==)|((is )?equal to)/
 EXIT:               /exit/
 FALSE:              /false/
 GLOBAL:             /global/
 IF:                 /if/
 PIPE:               /\|/
 LBRACE:             /\{/
+LPAREN:             /\(/ 
+MATCHES:            /match(es)?/ 
 MINUS:              /-/ 
 NAMESPACE:          /namespace/
 NONDQUOTEST:        /[^\"\n\r]/
 NONSQUOTEST:        /[^\'\n\r]/
+NOTEQUALS:          /(<>)|((is )?not equal to)/
+NOTMATCHES:         /does not match/ 
+OR:                 /or/
 PIPELINE:           /pipeline/
 PROFILE:            /profile/
 RBRACE:             /\}/
+RPAREN:             /\)/ 
 RULE:               /rule/
 SEMI:               /;/ 
 SQUOTE:             /\'/
@@ -132,7 +145,6 @@ ordinalword:        FIRST
 ADD:                /add/
 AFRAG:              /action fragment/
 ALL:                /all( of the)?/
-AND:                /and/
 ANY:                /any( of the)?/
 APPLIESTO:          /applies to/
 ARTICLE:            /(a)|(an)|(the)|(its)|(their)/
@@ -153,7 +165,6 @@ EIGHT:              /eight/
 EIGHTH:             /eighth/
 ELEMENTS:           /elements/
 END:                /end/
-EQUALS:             /(=)|((is )?equal to)/
 EXACTLY:            /exactly/
 FIFTH:              /fifth/
 FIRST:              /first/
@@ -175,7 +186,6 @@ ISNOTIN:            /is not one of/
 LBRACKET:           /\[/
 LEESEREQ:           /(<=)|((is )?less than or equal to)|((is )?before or on)/
 LESSER:             /(<)|((is )?less than)|((is )?before)/
-LPAREN:             /(/ 
 MINUSMINUS:         /--/
 MODEL:              /model/
 MOD:                /mod/ 
@@ -185,14 +195,12 @@ NINTH:              /ninth/
 NO:                 /(no)|(none)/
 NONRBRACEST:        /[^\}\n\r]/
 NONRBRACKST:        /[^\]\n\r]/
-NOTEQUALS:          /(<>)|((is )?not equal to)/
 NOTPRESENT:         /(is)|((are) not present)/
 NUMBEROF:           /number of/
 OF:                 /of/
 ONE:                /one/
 OPERATORS:          /operators/
 ORDINALSUFFIX:      /(st)|(nd)|(rd)|(th)/
-OR:                 /or/
 PLUS:               /\+/ 
 PRESENT:            /(is)|(are) present/
 RBRACKET:           /\]/
@@ -200,7 +208,6 @@ REMOVE:             /(remove)|(clear)/
 REPLACE:            /replace/
 REPORT:             /report/
 REPRESENT:          /(represent)|(represents)/
-RPAREN:             /)/ 
 RULESET:            /rule set/
 SECOND:             /second/
 SET:                /set/

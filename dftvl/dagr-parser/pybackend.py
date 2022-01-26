@@ -60,10 +60,10 @@ class EntryBlock(Block):
     socket.setsockopt_string(zmq.SUBSCRIBE, '')
     while True:
       try:    
-        data = socket.recv()
+        xmldata = socket.recv()
+        data = ET.fromstring(xmldata)
         for b in self.nexthop(data):
-          tree = ET.fromstring(data)
-          b.input(tree) 
+          b.input(data) 
           break  # forward only to first matching neighbor 
       except Exception as e: 
         print('Block ' + self.blkname + ': '  + str(e))
@@ -86,6 +86,14 @@ def rname(r):     return '_rule_%s' % r
 def tname(t):     return '_table_%s' % t
 def gname(b1,b2): return '_guard_%s_%s' % (b1,b2)
 
+def transpile_namespaces(dct):
+  s,n,t  = '','\n','  '
+  s += n + '_xml_namespaces = {}' + n
+  for k,v in dct.items():
+    s += "_xml_namespaces['%s'] = '%s'" % (k,v) + n
+    s += "ET.register_namespace('%s','%s')" % (k,v) + n
+  return s
+
 def transpile_table(q,x):
   (cols,data) = x
   s,n,t  = '','\n','  '
@@ -101,6 +109,9 @@ def transpile_guard(q,x):
   s,n,t  = '','\n','  '
   s += n + 'def ' + q + '(data):' + n
   # XXX: process actual guard expression here
+  # print([y for y in x if y.data=='subject'])
+  # print([y for y in x if y.data=='binop'])
+  # print([y for y in x if y.data=='object'])
   s += t + 'return True' + n
   return s
 
@@ -116,11 +127,11 @@ def python_backend(dagr_ir, output_file):
   once  = [True]
   with open(output_file, 'w') as f: 
     for _ in once:                           f.write(DAGR_BOILERPLATE)
+    for _ in once:                           f.write(transpile_namespaces(dagr_ir.nspaces))
     for t,x in dagr_ir.tables.items():       f.write(transpile_table(tname(t), x))
     for (b1,b2,x) in pline:                  f.write(transpile_guard(gname(b1,b2), x))
     for r,x in dagr_ir.rules.items():        f.write(transpile_rule(rname(r), x))
     for _ in once:                           f.write("\nif __name__=='__main__':\n")
-    for k,v in dagr_ir.nspaces.items():      f.write("  ET.register_namespace('%s','%s')\n" % (k,v))
     for _ in once:                           f.write("  e = Engine()\n")
     for b in dagr_ir.ruleblks:               f.write("  e.add('%s')\n" % b) 
     for (b1,b2,_) in pline:                  f.write("  e.connect('%s','%s',%s)\n" % (b1,b2,gname(b1,b2)))

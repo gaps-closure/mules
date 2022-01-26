@@ -17,8 +17,8 @@ profile PROF1 {
 
 pipeline P1 {
   entry => B1;
-  B1    => B2   | datatype is SVG;
-  B1    => exit | datatype is not SVG;
+  B1    => B2   | (document matches 'SVG');
+  B1    => exit | (document does not match 'SVG');
   B2    => exit;
 }
 
@@ -48,27 +48,27 @@ table sample_acl {
 
 rule redact_altitude {
   if 
-    whatevr 
+    (whatevr)
   then 
     nop;
 }
 
 rule drop_blacklisted {
   if 
-    whatevr 
+    (whatevr)
   then 
     nop;
 }
 
 rule apply_dtable {
-  if whatevr then nop else nop;
+  if (whatevr) then nop else nop;
 }
 
 rule pixelate_sensitive_region {
-  if whatevr then nop else nop;
+  if (whatevr) then nop else nop;
 }
 
 rule reduce_resolution {
-  if whatevr then nop otherwise nop;
+  if (whatevr) then nop otherwise nop;
 }
 
