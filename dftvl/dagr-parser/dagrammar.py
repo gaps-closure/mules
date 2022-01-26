@@ -2,23 +2,18 @@
 
 #----------------------------------------------------------------------------------------------
 RULES = r'''
-spec:               d* profblk d* pipeblk (d* (ruleblk|ruledef|tbldef))* d*
-profblk:            proftok d+ profname d* bstart (d* profelt   d* sdelim)+ d* bend
-pipeblk:            pipetok d+ pipename d* bstart (d* connector d* sdelim)+ d* bend
-ruleblk:            rblktok d+ rblkname d* bstart (d* rulename  d* sdelim)+ d* bend
-ruledef:            rdeftok d+ rulename d* bstart (d* rexpr     d* sdelim)  d* bend
-tbldef:             tdeftok d+ tblname  d* bstart (d* thdr     (d* trow)+)  d* bend
+spec:               profblk pipeblk  (ruleblk|ruledef|tbldef)* 
+profblk:            proftok profname bstart (profelt   sdelim)+ bend
+pipeblk:            pipetok pipename bstart (connector sdelim)+ bend
+ruleblk:            rblktok rblkname bstart (rulename  sdelim)+ bend
+ruledef:            rdeftok rulename bstart (rexpr     sdelim)  bend
+tbldef:             tdeftok tblname  bstart (thdr      trow+)   bend
 
-profelt:            device d+ dagrval
-                    | namespace d+ dagrval d+ dagrval
-                    | global d+ dagrval
-connector:          srcblk d* arrow d* dstblk (d* guard d* condition)?
-thdr:               tdelim (tdelim d* colname d*)+ tdelim tdelim
-trow:               tdelim (tdelim d* dagrval d*)+ tdelim tdelim
-rexpr:              ant d+ sat (d+ alt)?
-ant:                cif   d* condition 
-sat:                cthen d* action
-alt:                celse d* action
+profelt:            device dagrval | namespace dagrval dagrval | global dagrval
+connector:          srcblk arrow dstblk (guard condition)?
+thdr:               tdelim (tdelim colname)+ tdelim tdelim
+trow:               tdelim (tdelim dagrval)+ tdelim tdelim
+rexpr:              cif condition cthen action (celse action)?
 profname:           identifier
 pipename:           identifier 
 rblkname:           identifier 
@@ -29,13 +24,12 @@ srcblk:             rblkname | terminii
 dstblk:             rblkname | terminii
 dagrval:            identifier | dquotedstring | squotedstring | integer | float | bool
 
-condition:          lparen d* subject (d+ binop d+ object)* d* rparen
+condition:          cstart subject (binop object)* cend
 subject:            condition | dagrval | document
 object:             condition | dagrval | document
 
-action:             lparen d* dagrval (d+ dagrval)* d* rparen
+action:             cstart dagrval+ cend
 
-d:                  DELIM
 proftok:            PROFILE
 pipetok:            PIPELINE
 rblktok:            BLOCK
@@ -60,10 +54,10 @@ identifier:         BACKQUOTE? ALPHA ADM?
 cif:                IF
 cthen:              THEN
 celse:              ELSE
-document:           DOCUMENT
-lparen:             LPAREN
-rparen:             RPAREN
+cstart:             LPAREN
+cend:               RPAREN
 binop:              MATCHES | NOTMATCHES | EQUALS | NOTEQUALS | AND | OR
+document:           DOCUMENT
 '''
 
 #----------------------------------------------------------------------------------------------
@@ -116,6 +110,7 @@ TRUE:               /true/
 #----------------------------------------------------------------------------------------------
 DIRECTIVES = r'''
 %ignore COMMENT
+%ignore DELIM
 '''
 
 #----------------------------------------------------------------------------------------------

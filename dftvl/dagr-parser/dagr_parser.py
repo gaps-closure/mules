@@ -33,13 +33,14 @@ class CleanTokens(Transformer):
   def bool(self, items):          return Token('BOOL', self._hlp(items)=='true')
   def squotedstring(self, items): return Token('SQSTR', self._hlp(items).strip("'"))
   def dquotedstring(self, items): return Token('DQSTR', self._hlp(items).strip('"'))
-  def d(self, items):             return Discard();
   def guard(self, items):         return Discard();
   def arrow(self, items):         return Discard();
   def sdelim(self, items):        return Discard();
   def tdelim(self, items):        return Discard();
   def bstart(self, items):        return Discard();
   def bend(self, items):          return Discard();
+  def cstart(self, items):        return Discard();
+  def cend(self, items):          return Discard();
   def profile(self, items):       return Discard();
   def pipeline(self, items):      return Discard();
   def proftok(self, items):       return Discard();
@@ -63,7 +64,7 @@ def banprt(m,x):
   print('-----------------------------------------------')
   print(m)
   print('-----------------------------------------------')
-  PrettyPrinter().pprint(x)
+  if x: PrettyPrinter().pprint(x)
 
 class Frontend_DAGR():
   def __init__(self,tree,verbosity=0):
@@ -92,7 +93,7 @@ class Frontend_DAGR():
           raise Exception('Missing definition for rule %s needed by block %s' % (rname,bname))
 
     if verbosity > 0: 
-      banprt('Abstract Syntax Tree from Parser:', '')
+      banprt('Abstract Syntax Tree from Parser:', None)
       print(tree.pretty() if verbosity <= 2 else tree)
 
     if verbosity > 1:
