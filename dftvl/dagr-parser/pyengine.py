@@ -10,9 +10,6 @@ from   threading             import Thread
 ZMQ_IN_URI  = 'ipc:///tmp/dagr_in'
 ZMQ_OUT_URI = 'ipc:///tmp/dagr_out'
 
-def guard_eval(data, expr):
-  return True if expr == '' else False  # XXX: need to evaluate expression on data
-
 class Block(Thread):
   def __init__(self, blkname, engine):
     self.engine    = engine
