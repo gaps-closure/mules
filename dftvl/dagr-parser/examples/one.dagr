@@ -22,22 +22,23 @@ table gaps_acl {
 }
 
 rule redact_altitude {
-  if 
-    (('.//gma:SDHBWHeader/tagm' == '2') and
-     ('.//gma:SDHBWHeader/tags' == '2') and
-     ('.//gma:SDHBWHeader/tagt' == '1')) 
-  then 
-    (zeroize './/gma:Position/x');
+  let dmux './/gma:SDHBWHeader/tagm';
+  let dsec './/gma:SDHBWHeader/tags';
+  let dtyp './/gma:SDHBWHeader/tagt';
+  if ((dmux == '2') and (dsec == '2') and (dtyp == '1')) then zeroize './/gma:Position/x';
 }
 
 rule apply_acl {
+  let dmux './/gma:SDHBWHeader/tagm';
+  let dsec './/gma:SDHBWHeader/tags';
+  let dtyp './/gma:SDHBWHeader/tagt';
   if 
-    (('.//gma:SDHBWHeader/tagm' == 'gaps_acl.mux') and
-     ('.//gma:SDHBWHeader/tags' == 'gaps_acl.sec') and
-     ('.//gma:SDHBWHeader/tagt' == 'gaps_acl.typ') and
+    ((dmux == 'gaps_acl.mux') and
+     (dsec == 'gaps_acl.sec') and
+     (dtyp == 'gaps_acl.typ') and
      (('gaps_acl.typ' == 'allow') or ('gaps_acl.typ' == 'redact')))
   then 
-    (pass)
+    pass
   else
     (drop);
 }

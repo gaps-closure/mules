@@ -41,6 +41,7 @@ class CleanTokens(Transformer):
   def bend(self, items):          return Discard();
   def cstart(self, items):        return Discard();
   def cend(self, items):          return Discard();
+  def let(self, items):           return Discard();
   def profile(self, items):       return Discard();
   def pipeline(self, items):      return Discard();
   def proftok(self, items):       return Discard();

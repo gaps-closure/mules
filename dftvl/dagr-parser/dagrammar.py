@@ -13,13 +13,15 @@ profelt:            device dagrval | namespace dagrval dagrval | global dagrval
 connector:          srcblk arrow dstblk (guard condition)?
 thdr:               (tdelim colname)+ tdelim 
 trow:               (tdelim dagrval)+ tdelim 
-rexpr:              cif condition cthen action (celse action)?
+rexpr:              (letexp)* cif condition cthen action (celse action)?
+letexp:             let varname dagrval sdelim
 profname:           identifier
 pipename:           identifier 
 rblkname:           identifier 
 rulename:           identifier
 tblname:            identifier
 colname:            identifier
+varname:            identifier
 srcblk:             rblkname | terminii
 dstblk:             rblkname | terminii
 dagrval:            identifier | dquotedstring | squotedstring | integer | float | bool
@@ -28,7 +30,7 @@ condition:          cstart subject (binop object)* cend
 subject:            condition | dagrval | document
 object:             condition | dagrval | document
 
-action:             cstart dagrval+ cend
+action:             cstart dagrval+ cend | dagrval+
 
 proftok:            PROFILE
 pipetok:            PIPELINE
@@ -57,6 +59,7 @@ celse:              ELSE
 cstart:             LPAREN
 cend:               RPAREN
 binop:              MATCHES | NOTMATCHES | EQUALS | NOTEQUALS | AND | OR
+let:                LET
 document:           DOCUMENT
 '''
 
@@ -85,6 +88,7 @@ GLOBAL:             /global/
 IF:                 /if/
 PIPE:               /\|/
 LBRACE:             /\{/
+LET:                /let/
 LPAREN:             /\(/ 
 MATCHES:            /match(es)?/ 
 MINUS:              /-/ 
