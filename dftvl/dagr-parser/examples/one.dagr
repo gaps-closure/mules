@@ -1,4 +1,7 @@
-profile PROF1 { hardware CLOSURE; }
+profile PROF1 { 
+  device CLOSURE; 
+  namespace 'gma' 'urn:gma:1.0';
+}
 
 pipeline P1 {
   entry => B1;
@@ -6,10 +9,11 @@ pipeline P1 {
 }
 
 block B1 {
+  apply_acl;
   redact_altitude;
 }
 
-table sample_acl {
+table gaps_acl {
   || mux | sec | typ | op       ||
 --||-----+-----+-----+----------||
   || 1   | 1   |  1  | 'deny'   ||
@@ -18,6 +22,17 @@ table sample_acl {
 }
 
 rule redact_altitude {
+  if 
+    whatevr 
+  then 
+    nop;
+}
+
+rule apply_acl {
+  --if 
+    --gma::GapsPdu/gma::SDHBWPDU/gma::SDHBWHeader/tagm == gaps_acl.mux and
+    --gma::GapsPdu/gma::SDHBWPDU/gma::SDHBWHeader/tags == gaps_acl.sec and
+    --gma::GapsPdu/gma:SDHBWPDU/gma:SDHBWHeader/tagt == gaps_acl.typ
   if 
     whatevr 
   then 

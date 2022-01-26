@@ -1,3 +1,3 @@
-profile PROF1 { hardware CLOSURE; }
+profile PROF1 { device CLOSURE; }
 pipeline P1 { entry => exit; }
 

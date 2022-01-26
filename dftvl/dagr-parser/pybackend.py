@@ -120,6 +120,7 @@ def python_backend(dagr_ir, output_file):
     for (b1,b2,x) in pline:                  f.write(transpile_guard(gname(b1,b2), x))
     for r,x in dagr_ir.rules.items():        f.write(transpile_rule(rname(r), x))
     for _ in once:                           f.write("\nif __name__=='__main__':\n")
+    for k,v in dagr_ir.nspaces.items():      f.write("  ET.register_namespace('%s','%s')\n" % (k,v))
     for _ in once:                           f.write("  e = Engine()\n")
     for b in dagr_ir.ruleblks:               f.write("  e.add('%s')\n" % b) 
     for (b1,b2,_) in pline:                  f.write("  e.connect('%s','%s',%s)\n" % (b1,b2,gname(b1,b2)))

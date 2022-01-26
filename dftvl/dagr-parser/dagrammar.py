@@ -9,7 +9,9 @@ ruleblk:            rblktok d+ rblkname d* bstart (d* rulename  d* sdelim)+ d* b
 ruledef:            rdeftok d+ rulename d* bstart (d* rexpr     d* sdelim)  d* bend
 tbldef:             tdeftok d+ tblname  d* bstart (d* thdr     (d* trow)+)  d* bend
 
-profelt:            pkey d+ dagrval
+profelt:            device d+ dagrval
+                    | namespace d+ dagrval d+ dagrval
+                    | global d+ dagrval
 connector:          srcblk d* arrow d* dstblk (d* guard d* condition)?
 thdr:               tdelim (tdelim d* colname d*)+ tdelim tdelim
 trow:               tdelim (tdelim d* dagrval d*)+ tdelim tdelim
@@ -39,7 +41,9 @@ rblktok:            BLOCK
 rdeftok:            RULE
 tdeftok:            TABLE
 terminii:           ENTRY | EXIT
-pkey:               HARDWARE | GLOBAL 
+device:             DEVICE
+global:             GLOBAL
+namespace:          NAMESPACE
 guard:              PIPE
 tdelim:             PIPE
 bstart:             LBRACE 
@@ -67,6 +71,7 @@ BACKQUOTE:          /`/
 BLOCK:              /block/
 COMMENT:            /[ \t]*--[^\r\n]*(\r|\r\n|\n)/
 CONNECT:            /connect/
+DEVICE:             /device/
 DELIM:              /[ \t\f\r\n]+/
 DIGIT:              /[0-9]/
 DOT:                /\./ 
@@ -76,11 +81,11 @@ ENTRY:              /entry/
 EXIT:               /exit/
 FALSE:              /false/
 GLOBAL:             /global/
-HARDWARE:           /hardware/
 IF:                 /if/
 PIPE:               /\|/
 LBRACE:             /\{/
 MINUS:              /-/ 
+NAMESPACE:          /namespace/
 NONDQUOTEST:        /[^\"\n\r]/
 NONSQUOTEST:        /[^\'\n\r]/
 PIPELINE:           /pipeline/

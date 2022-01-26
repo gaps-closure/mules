@@ -2,9 +2,10 @@
 -- profile specifies hardware capability and global variables
 
 profile PROF1 {
-  hardware CLOSURE;    -- use CLOSURE emulator as hardware
-  global   FPCON;
-  global   OCONUS;
+  device    CLOSURE;    -- use CLOSURE emulator as hardware
+  namespace 'gma' 'urn:gma:1.0';
+  global    FPCON;
+  global    OCONUS;
 }
 
 -- must be specified second

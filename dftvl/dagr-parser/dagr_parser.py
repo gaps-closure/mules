@@ -59,13 +59,24 @@ def gc1(t,d):
   l = list(t.find_data(d))
   return l[0].children if len(l) == 1 else []
 
-class Frontend_DAGR():
-  def __init__(self,tree,discard=True,verbosity=0):
-    if discard:
-      for n in tree.iter_subtrees_topdown(): 
-        if isinstance(n, Tree): n.children = list(filter(lambda x: not(isinstance(x,Discard)), n.children))
+def banprt(m,x):
+  print('-----------------------------------------------')
+  print(m)
+  print('-----------------------------------------------')
+  PrettyPrinter().pprint(x)
 
-    self.profile  = list(tree.find_data('profblk'))
+class Frontend_DAGR():
+  def __init__(self,tree,verbosity=0):
+    for n in tree.iter_subtrees_topdown(): 
+      if isinstance(n, Tree): n.children = list(filter(lambda x: not(isinstance(x,Discard)), n.children))
+
+    self.devices  = [e.children[1].children[0].value for p in tree.find_data('profblk')
+                     for e in p.find_data('profelt') if e.children[0].data == 'device']
+    self.globals  = [e.children[1].children[0].value for p in tree.find_data('profblk')
+                     for e in p.find_data('profelt') if e.children[0].data == 'global']
+    self.nspaces  = { e.children[1].children[0].value:e.children[2].children[0].value
+                      for p in tree.find_data('profblk')
+                      for e in p.find_data('profelt') if e.children[0].data == 'namespace'}
     self.pipeline = { gs1(p,'pipename') : [(gs2(x,'srcblk'), gs2(x,'dstblk'), gc1(x,'condition')) 
                                             for x in p.find_data('connector')]
                       for p in tree.find_data('pipeblk') }
@@ -81,32 +92,17 @@ class Frontend_DAGR():
           raise Exception('Missing definition for rule %s needed by block %s' % (rname,bname))
 
     if verbosity > 0: 
-      print('-----------------------------------------------')
-      print('Abstract Syntax Tree from Parser:')
-      print('-----------------------------------------------')
+      banprt('Abstract Syntax Tree from Parser:', '')
       print(tree.pretty() if verbosity <= 2 else tree)
 
     if verbosity > 1:
-      print('-----------------------------------------------')
-      print('Intermediate Representation - Profile:')
-      print('-----------------------------------------------')
-      PrettyPrinter().pprint(self.profile)
-      print('-----------------------------------------------')
-      print('Intermediate Representation - Pipeline:')
-      print('-----------------------------------------------')
-      PrettyPrinter().pprint(self.pipeline)
-      print('-----------------------------------------------')
-      print('Intermediate Representation - Rule blocks:')
-      print('-----------------------------------------------')
-      PrettyPrinter().pprint(self.ruleblks)
-      print('-----------------------------------------------')
-      print('Intermediate Representation - Tables:')
-      print('-----------------------------------------------')
-      PrettyPrinter().pprint(self.tables)
-      print('-----------------------------------------------')
-      print('Intermediate Representation - Rules:')
-      print('-----------------------------------------------')
-      PrettyPrinter().pprint(self.rules)
+      banprt('Intermediate Representation - Devices:',     self.devices)
+      banprt('Intermediate Representation - Globals:',     self.globals)
+      banprt('Intermediate Representation - Namespaces:',  self.nspaces)
+      banprt('Intermediate Representation - Pipeline:',    self.pipeline)
+      banprt('Intermediate Representation - Rule blocks:', self.ruleblks)
+      banprt('Intermediate Representation - Tables:',      self.tables)
+      banprt('Intermediate Representation - Rules:',       self.rules)
 
 #---------------------------------------------------------------------------------------------------
 if __name__ == '__main__':
@@ -122,7 +118,7 @@ if __name__ == '__main__':
   if args.dftvl_lang == 'DAGR':
     parser = Lark(DAGR_GRAMMAR, start='spec', parser='lalr', lexer='contextual', transformer=CleanTokens())
     with open(args.dftvl_file, 'r') as inf: ast = parser.parse(inf.read())
-    dagr_ir = Frontend_DAGR(ast, discard=True, verbosity=args.verbosity)
+    dagr_ir = Frontend_DAGR(ast, verbosity=args.verbosity)
   else:
     raise Exception('Unsupportd DFTVL language:' + args.dftvl_lang)
 
