@@ -19,17 +19,19 @@ class Block(Thread):
     self.blkname   = blkname
     self.queue     = Queue()
     self.ftable    = []
-    self.processor = None
+    self.rules     = []
     super().__init__(daemon=True)
-  def populate(self, processor):     self.processor = processor
   def addNexthop(self, block, expr): self.ftable.append([block,expr])
+  def addRule(self, rulename):       self.rules.append(rulename)
   def input(self, data):             self.queue.put(data)
-  def nexthop(self, data):           return [b for [b,e] in self.ftable if guard_eval(data,e)]
+  def nexthop(self, data):           return [b for [b,e] in self.ftable if e(data)]
   def run(self):
     while True:
       try:
-        idata = self.queue.get()
-        odata = idata if self.processor is None else self.processor(idata) 
+        odata = self.queue.get()
+        idata = odata 
+        for r in self.rules:
+          odata = r(idata)
         for b in self.nexthop(odata):
           b.input(odata) # forward to first match only
           break
@@ -38,6 +40,7 @@ class Block(Thread):
 
 class ExitBlock(Block):
   def addNexthop(self, block, expr): pass
+  def addRule(self, rulename): pass
   def run(self):
     context = zmq.Context()
     socket  = context.socket(zmq.PUB)
@@ -52,6 +55,7 @@ class ExitBlock(Block):
 
 class EntryBlock(Block):
   def input(self, data): pass
+  def addRule(self, rulename): pass
   def run(self):
     context = zmq.Context()
     socket = context.socket(zmq.SUB)
@@ -70,9 +74,9 @@ class EntryBlock(Block):
 class Engine:
   def __init__(self):
     self.blocks = {}
-    self.add('entry')
-    self.add('exit')
-  def add(self, blkname=None): 
+    self.addBlock('entry')
+    self.addBlock('exit')
+  def addBlock(self, blkname): 
     if blkname not in self.blocks: 
       if blkname == 'entry':
         self.blocks[blkname] = EntryBlock(blkname, self) 
@@ -80,11 +84,12 @@ class Engine:
         self.blocks[blkname] = ExitBlock(blkname, self) 
       else:
         self.blocks[blkname] = Block(blkname, self) 
-  def connect(self, b1, b2, guard=None):
+  def addRuleToBlock(self, blkname, rulename): 
+    if blkname in self.blocks: 
+      self.blocks[blkname].addRule(rulename)
+  def connectBlocks(self, b1, b2, guard):
     if b1 in self.blocks and b2 in self.blocks: 
       self.blocks[b1].addNexthop(self.blocks[b2], guard)
-  def populate(self, blkname, processor): 
-    self.blocks[blkname].populate(processor)
   def start(self):
     for b in self.blocks.values(): b.start()
     while True: 

@@ -2,7 +2,7 @@
 -- profile specifies hardware capability and global variables
 
 profile PROF1 {
-  hardware MIND;    -- use MIND hardware
+  hardware CLOSURE;    -- use CLOSURE emulator as hardware
   global   FPCON;
   global   OCONUS;
 }
@@ -38,11 +38,11 @@ block B2 {
 }
 
 table sample_acl {
-  || mux | sec | typ | op     ||
---||-----+-----+-----+--------||
-  || 1   | 1   | 25  | allow  ||
-  || 1   | 1   | 32  | redact ||  
-  || 2   | 4   | 32  | allow  ||
+  || mux | sec | typ | op       ||
+--||-----+-----+-----+----------||
+  || 1   | 1   | 25  | 'allow'  ||
+  || 2   | 2   |  1  | 'redact' ||  
+  || 2   | 4   | 32  | 'deny'   ||
 }
 
 rule redact_altitude {

@@ -131,7 +131,7 @@ sudo apt install libzmq3-dev
 To test the parser and a generated Python engine, open three terminals.
 In the first terminal, generate Python code from a DFDL and DAGR specification, and then run the generated engine.
 ```
-python3 dagr_parser.py -v -s examples/gmabw.dfdl.xsd -d examples/one.dagr 
+python3 dagr_parser.py -v 1 -s examples/gmabw.dfdl.xsd -d examples/one.dagr 
 python3 gen.py
 ```
 

@@ -1,4 +1,4 @@
-profile PROF1 { hardware MIND; }
+profile PROF1 { hardware CLOSURE; }
 
 pipeline P1 {
   entry => B1;
@@ -7,6 +7,14 @@ pipeline P1 {
 
 block B1 {
   redact_altitude;
+}
+
+table sample_acl {
+  || mux | sec | typ | op       ||
+--||-----+-----+-----+----------||
+  || 1   | 1   |  1  | 'deny'   ||
+  || 1   | 1   |  2  | 'allow'  ||
+  || 2   | 2   |  1  | 'redact' ||  
 }
 
 rule redact_altitude {

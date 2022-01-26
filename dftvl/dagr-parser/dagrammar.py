@@ -21,9 +21,7 @@ tblname:            identifier
 colname:            identifier
 srcblk:             rblkname | terminii
 dstblk:             rblkname | terminii
-dagrval:            identifier | string | number | bool
-string:             dquotedstring | squotedstring
-number:             integer | float
+dagrval:            identifier | dquotedstring | squotedstring | integer | float | bool
 
 rexpr:              ant sat (alt)?
 ant:                cif   d* condition 
