@@ -50,25 +50,22 @@ rule redact_altitude {
   if 
     (whatevr)
   then 
-    nop;
+    (nop);
 }
 
 rule drop_blacklisted {
-  if 
-    (whatevr)
-  then 
-    nop;
+  if (whatevr) then (nop);
 }
 
 rule apply_dtable {
-  if (whatevr) then nop else nop;
+  if (whatevr) then (nop) else (nop);
 }
 
 rule pixelate_sensitive_region {
-  if (whatevr) then nop else nop;
+  if (whatevr) then (nop) else (nop);
 }
 
 rule reduce_resolution {
-  if (whatevr) then nop otherwise nop;
+  if (whatevr) then (nop) otherwise (nop);
 }
 

@@ -29,11 +29,11 @@ srcblk:             rblkname | terminii
 dstblk:             rblkname | terminii
 dagrval:            identifier | dquotedstring | squotedstring | integer | float | bool
 
-condition:          lparen d* subject (d+ binop d+ object)? d* rparen
+condition:          lparen d* subject (d+ binop d+ object)* d* rparen
 subject:            condition | dagrval | document
 object:             condition | dagrval | document
 
-action:             dagrval
+action:             lparen d* dagrval (d+ dagrval)* d* rparen
 
 d:                  DELIM
 proftok:            PROFILE

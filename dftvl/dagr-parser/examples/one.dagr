@@ -23,19 +23,22 @@ table gaps_acl {
 
 rule redact_altitude {
   if 
-    (whatevr matches whatevr)
+    (('.//gma:SDHBWHeader/tagm' == '2') and
+     ('.//gma:SDHBWHeader/tags' == '2') and
+     ('.//gma:SDHBWHeader/tagt' == '1')) 
   then 
-    nop;
+    (zeroize './/gma:Position/x');
 }
 
 rule apply_acl {
-  --if 
-    --gma::GapsPdu/gma::SDHBWPDU/gma::SDHBWHeader/tagm == gaps_acl.mux and
-    --gma::GapsPdu/gma::SDHBWPDU/gma::SDHBWHeader/tags == gaps_acl.sec and
-    --gma::GapsPdu/gma:SDHBWPDU/gma:SDHBWHeader/tagt == gaps_acl.typ
   if 
-    (whatevr matches whatevr)
+    (('.//gma:SDHBWHeader/tagm' == 'gaps_acl.mux') and
+     ('.//gma:SDHBWHeader/tags' == 'gaps_acl.sec') and
+     ('.//gma:SDHBWHeader/tagt' == 'gaps_acl.typ') and
+     (('gaps_acl.typ' == 'allow') or ('gaps_acl.typ' == 'redact')))
   then 
-    nop;
+    (pass)
+  else
+    (drop);
 }
 
