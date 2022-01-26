@@ -14,11 +14,11 @@ block B1 {
 }
 
 table gaps_acl {
-  || mux | sec | typ | op       ||
---||-----+-----+-----+----------||
-  || 1   | 1   |  1  | 'deny'   ||
-  || 1   | 1   |  2  | 'allow'  ||
-  || 2   | 2   |  1  | 'redact' ||  
+  | mux | sec | typ | op       |
+--|-----+-----+-----+----------|
+  | 1   | 1   |  1  | 'deny'   |
+  | 1   | 1   |  2  | 'allow'  |
+  | 2   | 2   |  1  | 'redact' |  
 }
 
 rule redact_altitude {

@@ -11,8 +11,8 @@ tbldef:             tdeftok tblname  bstart (thdr      trow+)   bend
 
 profelt:            device dagrval | namespace dagrval dagrval | global dagrval
 connector:          srcblk arrow dstblk (guard condition)?
-thdr:               tdelim (tdelim colname)+ tdelim tdelim
-trow:               tdelim (tdelim dagrval)+ tdelim tdelim
+thdr:               (tdelim colname)+ tdelim 
+trow:               (tdelim dagrval)+ tdelim 
 rexpr:              cif condition cthen action (celse action)?
 profname:           identifier
 pipename:           identifier 

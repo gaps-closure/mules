@@ -39,11 +39,11 @@ block B2 {
 }
 
 table sample_acl {
-  || mux | sec | typ | op       ||
---||-----+-----+-----+----------||
-  || 1   | 1   | 25  | 'allow'  ||
-  || 2   | 2   |  1  | 'redact' ||  
-  || 2   | 4   | 32  | 'deny'   ||
+  | mux | sec | typ | op       |
+--|-----+-----+-----+----------|
+  | 1   | 1   | 25  | 'allow'  |
+  | 2   | 2   |  1  | 'redact' |  
+  | 2   | 4   | 32  | 'deny'   |
 }
 
 rule redact_altitude {
