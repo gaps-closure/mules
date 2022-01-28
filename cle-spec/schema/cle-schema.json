@@ -130,6 +130,26 @@
                         "type": "string",
                         "description": "CLE Definition Name"
                     }
+                },
+                "idempotent":{
+                    "description": "Idempotent Function",
+                    "type": "boolean",
+                    "default": true
+                },
+                "num_tries":{
+                    "description": "Num tries",
+                    "type": "number",
+                    "default": 5
+                },
+                "timeout":{
+                    "description": "Timeout",
+                    "type": "number",
+                    "default": 1000
+                },
+                "pure":{
+                    "description": "Pure Function",
+                    "type": "boolean",
+                    "default": false
                 }
             },
             "dependencies": {
