@@ -15,24 +15,23 @@
 \section{Introduction}
 \section{CLE Types Grammar}
 The following is a small grammar for CLE types $\tau$. 
-$l$ and $r$ represent enclaves and can be thought of as arbitrary identifiers.
-$\alpha, \beta, \theta, \sigma$ are sets of remote enclaves, while $\delta$ is a set of $\mu$.
+$l$ and $r$ represent levels and can be thought of as arbitrary identifiers.
+$\alpha, \beta, \theta, \sigma, \phi, \pi, \gamma$ are sets of remote levels. 
 \begin{center}
 \begin{tabular}{ l r }
-    $\tau, \pi, \gamma$ $\Coloneqq$ $l\ \sigma$ $\bigl\vert$ $l\ \delta$ \\
-    $\mu$ $\Coloneqq$ $r$ ($\alpha_1$, $\dots$, $\alpha_n$) $\rightarrow_\phi$ $\theta$ \\
+    $\tau$ $\Coloneqq$ $l\ \sigma$ $\bigl\vert$ $l$ ($\alpha_1$, $\dots$, $\alpha_n$) $\rightarrow$ $\theta$ \\
 \end{tabular}
 \end{center}
 
+$l\ \sigma$ describes a global variable in level $l$ which can be shared with levels inside $\sigma$. 
+$l$ ($\alpha_1$, $\dots$, $\alpha_n$) $\rightarrow$ $\theta$ describes a function in level $l$ with arguments shareable with $\alpha_1, \ldots \alpha_n$ where the return
+value can be shared with $\theta$. The return value $\theta$ determines from which level where the function can be called from.
 
-$l\ \sigma$ describes a variable in enclave $l$ which can be shared with enclaves inside $\sigma$. 
-The inhabitants of $l\ \delta$ are functions in the enclave $l$. For every $r\ (\alpha_1, \dots, \alpha_n) \rightarrow_\phi \theta \in \delta$
-every function whose type is $l\ \delta$ can be called from an enclave r with
-arguments whose shareability is $\alpha_1, \dots, \alpha_n$, whose function body can share with $\phi$ and whose
-return is able to be shared with $\theta$.
+For any given program, there is a set, $\mathcal{U}$, which describes the set of levels under consideration.
+That set is called the universe set.
 
-The terms of the inhabitants of these types are an idealized subset of llvm, where the only control flow instructions
-are breaks and function calls. 
+The terms of the inhabitants of these types are an idealized subset of llvm, where the only control flow changes are from
+breaks and function calls. 
 
 \section{Type rules}
 Here we assume all functions and global variables have cle types associated with them.  We will focus on how to infer such types in the next section.
@@ -41,11 +40,12 @@ There are several types of judgements, each of which is enumerated below:
 \subsection{Judgements}
 \begin{enumerate}
     \item $\Gamma \vdash e : \tau$. 
-    Top-level entity or instruction $e$ has type $\tau$. 
-    \item $\Gamma \vdash b :_\pi \gamma$. 
-    Basic block or set of basic blocks $b$ has type $\pi$ for all variables bound in instructions, type $\gamma$ for the terminator.
-    \item $\Gamma \vdash t :_\pi \gamma$. 
-    Terminator $t$ has type $\gamma$ and all referenced basic blocks, $b$ are given type $_\pi \gamma$.
+    Function, instruction or global variable $e$ has type $\tau$. 
+    \item $\Gamma \vdash e \Leftarrow \phi: l\ \sigma$. 
+    Basic block or terminator $e$ has type $l\ \sigma$ with constraining set $\phi$. 
+    \item $\Gamma \vdash i \Leftarrow l\ \phi$. 
+    Instruction list is constrained by level set $\phi$ with level $l$.
+
 \end{enumerate}
 
 \subsection{Rules for top-level entities}
@@ -57,8 +57,9 @@ There are several types of judgements, each of which is enumerated below:
 \end{prooftree}
 \qquad
 \begin{prooftree}
-    \hypo{\tau = l\ \sigma}
-    \infer1[global-def]{\Gamma \vdash @x = c : \tau}
+    \hypo{c : l\ \sigma'}
+    \hypo{\sigma' \subseteq \sigma}
+    \infer2[global-def]{\Gamma \vdash @x = c : l\ \sigma}
 \end{prooftree}
 \]
 
@@ -66,21 +67,11 @@ There are several types of judgements, each of which is enumerated below:
 \begin{prooftree}
     \hypo{
     \begin{matrix}
-        \forall (r\ (\alpha_1, \dots, \alpha_n) \rightarrow_\phi \theta) \in \delta. \ 
-        \Gamma[@f \mapsto \tau, \%1 \mapsto l\ \alpha_1, \ldots, \%n \mapsto l\ \alpha_n] \vdash body :_{(l\ \phi)} l\ \theta \\
+        \Gamma[\%1 \mapsto l\ \alpha_1, \ldots, \%n \mapsto l\ \alpha_n] \vdash bb_0 \Leftarrow \mathcal{U} : l\ \theta \\
     \end{matrix}
     }
-    \infer1[fn-def]{\Gamma \vdash @f(\%1, \dots, \%n)\ \{ body \} : l\ \delta}
+    \infer1[fn-def]{\Gamma \vdash @f(\%1, \dots, \%n)\ \{ bb_0 \} : l\ (\alpha_1, \dots, \alpha_n) \rightarrow \theta}
     
-\end{prooftree}
-\]
-
-\[
-\begin{prooftree}
-    \hypo{
-    \Gamma(@f) = \tau = l\ \delta
-    }
-    \infer1[fn-def-known]{\Gamma \vdash @f(\%1, \dots, \%n)\ \{ body \} : \tau}
 \end{prooftree}
 \]
 
@@ -88,35 +79,18 @@ There are several types of judgements, each of which is enumerated below:
 
 \[
 \begin{prooftree} 
-    \hypo{\Gamma \vdash b :_\pi \gamma}
-    \hypo{\Gamma, \%b :_\pi \gamma \vdash bbs :_\pi \gamma}
-    \infer2[fn-body]{\Gamma \vdash b\ bbs :_\pi \gamma}
+    \hypo{\Gamma \vdash instrs \Leftarrow l\ \phi}
+    \hypo{\Gamma \vdash term \Leftarrow \phi : l\ \sigma}
+    \infer2[bb-unknown]{\Gamma \vdash \%b = instrs\ term \Leftarrow \phi : l\ \sigma}
 \end{prooftree} 
 \]
 
-
 \[
 \begin{prooftree} 
-    \hypo{\Gamma \vdash instrs : \pi}
-    \hypo{\Gamma \vdash term :_\pi \gamma}
-    \infer2[bb-unknown]{\Gamma \vdash \%b: instrs\ term :_\pi \gamma}
-\end{prooftree} 
-\]
-
-
-\[
-\begin{prooftree} 
-    \hypo{\Gamma(\%b) =_\pi \gamma} 
-    \infer1[bb-known]{\Gamma \vdash \%b: instrs\ term :_\pi \gamma}
-\end{prooftree} 
-\]
-
-
-\[
-\begin{prooftree} 
-    \hypo{\Gamma \vdash instr : \pi}
-    \hypo{\Gamma[\%a \mapsto \pi] \vdash instrs : \pi}
-    \infer2[instrs]{\Gamma \vdash \%a = instr; instrs : \pi}
+    \hypo{\Gamma \vdash instr : l\ \sigma}
+    \hypo{\sigma \subseteq \phi}
+    \hypo{\Gamma[\%a \mapsto l\ \sigma] \vdash instrs \Leftarrow l\ \phi}
+    \infer3[instrs]{\Gamma \vdash \%a = instr; instrs \Leftarrow l\ \phi}
 \end{prooftree} 
 \]
 
@@ -124,26 +98,47 @@ There are several types of judgements, each of which is enumerated below:
 
 \[
 \begin{prooftree}
-    \hypo{\Gamma(\%1) = l\ \alpha_1, \dots, \Gamma(\%n) = l\ \alpha_n}
-    \hypo{l\ (\alpha_1, \dots, \alpha_n) \rightarrow_\phi \theta \in \delta}
-    \hypo{\Gamma \vdash @f : r\ \delta}
-    \infer3[call]{\Gamma \vdash \text{call } @f(\%1, \dots, \%n) : l\ \theta}
+    \hypo{
+        \begin{matrix}
+        \Gamma(\%1) = l\ \alpha_1, \dots, \Gamma(\%n) = l\ \alpha_n \\
+        \Gamma \vdash f : r\ (\beta_1, \dots, \beta_n) \rightarrow \theta \\ 
+        \alpha_1 \supseteq \beta_1, \dots, \alpha_n \supseteq \beta_n \\
+        r \in \alpha_1, \dots, r \in \alpha_n \\
+        l \in \theta \\
+        \theta \supseteq \sigma 
+        \end{matrix}
+    }
+    \infer1[call]{\Gamma \vdash \text{call } @f(\%1, \dots, \%n) : l\ \sigma}
 \end{prooftree}
 \]
 
 \[
 \begin{prooftree}
-    \hypo{\Gamma(\%a) = \gamma}
-    \hypo{\Gamma \vdash \%b_1 :_\pi \gamma} 
-    \hypo{\Gamma \vdash \%b_2 :_\pi \gamma} 
-    \infer3[break]{\Gamma \vdash \text{br }\%a, \%b_1, \%b_2 :_\pi \gamma}
+    \hypo{\Gamma(\%v) = l\ \gamma'}
+    \hypo{\Gamma(\%a) = l\ \gamma}
+    \hypo{\gamma' \supseteq \gamma}
+    \infer3[store]{\Gamma \vdash \text{store }\%v, \%a : l\ \sigma}
 \end{prooftree}
 \]
 
 \[
 \begin{prooftree}
-    \hypo{\Gamma(\%a) = \gamma}
-    \infer1[ret]{\Gamma \vdash \text{ret }\%a :_\pi \gamma}
+    \hypo{\Gamma(\%a) = l\ \pi}
+    \hypo{\Gamma \vdash \%b_1 \Leftarrow \pi \cap \phi : l\ \gamma} 
+    \hypo{\Gamma \vdash \%b_2 \Leftarrow \pi \cap \phi : l\ \gamma'} 
+    \hypo{\gamma \cap \gamma' \supseteq \sigma}
+    \infer4[break]{\Gamma \vdash \text{br }\%a, \%b_1, \%b_2 \Leftarrow \phi : l\ \sigma}
+\end{prooftree}
+\]
+
+
+
+
+\[
+\begin{prooftree}
+    \hypo{\Gamma(\%a) = l\ \pi}
+    \hypo{\pi \supseteq \sigma}
+    \infer2[ret]{\Gamma \vdash \text{ret }\%a \Leftarrow \phi : l\ \sigma}
 \end{prooftree}
 \]
 
@@ -157,44 +152,10 @@ Thus,
 
 \[
 \begin{prooftree}
-    \hypo{\Gamma(\%a_1) = \dots = \Gamma(\%a_n) = \pi}
-    \infer1[ret]{\Gamma \vdash \text{instr}\ \%a_1, \dots \%a_n : \pi}
+    \hypo{\Gamma(\%a_1) = l\ \pi_1 \dots = \Gamma(\%a_n) = l\ \pi_n}
+    \hypo{\pi_1 \supseteq \sigma, \dots, \pi_n \supseteq \sigma}
+    \infer2[ret]{\Gamma \vdash \text{instr}\ \%a_1, \dots \%a_n : l\ \sigma}
 \end{prooftree}
 \]
-
-\section{Conversion from CLE label and enclave assignments}
-
-\subsection{Enclaves vs. Levels}
-The CLE JSON annotations deal in terms of levels, while the type system operates
-on enclaves. Since every enclave resides at a level, we can understand a level as
-a set of enclaves.
-
-\subsection{Annotated function assignments}
-We start with unannotated function $f$ is assigned a label $q$ and enclave $l$.
-Immediately, we know $f$ must have a type $l\ \delta$.
-To find $\delta$ we do the following: 
-\begin{enumerate}
-    \item Lookup $q$'s corresponding cle json in the cle map. 
-    \item For every cdf inside $q$'s definition
-    \item For each remote level in the cdfs for $q$, we lookup the argtaints, 
-    codtaints and rettaints labels and expand their corresponding levels into sets of remote enclaves.
-    For argtaints, we obtain a set of enclaves for each argument $\alpha_1, \dots, \alpha_n$. 
-    For codtaints and rettaints, we obtaint two sets $\phi$ and $\theta$ for codtaints and rettaints 
-    respectively. 
-    \item For each remote level, we obtain a set of remote enclaves $E$. For each enclave $r$ in $E$,
-    we construct a $\mu = r\ (\alpha_1, \dots, \alpha_n) \rightarrow_\phi \theta$.
-\end{enumerate}
-
-\subsection{Unannotated function assignments}
-Unannotated functions can only be called within an enclave. Thus,
-every unannotated function $f$ in enclave $l$ has type $l\ \delta$ where 
-$\delta = \{ l\ (\alpha_1, \dots, \alpha_n) \rightarrow_\phi \theta \}$,
-assuming there is some way to obtain $\alpha_1, \dots, \alpha_n, \phi, \theta$.
-
-\subsection{Global variables}
-A global variable $g$ in enclave $l$ will have type $l\ \sigma$. 
-To determine $\sigma$, we lookup the remote levels in the cdfs for $g$
-and expand to get a set of enclaves for each remote level. Then $\sigma$ is 
-the union of these sets.
 
 \end{document}
