@@ -58,7 +58,7 @@ There are several types of judgements, each of which is enumerated below:
 \qquad
 \begin{prooftree}
     \hypo{c : l\ \sigma'}
-    \hypo{\sigma' \subseteq \sigma}
+    \hypo{\sigma' \supseteq \sigma}
     \infer2[global-def]{\Gamma \vdash @x = c : l\ \sigma}
 \end{prooftree}
 \]
@@ -81,7 +81,7 @@ There are several types of judgements, each of which is enumerated below:
 \begin{prooftree} 
     \hypo{\Gamma \vdash instrs \Leftarrow l\ \phi}
     \hypo{\Gamma \vdash term \Leftarrow \phi : l\ \sigma}
-    \infer2[bb-unknown]{\Gamma \vdash \%b = instrs\ term \Leftarrow \phi : l\ \sigma}
+    \infer2[bb]{\Gamma \vdash \%b = instrs\ term \Leftarrow \phi : l\ \sigma}
 \end{prooftree} 
 \]
 
@@ -154,7 +154,7 @@ Thus,
 \begin{prooftree}
     \hypo{\Gamma(\%a_1) = l\ \pi_1 \dots = \Gamma(\%a_n) = l\ \pi_n}
     \hypo{\pi_1 \supseteq \sigma, \dots, \pi_n \supseteq \sigma}
-    \infer2[ret]{\Gamma \vdash \text{instr}\ \%a_1, \dots \%a_n : l\ \sigma}
+    \infer2[instr]{\Gamma \vdash \text{instr}\ \%a_1, \dots \%a_n : l\ \sigma}
 \end{prooftree}
 \]
 
