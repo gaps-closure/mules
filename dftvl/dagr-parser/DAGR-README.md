@@ -136,10 +136,12 @@ The following primitive value types `dagrval` are recognized in DAGR:
  * `bytestring` byte sequences, same as python3 b'...' 
  * `regex`      regular expressions, same as python3 r'...' 
  * `cselector`  c'...' containing a CSS selector in the string
- * `xselector`  x'...' containing a XPath on3 r'' regular expression strings
+ * `xselector`  x'...' containing a XPath expression in the string
  * `identifier` a symbol, with the following pattern `\`?[a-zA-Z][a-zA-Z0-9_]+`, 
    with the backquote used to escape DAGR keywords when used as identifiers
 
+We may restrict `xselector` to the XPath expression subset supported by Python3 XMLElementTree library.
+We may restrict `cselector` to not include some complex CSS selectors such as ':match'.
 
 Identifiers are globally unique with teo exceptions: identifiers introduced using a let
 expression in a rule definition (to be described later) and column names in a table (to
