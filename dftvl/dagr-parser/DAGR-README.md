@@ -76,72 +76,141 @@ parse and transform complex data formats--should be supported.
 * Structured English-like syntax similar to [Natural Rule Language](http://nrl.sourceforge.net)
 * Initial implementation using Python Lark parsing library
 
-We may develop a verifiable implementation in [Idris](https://www.idris-lang.org) so that formal properties 
-about the type system and decidability can be investigated, while generating code in C or Javascript. This is
-future work.
+We may develop a verifiable implementation in
+[Idris](https://www.idris-lang.org) so that formal properties about the type
+system and decidability can be investigated, while generating code in C or
+Javascript. This is future work.
 
-## DAGR Prototype
-
-### Grammar and Parser
+## DAGR Prototype HOWTO
 
 The prototype grammar in Lark notation is in `dagrammar.py` and the prototype parser sketch is in
 `dagr_parser.py`. Sample DAGR specifications can be found in the `examples` directory.
 
-Each DAGR specification must include a profile block first which specified the hardware profile and
-available our of band global configuration variables supported by the hardware.
-
-It must be followed by a pipeline block. which has a list of directed links between rule blocks.
-Two terminii `entry` and `exit` are mandatory rule blocks. The connections can optionally include 
-a guard condition which determines whether an outgoing edge is to be taken. The pipeline must
-form a directed acylic graph, and except the terminii, all referenced rule blocks must be defined
-in the specification.
-
-Comments in the specification start with `--` and everything to the end of line is ignored.
-Whitespace is not significant except to serve as token delimiters for parsing.
-
-The rest of the specification can contain one of more named rule blocks, named rule definitions, and 
-named table definitions in any order. Each rule block is simply a sequence of rule names.
-
-Types, variable scoping, and expression syntax will be described here in the future.
-
-### HOWTO
-
-Our development environment is Ubuntu Linux 20.04 LTS with Python 3.8.10 and pip 20.3.3 installed.
+Our development environment is Ubuntu Linux 20.04 LTS with Python 3.8.10 and pip 20.3.3 installed. Here are steps to install and use DAGR.
 
 Install the lark parser library.
 ```
 sudo -H pip3 install lark-parser==0.11.1
 ```
-
 Install GHC and Idris optionally; these may be used in the future to develop a verified version of the DAGR parser.
-
 ```
 sudo apt install ghc libgmp-dev cabal-install
 cabal update
 cabal install idris
 ```
-
 Install the 0MQ library as below and then build and install the `zc` utility from 
 [https://github.com/hdhaussy/zc/](https://github.com/hdhaussy/zc/)
 
 ```
 sudo apt install libzmq3-dev
 ```
-
-To test the parser and a generated Python engine, open three terminals.
-In the first terminal, generate Python code from a DFDL and DAGR specification, and then run the generated engine.
+To test the parser and a generated Python engine, open three terminals. In the first terminal, generate Python code from a DFDL and DAGR specification, and then run the generated engine.
 ```
 python3 dagr_parser.py -v 1 -s examples/gmabw.dfdl.xsd -d examples/one.dagr 
 python3 gen.py
 ```
-
 In the second terminal, listen to the output over 0MQ to the engine.
 ```
 zc -n1 SUB ipc:///tmp/dagr_out
 ```
-
 In the third terminal, send a sample input infoset over 0MQ to the engine.
 ```
 cat examples/bw_write_221.infoset | zc -n1 PUB ipc:///tmp/dagr_in 
 ```
+
+## DAGR Syntax
+
+Each DAGR specification includes a profile definition `profblk`, a pipeline defintion `pipeblk`, 
+and then zero or more definitions of rule block `ruleblk`, rule `ruledef`, and table `tbldef`.
+
+Whitespace is not significant and is ignored, making the grammar easier for a LALR parser.
+A comment starts with '--' and ends at the newline. Comments are ignored. 
+
+The following primitive value types `dagrval` are recognized in DAGR:
+ * `nil`        null, same to python3 `None`
+ * `integer`    integers, same as python3 int
+ * `float`      floating point numbers, same as python3 float
+ * `bool`       boolean values, same as python3 bool
+ * `string`     strings, same as python3 string, includes single- and double-quoted variants
+ * `unicode`    unicode strings, same as python3 u'...' 
+ * `bytestring` byte sequences, same as python3 b'...' 
+ * `regex`      regular expressions, same as python3 r'...' 
+ * `cselector`  c'...' containing a CSS selector in the string
+ * `xselector`  x'...' containing a XPath on3 r'' regular expression strings
+ * `identifier` a symbol, with the following pattern `\`?[a-zA-Z][a-zA-Z0-9_]+`, 
+   with the backquote used to escape DAGR keywords when used as identifiers
+
+
+Identifiers are globally unique with teo exceptions: identifiers introduced using a let
+expression in a rule definition (to be described later) and column names in a table (to
+be defined later). They have local scope, and in the case of the table, they can be
+refernced as `tblname`.`colname`.
+
+Lists, tuples, and dictionaries may be defined in the future.
+
+A profile block has the following syntax:
+```
+profblk:            'profile' profname '{' (profelt ';')+ '}'
+profname:           identifier
+profelt:            'device' identifier | 'namespace' identifier string | 'global' identifier
+```
+
+The profile block can have profile elements `profelt`, which can be a device declaration to 
+specify the target platform profile, zero or more namespace shorthand declarations, and zero 
+or more global variable declarations. For now, the global variables are well-known parameters
+that are supported by the target platform (for providing contextual information such as the
+operational location). User-defined global variables may be considered in the future.
+
+A pipeline definition `pipeblk` has the following syntax:
+
+```
+pipeblk:            'pipeline' pipename '{' (connector ';')+ '}'
+connector:          srcblk '=>' dstblk ('|' condition)?
+srcblk:             rblkname | terminii
+dstblk:             rblkname | terminii
+terminii:           'entry' | 'exit'
+```
+
+The `pipename` is an identifier which names the pipeline. The `rblkname` is an
+identifier which must match the name of a rule block defined in the
+specification. In addition there are two special terminal blocks named 'entry'
+and 'exit' that are available (and cannot be defined). The pipeline sets up a
+number of connectors between `srcblk` and `dstblk`, which are identifiers
+matching the name of a rule block or a terminal block. A guard condition can be
+optionally specified, and the condition expression syntax will be defined
+later. If a source block connects to multiple destination blocks, then control
+will transition to the destination block based on the first connector whose
+guard condition expression evaluates to true. The pipeline must form a directed
+acylic graph.
+
+A `ruleblk` has the following syntax:
+```
+ruleblk:            'block' rblkname '{' (rulename  ';')+ '}'
+```
+The `rblkname` is an identifier which can be referenced in the pipeline defintion. The rule block 
+is simply a sequence of `rulename` entries, which are identifiers that match the name of a rule 
+defined in the specification. A rule can be referenced in multiple rule blocks.
+
+A table definition has the following syntax:
+
+```
+tbldef:             'table` tblname  '{' thdr trow+  '}'
+thdr:               ('|' colname)+ '|'
+trow:               ('|' dagrval)+ '|'
+```
+The name of the table `tblname` is an identifier that can be referenced in other rules. The table has a header `thdr` and one or more rows `trow`. The table uses '|' to delimit cells in a header or row. For
+stylistic purposes, comment lines beginning with '--' such as '--+------+------' can be used before
+and after a header or row; these are ignored. Each cell in the header contains a column name `colname` 
+which is an identifier. Each cell in a row can contain a value of any primitive type (`dagrval`).
+
+A rule definition has the following syntax:
+
+```
+ruledef:            'rule' rulename '{' rexpr ';' '}'
+rexpr:              (letexp)* 'if' condition 'then' action ('else' action)?
+letexp:             'let' varname dagrval ';'
+```
+
+XXX: Specify syntax for condition and action expressions here
+
 
