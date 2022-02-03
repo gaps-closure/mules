@@ -148,7 +148,8 @@ expression in a rule definition (to be described later) and column names in a ta
 be defined later). They have local scope, and in the case of the table, they can be
 refernced as `tblname`.`colname`.
 
-Lists, tuples, and dictionaries may be defined in the future.
+Lists, tuples, and dictionaries may be defined in the future. Also we may include a primitive 
+data type  for ISO date time strings and one notation for geo-coordinates.
 
 A profile block has the following syntax:
 ```
@@ -213,6 +214,19 @@ rexpr:              (letexp)* 'if' condition 'then' action ('else' action)?
 letexp:             'let' varname dagrval ';'
 ```
 
+The rule has a name `rulename` which is an identifier which can be referenced in rule blocks. The 
+rule expression `rexpr` includes one or more let expressions that declare a variable `varname` 
+which is an identifier and assign it a value of a primitive type, In the future we may
+consider assignment of an expression to te variable. The variable is locally scoped within 
+the rule definition. It can shadow a global identifier of the same name.  The
+main rule expression has an antecendent `condition` and one or two `action`
+expressions. The syntax for these expressions will be described later.  If the
+`condition` evaluates to True, then the first `action` expression is evaluated,
+otherwise the optional second `action` expression is evaluated if specified. As
+with most languages, the evaluation of the `action` expressions is lazy, and
+done only as needed after the evaluation of the `comdition` expression.  
+
 XXX: Specify syntax for condition and action expressions here
+
 
 
