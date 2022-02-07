@@ -12,10 +12,10 @@ submitted as a candidate to the DFTVL working group.  DAGR is currently under
 active development and is expected to undergo significant evolution.
 
 DAGR is intended for use in application domains with:
-  1. Strongly isolated data processing enclaves (parties)
-  2. Constraints on what information can be shared between parties
-  3. Enforcement points, to be configured using DAGR, that mediate the transfer
-     between parties
+
+   1. Strongly isolated data processing enclaves (parties)
+   2. Constraints on what information can be shared between parties
+   3. Enforcement points, to be configured using DAGR, that mediate the transfer between parties
 
 While the primary use case comes from cross-domain systems, other use cases can
 be found in: (i) medical records in healthcare, (ii) isolating safety-critical
