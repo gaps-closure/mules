@@ -4,7 +4,6 @@ from   pprint        import PrettyPrinter
 from   lark          import Lark, Tree
 from   lark.visitors import Transformer, Interpreter
 from   lark.lexer    import Lexer, Token
-from   lark.visitors import Discard
 from   dagrammar     import DAGR_GRAMMAR
 from   pybackend     import python_backend
 
@@ -38,25 +37,6 @@ class CleanTokens(Transformer):
   def bytestring(self, items):    return Token('CSEL', self._hlp(items).lstrip("b").strip("'"))
   def squotedstring(self, items): return Token('SQSTR', self._hlp(items).strip("'"))
   def dquotedstring(self, items): return Token('DQSTR', self._hlp(items).strip('"'))
-  #def guard(self, items):         return Discard();
-  #def arrow(self, items):         return Discard();
-  #def sdelim(self, items):        return Discard();
-  #def tdelim(self, items):        return Discard();
-  #def bstart(self, items):        return Discard();
-  #def bend(self, items):          return Discard();
-  #def cstart(self, items):        return Discard();
-  #def cend(self, items):          return Discard();
-  #def let(self, items):           return Discard();
-  #def profile(self, items):       return Discard();
-  #def pipeline(self, items):      return Discard();
-  #def proftok(self, items):       return Discard();
-  #def pipetok(self, items):       return Discard();
-  #def rblktok(self, items):       return Discard();
-  #def rdeftok(self, items):       return Discard();
-  #def tdeftok(self, items):       return Discard();
-  #def cif(self, items):           return Discard();
-  #def cthen(self, items):         return Discard();
-  #def celse(self, items):         return Discard();
 
 def gs1(t,d): return list(t.find_data(d))[0].children[0].value
 def gs2(t,d): return list(t.find_data(d))[0].children[0].children[0].value
@@ -74,16 +54,12 @@ def banprt(m,x):
 
 class Frontend_DAGR():
   def __init__(self,tree,verbosity=0):
-    for n in tree.iter_subtrees_topdown(): 
-      if isinstance(n, Tree): n.children = list(filter(lambda x: not(isinstance(x,Discard)), n.children))
-
-    self.devices  = [e.children[1].children[0].value for p in tree.find_data('profblk')
-                     for e in p.find_data('profelt') if e.children[0].data == 'device']
-    self.globals  = [e.children[1].children[0].value for p in tree.find_data('profblk')
-                     for e in p.find_data('profelt') if e.children[0].data == 'global']
+    #self.devices  = [e.children[1].children[0].value for p in tree.find_data('profblk')
+    #                 for e in p.find_data('profelt') if e.children[0].data == 'device']
+    self.devices  = [e.children[1].children[0].value for e in tree.find_data('profelt') if e.children[0].data == 'device']
+    self.globals  = [e.children[1].children[0].value for e in tree.find_data('profelt') if e.children[0].data == 'global']
     self.nspaces  = { e.children[1].children[0].value:e.children[2].children[0].value
-                      for p in tree.find_data('profblk')
-                      for e in p.find_data('profelt') if e.children[0].data == 'namespace'}
+                      for e in tree.find_data('profelt') if e.children[0].data == 'namespace'}
     self.pipeline = { gs1(p,'pipename') : [(gs2(x,'srcblk'), gs2(x,'dstblk'), gc1(x,'condition')) 
                                             for x in p.find_data('connector')]
                       for p in tree.find_data('pipeblk') }
@@ -93,10 +69,8 @@ class Frontend_DAGR():
                       for t in tree.find_data('tbldef') }
     self.rules    = { gs1(p,'rulename') : gc1(p,'rexpr') for p in tree.find_data('ruledef') }
 
-    for bname,rules in self.ruleblks.items():
-      for rname in rules:
-        if rname not in self.rules:
-          raise Exception('Missing definition for rule %s needed by block %s' % (rname,bname))
+    miss = [b+'::'+r for b,rs in self.ruleblks.items() for r in rs if r not in self.rules]
+    if len(miss) > 0: raise Exception('Missing definition(s) for block::rule :-\n%s' % '\n'.join(miss))
 
     if verbosity > 0: 
       banprt('Abstract Syntax Tree from Parser:', None)

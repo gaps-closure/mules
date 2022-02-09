@@ -10,13 +10,13 @@ ruledef:            RULE     rulename LBRACE (rexpr     SEMI)  RBRACE
 tbldef:             TABLE    tblname  LBRACE (thdr      trow+) RBRACE
 
 profelt:            device dagrval | namespace nsalias nspath | global gvarname
-connector:          srcblk arrow dstblk (PIPE condition)?
+connector:          srcblk TRANSIT dstblk (PIPE condition)?
 thdr:               (PIPE colname)+ PIPE 
 trow:               (PIPE dagrval)+ PIPE 
-rexpr:              (letexp)* cif condition cthen action (celse action)?
+rexpr:              (letexp)* IF condition THEN action (ELSE action)?
 condition:          expr
 action:             expr
-letexp:             let varname expr sdelim
+letexp:             LET varname expr SEMI
 nsalias:            identifier
 profname:           identifier
 pipename:           identifier 
@@ -39,25 +39,14 @@ expr:               identifier
                     | function
                     | unop expr
                     | expr (binop expr)+
-                    | cstart expr cend
-function:           identifier cstart (argument (comma argument)*)* cend
+                    | LPAREN expr RPAREN
+function:           identifier LPAREN (argument (COMMA argument)*)* RPAREN
 argument:           expr
 
-proftok:            PROFILE
-pipetok:            PIPELINE
-rblktok:            BLOCK
-rdeftok:            RULE
-tdeftok:            TABLE
 terminii:           ENTRY | EXIT
 device:             DEVICE
 global:             GLOBAL
 namespace:          NAMESPACE
-guard:              PIPE
-tdelim:             PIPE
-bstart:             LBRACE 
-sdelim:             SEMI
-bend:               RBRACE
-arrow:              TRANSIT
 dquotedstring:      DQUOTE (NONDQUOTEST)* DQUOTE
 squotedstring:      SQUOTE (NONSQUOTEST)* SQUOTE
 regexstring:        REGSTART (NONSQUOTEST)* SQUOTE
@@ -70,15 +59,8 @@ integer:            MINUS? DIGIT+
 float:    	    MINUS? DIGIT+ DOT DIGIT+
 bool:               TRUE | FALSE
 identifier:         BACKQUOTE? ALPHA ADM?
-cif:                IF
-cthen:              THEN
-celse:              ELSE
-cstart:             LPAREN
-cend:               RPAREN
-comma:              COMMA
 unop:               NOT
 binop:              EQUALS | NOTEQUALS | AND | OR
-let:                LET
 '''
 
 #----------------------------------------------------------------------------------------------
