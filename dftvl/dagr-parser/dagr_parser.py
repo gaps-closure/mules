@@ -54,8 +54,6 @@ def banprt(m,x):
 
 class Frontend_DAGR():
   def __init__(self,tree,verbosity=0):
-    #self.devices  = [e.children[1].children[0].value for p in tree.find_data('profblk')
-    #                 for e in p.find_data('profelt') if e.children[0].data == 'device']
     self.devices  = [e.children[1].children[0].value for e in tree.find_data('profelt') if e.children[0].data == 'device']
     self.globals  = [e.children[1].children[0].value for e in tree.find_data('profelt') if e.children[0].data == 'global']
     self.nspaces  = { e.children[1].children[0].value:e.children[2].children[0].value
