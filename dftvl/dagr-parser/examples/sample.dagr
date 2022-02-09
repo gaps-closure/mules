@@ -18,7 +18,7 @@ profile PROF1 {
 pipeline P1 {
   entry => B1;
   B1    => B2   | x'.//SVG';
-  B1    => exit | not x'.//SVG');
+  B1    => exit | not x'.//SVG';
   B2    => exit;
 }
 
@@ -48,24 +48,24 @@ table sample_acl {
 
 rule redact_altitude {
   if 
-    (whatevr)
+    True
   then 
-    (nop);
+    nop();
 }
 
 rule drop_blacklisted {
-  if (whatevr) then (nop);
+  if True then nop();
 }
 
 rule apply_dtable {
-  if (whatevr) then (nop) else (nop);
+  if True then nop() else nop();
 }
 
 rule pixelate_sensitive_region {
-  if (whatevr) then (nop) else (nop);
+  if True then nop() else nop();
 }
 
 rule reduce_resolution {
-  if (whatevr) then (nop) otherwise (nop);
+  if True then nop() otherwise nop();
 }
 

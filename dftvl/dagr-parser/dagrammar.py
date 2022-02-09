@@ -9,19 +9,22 @@ ruleblk:            rblktok rblkname bstart (rulename  sdelim)+ bend
 ruledef:            rdeftok rulename bstart (rexpr     sdelim)  bend
 tbldef:             tdeftok tblname  bstart (thdr      trow+)   bend
 
-profelt:            device dagrval | namespace nsalias dagrval | global dagrval
+profelt:            device dagrval | namespace nsalias nspath | global gvarname
 connector:          srcblk arrow dstblk (guard condition)?
 thdr:               (tdelim colname)+ tdelim 
 trow:               (tdelim dagrval)+ tdelim 
 rexpr:              (letexp)* cif condition cthen action (celse action)?
 letexp:             let varname expr sdelim
 nsalias:            identifier
+devname:            squotedstring | dquotedstring
+nspath:             squotedstring | dquotedstring
 profname:           identifier
 pipename:           identifier 
 rblkname:           identifier 
 rulename:           identifier
 tblname:            identifier
 colname:            identifier
+gvarname:           identifier
 varname:            identifier
 srcblk:             rblkname | terminii
 dstblk:             rblkname | terminii
@@ -30,15 +33,16 @@ dagrval:            nil | bool | float | integer
                     | xpathstring | cselstring 
 
 condition:          expr
-action:             cstart (identifier | dagrval)+ cend | (identifier|dagrval)+
+action1:             cstart (identifier | dagrval)+ cend | (identifier|dagrval)+
+action:             expr
 
 expr:               identifier
                     | dagrval
+                    | function
                     | unop expr
                     | expr (binop expr)+
                     | cstart expr cend
-function:           fname cstart (argument (comma argument)*)* cend
-fname:              identifier
+function:           identifier cstart (argument (comma argument)*)* cend
 argument:           expr
 
 proftok:            PROFILE
