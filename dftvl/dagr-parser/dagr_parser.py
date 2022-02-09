@@ -31,6 +31,11 @@ class CleanTokens(Transformer):
   def integer(self, items):       return Token('INT', int(self._hlp(items)))
   def float(self, items):         return Token('FLT', float(self._hlp(items)))
   def bool(self, items):          return Token('BOOL', self._hlp(items)=='true')
+  def regesxtring(self, items):   return Token('REGEX', self._hlp(items).lstrip("r").strip("'"))
+  def xpathstring(self, items):   return Token('XPATH', self._hlp(items).lstrip("x").strip("'"))
+  def cselstring(self, items):    return Token('CSEL', self._hlp(items).lstrip("c").strip("'"))
+  def unistring(self, items):     return Token('CSEL', self._hlp(items).lstrip("u").strip("'"))
+  def bytestring(self, items):    return Token('CSEL', self._hlp(items).lstrip("b").strip("'"))
   def squotedstring(self, items): return Token('SQSTR', self._hlp(items).strip("'"))
   def dquotedstring(self, items): return Token('DQSTR', self._hlp(items).strip('"'))
   def guard(self, items):         return Discard();

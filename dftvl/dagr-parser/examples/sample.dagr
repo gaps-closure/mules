@@ -2,8 +2,8 @@
 -- profile specifies hardware capability and global variables
 
 profile PROF1 {
-  device    CLOSURE;    -- use CLOSURE emulator as hardware
-  namespace 'gma' 'urn:gma:1.0';
+  device    'CLOSURE';    -- use CLOSURE emulator as hardware
+  namespace gma 'urn:gma:1.0';
   global    FPCON;
   global    OCONUS;
 }
@@ -17,8 +17,8 @@ profile PROF1 {
 
 pipeline P1 {
   entry => B1;
-  B1    => B2   | (document matches 'SVG');
-  B1    => exit | (document does not match 'SVG');
+  B1    => B2   | x'.//SVG';
+  B1    => exit | not x'.//SVG');
   B2    => exit;
 }
 

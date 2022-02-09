@@ -9,12 +9,13 @@ ruleblk:            rblktok rblkname bstart (rulename  sdelim)+ bend
 ruledef:            rdeftok rulename bstart (rexpr     sdelim)  bend
 tbldef:             tdeftok tblname  bstart (thdr      trow+)   bend
 
-profelt:            device dagrval | namespace dagrval dagrval | global dagrval
+profelt:            device dagrval | namespace nsalias dagrval | global dagrval
 connector:          srcblk arrow dstblk (guard condition)?
 thdr:               (tdelim colname)+ tdelim 
 trow:               (tdelim dagrval)+ tdelim 
 rexpr:              (letexp)* cif condition cthen action (celse action)?
-letexp:             let varname dagrval sdelim
+letexp:             let varname expr sdelim
+nsalias:            identifier
 profname:           identifier
 pipename:           identifier 
 rblkname:           identifier 
@@ -24,13 +25,21 @@ colname:            identifier
 varname:            identifier
 srcblk:             rblkname | terminii
 dstblk:             rblkname | terminii
-dagrval:            identifier | dquotedstring | squotedstring | integer | float | bool
+dagrval:            nil | bool | float | integer 
+                    | dquotedstring | squotedstring | unistring | bytestring | regexstring 
+                    | xpathstring | cselstring 
 
-condition:          cstart subject (binop object)* cend
-subject:            condition | dagrval | document
-object:             condition | dagrval | document
+condition:          expr
+action:             cstart (identifier | dagrval)+ cend | (identifier|dagrval)+
 
-action:             cstart dagrval+ cend | dagrval+
+expr:               identifier
+                    | dagrval
+                    | unop expr
+                    | expr (binop expr)+
+                    | cstart expr cend
+function:           fname cstart (argument (comma argument)*)* cend
+fname:              identifier
+argument:           expr
 
 proftok:            PROFILE
 pipetok:            PIPELINE
@@ -49,6 +58,12 @@ bend:               RBRACE
 arrow:              TRANSIT
 dquotedstring:      DQUOTE (NONDQUOTEST)* DQUOTE
 squotedstring:      SQUOTE (NONSQUOTEST)* SQUOTE
+regexstring:        REGSTART (NONSQUOTEST)* SQUOTE
+xpathstring:        XPATHSTART (NONSQUOTEST)* SQUOTE
+cselstring:         CSELSTART (NONSQUOTEST)* SQUOTE
+unistring:          UNISTART (NONSQUOTEST)* SQUOTE
+bytestring:         BYTSTART (NONSQUOTEST)* SQUOTE
+nil:                NONE
 integer:            MINUS? DIGIT+
 float:    	    MINUS? DIGIT+ DOT DIGIT+
 bool:               TRUE | FALSE
@@ -58,9 +73,10 @@ cthen:              THEN
 celse:              ELSE
 cstart:             LPAREN
 cend:               RPAREN
-binop:              MATCHES | NOTMATCHES | EQUALS | NOTEQUALS | AND | OR
+comma:              COMMA
+unop:               NOT
+binop:              EQUALS | NOTEQUALS | AND | OR
 let:                LET
-document:           DOCUMENT
 '''
 
 #----------------------------------------------------------------------------------------------
@@ -71,36 +87,39 @@ ALPHA:              /[a-zA-Z]/
 AND:                /and/
 BACKQUOTE:          /`/
 BLOCK:              /block/
+BYTSTART:           /b\'/
+COMMA:              /,/ 
 COMMENT:            /[ \t]*--[^\r\n]*(\r|\r\n|\n)/
 CONNECT:            /connect/
+CSELSTART:          /c\'/
 DEVICE:             /device/
 DELIM:              /[ \t\f\r\n]+/
 DIGIT:              /[0-9]/
-DOCUMENT:           /document/
 DOT:                /\./ 
 DQUOTE:             /\"/
 ELSE:               /(else)|(otherwise)/
 ENTRY:              /entry/
 EQUALS:             /(==)|((is )?equal to)/
 EXIT:               /exit/
-FALSE:              /false/
+FALSE:              /False/
 GLOBAL:             /global/
 IF:                 /if/
 PIPE:               /\|/
 LBRACE:             /\{/
 LET:                /let/
 LPAREN:             /\(/ 
-MATCHES:            /match(es)?/ 
 MINUS:              /-/ 
 NAMESPACE:          /namespace/
 NONDQUOTEST:        /[^\"\n\r]/
+NONE:               /None/
 NONSQUOTEST:        /[^\'\n\r]/
+NOT:                /not/
 NOTEQUALS:          /(<>)|((is )?not equal to)/
-NOTMATCHES:         /does not match/ 
 OR:                 /or/
 PIPELINE:           /pipeline/
 PROFILE:            /profile/
 RBRACE:             /\}/
+REGSTART:           /r\'/
 RPAREN:             /\)/ 
 RULE:               /rule/
 SEMI:               /;/ 
@@ -108,7 +127,9 @@ SQUOTE:             /\'/
 TABLE:              /table/
 THEN:               /then/
 TRANSIT:            /=>/
-TRUE:               /true/
+TRUE:               /True/
+UNISTART:           /u\'/
+XPATHSTART:         /x\'/
 '''
 
 #----------------------------------------------------------------------------------------------
@@ -155,10 +176,10 @@ BEGIN:              /begin/
 BY:                 /by/
 COLON:              /:/ 
 COLONCOLON:         /::/
-COMMA:              /,/ 
 CONTEXT:            /context:/
 CREATE:             /create/
 DIV:                /\// 
+DOCUMENT:           /document/ 
 EACH:               /(for )?each( of the)?/
 EIGHT:              /eight/
 EIGHTH:             /eighth/
@@ -185,6 +206,7 @@ ISNOTIN:            /is not one of/
 LBRACKET:           /\[/
 LEESEREQ:           /(<=)|((is )?less than or equal to)|((is )?before or on)/
 LESSER:             /(<)|((is )?less than)|((is )?before)/
+MATCHES:            /match(es)?/ 
 MINUSMINUS:         /--/
 MODEL:              /model/
 MOD:                /mod/ 
@@ -194,6 +216,7 @@ NINTH:              /ninth/
 NO:                 /(no)|(none)/
 NONRBRACEST:        /[^\}\n\r]/
 NONRBRACKST:        /[^\]\n\r]/
+NOTMATCHES:         /does not match/ 
 NOTPRESENT:         /(is)|((are) not present)/
 NUMBEROF:           /number of/
 OF:                 /of/
