@@ -38,37 +38,35 @@ class CleanTokens(Transformer):
   def squotedstring(self, items): return Token('SQSTR', self._hlp(items).strip("'"))
   def dquotedstring(self, items): return Token('DQSTR', self._hlp(items).strip('"'))
 
-def gs1(t,d): return list(t.find_data(d))[0].children[0].value
-def gs2(t,d): return list(t.find_data(d))[0].children[0].children[0].value
-def gv1(t,d): return list([x.children[0].value for x in t.find_data(d)])
-
-def gc1(t,d): 
-  l = list(t.find_data(d))
-  return l[0].children if len(l) == 1 else []
-
-def banprt(m,x):
-  print('-----------------------------------------------')
-  print(m)
-  print('-----------------------------------------------')
-  if x: PrettyPrinter().pprint(x)
 
 class Frontend_DAGR():
   def __init__(self,tree,verbosity=0):
-    self.devices  = [e.children[1].children[0].value for e in tree.find_data('profelt') if e.children[0].data == 'device']
-    self.globals  = [e.children[1].children[0].value for e in tree.find_data('profelt') if e.children[0].data == 'global']
-    self.nspaces  = { e.children[1].children[0].value:e.children[2].children[0].value
-                      for e in tree.find_data('profelt') if e.children[0].data == 'namespace'}
-    self.pipeline = { gs1(p,'pipename') : [(gs2(x,'srcblk'), gs2(x,'dstblk'), gc1(x,'condition')) 
-                                            for x in p.find_data('connector')]
-                      for p in tree.find_data('pipeblk') }
-    self.ruleblks = { gs1(x,'rblkname') : gv1(x,'rulename') for x in tree.find_data('ruleblk') }
-    self.tables   = { gs1(t, 'tblname') : ([gv1(h, 'colname') for h in t.find_data('thdr')][0], 
-                                           [gv1(r, 'dagrval') for r in t.find_data('trow')])
-                      for t in tree.find_data('tbldef') }
-    self.rules    = { gs1(p,'rulename') : gc1(p,'rexpr') for p in tree.find_data('ruledef') }
+    def fct(t,d):     return t.children[0].data == d
+    def fmfcv(t,d):   return list(t.find_data(d))[0].children[0].value
+    def fmfcfcv(t,d): return list(t.find_data(d))[0].children[0].children[0].value
+    def amfcv(t,d):   return list([x.children[0].value for x in t.find_data(d)])
+    def fmac(t,d):    return list([x.children for x in t.find_data(d)])[:1]
+    def edges(t):     return [(fmfcfcv(x,'srcblk'),fmfcfcv(x,'dstblk'),fmac(x,'condition')) for x in t.find_data('connector')]
+    def hdr(t):       return [amfcv(x, 'colname') for x in t.find_data('thdr')][0] 
+    def rows(t):      return [amfcv(x, 'dagrval') for x in t.find_data('trow')]
+
+    self.devices  = [ fmfcv(x,'devname')                        for x in tree.find_data('profelt') if fct(x,'device') ]
+    self.globals  = [ fmfcv(x,'gvarname')                       for x in tree.find_data('profelt') if fct(x,'global') ]
+    self.nspaces  = { fmfcv(x,'nsalias')  : fmfcv(x,'nspath')   for x in tree.find_data('profelt') if fct(x,'namespace') }
+    self.pipeline = { fmfcv(x,'pipename') : edges(x)            for x in tree.find_data('pipeblk') }
+    self.ruleblks = { fmfcv(x,'rblkname') : amfcv(x,'rulename') for x in tree.find_data('ruleblk') }
+    self.tables   = { fmfcv(x,'tblname')  : (hdr(x), rows(x))   for x in tree.find_data('tbldef') }
+    self.rules    = { fmfcv(x,'rulename') : fmac(x,'rexpr')     for x in tree.find_data('ruledef') }
 
     miss = [b+'::'+r for b,rs in self.ruleblks.items() for r in rs if r not in self.rules]
     if len(miss) > 0: raise Exception('Missing definition(s) for block::rule :-\n%s' % '\n'.join(miss))
+
+    self.log(tree, verbosity)
+
+  def log(self, tree, verbosity):
+    def banprt(m,x):
+      print('-' * 50 + '\n' + m + '\n' + '-' * 50)
+      if x: PrettyPrinter().pprint(x)
 
     if verbosity > 0: 
       banprt('Abstract Syntax Tree from Parser:', None)

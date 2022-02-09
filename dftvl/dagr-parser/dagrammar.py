@@ -9,7 +9,7 @@ ruleblk:            BLOCK    rblkname LBRACE (rulename  SEMI)+ RBRACE
 ruledef:            RULE     rulename LBRACE (rexpr     SEMI)  RBRACE
 tbldef:             TABLE    tblname  LBRACE (thdr      trow+) RBRACE
 
-profelt:            device dagrval | namespace nsalias nspath | global gvarname
+profelt:            device devname | namespace nsalias nspath | global gvarname
 connector:          srcblk TRANSIT dstblk (PIPE condition)?
 thdr:               (PIPE colname)+ PIPE 
 trow:               (PIPE dagrval)+ PIPE 
