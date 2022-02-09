@@ -73,12 +73,12 @@ class Engine:
     self.blocks = { 'entry': EntryBlock('entry', self), 'exit': ExitBlock('exit', self) }
   def add(self, blkname): 
     if blkname not in self.blocks: self.blocks[blkname] = Block(blkname, self) 
-  def connect(self, b1, b2, guard):     self.blocks[b1].addNexthop(self.blocks[b2], guard)
+  def connect(self, b1, b2, guard): self.blocks[b1].addNexthop(self.blocks[b2], guard)
   def addRule(self, blkname, rulename): self.blocks[blkname].addRule(rulename)
   def start(self):
     for b in self.blocks.values(): b.start()
     while True: 
-      try:                       sleep(1)
+      try: sleep(1)
       except(KeyboardInterrupt): sys.exit(1)
 '''
       

@@ -2,22 +2,22 @@
 
 #----------------------------------------------------------------------------------------------
 RULES = r'''
-spec:               profblk pipeblk  (ruleblk|ruledef|tbldef)* 
-profblk:            proftok profname bstart (profelt   sdelim)+ bend
-pipeblk:            pipetok pipename bstart (connector sdelim)+ bend
-ruleblk:            rblktok rblkname bstart (rulename  sdelim)+ bend
-ruledef:            rdeftok rulename bstart (rexpr     sdelim)  bend
-tbldef:             tdeftok tblname  bstart (thdr      trow+)   bend
+spec:               profblk  pipeblk  (ruleblk|ruledef|tbldef)* 
+profblk:            PROFILE  profname LBRACE (profelt   SEMI)+ RBRACE
+pipeblk:            PIPELINE pipename LBRACE (connector SEMI)+ RBRACE
+ruleblk:            BLOCK    rblkname LBRACE (rulename  SEMI)+ RBRACE
+ruledef:            RULE     rulename LBRACE (rexpr     SEMI)  RBRACE
+tbldef:             TABLE    tblname  LBRACE (thdr      trow+) RBRACE
 
 profelt:            device dagrval | namespace nsalias nspath | global gvarname
-connector:          srcblk arrow dstblk (guard condition)?
-thdr:               (tdelim colname)+ tdelim 
-trow:               (tdelim dagrval)+ tdelim 
+connector:          srcblk arrow dstblk (PIPE condition)?
+thdr:               (PIPE colname)+ PIPE 
+trow:               (PIPE dagrval)+ PIPE 
 rexpr:              (letexp)* cif condition cthen action (celse action)?
+condition:          expr
+action:             expr
 letexp:             let varname expr sdelim
 nsalias:            identifier
-devname:            squotedstring | dquotedstring
-nspath:             squotedstring | dquotedstring
 profname:           identifier
 pipename:           identifier 
 rblkname:           identifier 
@@ -26,15 +26,13 @@ tblname:            identifier
 colname:            identifier
 gvarname:           identifier
 varname:            identifier
+devname:            squotedstring | dquotedstring
+nspath:             squotedstring | dquotedstring
 srcblk:             rblkname | terminii
 dstblk:             rblkname | terminii
 dagrval:            nil | bool | float | integer 
                     | dquotedstring | squotedstring | unistring | bytestring | regexstring 
                     | xpathstring | cselstring 
-
-condition:          expr
-action1:             cstart (identifier | dagrval)+ cend | (identifier|dagrval)+
-action:             expr
 
 expr:               identifier
                     | dagrval
