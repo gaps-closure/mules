@@ -18,13 +18,14 @@ trow:               (PIPE dagrval)+ PIPE
 dagrval:            nil | bool | integer | float | string
                     | unistring | bytestring | regexstring
                     | xpathstring | cselstring
-rexpr:              (letexp)* IF condition THEN action (ELSE action)?
+rexpr:              (letexp)* IF condition THEN action (ELSE altaction)?
 letexp:             LET varname expr SEMI
 expr:               complexid | dagrval | function | unop expr | expr (binop expr)+ | LPAREN expr RPAREN
 function:           complexid LPAREN (argument (COMMA argument)*)* RPAREN
 
 condition:          expr
 action:             expr
+altaction:          expr
 argument:           expr
 profname:           identifier
 pipename:           identifier
