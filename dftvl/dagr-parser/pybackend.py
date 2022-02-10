@@ -123,18 +123,18 @@ def transpile_rule(q,x):
   return s
 
 def python_backend(dagr_ir, output_file):
-  pline = list(dagr_ir.pipeline.values())[0]
+  pline = list(dagr_ir['pipeline'].values())[0]
   once  = [True]
   with open(output_file, 'w') as f: 
     for _ in once:                           f.write(DAGR_BOILERPLATE)
-    for _ in once:                           f.write(transpile_namespaces(dagr_ir.nspaces))
-    for t,x in dagr_ir.tables.items():       f.write(transpile_table(tname(t), x))
+    for _ in once:                           f.write(transpile_namespaces(dagr_ir['nspaces']))
+    for t,x in dagr_ir['tables'].items():    f.write(transpile_table(tname(t), x))
     for (b1,b2,x) in pline:                  f.write(transpile_guard(gname(b1,b2), x))
-    for r,x in dagr_ir.rules.items():        f.write(transpile_rule(rname(r), x))
+    for r,x in dagr_ir['rules'].items():     f.write(transpile_rule(rname(r), x))
     for _ in once:                           f.write("\nif __name__=='__main__':\n")
     for _ in once:                           f.write("  e = Engine()\n")
-    for b in dagr_ir.ruleblks:               f.write("  e.add('%s')\n" % b) 
+    for b in dagr_ir['ruleblks']:            f.write("  e.add('%s')\n" % b) 
     for (b1,b2,_) in pline:                  f.write("  e.connect('%s','%s',%s)\n" % (b1,b2,gname(b1,b2)))
-    for b,rules in dagr_ir.ruleblks.items():
+    for b,rules in dagr_ir['ruleblks'].items():
       for r in rules:                        f.write("  e.addRule('%s',%s)\n" % (b,rname(r))) 
     for _ in once:                           f.write("  e.start()\n")

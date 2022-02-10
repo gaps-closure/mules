@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 from   argparse      import ArgumentParser
-from   pprint        import PrettyPrinter
+from   pprint        import pformat
 from   lark          import Lark, Tree
 from   lark.visitors import Transformer, Interpreter
 from   lark.lexer    import Lexer, Token
@@ -40,8 +40,9 @@ class CleanTokens(Transformer):
   def regesxtring(self, items):   return Token('REGEX', _ehlp(items)[2:-1])
   def xpathstring(self, items):   return Token('XPATH', _ehlp(items)[2:-1])
   def cselstring(self, items):    return Token('CSEL',  _ehlp(items)[2:-1])
+  def expr(self, items):          return items
 
-class Frontend_DAGR():
+class Frontend_DAGR(dict):
   def __init__(self,tree,verbosity=0):
     def fct(t,d):     return t.children[0].data == d
     def fmfcv(t,d):   return list(t.find_data(d))[0].children[0].value
@@ -52,42 +53,32 @@ class Frontend_DAGR():
     def hdr(t):       return [amfcv(x, 'colname') for x in t.find_data('thdr')][0] 
     def rows(t):      return [amfcv(x, 'dagrval') for x in t.find_data('trow')]
 
-    self.devices  = [ fmfcv(x,'devname')                        for x in tree.find_data('profelt') if fct(x,'device') ]
-    self.globals  = [ fmfcv(x,'gvarname')                       for x in tree.find_data('profelt') if fct(x,'global') ]
-    self.nspaces  = { fmfcv(x,'nsalias')  : fmfcv(x,'nspath')   for x in tree.find_data('profelt') if fct(x,'namespace') }
-    self.pipeline = { fmfcv(x,'pipename') : edges(x)            for x in tree.find_data('pipeblk') }
-    self.ruleblks = { fmfcv(x,'rblkname') : amfcv(x,'rulename') for x in tree.find_data('ruleblk') }
-    self.tables   = { fmfcv(x,'tblname')  : (hdr(x), rows(x))   for x in tree.find_data('tbldef') }
-    self.rules    = { fmfcv(x,'rulename') : fmac(x,'rexpr')     for x in tree.find_data('ruledef') }
+    self['devices']  = [ fmfcv(x,'devname')                        for x in tree.find_data('profelt') if fct(x,'device') ]
+    self['globals']  = [ fmfcv(x,'gvarname')                       for x in tree.find_data('profelt') if fct(x,'global') ]
+    self['nspaces']  = { fmfcv(x,'nsalias')  : fmfcv(x,'nspath')   for x in tree.find_data('profelt') if fct(x,'namespace') }
+    self['pipeline'] = { fmfcv(x,'pipename') : edges(x)            for x in tree.find_data('pipeblk') }
+    self['ruleblks'] = { fmfcv(x,'rblkname') : amfcv(x,'rulename') for x in tree.find_data('ruleblk') }
+    self['tables']   = { fmfcv(x,'tblname')  : (hdr(x), rows(x))   for x in tree.find_data('tbldef') }
+    self['rules']    = { fmfcv(x,'rulename') : fmac(x,'rexpr')     for x in tree.find_data('ruledef') }
 
-    miss = [b+'::'+r for b,rs in self.ruleblks.items() for r in rs if r not in self.rules]
+    miss = [b+'::'+r for b,rs in self['ruleblks'].items() for r in rs if r not in self['rules']]
     if len(miss) > 0: raise Exception('Missing definition(s) for block::rule :-\n%s' % '\n'.join(miss))
 
     self.log(tree, verbosity)
 
   def log(self, tree, verbosity):
-    def banprt(m,x):
-      print('-' * 50 + '\n' + m + '\n' + '-' * 50)
-      if x: PrettyPrinter().pprint(x)
-
+    def banprt(m, x): print('\n'.join(['-'*50, m, '-'*50, x, '']))
     if verbosity > 0: 
-      banprt('Abstract Syntax Tree from Parser:', None)
-      print(tree.pretty() if verbosity <= 2 else tree)
-
-    if verbosity > 1:
-      banprt('Intermediate Representation - Devices:',     self.devices)
-      banprt('Intermediate Representation - Globals:',     self.globals)
-      banprt('Intermediate Representation - Namespaces:',  self.nspaces)
-      banprt('Intermediate Representation - Pipeline:',    self.pipeline)
-      banprt('Intermediate Representation - Rule blocks:', self.ruleblks)
-      banprt('Intermediate Representation - Tables:',      self.tables)
-      banprt('Intermediate Representation - Rules:',       self.rules)
+      banprt('Abstract Syntax Tree from Parser:', (tree.pretty() if verbosity <= 2 else tree))
+    if verbosity > 1: 
+      for k,v in self.items(): banprt('Intermediate Representation - %s:' % k, pformat(v))
 
 #---------------------------------------------------------------------------------------------------
 if __name__ == '__main__':
   args   = get_args()
 
   if args.schema_lang == 'DFDL':
+    # XXX: generate DFDL <xpath,type,offset,len> map here
     pass
   elif args.schema_lang == 'XSD':
     raise Exception('Not yet implemented:' + args.schema_lang)
