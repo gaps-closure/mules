@@ -2,118 +2,144 @@
 
 #----------------------------------------------------------------------------------------------
 RULES = r'''
-spec:               profblk  pipeblk  (ruleblk|ruledef|tbldef)* 
+spec:               profblk  pipeblk  (ruleblk|ruledef|tbldef)*
 profblk:            PROFILE  profname LBRACE (profelt   SEMI)+ RBRACE
 pipeblk:            PIPELINE pipename LBRACE (connector SEMI)+ RBRACE
+tbldef:             TABLE    tblname  LBRACE (thdr      trow+) RBRACE
 ruleblk:            BLOCK    rblkname LBRACE (rulename  SEMI)+ RBRACE
 ruledef:            RULE     rulename LBRACE (rexpr     SEMI)  RBRACE
-tbldef:             TABLE    tblname  LBRACE (thdr      trow+) RBRACE
 
 profelt:            device devname | namespace nsalias nspath | global gvarname
 connector:          srcblk TRANSIT dstblk (PIPE condition)?
-thdr:               (PIPE colname)+ PIPE 
-trow:               (PIPE dagrval)+ PIPE 
+srcblk:             rblkname | terminii
+dstblk:             rblkname | terminii
+thdr:               (PIPE colname)+ PIPE
+trow:               (PIPE dagrval)+ PIPE
+dagrval:            nil | bool | integer | float | string
+                    | unistring | bytestring | regexstring
+                    | xpathstring | cselstring
 rexpr:              (letexp)* IF condition THEN action (ELSE action)?
+letexp:             LET varname expr SEMI
+expr:               complexid | dagrval | function | unop expr | expr (binop expr)+ | LPAREN expr RPAREN
+function:           complexid LPAREN (argument (COMMA argument)*)* RPAREN
+
 condition:          expr
 action:             expr
-letexp:             LET varname expr SEMI
-nsalias:            identifier
+argument:           expr
 profname:           identifier
-pipename:           identifier 
-rblkname:           identifier 
+pipename:           identifier
+rblkname:           identifier
 rulename:           identifier
 tblname:            identifier
 colname:            identifier
 gvarname:           identifier
+nsalias:            identifier
 varname:            identifier
-devname:            squotedstring | dquotedstring
-nspath:             squotedstring | dquotedstring
-srcblk:             rblkname | terminii
-dstblk:             rblkname | terminii
-dagrval:            nil | bool | float | integer 
-                    | dquotedstring | squotedstring | unistring | bytestring | regexstring 
-                    | xpathstring | cselstring 
-
-expr:               identifier
-                    | dagrval
-                    | function
-                    | unop expr
-                    | expr (binop expr)+
-                    | LPAREN expr RPAREN
-function:           identifier LPAREN (argument (COMMA argument)*)* RPAREN
-argument:           expr
+devname:            string | unistring
+nspath:             string | unistring
 
 terminii:           ENTRY | EXIT
 device:             DEVICE
 global:             GLOBAL
 namespace:          NAMESPACE
-dquotedstring:      DQUOTE (NONDQUOTEST)* DQUOTE
-squotedstring:      SQUOTE (NONSQUOTEST)* SQUOTE
-regexstring:        REGSTART (NONSQUOTEST)* SQUOTE
-xpathstring:        XPATHSTART (NONSQUOTEST)* SQUOTE
-cselstring:         CSELSTART (NONSQUOTEST)* SQUOTE
-unistring:          UNISTART (NONSQUOTEST)* SQUOTE
-bytestring:         BYTSTART (NONSQUOTEST)* SQUOTE
+identifier:         BACKQUOTE? ALPHA ADU?
+complexid:          BACKQUOTE? ALPHA ADU? (COLONCOLON ALPHA ADU?)* (DOT ADU)*
 nil:                NONE
+bool:               TRUE | FALSE
 integer:            MINUS? DIGIT+
 float:    	    MINUS? DIGIT+ DOT DIGIT+
-bool:               TRUE | FALSE
-identifier:         BACKQUOTE? ALPHA ADM?
+string:             (DQUOTE (NONDQUOTEST|EDQUOTE)* DQUOTE)  | (SQUOTE (NONSQUOTEST|ESQUOTE)* SQUOTE)
+unistring:          (UDQUOTE (NONDQUOTEST|EDQUOTE)* DQUOTE) | (USQUOTE (NONSQUOTEST|ESQUOTE)* SQUOTE)
+regexstring:        (RDQUOTE (NONDQUOTEST|EDQUOTE)* DQUOTE) | (RSQUOTE (NONSQUOTEST|ESQUOTE)* SQUOTE)
+bytestring:         (BDQUOTE (NONDQUOTEST|EDQUOTE)* DQUOTE) | (BSQUOTE (NONSQUOTEST|ESQUOTE)* SQUOTE)
+xpathstring:        (XDQUOTE (NONDQUOTEST|EDQUOTE)* DQUOTE) | (XSQUOTE (NONSQUOTEST|ESQUOTE)* SQUOTE)
+cselstring:         (CDQUOTE (NONDQUOTEST|EDQUOTE)* DQUOTE) | (CSQUOTE (NONSQUOTEST|ESQUOTE)* SQUOTE)
+
 unop:               NOT
-binop:              EQUALS | NOTEQUALS | AND | OR
+binop:              AND | OR | XOR
+                    | EQ | NEQ | GEQ | GT | LEQ | LT
+                    | ADD | SUB | MUL | DIV | MOD | POW
+                    | IN  | NOTIN
 '''
 
 #----------------------------------------------------------------------------------------------
 TOKENS = r'''
-COLON:              /:/ 
-ADM:                /[a-zA-Z0-9_]+/
-ALPHA:              /[a-zA-Z]/
-AND:                /and/
-BACKQUOTE:          /`/
-BLOCK:              /block/
-BYTSTART:           /b\'/
-COMMA:              /,/ 
 COMMENT:            /[ \t]*--[^\r\n]*(\r|\r\n|\n)/
-CONNECT:            /connect/
-CSELSTART:          /c\'/
-DEVICE:             /device/
 DELIM:              /[ \t\f\r\n]+/
-DIGIT:              /[0-9]/
-DOT:                /\./ 
-DQUOTE:             /\"/
-ELSE:               /(else)|(otherwise)/
-ENTRY:              /entry/
-EQUALS:             /(==)|((is )?equal to)/
-EXIT:               /exit/
-FALSE:              /False/
-GLOBAL:             /global/
-IF:                 /if/
-PIPE:               /\|/
-LBRACE:             /\{/
-LET:                /let/
-LPAREN:             /\(/ 
-MINUS:              /-/ 
-NAMESPACE:          /namespace/
-NONDQUOTEST:        /[^\"\n\r]/
+
+BACKQUOTE:          /`/
+ALPHA:              /[a-zA-Z]/
+ADU:                /[a-zA-Z0-9_]+/
+IDENT:              /[a-zA-Z][a-zA-Z0-9_]*/
+COLONCOLON:         /::/
+
 NONE:               /None/
-NONSQUOTEST:        /[^\'\n\r]/
-NOT:                /not/
-NOTEQUALS:          /(<>)|((is )?not equal to)/
-OR:                 /or/
-PIPELINE:           /pipeline/
-PROFILE:            /profile/
-RBRACE:             /\}/
-REGSTART:           /r\'/
-RPAREN:             /\)/ 
-RULE:               /rule/
-SEMI:               /;/ 
-SQUOTE:             /\'/
-TABLE:              /table/
-THEN:               /then/
-TRANSIT:            /=>/
+
 TRUE:               /True/
-UNISTART:           /u\'/
-XPATHSTART:         /x\'/
+FALSE:              /False/
+
+MINUS:              /-/
+DIGIT:              /[0-9]/
+DOT:                /\./
+
+SQUOTE:             /\'/
+USQUOTE:            /u\'/
+RSQUOTE:            /r\'/
+BSQUOTE:            /b\'/
+XSQUOTE:            /x\'/
+CSQUOTE:            /c\'/
+ESQUOTE:            /\\\'/
+NONSQUOTEST:        /[^\'\n\r]/
+DQUOTE:             /\"/
+UDQUOTE:            /u\"/
+RDQUOTE:            /r\"/
+BDQUOTE:            /b\'/
+XDQUOTE:            /x\"/
+CDQUOTE:            /c\"/
+EDQUOTE:            /\\\"/
+NONDQUOTEST:        /[^\"\n\r]/
+
+PROFILE:            /profile/
+DEVICE:             /device/
+GLOBAL:             /global/
+NAMESPACE:          /namespace/
+LBRACE:             /\{/
+RBRACE:             /\}/
+SEMI:               /;/
+PIPELINE:           /pipeline/
+ENTRY:              /entry/
+EXIT:               /exit/
+TRANSIT:            /=>/
+PIPE:               /\|/
+BLOCK:              /block/
+TABLE:              /table/
+RULE:               /rule/
+LET:                /let/
+IF:                 /if/
+THEN:               /then/
+ELSE:               /(else)|(otherwise)/
+LPAREN:             /\(/
+RPAREN:             /\)/
+COMMA:              /,/
+
+NOT:                /(not)|(!)/
+AND:                /(and)|(&&)/
+OR:                 /(or)|(\|\|)/
+XOR:                /xor/
+EQ:                 /(==)|((is )?equal to)/
+NEQ:                /(<>)|((is )?not equal to)/
+GEQ:                /(>=)|((is )?greater than or equal to)|((is )?after or on)/
+GT:                 /(>)|((is )?greater than)|((is )?after)/
+LEQ:                /(<=)|((is )?less than or equal to)|((is )?before or on)/
+LT:                 /(<)|((is )?less than)|((is )?before)/
+ADD:                /\+/
+SUB:                /\-/
+MUL:                /\*/
+DIV:                /\//
+MOD:                /%/
+POW:                /\^/
+IN:                 /((is )?in)|(is one of)/
+NOTIN:              /((is )?not in)|(is not one of)/
 '''
 
 #----------------------------------------------------------------------------------------------
@@ -127,9 +153,6 @@ DAGR_GRAMMAR = RULES + TOKENS + DIRECTIVES
 
 #----------------------------------------------------------------------------------------------
 NOTUSED = r'''
-idstep:             (BACKQUOTE)? (ADM)+
-complexid:          identifier (COLONCOLON identifier)* (DOT idstep)*
-
 propertyname:       LBRACE (NONRBRACEST)+ RBRACE
 operatorname:       LBRACKET (NONRBRACKST)+ RBRACKET
 
@@ -145,9 +168,6 @@ ordinalword:        FIRST
                     | EIGHTH
                     | NINTH
                     | TENTH
-
-ADD:                /add/
-AFRAG:              /action fragment/
 ALL:                /all( of the)?/
 ANY:                /any( of the)?/
 APPLIESTO:          /applies to/
@@ -156,19 +176,16 @@ ARULE:              /action rule/
 ASA:                /(as a)|(as an)/
 ATLEAST:            /at least/
 ATMOST:             /at most/
-BEGIN:              /begin/
 BY:                 /by/
-COLON:              /:/ 
-COLONCOLON:         /::/
+COLON:              /:/
+CONNECT:            /connect/
 CONTEXT:            /context:/
 CREATE:             /create/
-DIV:                /\// 
-DOCUMENT:           /document/ 
+DOCUMENT:           /document/
 EACH:               /(for )?each( of the)?/
 EIGHT:              /eight/
 EIGHTH:             /eighth/
 ELEMENTS:           /elements/
-END:                /end/
 EXACTLY:            /exactly/
 FIFTH:              /fifth/
 FIRST:              /first/
@@ -177,37 +194,27 @@ FOLLOWING:          /following/
 FOUR:               /four/
 FOURTH:             /fourth/
 FROM:               /from/
-GREATEREQ:          /(>=)|((is )?greater than or equal to)|((is )?after or on)/
-GREATER:            /(>)|((is )?greater than)|((is )?after)/
 HASHAVE:            /(has)|(have)|(is)|(are)/
 IFF:                /only if/
 IMPLIES:            /implies/
 INCOLLECTION:       /in the collection/
-IN:                 /in/
-ISIN:               /is one of/
 ISKINDOF:           /((is)|(are)) a kind of/
-ISNOTIN:            /is not one of/
+MATCHES:            /match(es)?/
 LBRACKET:           /\[/
-LEESEREQ:           /(<=)|((is )?less than or equal to)|((is )?before or on)/
-LESSER:             /(<)|((is )?less than)|((is )?before)/
-MATCHES:            /match(es)?/ 
-MINUSMINUS:         /--/
 MODEL:              /model/
-MOD:                /mod/ 
 NEW:                /new/
 NINE:               /nine/
 NINTH:              /ninth/
 NO:                 /(no)|(none)/
 NONRBRACEST:        /[^\}\n\r]/
 NONRBRACKST:        /[^\]\n\r]/
-NOTMATCHES:         /does not match/ 
+NOTMATCHES:         /does not match/
 NOTPRESENT:         /(is)|((are) not present)/
 NUMBEROF:           /number of/
 OF:                 /of/
 ONE:                /one/
 OPERATORS:          /operators/
 ORDINALSUFFIX:      /(st)|(nd)|(rd)|(th)/
-PLUS:               /\+/ 
 PRESENT:            /(is)|(are) present/
 RBRACKET:           /\]/
 REMOVE:             /(remove)|(clear)/
@@ -228,14 +235,11 @@ THAT:               /that/
 THEREIS:            /there (is)|(are)/
 THIRD:              /third/
 THREE:              /three/
-TIMES:              /\*/ 
 TO:                 /to/
 TWO:                /two/
 UNIQUE:             /unique/
 USES:               /uses/
 USING:              /using/
-VFRAG:              /validation fragment/
-VRULE:              /validation rule/
 WHERE:              /where/
 WITH:               /with/
 '''

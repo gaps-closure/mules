@@ -24,20 +24,22 @@ def get_args():
     print('')
   return args
 
-class CleanTokens(Transformer):
-  def _hlp(self, items):          return ''.join([x for x in items if isinstance(x, Token)])
-  def identifier(self, items):    return Token('ID', self._hlp(items))
-  def integer(self, items):       return Token('INT', int(self._hlp(items)))
-  def float(self, items):         return Token('FLT', float(self._hlp(items)))
-  def bool(self, items):          return Token('BOOL', self._hlp(items)=='true')
-  def regesxtring(self, items):   return Token('REGEX', self._hlp(items).lstrip("r").strip("'"))
-  def xpathstring(self, items):   return Token('XPATH', self._hlp(items).lstrip("x").strip("'"))
-  def cselstring(self, items):    return Token('CSEL', self._hlp(items).lstrip("c").strip("'"))
-  def unistring(self, items):     return Token('CSEL', self._hlp(items).lstrip("u").strip("'"))
-  def bytestring(self, items):    return Token('CSEL', self._hlp(items).lstrip("b").strip("'"))
-  def squotedstring(self, items): return Token('SQSTR', self._hlp(items).strip("'"))
-  def dquotedstring(self, items): return Token('DQSTR', self._hlp(items).strip('"'))
+def _hlp(items):  return ''.join([x for x in items if isinstance(x, Token)])
+def _ehlp(items): return _hlp(items).replace('\\"','"').replace("\\'","'")
+def _bhlp(items): return _hlp(items).replace('`','')
 
+class CleanTokens(Transformer):
+  def identifier(self, items):    return Token('ID',    _bhlp(items))
+  def complexid(self, items):     return Token('CID',   _bhlp(items))
+  def bool(self, items):          return Token('BOOL',  _hlp(items)=='True')
+  def integer(self, items):       return Token('INT',   int(_hlp(items)))
+  def float(self, items):         return Token('FLT',   float(_hlp(items)))
+  def string(self, items):        return Token('STR',   _ehlp(items)[1:-1])
+  def unistring(self, items):     return Token('UNSTR', _ehlp(items)[2:-1])
+  def bytestring(self, items):    return Token('BYSTR', _ehlp(items)[2:-1])
+  def regesxtring(self, items):   return Token('REGEX', _ehlp(items)[2:-1])
+  def xpathstring(self, items):   return Token('XPATH', _ehlp(items)[2:-1])
+  def cselstring(self, items):    return Token('CSEL',  _ehlp(items)[2:-1])
 
 class Frontend_DAGR():
   def __init__(self,tree,verbosity=0):
