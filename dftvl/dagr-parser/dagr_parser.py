@@ -19,7 +19,7 @@ def get_args():
   p.add_argument('-T', '--target_lang', required=False, type=str, default='Python', help='Target for compiler [Python]')
   args = p.parse_args()
   if args.verbosity > 0:
-    print('Invoked with following options: ')
+    print('Invoked with following command line options: ')
     for x in vars(args).items(): print(' --%s %s' % x)
     print('')
   return args
@@ -46,22 +46,22 @@ class CleanTokens(Transformer):
 def m(t,d):        return t.find_data(d)
 def f(y):          return [x.children[0] for x in y]
 def v(y):          return [x.value       for x in y]
-
-def idens(t,d):    return v(f(m(t,d)))
-def iden(t,d):     return idens(t,d)[0]
+def idfs(t,d):     return v(f(m(t,d)))
+def idf(t,d):      return idfs(t,d)[0]
 def rows(t,d,y):   return [v(f(m(x,y))) for x in m(t,d)]
+def row(t,d,y):    return rows(t,d,y)[0]
 def rool(t,a,b,c): return (f(m(t,a)), f(m(t,b)), f(m(t,c))[:1])
 def edge(t,a,b,c): return (v(f(f(m(t,a))))[0], v(f(f(m(t,b))))[0], f(m(t,c))[:1])
 
 class Frontend_DAGR(Visitor):
-  def devprof(self,x):   self.d['devcs'].append(iden(x,'devname'))
-  def glprof(self,x):    self.d['glbls'].append(iden(x,'gvarname'))
-  def improf(self,x):    self.d['impts'].append(iden(x,'libname'))
+  def devprof(self,x):   self.d['devcs'].append(idf(x,'devname'))
+  def glprof(self,x):    self.d['glbls'].append(idf(x,'gvarname'))
+  def improf(self,x):    self.d['impts'].append(idf(x,'libname'))
   def connector(self,x): self.d['pline'].append(edge(x,'srcblk','dstblk','pcondition'))
-  def nsprof(self,x):    self.d['nspcs'].update({ iden(x,'nsalias')  : iden(x,'nspath') })
-  def ruleblk(self,x):   self.d['rblks'].update({ iden(x,'rblkname') : idens(x,'rulename') })
-  def tbldef(self,x):    self.d['tabls'].update({ iden(x,'tblname')  : (rows(x,'thdr','colname')[0], rows(x,'trow','dagrval')) })
-  def ruledef(self,x):   self.d['rools'].update({ iden(x,'rulename') : (rool(x,'condition','action','altaction')) })
+  def nsprof(self,x):    self.d['nspcs'].update({ idf(x,'nsalias')  : idf(x,'nspath') })
+  def ruleblk(self,x):   self.d['rblks'].update({ idf(x,'rblkname') : idfs(x,'rulename') })
+  def tbldef(self,x):    self.d['tabls'].update({ idf(x,'tblname')  : (row(x,'thdr','colname'), rows(x,'trow','dagrval')) })
+  def ruledef(self,x):   self.d['rools'].update({ idf(x,'rulename') : (rool(x,'condition','action','altaction')) })
   def __init__(self,tree,verbosity):
     self.d =  dict(devcs=[],glbls=[],impts=[],nspcs={},pline=[],rblks={},tabls={},rools={})
     super().__init__()
