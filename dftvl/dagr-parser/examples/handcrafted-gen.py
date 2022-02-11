@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-
 import sys
 import zmq
 import xml.etree.ElementTree as     ET
@@ -7,6 +6,7 @@ from   time                  import sleep
 from   queue                 import Queue
 from   threading             import Thread
 from   pandas                import DataFrame
+import dagrlib.closure
 
 ZMQ_IN_URI  = 'ipc:///tmp/dagr_in'
 ZMQ_OUT_URI = 'ipc:///tmp/dagr_out'
@@ -124,7 +124,6 @@ def _rule_apply_acl(data):
                 & (df['sec']==int(sec.text))
                 & (df['typ']==int(typ.text))
                 & ((df['op']=='allow') | (df['op']=='redact'))]
-  print(len(rows))
   return data if len(rows) >= 1 else None
 
 if __name__=='__main__':

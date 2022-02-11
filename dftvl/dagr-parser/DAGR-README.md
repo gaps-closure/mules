@@ -120,113 +120,175 @@ cat examples/bw_write_221.infoset | zc -n1 PUB ipc:///tmp/dagr_in
 
 ## DAGR Syntax
 
-Each DAGR specification includes a profile definition `profblk`, a pipeline defintion `pipeblk`, 
-and then zero or more definitions of rule block `ruleblk`, rule `ruledef`, and table `tbldef`.
+DAGR syntax is specified using Lark parser grammar.  Whitespace is not
+significant and is ignored, making the grammar easier for a LALR(1) parser.  
+Each comment starts with '--' and ends at the newline. Comments are ignored. 
+A partial excerpt of the grammar is provided here; for any missing rules (lower
+case) or tokens (all upper case), consult the `dagrammar.py` file.
 
-Whitespace is not significant and is ignored, making the grammar easier for a LALR parser.
-A comment starts with '--' and ends at the newline. Comments are ignored. 
-
-The following primitive value types `dagrval` are recognized in DAGR:
- * `nil`        null, same to python3 `None`
- * `integer`    integers, same as python3 int
- * `float`      floating point numbers, same as python3 float
- * `bool`       boolean values, same as python3 bool
- * `string`     strings, same as python3 string, includes single- and double-quoted variants
- * `unicode`    unicode strings, same as python3 u'...' 
- * `bytestring` byte sequences, same as python3 b'...' 
- * `regex`      regular expressions, same as python3 r'...' 
- * `cselector`  c'...' containing a CSS selector in the string
- * `xselector`  x'...' containing a XPath expression in the string
- * `identifier` a symbol, with the following pattern `\`?[a-zA-Z][a-zA-Z0-9_]+`, 
-   with the backquote used to escape DAGR keywords when used as identifiers
-
-We may restrict `xselector` to the XPath expression subset supported by Python3 XMLElementTree library.
-We may restrict `cselector` to not include some complex CSS selectors such as ':match'.
-
-Identifiers are globally unique with teo exceptions: identifiers introduced using a let
-expression in a rule definition (to be described later) and column names in a table (to
-be defined later). They have local scope, and in the case of the table, they can be
-refernced as `tblname`.`colname`.
-
-Lists, tuples, and dictionaries may be defined in the future. Also we may include a primitive 
-data type  for ISO date time strings and one notation for geo-coordinates.
-
-A profile block has the following syntax:
+For symbols, DAGR allows simple identifiers `identifier` and complex
+identifiers `complexid`.  The optional backquote is used to allow reuse of DAGR
+keywords as identifiers.  Identifiers that are introduced using a let
+expression in a rule definition have local scope.  Column names in a table have
+local scope but can be accessed globally using a complex identifier that
+includes the table name. All other simple and complex identifiers have global
+scope.
 ```
-profblk:            'profile' profname '{' (profelt ';')+ '}'
+identifier:         BACKQUOTE? ALPHA ADU?
+complexid:          BACKQUOTE? ALPHA ADU? (COLONCOLON ALPHA ADU?)* (DOT ADU)*
+```
+
+The following primitive value types `dagrval` are recognized in DAGR and are
+similar to those in Python3. These include `nil`, `bool`, `integer`, `float`,
+`string` (both single and double quoted versions). For targets where Unicode
+may not be default, we allow `ustring` similar to Python2. Regular expressions
+`rstring` and byte strings `bstring` also follow Python3. We add two more types
+to encode XPath `xstring` and  CSS selectors `cstring`.  We may include a
+primitive data type  for ISO date time strings and one notation for
+geo-coordinates. We may restrict the XPath expression subset supported by
+Python3 XMLElementTree library. We may restrict the CSS selector and exclude
+complex selectors such as ':match'.
+```
+dagrval:            nil | bool | integer | float | string | ustring | bstring | rstring | xstring | cstring
+nil:                NONE
+bool:               TRUE | FALSE
+integer:            MINUS? DIGIT+
+float:    	    MINUS? DIGIT+ DOT DIGIT+
+string:             (DQUOTE  (NONDQUOTEST|EDQUOTE)* DQUOTE) | (SQUOTE  (NONSQUOTEST|ESQUOTE)* SQUOTE)
+ustring:            (UDQUOTE (NONDQUOTEST|EDQUOTE)* DQUOTE) | (USQUOTE (NONSQUOTEST|ESQUOTE)* SQUOTE)
+rstring:            (RDQUOTE (NONDQUOTEST|EDQUOTE)* DQUOTE) | (RSQUOTE (NONSQUOTEST|ESQUOTE)* SQUOTE)
+bstring:            (BDQUOTE (NONDQUOTEST|EDQUOTE)* DQUOTE) | (BSQUOTE (NONSQUOTEST|ESQUOTE)* SQUOTE)
+xstring:            (XDQUOTE (NONDQUOTEST|EDQUOTE)* DQUOTE) | (XSQUOTE (NONSQUOTEST|ESQUOTE)* SQUOTE)
+cstring:            (CDQUOTE (NONDQUOTEST|EDQUOTE)* DQUOTE) | (CSQUOTE (NONSQUOTEST|ESQUOTE)* SQUOTE)
+```
+
+The syntax for DAGR expressions `expr` which include lists `lst` and functions
+`function` is below:
+```
+expr:               complexid | dagrval | lst | function | unop expr | expr (binop expr)+ | LPAREN expr RPAREN
+lst:                LBRACKET (expr (COMMA expr)*)* RBRACKET
+function:           complexid LPAREN (expr (COMMA expr)*)* RPAREN
+```
+
+Currently we have included the following unary `unop` and binary operators
+`binop` for use in expressions. The latter includes logical, comparison,
+arithmetic, and memebership operators.
+```
+unop:               NOT
+binop:              AND | OR | XOR | EQ | NEQ | GEQ | GT | LEQ | LT | IN  | NIN
+                    | ADD | SUB | MUL | DIV | MOD | POW
+
+```
+
+Each DAGR specification `spec` includes a profile definition `profblk`, a
+pipeline defintion `pipeblk`, and then zero or more definitions of rule block
+`ruleblk`, rule `ruledef`, and table `tbldef`.  
+```
+spec:               profblk  pipeblk  (ruleblk|ruledef|tbldef)*
+```
+
+A profile block has the syntax below. The profile block can have profile
+elements `profelt`, which can be a device declaration to specify the target
+platform profile, namespace alias declarations, DAGR library imports, and
+global variable declarations. For now, the global variables are well-known
+parameters that are supported by the target platform (for providing contextual
+information such as the operational location). User-defined global variables
+may be considered in the future. 
+```
+profblk:            PROFILE profname LBRACE (profelt SEMI)+ RBRACE
+profelt:            devprof | nsprof | glprof | improf
 profname:           identifier
-profelt:            'device' identifier | 'namespace' identifier string | 'global' identifier
+devprof:            DEVICE devname
+nsprof:             NAMESPACE nsalias nspath
+glprof:             GLOBAL gvarname
+improf:             IMPORT libname
+devname:            string | ustring
+nspath:             string | ustring
+nsalias:            identifier
+gvarname:           identifier
+libname:            identifier
 ```
 
-The profile block can have profile elements `profelt`, which can be a device declaration to 
-specify the target platform profile, zero or more namespace shorthand declarations, and zero 
-or more global variable declarations. For now, the global variables are well-known parameters
-that are supported by the target platform (for providing contextual information such as the
-operational location). User-defined global variables may be considered in the future.
-
-A pipeline definition `pipeblk` has the following syntax:
-
+A pipeline definition `pipeblk` has the syntax below. The `pipename` is an
+identifier which names the pipeline. The `rblkname` is an identifier which must
+match the name of a rule block defined in the specification. In addition there
+are two pre-defined special terminal blocks for entry and exit. The pipeline
+sets up a number of connectors between `srcblk` and `dstblk`, which are
+identifiers matching the name of a rule block or a terminal block. A pipe
+condition `pcondition` can be optionally specified, and the condition
+expression syntax will be defined later. If a source block connects to multiple
+destination blocks, then control will transition to the destination block based
+on the first connector whose guard condition expression evaluates to true. If
+no connectors match, then the data is dropped. The pipeline must form a
+directed acylic graph.
 ```
-pipeblk:            'pipeline' pipename '{' (connector ';')+ '}'
-connector:          srcblk '=>' dstblk ('|' condition)?
+pipeblk:            PIPELINE pipename LBRACE (connector SEMI)+ RBRACE
+connector:          srcblk TRANSIT dstblk (PIPE pcondition)?
+pipename:           identifier
 srcblk:             rblkname | terminii
 dstblk:             rblkname | terminii
-terminii:           'entry' | 'exit'
+rblkname:           identifier
+terminii:           ENTRY | EXIT
+pcondition:         expr
 ```
 
-The `pipename` is an identifier which names the pipeline. The `rblkname` is an
-identifier which must match the name of a rule block defined in the
-specification. In addition there are two special terminal blocks named 'entry'
-and 'exit' that are available (and cannot be defined). The pipeline sets up a
-number of connectors between `srcblk` and `dstblk`, which are identifiers
-matching the name of a rule block or a terminal block. A guard condition can be
-optionally specified, and the condition expression syntax will be defined
-later. If a source block connects to multiple destination blocks, then control
-will transition to the destination block based on the first connector whose
-guard condition expression evaluates to true. The pipeline must form a directed
-acylic graph.
-
-A `ruleblk` has the following syntax:
+A rule block `ruleblk` has the syntax below. The `rblkname` is an identifier
+which can be referenced in the pipeline defintion. The rule block is simply a
+sequence of `rulename` entries, which are identifiers that match the name of a
+rule defined in the specification. A rule can be referenced in multiple rule
+blocks.
 ```
-ruleblk:            'block' rblkname '{' (rulename  ';')+ '}'
-```
-The `rblkname` is an identifier which can be referenced in the pipeline defintion. The rule block 
-is simply a sequence of `rulename` entries, which are identifiers that match the name of a rule 
-defined in the specification. A rule can be referenced in multiple rule blocks.
-
-A table definition has the following syntax:
-
-```
-tbldef:             'table` tblname  '{' thdr trow+  '}'
-thdr:               ('|' colname)+ '|'
-trow:               ('|' dagrval)+ '|'
-```
-The name of the table `tblname` is an identifier that can be referenced in other rules. The table has a header `thdr` and one or more rows `trow`. The table uses '|' to delimit cells in a header or row. For
-stylistic purposes, comment lines beginning with '--' such as '--+------+------' can be used before
-and after a header or row; these are ignored. Each cell in the header contains a column name `colname` 
-which is an identifier. Each cell in a row can contain a value of any primitive type (`dagrval`).
-
-A rule definition has the following syntax:
-
-```
-ruledef:            'rule' rulename '{' rexpr ';' '}'
-rexpr:              (letexp)* 'if' condition 'then' action ('else' action)?
-letexp:             'let' varname dagrval ';'
+ruleblk:            BLOCK rblkname LBRACE (rulename  SEMI)+ RBRACE
+rulename:           identifier
 ```
 
-The rule has a name `rulename` which is an identifier which can be referenced in rule blocks. The 
-rule expression `rexpr` includes one or more let expressions that declare a variable `varname` 
-which is an identifier and assign it a value of a primitive type, In the future we may
-consider assignment of an expression to te variable. The variable is locally scoped within 
-the rule definition. It can shadow a global identifier of the same name.  The
-main rule expression has an antecendent `condition` and one or two `action`
-expressions. The syntax for these expressions will be described later.  If the
-`condition` evaluates to True, then the first `action` expression is evaluated,
-otherwise the optional second `action` expression is evaluated if specified. As
-with most languages, the evaluation of the `action` expressions is lazy, and
-done only as needed after the evaluation of the `comdition` expression.  
+A table definition has the syntax below. The name of the table `tblname` is an
+identifier that can be referenced in other rules. The table has a header `thdr`
+and one or more rows `trow`. The table uses '|' to delimit cells in a header or
+row. For stylistic purposes, comment lines beginning with '--' such as
+'--+------+------' can be used before and after a header or row; these are
+ignored. Each cell in the header contains a column name `colname` which is an
+identifier. Each cell in a row can contain a value of any primitive type
+(`dagrval`).
+```
+tbldef:             TABLE tblname LBRACE thdr trow+ RBRACE
+thdr:               (PIPE colname)+ PIPE
+trow:               (PIPE dagrval)+ PIPE
+tblname:            identifier
+colname:            identifier
+```
 
-XXX: Specify syntax for condition and action expressions here
+A rule definition has the syntax below. The rule has a name `rulename` which is
+an identifier which can be referenced in rule blocks. The rule expression
+`rexpr` includes one or more let expressions that declare a variable `varname`
+which is an identifier and assign an expression to it. The variable is locally
+scoped within the rule definition.  It can shadow a global identifier of the
+same name.  The main rule expression has an antecendent `condition`, an
+`action` and an optional `altaction`. If the `condition` evaluates to True,
+then the `action` is evaluated, otherwise the optional `altaction` expression
+is evaluated if specified. As with most languages, the evaluation of the
+`action` expressions is lazy, and done only as needed after the evaluation of
+the `comdition` expression. The `condition` expression cannot change the data
+being processed, but can keep state in the local variables. The `action` and
+`altaction` are blocks with a sequence of function invocation statements each 
+ending with a semicolon. Action functions can pass or drop the data, and can 
+modify it. Each function in the action block must return either the transformed 
+data or `None`.
+```
+ruledef:            RULE rulename LBRACE rexpr SEMI RBRACE
+rexpr:              (letexp)* IF condition THEN action (ELSE altaction)?
+letexp:             LET varname expr SEMI
+varname:            identifier
+condition:          expr
+action:             ablock
+altaction:          ablock
+ablock:             function | (LBRACE (function SEMI)+ RBRACE)
+```
 
+XXX: TODO
 
+* Develop an expression evaluator and action dispatcher
+* Identify some DFTVL use cases and flesh out expr and ablock syntax
+* Discuss types and values w.r.t to xpath selectors, tables, regexes and expressions
+* Identify useful built-in functions 
 

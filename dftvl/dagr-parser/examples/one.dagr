@@ -1,5 +1,7 @@
 profile PROF1 { 
   device 'CLOSURE'; 
+  import closure;
+  global dummy;
   namespace gma 'urn:gma:1.0';
 }
 
@@ -25,7 +27,7 @@ rule redact_altitude {
   let dmux x'.//gma:SDHBWHeader/tagm';
   let dsec x'.//gma:SDHBWHeader/tags';
   let dtyp x'.//gma:SDHBWHeader/tagt';
-  if ((dmux == 2) && (dsec == 2) and (dtyp == 1)) then zeroize (x'.//gma:Position/x');
+  if ((dmux == 2) && (dsec == 2) and (dtyp == 1)) then zeroize(x'.//gma:Position/x'); 
 }
 
 rule apply_acl {
@@ -37,9 +39,6 @@ rule apply_acl {
      (dsec == gaps_acl.sec) and
      (dtyp == gaps_acl.typ) and
      ((gaps_acl.typ == 'allow') || (gaps_acl.typ == 'redact')))
-  then 
-    pass()
-  else
-    drop();
+  then pass() else drop();
 }
 

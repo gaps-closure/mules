@@ -47,25 +47,22 @@ table sample_acl {
 }
 
 rule redact_altitude {
-  if 
-    True
-  then 
-    nop();
+  if True then pass();
 }
 
 rule drop_blacklisted {
-  if True then nop();
+  if True then pass();
 }
 
 rule apply_dtable {
-  if True then nop() else nop();
+  if True then pass() else { drop(); };
 }
 
 rule pixelate_sensitive_region {
-  if True then nop() else nop();
+  if True then { pass(); } else { drop(); };
 }
 
 rule reduce_resolution {
-  if True then nop() otherwise nop();
+  if True then { foobar(1); pass(); } otherwise drop();
 }
 

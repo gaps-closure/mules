@@ -1,5 +1,4 @@
 DAGR_BOILERPLATE='''#!/usr/bin/env python3
-
 import sys
 import zmq
 import xml.etree.ElementTree as     ET
@@ -7,7 +6,9 @@ from   time                  import sleep
 from   queue                 import Queue
 from   threading             import Thread
 from   pandas                import DataFrame
+'''
 
+DAGR_ENGINE='''
 ZMQ_IN_URI  = 'ipc:///tmp/dagr_in'
 ZMQ_OUT_URI = 'ipc:///tmp/dagr_out'
 
@@ -86,6 +87,11 @@ def rname(r):     return '_rule_%s' % r
 def tname(t):     return '_table_%s' % t
 def gname(b1,b2): return '_guard_%s_%s' % (b1,b2)
 
+def transpile_imports(imp):
+  s,n,t  = '','\n','  '
+  for i in imp: s += 'import dagrlib.%s' % i + n
+  return s
+
 def transpile_namespaces(dct):
   s,n,t  = '','\n','  '
   s += n + '_xml_namespaces = {}' + n
@@ -127,6 +133,8 @@ def python_backend(dagr_ir, output_file):
   once  = [True]
   with open(output_file, 'w') as f: 
     for _ in once:                           f.write(DAGR_BOILERPLATE)
+    for _ in once:                           f.write(transpile_imports(dagr_ir['imports']))
+    for _ in once:                           f.write(DAGR_ENGINE)
     for _ in once:                           f.write(transpile_namespaces(dagr_ir['nspaces']))
     for t,x in dagr_ir['tables'].items():    f.write(transpile_table(tname(t), x))
     for (b1,b2,x) in pline:                  f.write(transpile_guard(gname(b1,b2), x))
