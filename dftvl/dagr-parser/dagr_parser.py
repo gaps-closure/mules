@@ -2,7 +2,7 @@
 from   argparse      import ArgumentParser
 from   pprint        import pformat
 from   lark          import Lark, Tree
-from   lark.visitors import Transformer, Interpreter
+from   lark.visitors import Transformer, Visitor, Discard
 from   lark.lexer    import Lexer, Token
 from   dagrammar     import DAGR_GRAMMAR
 from   pybackend     import python_backend
@@ -24,51 +24,54 @@ def get_args():
     print('')
   return args
 
-def _hlp(items):  return ''.join([x for x in items if isinstance(x, Token)])
-def _ehlp(items): return _hlp(items).replace('\\"','"').replace("\\'","'")
-def _bhlp(items): return _hlp(items).replace('`','')
+#---------------------------------------------------------------------------------------------------
+def _hlp(i):  return ''.join([x for x in i if isinstance(x, Token)])
+def _ehlp(i): return _hlp(i).replace('\\"','"').replace("\\'","'")
+def _bhlp(i): return _hlp(i).replace('`','')
 
 class CleanTokens(Transformer):
-  def identifier(self, items): return Token('SID',   _bhlp(items))
-  def complexid(self, items):  return Token('CID',   _bhlp(items))
-  def bool(self, items):       return Token('BOOL',  _hlp(items)=='True')
-  def integer(self, items):    return Token('INT',   int(_hlp(items)))
-  def float(self, items):      return Token('FLT',   float(_hlp(items)))
-  def string(self, items):     return Token('STRNG', _ehlp(items)[1:-1])
-  def ustring(self, items):    return Token('UNSTR', _ehlp(items)[2:-1])
-  def bstring(self, items):    return Token('BYSTR', _ehlp(items)[2:-1])
-  def rstring(self, items):    return Token('REGEX', _ehlp(items)[2:-1])
-  def xstring(self, items):    return Token('XPATH', _ehlp(items)[2:-1])
-  def cstring(self, items):    return Token('CSSEL', _ehlp(items)[2:-1])
+  def identifier(self,i): return Token('SID',   _bhlp(i))
+  def complexid(self,i):  return Token('CID',   _bhlp(i))
+  def nil(self,i):        return Token('NIL',   None)
+  def bool(self,i):       return Token('BOOL',  _hlp(i)=='True')
+  def integer(self,i):    return Token('INT',   int(_hlp(i)))
+  def float(self,i):      return Token('FLT',   float(_hlp(i)))
+  def string(self,i):     return Token('STRNG', _ehlp(i)[1:-1])
+  def ustring(self,i):    return Token('UNSTR', _ehlp(i)[2:-1])
+  def bstring(self,i):    return Token('BYSTR', _ehlp(i)[2:-1])
+  def rstring(self,i):    return Token('REGEX', _ehlp(i)[2:-1])
+  def xstring(self,i):    return Token('XPATH', _ehlp(i)[2:-1])
+  def cstring(self,i):    return Token('CSSEL', _ehlp(i)[2:-1])
 
-class Frontend_DAGR(dict):
-  def __init__(self,tree,verbosity=0):
-    def banprt(m, x): print('\n'.join(['-'*50, m, '-'*50, x, '']))
-    def fct(t,d):     return t.children[0].data == d
-    def fmfcv(t,d):   return list(t.find_data(d))[0].children[0].value
-    def fmfcfcv(t,d): return list(t.find_data(d))[0].children[0].children[0].value
-    def amfcv(t,d):   return list([x.children[0].value for x in t.find_data(d)])
-    def fmac(t,d):    return list([x.children for x in t.find_data(d)])[:1]
-    def edges(t):     return [(fmfcfcv(x,'srcblk'),fmfcfcv(x,'dstblk'),fmac(x,'pcondition')) for x in t.find_data('connector')]
-    def hdr(t):       return [amfcv(x, 'colname') for x in t.find_data('thdr')][0] 
-    def rows(t):      return [amfcv(x, 'dagrval') for x in t.find_data('trow')]
+def m(t,d):        return t.find_data(d)
+def f(y):          return [x.children[0] for x in y]
+def v(y):          return [x.value       for x in y]
+def elts(t,d):     return v(f(m(t,d)))
+def iden(t,d):     return v(f(m(t,d)))[0]
+def rows(t,d,y):   return [v(f(m(x,y))) for x in m(t,d)]
+def rool(t,a,b,c): return (f(m(t,a))[0], f(m(t,b))[0], f(m(t,c))[:-1])
+def edge(t,a,b,c): return (v(f(f(m(t,a))))[0], v(f(f(m(t,b))))[0], f(m(t,c))[:-1])
 
-    self['devices']  = [ fmfcv(x,'devname')                        for x in tree.find_data('devprof') ]
-    self['globals']  = [ fmfcv(x,'gvarname')                       for x in tree.find_data('glprof')  ]
-    self['imports']  = [ fmfcv(x,'libname')                        for x in tree.find_data('improf')  ]
-    self['nspaces']  = { fmfcv(x,'nsalias')  : fmfcv(x,'nspath')   for x in tree.find_data('nsprof')  }
-    self['pipeline'] = { fmfcv(x,'pipename') : edges(x)            for x in tree.find_data('pipeblk') }
-    self['ruleblks'] = { fmfcv(x,'rblkname') : amfcv(x,'rulename') for x in tree.find_data('ruleblk') }
-    self['tables']   = { fmfcv(x,'tblname')  : (hdr(x), rows(x))   for x in tree.find_data('tbldef') }
-    self['rules']    = { fmfcv(x,'rulename') : fmac(x,'rexpr')     for x in tree.find_data('ruledef') }
-
-    miss = [b+'::'+r for b,rs in self['ruleblks'].items() for r in rs if r not in self['rules']]
+class Frontend_DAGR(Visitor):
+  def devprof(self,x):   self.d['devcs'].append(iden(x,'devname'))
+  def glprof(self,x):    self.d['glbls'].append(iden(x,'gvarname'))
+  def improf(self,x):    self.d['impts'].append(iden(x,'libname'))
+  def connector(self,x): self.d['pline'].append(edge(x,'srcblk','dstblk','pcondition'))
+  def nsprof(self,x):    self.d['nspcs'].update({ iden(x,'nsalias')  : iden(x,'nspath') })
+  def ruleblk(self,x):   self.d['rblks'].update({ iden(x,'rblkname') : elts(x,'rulename') })
+  def tbldef(self,x):    self.d['tabls'].update({ iden(x,'tblname')  : (rows(x,'thdr','colname')[0], rows(x,'trow','dagrval')) })
+  def ruledef(self,x):   self.d['rools'].update({ iden(x,'rulename') : (rool(x,'condition','action','altaction')) })
+  def __init__(self,tree,verbosity):
+    self.d =  dict(devcs=[],glbls=[],impts=[],nspcs={},pline=[],rblks={},tabls={},rools={})
+    super().__init__()
+    self.visit(tree)
+    miss = [b+'::'+r for b,rs in self.d['rblks'].items() for r in rs if r not in self.d['rools']]
     if len(miss) > 0: raise Exception('Missing definition(s) for block::rule :-\n%s' % '\n'.join(miss))
-
+    def banprt(m,x):  print('\n'.join(['-'*50, m, '-'*50, x, '']))
     if verbosity > 0: 
       banprt('Abstract Syntax Tree from Parser:', (tree.pretty() if verbosity <= 2 else tree))
     if verbosity > 1: 
-      for k,v in self.items(): banprt('Intermediate Representation - %s:' % k, pformat(v))
+      for k,v in self.d.items(): banprt('Intermediate Representation - %s:' % k, pformat(v))
 
 #---------------------------------------------------------------------------------------------------
 if __name__ == '__main__':
@@ -85,7 +88,7 @@ if __name__ == '__main__':
   if args.dftvl_lang == 'DAGR':
     parser = Lark(DAGR_GRAMMAR, start='spec', parser='lalr', lexer='contextual', transformer=CleanTokens())
     with open(args.dftvl_file, 'r') as inf: ast = parser.parse(inf.read())
-    dagr_ir = Frontend_DAGR(ast, verbosity=args.verbosity)
+    dagr_ir = Frontend_DAGR(ast,args.verbosity).d
   else:
     raise Exception('Unsupportd DFTVL language:' + args.dftvl_lang)
 
@@ -94,3 +97,4 @@ if __name__ == '__main__':
   else:
     raise Exception('Unsupported compilation target:' + args.target_lang)
 
+#---------------------------------------------------------------------------------------------------

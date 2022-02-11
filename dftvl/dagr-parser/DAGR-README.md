@@ -107,7 +107,7 @@ sudo apt install libzmq3-dev
 To test the parser and a generated Python engine, open three terminals. In the first terminal, generate Python code from a DFDL and DAGR specification, and then run the generated engine.
 ```
 python3 dagr_parser.py -v 1 -s examples/gmabw.dfdl.xsd -d examples/one.dagr 
-python3 gen.py
+PYTHONPATH=. python3 gen.py
 ```
 In the second terminal, listen to the output over 0MQ to the engine.
 ```
@@ -120,19 +120,18 @@ cat examples/bw_write_221.infoset | zc -n1 PUB ipc:///tmp/dagr_in
 
 ## DAGR Syntax
 
-DAGR syntax is specified using Lark parser grammar.  Whitespace is not
-significant and is ignored, making the grammar easier for a LALR(1) parser.  
-Each comment starts with '--' and ends at the newline. Comments are ignored. 
-A partial excerpt of the grammar is provided here; for any missing rules (lower
+DAGR syntax is specified using Lark parser grammar. Whitespace is not
+significant and is ignored, making the grammar easier for a LALR(1) parser.
+Each comment starts with '--' and ends at the newline. Comments are ignored. A
+partial excerpt of the grammar is provided here; for any missing rules (lower
 case) or tokens (all upper case), consult the `dagrammar.py` file.
 
 For symbols, DAGR allows simple identifiers `identifier` and complex
-identifiers `complexid`.  The optional backquote is used to allow reuse of DAGR
-keywords as identifiers.  Identifiers that are introduced using a let
-expression in a rule definition have local scope.  Column names in a table have
-local scope but can be accessed globally using a complex identifier that
-includes the table name. All other simple and complex identifiers have global
-scope.
+identifiers `complexid`. The optional backquote is used to allow reuse of DAGR
+keywords as identifiers. Identifiers that are introduced using a let expression
+in a rule definition have local scope. Column names in a table have local
+scope but can be accessed globally using a complex identifier that includes the
+table name. All other simple and complex identifiers have global scope.
 ```
 identifier:         BACKQUOTE? ALPHA ADU?
 complexid:          BACKQUOTE? ALPHA ADU? (COLONCOLON ALPHA ADU?)* (DOT ADU)*
@@ -143,7 +142,7 @@ similar to those in Python3. These include `nil`, `bool`, `integer`, `float`,
 `string` (both single and double quoted versions). For targets where Unicode
 may not be default, we allow `ustring` similar to Python2. Regular expressions
 `rstring` and byte strings `bstring` also follow Python3. We add two more types
-to encode XPath `xstring` and  CSS selectors `cstring`.  We may include a
+to encode XPath `xstring` and  CSS selectors `cstring`. We may include a
 primitive data type  for ISO date time strings and one notation for
 geo-coordinates. We may restrict the XPath expression subset supported by
 Python3 XMLElementTree library. We may restrict the CSS selector and exclude
@@ -285,10 +284,23 @@ altaction:          ablock
 ablock:             function | (LBRACE (function SEMI)+ RBRACE)
 ```
 
-XXX: TODO
+## TODO
 
-* Develop an expression evaluator and action dispatcher
-* Identify some DFTVL use cases and flesh out expr and ablock syntax
-* Discuss types and values w.r.t to xpath selectors, tables, regexes and expressions
-* Identify useful built-in functions 
+* Process `expr` and `ablock` and transpile
+  -- match xpath, select from table, match regex
+  -- operations on all or kth or unique element
+  -- get kth child or parent
+  -- pass(), drop(), replace(), add(), remove()
+
+* Clarify types and values w.r.t to xpath selectors, tables, regexes and expressions
+  -- evaluating xpath returns a list of elements or empty list
+  -- assignment and reference to an element in the list uses the value
+  -- vector operations 
+  -- type(elt) would get the type of the element
+
+* Identify test use cases, flesh out expr/ablock syntax and useful functions to implement
+* Validate/handle ustring, rstring, bstring, ustring, xstring, cstring
+* Process DFDL to extract a map: `[(xpath,type,offset,length)]` and do type checking
+* Concurrency within action blocks, within rule blocks, within pipeline
+* Idris formal model to establish decidability 
 
