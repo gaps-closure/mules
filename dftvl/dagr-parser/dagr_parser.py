@@ -38,19 +38,20 @@ class CleanTokens(Transformer):
   def float(self,i):      return Token('FLT',   float(_hlp(i)))
   def string(self,i):     return Token('STRNG', _ehlp(i)[1:-1])
   def ustring(self,i):    return Token('UNSTR', _ehlp(i)[2:-1])
-  def bstring(self,i):    return Token('BYSTR', _ehlp(i)[2:-1])
-  def rstring(self,i):    return Token('REGEX', _ehlp(i)[2:-1])
-  def xstring(self,i):    return Token('XPATH', _ehlp(i)[2:-1])
-  def cstring(self,i):    return Token('CSSEL', _ehlp(i)[2:-1])
+  def bstring(self,i):    return Token('BYSTR', _ehlp(i))
+  def rstring(self,i):    return Token('REGEX', _ehlp(i))
+  def xstring(self,i):    return Token('XPATH', _ehlp(i))
+  def cstring(self,i):    return Token('CSSEL', _ehlp(i))
 
 def m(t,d):        return t.find_data(d)
 def f(y):          return [x.children[0] for x in y]
 def v(y):          return [x.value       for x in y]
-def elts(t,d):     return v(f(m(t,d)))
-def iden(t,d):     return v(f(m(t,d)))[0]
+
+def idens(t,d):    return v(f(m(t,d)))
+def iden(t,d):     return idens(t,d)[0]
 def rows(t,d,y):   return [v(f(m(x,y))) for x in m(t,d)]
-def rool(t,a,b,c): return (f(m(t,a))[0], f(m(t,b))[0], f(m(t,c))[:-1])
-def edge(t,a,b,c): return (v(f(f(m(t,a))))[0], v(f(f(m(t,b))))[0], f(m(t,c))[:-1])
+def rool(t,a,b,c): return (f(m(t,a)), f(m(t,b)), f(m(t,c))[:1])
+def edge(t,a,b,c): return (v(f(f(m(t,a))))[0], v(f(f(m(t,b))))[0], f(m(t,c))[:1])
 
 class Frontend_DAGR(Visitor):
   def devprof(self,x):   self.d['devcs'].append(iden(x,'devname'))
@@ -58,7 +59,7 @@ class Frontend_DAGR(Visitor):
   def improf(self,x):    self.d['impts'].append(iden(x,'libname'))
   def connector(self,x): self.d['pline'].append(edge(x,'srcblk','dstblk','pcondition'))
   def nsprof(self,x):    self.d['nspcs'].update({ iden(x,'nsalias')  : iden(x,'nspath') })
-  def ruleblk(self,x):   self.d['rblks'].update({ iden(x,'rblkname') : elts(x,'rulename') })
+  def ruleblk(self,x):   self.d['rblks'].update({ iden(x,'rblkname') : idens(x,'rulename') })
   def tbldef(self,x):    self.d['tabls'].update({ iden(x,'tblname')  : (rows(x,'thdr','colname')[0], rows(x,'trow','dagrval')) })
   def ruledef(self,x):   self.d['rools'].update({ iden(x,'rulename') : (rool(x,'condition','action','altaction')) })
   def __init__(self,tree,verbosity):
