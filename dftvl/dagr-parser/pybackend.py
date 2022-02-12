@@ -129,8 +129,10 @@ def transpile_rule(q,x):
   return s
 
 def python_backend(dagr_ir, output_file):
-  once  = [True]
   if dagr_ir['devcs'][0] != 'CLOSURE': raise Exception('Unhandled device for backend')
+  miss = [b+'::'+r for b,rs in dagr_ir['rblks'].items() for r in rs if r not in dagr_ir['rools']]
+  if len(miss) > 0: raise Exception('Missing definition(s) for block::rule :-\n%s' % '\n'.join(miss))
+  once  = [True]
   with open(output_file, 'w') as f: 
     for _ in once:                           f.write(DAGR_BOILERPLATE)
     for _ in once:                           f.write(transpile_imports(dagr_ir['impts']))
