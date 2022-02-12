@@ -115,9 +115,6 @@ def transpile_guard(q,x):
   s,n,t  = '','\n','  '
   s += n + 'def ' + q + '(data):' + n
   # XXX: process actual guard expression here
-  # print([y for y in x if y.data=='subject'])
-  # print([y for y in x if y.data=='binop'])
-  # print([y for y in x if y.data=='object'])
   s += t + 'return True' + n
   return s
 
