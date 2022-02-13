@@ -28,13 +28,13 @@ class Block(Thread):
       try:
         odata = self.queue.get()
         idata = odata
-        for r in self.rules: 
+        for r in self.rules:
           if idata is None: break
           odata = r(idata)
-          idata = odata 
+          idata = odata
         if odata:
           for b in self.nexthop(odata):
-            b.input(odata) 
+            b.input(odata)
             break  # forward to first match only
       except Exception as e:
         print('Block ' + self.blkname + ': '  + str(e))
@@ -45,11 +45,11 @@ class ExitBlock(Block):
     socket  = context.socket(zmq.PUB)
     socket.bind(ZMQ_OUT_URI)
     while True:
-      try:    
+      try:
         tree = self.queue.get()
         data = ET.tostring(tree)
         socket.send(data)
-      except Exception as e: 
+      except Exception as e:
         print('Block ' + self.blkname + ': '  + str(e))
 
 class EntryBlock(Block):
@@ -59,25 +59,25 @@ class EntryBlock(Block):
     socket.bind(ZMQ_IN_URI)
     socket.setsockopt_string(zmq.SUBSCRIBE, '')
     while True:
-      try:    
+      try:
         xmldata = socket.recv()
         data = ET.fromstring(xmldata)
         for b in self.nexthop(data):
-          b.input(data) 
-          break  # forward only to first matching neighbor 
-      except Exception as e: 
+          b.input(data)
+          break  # forward only to first matching neighbor
+      except Exception as e:
         print('Block ' + self.blkname + ': '  + str(e))
 
 class Engine:
   def __init__(self):
     self.blocks = { 'entry': EntryBlock('entry', self), 'exit': ExitBlock('exit', self) }
-  def add(self, blkname): 
-    if blkname not in self.blocks: self.blocks[blkname] = Block(blkname, self) 
+  def add(self, blkname):
+    if blkname not in self.blocks: self.blocks[blkname] = Block(blkname, self)
   def connect(self, b1, b2, guard): self.blocks[b1].addNexthop(self.blocks[b2], guard)
   def addRule(self, blkname, rulename): self.blocks[blkname].addRule(rulename)
   def start(self):
     for b in self.blocks.values(): b.start()
-    while True: 
+    while True:
       try: sleep(1)
       except(KeyboardInterrupt): sys.exit(1)
 

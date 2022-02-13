@@ -29,13 +29,13 @@ class Block(Thread):
       try:
         odata = self.queue.get()
         idata = odata
-        for r in self.rules: 
+        for r in self.rules:
           if idata is None: break
           odata = r(idata)
-          idata = odata 
+          idata = odata
         if odata:
           for b in self.nexthop(odata):
-            b.input(odata) 
+            b.input(odata)
             break  # forward to first match only
       except Exception as e:
         print('Block ' + self.blkname + ': '  + str(e))
@@ -46,11 +46,11 @@ class ExitBlock(Block):
     socket  = context.socket(zmq.PUB)
     socket.bind(ZMQ_OUT_URI)
     while True:
-      try:    
+      try:
         tree = self.queue.get()
         data = ET.tostring(tree)
         socket.send(data)
-      except Exception as e: 
+      except Exception as e:
         print('Block ' + self.blkname + ': '  + str(e))
 
 class EntryBlock(Block):
@@ -60,29 +60,29 @@ class EntryBlock(Block):
     socket.bind(ZMQ_IN_URI)
     socket.setsockopt_string(zmq.SUBSCRIBE, '')
     while True:
-      try:    
+      try:
         xmldata = socket.recv()
         data = ET.fromstring(xmldata)
         for b in self.nexthop(data):
-          b.input(data) 
-          break  # forward only to first matching neighbor 
-      except Exception as e: 
+          b.input(data)
+          break  # forward only to first matching neighbor
+      except Exception as e:
         print('Block ' + self.blkname + ': '  + str(e))
 
 class Engine:
   def __init__(self):
     self.blocks = { 'entry': EntryBlock('entry', self), 'exit': ExitBlock('exit', self) }
-  def add(self, blkname): 
-    if blkname not in self.blocks: self.blocks[blkname] = Block(blkname, self) 
+  def add(self, blkname):
+    if blkname not in self.blocks: self.blocks[blkname] = Block(blkname, self)
   def connect(self, b1, b2, guard): self.blocks[b1].addNexthop(self.blocks[b2], guard)
   def addRule(self, blkname, rulename): self.blocks[blkname].addRule(rulename)
   def start(self):
     for b in self.blocks.values(): b.start()
-    while True: 
+    while True:
       try: sleep(1)
       except(KeyboardInterrupt): sys.exit(1)
 '''
-      
+
 def rname(r):     return '_rule_%s' % r
 def tname(t):     return '_table_%s' % t
 def gname(b1,b2): return '_guard_%s_%s' % (b1,b2)
@@ -101,7 +101,7 @@ def transpile_namespaces(dct):
   return s
 
 def transpile_table(q,x):
-  (cols,data) = x
+  (cols,data) = x['thdr'],x['trow']
   s,n,t  = '','\n','  '
   s += n + q + ' = DataFrame.from_records([' + n
   for row in data[:-1]: s += t + t + '%s,' % row + n
@@ -115,6 +115,7 @@ def transpile_guard(q,x):
   s,n,t  = '','\n','  '
   s += n + 'def ' + q + '(data):' + n
   # XXX: process actual guard expression here
+  print('pcondition', x.listoks(x) if x is not None else x)
   s += t + 'return True' + n
   return s
 
@@ -122,26 +123,34 @@ def transpile_rule(q,x):
   s,n,t  = '','\n','  '
   s += n + 'def ' + q + '(data):' + n
   # XXX: process actual rule expression here
+  for k,v in x.items():
+    if k == 'letexp':
+      for k1,v1 in x[k].items(): print(k1, v1.listoks(v1))
+    else:
+      print(k, v.listoks(v) if v is not None else v)
+
   s += t + 'return data' + n
   return s
 
 def python_backend(dagr_ir, output_file):
-  if dagr_ir['devcs'][0] != 'CLOSURE': raise Exception('Unhandled device for backend')
-  miss = [b+'::'+r for b,rs in dagr_ir['rblks'].items() for r in rs if r not in dagr_ir['rools']]
-  if len(miss) > 0: raise Exception('Missing definition(s) for block::rule :-\n%s' % '\n'.join(miss))
   once  = [True]
-  with open(output_file, 'w') as f: 
+  pline = [(x['srcblk'],x['dstblk'],x['pcondition']) for x in dagr_ir['pline']]
+  miss  = [b+'::'+r for b,rs in dagr_ir['rblks'].items() for r in rs if r not in dagr_ir['rules']]
+  if len(miss) > 0: raise Exception('Missing definition(s) for block::rule :-\n%s' % '\n'.join(miss))
+  if len(dagr_ir['devcs']) != 1: raise Exception('Exactly one device must be specified')
+  if dagr_ir['devcs'][0] != 'CLOSURE': raise Exception('Unhandled device for backend')
+  with open(output_file, 'w') as f:
     for _ in once:                           f.write(DAGR_BOILERPLATE)
     for _ in once:                           f.write(transpile_imports(dagr_ir['impts']))
     for _ in once:                           f.write(DAGR_ENGINE)
     for _ in once:                           f.write(transpile_namespaces(dagr_ir['nspcs']))
     for t,x in dagr_ir['tabls'].items():     f.write(transpile_table(tname(t), x))
-    for (b1,b2,x) in dagr_ir['pline']:       f.write(transpile_guard(gname(b1,b2), x))
-    for r,x in dagr_ir['rools'].items():     f.write(transpile_rule(rname(r), x))
+    for (b1,b2,x) in pline:                  f.write(transpile_guard(gname(b1,b2), x))
+    for r,x in dagr_ir['rules'].items():     f.write(transpile_rule(rname(r), x))
     for _ in once:                           f.write("\nif __name__=='__main__':\n")
     for _ in once:                           f.write("  e = Engine()\n")
-    for b in dagr_ir['rblks']:               f.write("  e.add('%s')\n" % b) 
-    for (b1,b2,_) in dagr_ir['pline']:       f.write("  e.connect('%s','%s',%s)\n" % (b1,b2,gname(b1,b2)))
+    for b in dagr_ir['rblks']:               f.write("  e.add('%s')\n" % b)
+    for (b1,b2,_) in pline:                  f.write("  e.connect('%s','%s',%s)\n" % (b1,b2,gname(b1,b2)))
     for b,rules in dagr_ir['rblks'].items():
-      for r in rules:                        f.write("  e.addRule('%s',%s)\n" % (b,rname(r))) 
+      for r in rules:                        f.write("  e.addRule('%s',%s)\n" % (b,rname(r)))
     for _ in once:                           f.write("  e.start()\n")
