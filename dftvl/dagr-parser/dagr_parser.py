@@ -45,19 +45,19 @@ def rool(x,l,i,t,e):      return {l:letdict(m(x,l)), i:w(f(m(x,i))[0]), t:w(f(m(
 def edge(x,s,d,g):        return {s:v(f(f(m(x,s))))[0], d:v(f(f(m(x,d))))[0], g:ew(f(m(x,g)))}
 
 class Evaluator(Tree):
-  def __repr__(self):     return '""" ' + ' '.join(self.listoks(self)) + ' """'
-  def listoks(self,x):    return [str(x.value)] if isinstance(x,Token) else [i for y in x.children for i in self.listoks(y)]
+  def __repr__(self):     return '""" ' + ' '.join(self.ltoks(self)) + ' """'
+  def ltoks(self,x):      return [x.value] if isinstance(x,Token) else [i for y in x.children for i in self.ltoks(y)]
 
 # Transformer munges identifiers and primitives, and removes redundant tokens
 class CleanTokens(Transformer):
   def identifier(self,x): return Token('SID', bhlp(x))
   def complexid(self,x):  return Token('CID', bhlp(x))
-  def nil(self,x):        return Token('NIL', None)
-  def integer(self,x):    return Token('INT', int(hlp(x)))
-  def float(self,x):      return Token('FLT', float(hlp(x)))
-  def bool(self,x):       return Token('BOOL', hlp(x)=='True')
-  def string(self,x):     return Token('STRNG', ehlp(x)[1:-1])
-  def ustring(self,x):    return Token('UNSTR', ehlp(x)[2:-1])
+  def nil(self,x):        return Token('NIL', hlp(x))
+  def integer(self,x):    return Token('INT', hlp(x))
+  def float(self,x):      return Token('FLT', hlp(x))
+  def bool(self,x):       return Token('BOOL', hlp(x))
+  def string(self,x):     return Token('STRNG', ehlp(x))
+  def ustring(self,x):    return Token('UNSTR', ehlp(x))
   def bstring(self,x):    return Token('BYSTR', ehlp(x))
   def rstring(self,x):    return Token('REGEX', ehlp(x))
   def xstring(self,x):    return Token('XPATH', ehlp(x))

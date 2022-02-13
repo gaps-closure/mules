@@ -86,6 +86,12 @@ class Engine:
 def rname(r):     return '_rule_%s' % r
 def tname(t):     return '_table_%s' % t
 def gname(b1,b2): return '_guard_%s_%s' % (b1,b2)
+def veval(x):
+  if x.startswith('r"') or x.startswith("r'"): return x
+  if x.startswith('b"') or x.startswith("b'"): return x
+  if x.startswith('x"') or x.startswith("x'"): return x
+  if x.startswith('c"') or x.startswith("c'"): return x
+  return eval(x)
 
 def transpile_imports(imp):
   s,n,t  = '','\n','  '
@@ -96,16 +102,17 @@ def transpile_namespaces(dct):
   s,n,t  = '','\n','  '
   s += n + '_xml_namespaces = {}' + n
   for k,v in dct.items():
-    s += "_xml_namespaces['%s'] = '%s'" % (k,v) + n
-    s += "ET.register_namespace('%s','%s')" % (k,v) + n
+    v1 = veval(v)
+    s += "_xml_namespaces['%s'] = '%s'" % (k,v1) + n
+    s += "ET.register_namespace('%s','%s')" % (k,v1) + n
   return s
 
 def transpile_table(q,x):
   (cols,data) = x['thdr'],x['trow']
   s,n,t  = '','\n','  '
   s += n + q + ' = DataFrame.from_records([' + n
-  for row in data[:-1]: s += t + t + '%s,' % row + n
-  s += t + t + '%s' % data[-1] + n
+  for row in data[:-1]: s += t + t + '%s,' % [veval(y) for y in row] + n
+  s += t + t + '%s' % [veval(y) for y in data[-1]] + n
   s += t + '], ' + n
   s += t + 'columns=%s' % cols + n
   s += ')' + n
@@ -115,7 +122,7 @@ def transpile_guard(q,x):
   s,n,t  = '','\n','  '
   s += n + 'def ' + q + '(data):' + n
   # XXX: process actual guard expression here
-  print('pcondition', x.listoks(x) if x is not None else x)
+  # print('pcondition', x.ltoks(x) if x is not None else x)
   s += t + 'return True' + n
   return s
 
@@ -123,12 +130,11 @@ def transpile_rule(q,x):
   s,n,t  = '','\n','  '
   s += n + 'def ' + q + '(data):' + n
   # XXX: process actual rule expression here
-  for k,v in x.items():
-    if k == 'letexp':
-      for k1,v1 in x[k].items(): print(k1, v1.listoks(v1))
-    else:
-      print(k, v.listoks(v) if v is not None else v)
-
+  #for k,v in x.items():
+  #  if k == 'letexp':
+  #    for k1,v1 in x[k].items(): print(k1, v1.ltoks(v1))
+  #  else:
+  #    print(k, v.ltoks(v) if v is not None else v)
   s += t + 'return data' + n
   return s
 
@@ -138,7 +144,7 @@ def python_backend(dagr_ir, output_file):
   miss  = [b+'::'+r for b,rs in dagr_ir['rblks'].items() for r in rs if r not in dagr_ir['rules']]
   if len(miss) > 0: raise Exception('Missing definition(s) for block::rule :-\n%s' % '\n'.join(miss))
   if len(dagr_ir['devcs']) != 1: raise Exception('Exactly one device must be specified')
-  if dagr_ir['devcs'][0] != 'CLOSURE': raise Exception('Unhandled device for backend')
+  if veval(dagr_ir['devcs'][0]) != 'CLOSURE': raise Exception('Unhandled device for backend')
   with open(output_file, 'w') as f:
     for _ in once:                           f.write(DAGR_BOILERPLATE)
     for _ in once:                           f.write(transpile_imports(dagr_ir['impts']))
