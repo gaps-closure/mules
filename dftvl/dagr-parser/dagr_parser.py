@@ -26,12 +26,11 @@ def get_args():
 
 #---------------------------------------------------------------------------------------------------
 # Utility functions
-def banprt(m,x):          print('\n'.join(['-'*50, m, '-'*50, x]))
 def detok(x):             return [y for y in x if isinstance(y,Tree)]
 def hlp(i):               return ''.join([x for x in i if isinstance(x, Token)])
 def ehlp(i):              return hlp(i).replace('\\"','"').replace("\\'","'")
 def bhlp(i):              return hlp(i).replace('`','')
-def w(x):                 return Evaluator(x.data,x.children) if isinstance(x,Tree) else x
+def w(x):                 return TokenLister(x.data,x.children) if isinstance(x,Tree) else x
 def ew(x):                return w(x[0]) if len(x) > 0 else None
 def m(x,d):               return [y for y in x.find_data(d)]
 def f(x):                 return [y.children[0] for y in x]
@@ -44,7 +43,7 @@ def letdict(x):           return {y.children[0].children[0].value:w(y.children[1
 def rool(x,l,i,t,e):      return {l:letdict(m(x,l)), i:w(f(m(x,i))[0]), t:w(f(m(x,t))[0]), e:ew(f(m(x,e)))}
 def edge(x,s,d,g):        return {s:v(f(f(m(x,s))))[0], d:v(f(f(m(x,d))))[0], g:ew(f(m(x,g)))}
 
-class Evaluator(Tree):
+class TokenLister(Tree):
   def __repr__(self):     return '""" ' + ' '.join(self.ltoks(self)) + ' """'
   def ltoks(self,x):      return [x.value] if isinstance(x,Token) else [i for y in x.children for i in self.ltoks(y)]
 
@@ -105,8 +104,8 @@ if __name__ == '__main__':
     parser = Lark(DAGR_GRAMMAR, start='spec', parser='lalr', lexer='contextual', transformer=CleanTokens())
     with open(args.dftvl_file, 'r') as inf: ast = parser.parse(inf.read())
     dagr_ir = Frontend_DAGR(ast,args.verbosity).d
-    if args.verbosity > 1: banprt('Abstract Syntax Tree from Parser:', (ast.pretty() if args.verbosity <= 2 else ast))
-    if args.verbosity > 0: banprt('Intermediate Representation:', pformat(dagr_ir))
+    if args.verbosity > 1: print('Abstract Syntax Tree:\n', (ast.pretty() if args.verbosity <= 2 else ast))
+    if args.verbosity > 0: print('Intermediate Representation:\n', pformat(dagr_ir))
   else:
     raise Exception('Unsupportd DFTVL language:' + args.dftvl_lang)
 
