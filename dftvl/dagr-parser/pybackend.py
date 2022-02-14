@@ -86,12 +86,7 @@ class Engine:
 def rname(r):     return '_rule_%s' % r
 def tname(t):     return '_table_%s' % t
 def gname(b1,b2): return '_guard_%s_%s' % (b1,b2)
-def veval(x):
-  if x.startswith('r"') or x.startswith("r'"): return x
-  if x.startswith('b"') or x.startswith("b'"): return x
-  if x.startswith('x"') or x.startswith("x'"): return x
-  if x.startswith('c"') or x.startswith("c'"): return x
-  return eval(x)
+def veval(x):     return x if x.startswith(('r"',"r'",'b"',"b'",'x"',"x'",'c"',"c'")) else eval(x)
 
 def transpile_imports(imp):
   s,n,t  = '','\n','  '
@@ -102,9 +97,9 @@ def transpile_namespaces(dct):
   s,n,t  = '','\n','  '
   s += n + '_xml_namespaces = {}' + n
   for k,v in dct.items():
-    v1 = veval(v)
-    s += "_xml_namespaces['%s'] = '%s'" % (k,v1) + n
-    s += "ET.register_namespace('%s','%s')" % (k,v1) + n
+    k1,v1 = veval(k),veval(v)
+    s += "_xml_namespaces['%s'] = '%s'" % (k1,v1) + n
+    s += "ET.register_namespace('%s','%s')" % (k1,v1) + n
   return s
 
 def transpile_table(q,x):

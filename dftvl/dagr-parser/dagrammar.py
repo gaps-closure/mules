@@ -17,8 +17,9 @@ bstring:            (BDQUOTE (NONDQUOTEST|EDQUOTE)* DQUOTE) | (BSQUOTE (NONSQUOT
 xstring:            (XDQUOTE (NONDQUOTEST|EDQUOTE)* DQUOTE) | (XSQUOTE (NONSQUOTEST|ESQUOTE)* SQUOTE)
 cstring:            (CDQUOTE (NONDQUOTEST|EDQUOTE)* DQUOTE) | (CSQUOTE (NONSQUOTEST|ESQUOTE)* SQUOTE)
 
-expr:               complexid | dagrval | lst | function | unop expr | expr (binop expr)+ | LPAREN expr RPAREN
+expr:               complexid | dagrval | lst | lstref | function | unop expr | expr (binop expr)+ | LPAREN expr RPAREN
 lst:                LBRACKET (expr (COMMA expr)*)* RBRACKET
+lstref:             lst (LBRACKET [expr] RBRACKET)+
 function:           complexid LPAREN (expr (COMMA expr)*)* RPAREN
 
 unop:               NOT
@@ -36,7 +37,7 @@ glprof:             GLOBAL gvarname
 improf:             IMPORT libname
 devname:            string | ustring
 nspath:             string | ustring
-nsalias:            identifier
+nsalias:            string | ustring
 gvarname:           identifier
 libname:            identifier
 

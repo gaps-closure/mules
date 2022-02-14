@@ -2,7 +2,7 @@ profile PROF1 {
   device 'CLOSURE'; 
   import closure;
   global dummy;
-  namespace gma 'urn:gma:1.0';
+  namespace 'gma' 'urn:gma:1.0';
 }
 
 pipeline P1 {
