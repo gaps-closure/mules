@@ -20,7 +20,8 @@ cstring:            (CDQUOTE (NONDQUOTEST|EDQUOTE)* DQUOTE) | (CSQUOTE (NONSQUOT
 expr:               complexid | dagrval | lst | lstref | function | unop expr | expr (binop expr)+ | LPAREN expr RPAREN
 lst:                LBRACKET (expr (COMMA expr)*)* RBRACKET
 lstref:             lst (LBRACKET [expr] RBRACKET)+
-function:           complexid LPAREN (expr (COMMA expr)*)* RPAREN
+function:           (builtin | complexid) LPAREN (expr (COMMA expr)*)* RPAREN
+builtin:            PASS | DROP | REPLACE 
 
 unop:               NOT
 binop:              AND | OR | XOR | EQ | NEQ | GEQ | GT | LEQ | LT | IN  | NIN
@@ -151,6 +152,10 @@ MOD:                /%/
 POW:                /\^/
 IN:                 /((is )?in)|(is one of)/
 NIN:                /((is )?not in)|(is not one of)/
+
+PASS:               /pass/
+DROP:               /drop/
+REPLACE:            /replace/
 '''
 
 #----------------------------------------------------------------------------------------------

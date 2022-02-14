@@ -161,12 +161,17 @@ xstring:            (XDQUOTE (NONDQUOTEST|EDQUOTE)* DQUOTE) | (XSQUOTE (NONSQUOT
 cstring:            (CDQUOTE (NONDQUOTEST|EDQUOTE)* DQUOTE) | (CSQUOTE (NONSQUOTEST|ESQUOTE)* SQUOTE)
 ```
 
-The syntax for DAGR expressions `expr` which include lists `lst` and functions
-`function` is below:
+The syntax for DAGR expressions `expr` is below. In addition to identifiers and
+primitives, it include lists `lst`, multi-dimensional list references `lstref`,
+functions, expressions formed using binary or unary operators, and grouping
+using parentheses. Functions can be builtin or foreign (through library
+import). Function body definitions are not part of the language at present.
 ```
-expr:               complexid | dagrval | lst | function | unop expr | expr (binop expr)+ | LPAREN expr RPAREN
+expr:               complexid | dagrval | lst | lstref | function | unop expr | expr (binop expr)+ | LPAREN expr RPAREN
 lst:                LBRACKET (expr (COMMA expr)*)* RBRACKET
-function:           complexid LPAREN (expr (COMMA expr)*)* RPAREN
+lstref:             lst (LBRACKET [expr] RBRACKET)+
+function:           (builtin | complexid) LPAREN (expr (COMMA expr)*)* RPAREN
+builtin:            PASS | DROP | REPLACE 
 ```
 
 Currently we have included the following unary `unop` and binary operators
@@ -203,7 +208,7 @@ glprof:             GLOBAL gvarname
 improf:             IMPORT libname
 devname:            string | ustring
 nspath:             string | ustring
-nsalias:            identifier
+nsalias:            string | ustring
 gvarname:           identifier
 libname:            identifier
 ```
@@ -290,7 +295,7 @@ ablock:             function | (LBRACE (function SEMI)+ RBRACE)
   -- match xpath, select from table, match regex
   -- operations on all or kth or unique element
   -- get kth child or parent
-  -- pass(), drop(), replace(), add(), remove()
+  -- pass(), drop(), replace()
 
 * Clarify types and values w.r.t to xpath selectors, tables, regexes and expressions
   -- evaluating xpath returns a list of elements or empty list
@@ -300,7 +305,7 @@ ablock:             function | (LBRACE (function SEMI)+ RBRACE)
 
 * Identify test use cases, flesh out expr/ablock syntax and useful functions to implement
 * Validate/handle ustring, rstring, bstring, ustring, xstring, cstring
-* Process DFDL to extract a map: `[(xpath,type,offset,length)]` and do type checking
-* Concurrency within action blocks, within rule blocks, within pipeline
+* Process DFDL to extract a map: `[(xpath,type,offset,length)]`
+* Load DFDL map and do type checking
 * Idris formal model to establish decidability 
 
