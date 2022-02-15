@@ -21,7 +21,7 @@ expr:               complexid | dagrval | lst | lstref | function | unop expr | 
 lst:                LBRACKET (expr (COMMA expr)*)* RBRACKET
 lstref:             lst (LBRACKET [expr] RBRACKET)+
 function:           (builtin | complexid) LPAREN (expr (COMMA expr)*)* RPAREN
-builtin:            PASS | DROP | REPLACE 
+builtin:            MATCH | PASS | DROP | REPLACE | INSERT | REMOVE 
 
 unop:               NOT
 binop:              AND | OR | XOR | EQ | NEQ | GEQ | GT | LEQ | LT | IN  | NIN
@@ -150,12 +150,15 @@ MUL:                /\*/
 DIV:                /\//
 MOD:                /%/
 POW:                /\^/
-IN:                 /((is )?in)|(is one of)/
-NIN:                /((is )?not in)|(is not one of)/
+IN:                 /in/
+NIN:                /not in/
 
+MATCH:              /match/
 PASS:               /pass/
 DROP:               /drop/
 REPLACE:            /replace/
+INSERT:             /insert/
+REMOVE:             /remove/
 '''
 
 #----------------------------------------------------------------------------------------------
