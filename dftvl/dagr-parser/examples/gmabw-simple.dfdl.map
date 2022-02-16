@@ -1,0 +1,36 @@
+{
+  namespaces: {
+   "gma": "urn:gaps:0'
+   "xs":  "http://www.w3.org/2001/XMLSchema"
+  }
+  dfdl-map: {
+   "/gma:GapsPDU": { "type": "gma:GapsPDU", "offset": 0, "length": 384, restrictions: {} },
+   "/gma:GapsPDU/gma:SDHBWPDU": { "type": "gma:SDHBWPDU", "offset": 0, "length": 384, restrictions: {} },
+   "/gma:GapsPDU/gma:SDHBWPDU/gma:GapsTrailer": { "type": "gma:GapsTrailer", "offset": 256, "length": 128, restrictions: {} },
+   "/gma:GapsPDU/gma:SDHBWPDU/gma:GapsTrailer/crc": { "type": "xs:unsignedInt", "offset": 368, "length": 16, restrictions: {} },
+   "/gma:GapsPDU/gma:SDHBWPDU/gma:GapsTrailer/mid": { "type": "xs:unsignedInt", "offset": 352, "length": 16, restrictions: {} },
+   "/gma:GapsPDU/gma:SDHBWPDU/gma:GapsTrailer/oid": { "type": "xs:unsignedInt", "offset": 320, "length": 32, restrictions: {} },
+   "/gma:GapsPDU/gma:SDHBWPDU/gma:GapsTrailer/rqr": { "type": "xs:unsignedInt", "offset": 288, "length": 32, restrictions: {} },
+   "/gma:GapsPDU/gma:SDHBWPDU/gma:GapsTrailer/seq": { "type": "xs:unsignedInt", "offset": 256, "length": 32, restrictions: {} },
+   "/gma:GapsPDU/gma:SDHBWPDU/gma:Position": { "type": "gma:Position", "offset": 64, "length": 192, restrictions: {} },
+   "/gma:GapsPDU/gma:SDHBWPDU/gma:Position/z": { "type": "xs:double", "offset": 192, "length": 64, restrictions: {} },
+   "/gma:GapsPDU/gma:SDHBWPDU/gma:Position/y": { "type": "xs:double", "offset": 128, "length": 64, restrictions: {} },
+   "/gma:GapsPDU/gma:SDHBWPDU/gma:Position/x": { "type": "xs:double", "offset": 64, "length": 64, restrictions: {} },
+   "/gma:GapsPDU/gma:SDHBWPDU/gma:SDHBWHeader": { "type": "gma:SDHBWHeader", "offset": 0, "length": 64, restrictions: {} },
+   "/gma:GapsPDU/gma:SDHBWPDU/gma:SDHBWHeader/crc": { "type": "xs:unsignedInt", "offset": 48, "length": 16, restrictions: {} },
+   "/gma:GapsPDU/gma:SDHBWPDU/gma:SDHBWHeader/len": { "type": "xs:unsignedInt", "offset": 32, "length": 16, restrictions: {} },
+   "/gma:GapsPDU/gma:SDHBWPDU/gma:SDHBWHeader/tagt": { "type": "xs:unsignedInt", "offset": 24, "length": 8, restrictions: {} },
+   "/gma:GapsPDU/gma:SDHBWPDU/gma:SDHBWHeader/tags": { "type": "xs:unsignedInt", "offset": 16, "length": 8, restrictions: {} },
+   "/gma:GapsPDU/gma:SDHBWPDU/gma:SDHBWHeader/tagm": { "type": "xs:unsignedInt", "offset": 8, "length": 8, restrictions: {} },
+   "/gma:GapsPDU/gma:SDHBWPDU/gma:SDHBWHeader/tag0": { "type": "xs:unsignedInt", "offset": 0, "length": 8, restrictions: {} }
+ }
+}
+
+
+1. Can I tell whether the schema is of 
+                              - fixed format, for all paths, offsets, lengths
+                              - variable but bounded?
+2. What should the expression syntax be?
+   offset: offset(parent-path) + constant
+   len:    len(parent-path)    + constant
+

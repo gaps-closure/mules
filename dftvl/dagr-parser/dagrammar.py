@@ -139,7 +139,7 @@ AND:                /(and)|(&&)/
 OR:                 /(or)|(\|\|)/
 XOR:                /xor/
 EQ:                 /(==)|((is )?equal to)/
-NEQ:                /(<>)|((is )?not equal to)/
+NEQ:                /(<>)|(!=)|((is )?not equal to)/
 GEQ:                /(>=)|((is )?greater than or equal to)|((is )?after or on)/
 GT:                 /(>)|((is )?greater than)|((is )?after)/
 LEQ:                /(<=)|((is )?less than or equal to)|((is )?before or on)/

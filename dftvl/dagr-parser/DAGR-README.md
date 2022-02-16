@@ -106,7 +106,7 @@ sudo apt install libzmq3-dev
 ```
 To test the parser and a generated Python engine, open three terminals. In the first terminal, generate Python code from a DFDL and DAGR specification, and then run the generated engine.
 ```
-python3 dagr_parser.py -v 1 -s examples/gmabw.dfdl.xsd -d examples/one.dagr 
+python3 dagr_parser.py -v 1 -s examples/gmabw-simple.dfdl.xsd -d examples/one.dagr 
 PYTHONPATH=. python3 gen.py
 ```
 In the second terminal, listen to the output over 0MQ to the engine.
@@ -142,11 +142,10 @@ similar to those in Python3. These include `nil`, `bool`, `integer`, `float`,
 `string` (both single and double quoted versions). For targets where Unicode
 may not be default, we allow `ustring` similar to Python2. Regular expressions
 `rstring` and byte strings `bstring` also follow Python3. We add two more types
-to encode XPath `xstring` and  CSS selectors `cstring`. We may include a
-primitive data type  for ISO date time strings and one notation for
-geo-coordinates. We may restrict the XPath expression subset supported by
-Python3 XMLElementTree library. We may restrict the CSS selector and exclude
-complex selectors such as ':match'.
+to encode XPath `xstring` and  CSS selectors `cstring`. We will extend to
+cover the simple types supported in DFDL. We may restrict the XPath expression 
+subset (e.g., as in the Python3 XMLElementTree library). We may restrict the 
+CSS selector and exclude complex selectors such as ':match'.
 ```
 dagrval:            nil | bool | integer | float | string | ustring | bstring | rstring | xstring | cstring
 nil:                NONE
@@ -171,8 +170,23 @@ expr:               complexid | dagrval | lst | lstref | function | unop expr | 
 lst:                LBRACKET (expr (COMMA expr)*)* RBRACKET
 lstref:             lst (LBRACKET [expr] RBRACKET)+
 function:           (builtin | complexid) LPAREN (expr (COMMA expr)*)* RPAREN
-builtin:            PASS | DROP | REPLACE 
+builtin:            MATCH | PASS | DROP | REPLACE | INSERT | REMOVE 
 ```
+
+All action functiosn return the data item (in internal representation) or None. The builtin functions suitable for the actions are:
+```
+pass() -- pass the data as is
+drop() -- drop the data
+replace([path-list],[value-list]) -- replace the value of elements in the path list with corresponding entries in value list
+remove([path-list]) -- remove the elements in the path-list
+insert([path-list], [value-list]) -- insert a new element for each entry in the path list with values from the corresponding entries in the value list
+```
+
+The builtin functions for the condition is:
+```
+match(xstring | cstring) -- returns a list of elements in the data that match the path
+```
+Additional string functions including regex matching are to be defined.
 
 Currently we have included the following unary `unop` and binary operators
 `binop` for use in expressions. The latter includes logical, comparison,
@@ -289,23 +303,19 @@ altaction:          ablock
 ablock:             function | (LBRACE (function SEMI)+ RBRACE)
 ```
 
+A note on sharing state. Currently we have vaiables only at two levels of
+scoping, namely, local to a rule definition or global.  There are two other
+mechanisms available for sharing runtime state: (i) Rules may set an attribute in
+an element and pass it to downstream elements to read and or modify, and these
+attributes will need to be removed at exit; (ii) foreign functions may allow
+state to be set in static variables.
+
+A note on typing. The current plan is to keep DAGR free of explicit type 
+declarations and have them flow in from the DFDL.
+
 ## TODO
 
-* Process `expr` and `ablock` and transpile
-  -- match xpath, select from table, match regex
-  -- operations on all or kth or unique element
-  -- get kth child or parent
-  -- pass(), drop(), replace()
-
-* Clarify types and values w.r.t to xpath selectors, tables, regexes and expressions
-  -- evaluating xpath returns a list of elements or empty list
-  -- assignment and reference to an element in the list uses the value
-  -- vector operations 
-  -- type(elt) would get the type of the element
-
 * Identify test use cases, flesh out expr/ablock syntax and useful functions to implement
-* Validate/handle ustring, rstring, bstring, ustring, xstring, cstring
-* Process DFDL to extract a map: `[(xpath,type,offset,length)]`
-* Load DFDL map and do type checking
+* Load DFDL map and do type checking and validation
 * Idris formal model to establish decidability 
 

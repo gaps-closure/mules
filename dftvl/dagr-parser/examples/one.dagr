@@ -6,7 +6,8 @@ profile PROF1 {
 }
 
 pipeline P1 {
-  entry => B1 | x'.//gma:SDHBWPDU';
+  entry => B1 | match(x'.//gma:SDHBWPDU') != [];
+  --entry => B1 | x'.//gma:SDHBWPDU';
   B1    => exit;
 }
 
