@@ -25,13 +25,13 @@ table gaps_acl {
 
 rule redact_altitude {
   h = match(None, x'.//gma:SDHBWHeader');
-  m = match(h, x'./tagm');
-  s = match(h, x'./tags');
-  t = match(h, x'./tagt');
+  m = match(h,    x'./tagm');
+  s = match(h,    x'./tags');
+  t = match(h,    x'./tagt');
   p = match(None, x'.//gma:Position');
-  x = match(p, x'./x');
-  y = match(p, x'./y');
-  z = match(p, x'./z');
+  x = match(p,    x'./x');
+  y = match(p,    x'./y');
+  z = match(p,    x'./z');
 
   if ((m == 2) and (s == 2) and (t == 1)) then {
     replace(x, 0.0); 
@@ -42,9 +42,9 @@ rule redact_altitude {
 
 rule apply_acl {
   h = match(None, x'.//gma:SDHBWHeader');
-  m = match(hdr, x'./tagm');
-  s = match(hdr, x'./tags');
-  t = match(hdr, x'./tagt');
+  m = match(hdr,  x'./tagm');
+  s = match(hdr,  x'./tags');
+  t = match(hdr,  x'./tagt');
   r = [x for x from gaps_acl where (x.mux == m) and (x.sec == s) and (x.typ == t) and (x.op in ['allow', 'redact'])];
 
   if r == [] then drop();
