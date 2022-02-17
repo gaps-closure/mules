@@ -1,3 +1,4 @@
+
 {
   namespaces: {
    "gma": "urn:gma:0'
@@ -25,12 +26,4 @@
    "/gma:GapsPDU/gma:SDHBWPDU/gma:SDHBWHeader/tag0": { "type": "xs:unsignedInt", "offset": 0, "length": 8, restrictions: {} }
  }
 }
-
-
-1. Can I tell whether the schema is of 
-                              - fixed format, for all paths, offsets, lengths
-                              - variable but bounded?
-2. What should the expression syntax be?
-   offset: offset(parent-path) + constant
-   len:    len(parent-path)    + constant
 
