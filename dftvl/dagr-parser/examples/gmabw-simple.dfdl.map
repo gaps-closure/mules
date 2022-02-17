@@ -1,6 +1,6 @@
 {
   namespaces: {
-   "gma": "urn:gaps:0'
+   "gma": "urn:gma:0'
    "xs":  "http://www.w3.org/2001/XMLSchema"
   }
   dfdl-map: {
