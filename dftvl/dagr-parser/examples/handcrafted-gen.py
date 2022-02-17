@@ -94,37 +94,46 @@ _table_gaps_acl = DataFrame.from_records([
 )
 
 def _guard_entry_B1(data):
-  return True if data.find('.//gma:SDHBWPDU',namespaces=_xml_namespaces) else False
+  return data.find('.//gma:SDHBWPDU',namespaces=_xml_namespaces) != None
 
 def _guard_B1_exit(data):
   return True
 
 def _rule_redact_altitude(data):
-  mux = data.find('.//gma:SDHBWHeader/tagm',namespaces=_xml_namespaces) 
-  sec = data.find('.//gma:SDHBWHeader/tags',namespaces=_xml_namespaces) 
-  typ = data.find('.//gma:SDHBWHeader/tagt',namespaces=_xml_namespaces) 
-  alt = data.findall('.//gma:Position/z',namespaces=_xml_namespaces) 
-  if mux is None: return None
-  if sec is None: return None
-  if typ is None: return None
-  if mux.text==str(2) and sec.text==str(2) and typ.text==str(1):
-    for x in alt:
+  try:
+    h = data.find('.//gma:SDHBWHeader',namespaces=_xml_namespaces) 
+    m = h.find('./tagm',namespaces=_xml_namespaces) 
+    s = h.find('./tags',namespaces=_xml_namespaces) 
+    t = h.find('./tagt',namespaces=_xml_namespaces) 
+    p = data.find('.//gma:Position',namespaces=_xml_namespaces) 
+    x = p.find('./x',namespaces=_xml_namespaces) 
+    y = p.find('./y',namespaces=_xml_namespaces) 
+    z = p.find('./z',namespaces=_xml_namespaces) 
+    if (m.text == str(2)) and (s.text == str(2)) and (t.text == str(1)):
       x.text = str(0.0)
-  return data
+      y.text = str(0.0)
+      z.text = str(0.0) 
+    return data
+  except Exception as e:
+    print('_rule_redact_altitude:', str(e))
+    return None
 
 def _rule_apply_acl(data):
-  df = _table_gaps_acl
-  mux = data.find('.//gma:SDHBWHeader/tagm',namespaces=_xml_namespaces) 
-  sec = data.find('.//gma:SDHBWHeader/tags',namespaces=_xml_namespaces) 
-  typ = data.find('.//gma:SDHBWHeader/tagt',namespaces=_xml_namespaces) 
-  if mux is None: return None
-  if sec is None: return None
-  if typ is None: return None
-  rows = df.loc[(df['mux']==int(mux.text))
-                & (df['sec']==int(sec.text))
-                & (df['typ']==int(typ.text))
-                & ((df['op']=='allow') | (df['op']=='redact'))]
-  return data if len(rows) >= 1 else None
+  try:
+    h = data.find('.//gma:SDHBWHeader',namespaces=_xml_namespaces) 
+    m = h.find('./tagm',namespaces=_xml_namespaces) 
+    s = h.find('./tags',namespaces=_xml_namespaces) 
+    t = h.find('./tagt',namespaces=_xml_namespaces) 
+    r = [x for _,x in _table_gaps_acl.iterrows() if 
+         x['mux'] == int(m.text) and
+         x['sec'] == int(s.text) and
+         x['typ'] == int(t.text) and
+         x['op'] in ['allow','redact']]
+    if r == []: return None
+    return data
+  except Exception as e:
+    print('_rule_apply_acl:', str(e))
+    return None
 
 if __name__=='__main__':
   e = Engine()

@@ -2,8 +2,8 @@
 
 #----------------------------------------------------------------------------------------------
 RULES = r'''
-identifier:         BACKQUOTE? ALPHA ADU?
-complexid:          BACKQUOTE? ALPHA ADU? (COLONCOLON ALPHA ADU?)* (DOT ADU)*
+identifier:         BACKQUOTE? ALPHA ADU*
+complexid:          BACKQUOTE? ALPHA ADU* (COLONCOLON ALPHA ADU*)* (DOT ADU*)*
 
 dagrval:            nil | bool | integer | float | string | ustring | bstring | rstring | xstring | cstring
 nil:                NONE
@@ -18,10 +18,13 @@ xstring:            (XDQUOTE (NONDQUOTEST|EDQUOTE)* DQUOTE) | (XSQUOTE (NONSQUOT
 cstring:            (CDQUOTE (NONDQUOTEST|EDQUOTE)* DQUOTE) | (CSQUOTE (NONSQUOTEST|ESQUOTE)* SQUOTE)
 
 expr:               complexid | dagrval | lst | lstref | function | unop expr | expr (binop expr)+ | LPAREN expr RPAREN
-lst:                LBRACKET (expr (COMMA expr)*)* RBRACKET
+lst:                LBRACKET etuple* RBRACKET
+                    | LBRACKET etuple FOR ituple FROM expr (WHERE expr)? RBRACKET
+etuple:             expr (COMMA expr)*
+ituple:             identifier (COMMA identifier)*
 lstref:             lst (LBRACKET [expr] RBRACKET)+
 function:           (builtin | complexid) LPAREN (expr (COMMA expr)*)* RPAREN
-builtin:            MATCH | PASS | DROP | REPLACE | INSERT | REMOVE 
+builtin:            ROWS | MATCH | MATCHALL | PASS | DROP | REPLACE | INSERT | REMOVE 
 
 unop:               NOT
 binop:              AND | OR | XOR | EQ | NEQ | GEQ | GT | LEQ | LT | IN  | NIN
@@ -62,7 +65,7 @@ colname:            identifier
 
 ruledef:            RULE rulename LBRACE rexpr SEMI RBRACE
 rexpr:              (letexp)* IF condition THEN action (ELSE altaction)?
-letexp:             LET varname expr SEMI
+letexp:             varname ASSGN expr SEMI
 varname:            identifier
 condition:          expr
 action:             ablock
@@ -77,8 +80,7 @@ DELIM:              /[ \t\f\r\n]+/
 
 BACKQUOTE:          /`/
 ALPHA:              /[a-zA-Z]/
-ADU:                /[a-zA-Z0-9_]+/
-IDENT:              /[a-zA-Z][a-zA-Z0-9_]*/
+ADU:                /[a-zA-Z0-9_]/
 COLONCOLON:         /::/
 
 NONE:               /None/
@@ -112,6 +114,10 @@ RBRACKET:           /\]/
 LPAREN:             /\(/
 RPAREN:             /\)/
 COMMA:              /,/
+ASSGN:              /=/
+FOR:                /for/
+FROM:               /from/
+WHERE:              /where/
 
 PROFILE:            /profile/
 DEVICE:             /device/
@@ -129,7 +135,6 @@ PIPE:               /\|/
 BLOCK:              /block/
 TABLE:              /table/
 RULE:               /rule/
-LET:                /let/
 IF:                 /if/
 THEN:               /then/
 ELSE:               /(else)|(otherwise)/
@@ -153,7 +158,9 @@ POW:                /\^/
 IN:                 /in/
 NIN:                /not in/
 
+ROWS:               /rows/
 MATCH:              /match/
+MATCHALL:           /match/
 PASS:               /pass/
 DROP:               /drop/
 REPLACE:            /replace/
@@ -218,6 +225,7 @@ IFF:                /only if/
 IMPLIES:            /implies/
 INCOLLECTION:       /in the collection/
 ISKINDOF:           /((is)|(are)) a kind of/
+LET:                /let/
 MATCHES:            /match(es)?/
 MODEL:              /model/
 NEW:                /new/
@@ -257,7 +265,6 @@ TWO:                /two/
 UNIQUE:             /unique/
 USES:               /uses/
 USING:              /using/
-WHERE:              /where/
 WITH:               /with/
 '''
 

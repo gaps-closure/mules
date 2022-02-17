@@ -6,8 +6,7 @@ profile PROF1 {
 }
 
 pipeline P1 {
-  entry => B1 | match(x'.//gma:SDHBWPDU') != [];
-  --entry => B1 | x'.//gma:SDHBWPDU';
+  entry => B1 | match(None,x'.//gma:SDHBWPDU') != None;
   B1    => exit;
 }
 
@@ -25,21 +24,29 @@ table gaps_acl {
 }
 
 rule redact_altitude {
-  let dmux x'.//gma:SDHBWHeader/tagm';
-  let dsec x'.//gma:SDHBWHeader/tags';
-  let dtyp x'.//gma:SDHBWHeader/tagt';
-  if ((dmux == 2) && (dsec == 2) and (dtyp == 1)) then replace(x'.//gma:Position/x', 0.0); 
+  h = match(None, x'.//gma:SDHBWHeader');
+  m = match(h, x'./tagm');
+  s = match(h, x'./tags');
+  t = match(h, x'./tagt');
+  p = match(None, x'.//gma:Position');
+  x = match(p, x'./x');
+  y = match(p, x'./y');
+  z = match(p, x'./z');
+
+  if ((m == 2) and (s == 2) and (t == 1)) then {
+    replace(x, 0.0); 
+    replace(y, 0.0); 
+    replace(z, 0.0); 
+  };
 }
 
 rule apply_acl {
-  let dmux x'.//gma:SDHBWHeader/tagm';
-  let dsec x'.//gma:SDHBWHeader/tags';
-  let dtyp x'.//gma:SDHBWHeader/tagt';
-  if 
-    ((dmux == gaps_acl.mux) and
-     (dsec == gaps_acl.sec) and
-     (dtyp == gaps_acl.typ) and
-     ((gaps_acl.typ == 'allow') || (gaps_acl.typ == 'redact')))
-  then pass() else drop();
+  h = match(None, x'.//gma:SDHBWHeader');
+  m = match(hdr, x'./tagm');
+  s = match(hdr, x'./tags');
+  t = match(hdr, x'./tagt');
+  r = [x for x from gaps_acl where (x.mux == m) and (x.sec == s) and (x.typ == t) and (x.op in ['allow', 'redact'])];
+
+  if r == [] then drop();
 }
 

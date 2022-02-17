@@ -105,7 +105,7 @@ if __name__ == '__main__':
     with open(args.dftvl_file, 'r') as inf: ast = parser.parse(inf.read())
     dagr_ir = Frontend_DAGR(ast,args.verbosity).d
     if args.verbosity > 1: print('Abstract Syntax Tree:\n', (ast.pretty() if args.verbosity <= 2 else ast))
-    if args.verbosity > 0: print('Intermediate Representation:\n', pformat(dagr_ir))
+    if args.verbosity > 0: print('Intermediate Representation:\n', pformat(dagr_ir, sort_dicts=False))
   else:
     raise Exception('Unsupportd DFTVL language:' + args.dftvl_lang)
 

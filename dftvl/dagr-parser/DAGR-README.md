@@ -170,23 +170,10 @@ expr:               complexid | dagrval | lst | lstref | function | unop expr | 
 lst:                LBRACKET (expr (COMMA expr)*)* RBRACKET
 lstref:             lst (LBRACKET [expr] RBRACKET)+
 function:           (builtin | complexid) LPAREN (expr (COMMA expr)*)* RPAREN
-builtin:            MATCH | PASS | DROP | REPLACE | INSERT | REMOVE 
+builtin:            ROWS | MATCH | MATCHALL | PASS | DROP | REPLACE | INSERT | REMOVE 
 ```
 
-All action functiosn return the data item (in internal representation) or None. The builtin functions suitable for the actions are:
-```
-pass() -- pass the data as is
-drop() -- drop the data
-replace([path-list],[value-list]) -- replace the value of elements in the path list with corresponding entries in value list
-remove([path-list]) -- remove the elements in the path-list
-insert([path-list], [value-list]) -- insert a new element for each entry in the path list with values from the corresponding entries in the value list
-```
-
-The builtin functions for the condition is:
-```
-match(xstring | cstring) -- returns a list of elements in the data that match the path
-```
-Additional string functions including regex matching are to be defined.
+Builtin functions are to be documented. Additional string functions including regex matching are to be defined.
 
 Currently we have included the following unary `unop` and binary operators
 `binop` for use in expressions. The latter includes logical, comparison,
