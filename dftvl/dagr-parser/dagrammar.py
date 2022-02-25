@@ -17,12 +17,15 @@ bstring:            (BDQUOTE (NONDQUOTEST|EDQUOTE)* DQUOTE) | (BSQUOTE (NONSQUOT
 xstring:            (XDQUOTE (NONDQUOTEST|EDQUOTE)* DQUOTE) | (XSQUOTE (NONSQUOTEST|ESQUOTE)* SQUOTE)
 cstring:            (CDQUOTE (NONDQUOTEST|EDQUOTE)* DQUOTE) | (CSQUOTE (NONSQUOTEST|ESQUOTE)* SQUOTE)
 
-expr:               complexid | dagrval | lst | lstref | function | unop expr | expr (binop expr)+ | LPAREN expr RPAREN
+expr:               complexid | dagrval | lst | lstref | lstcon | function | unexpr | binexpr | parexpr
+binexpr:            expr (binop expr)+ 
+unexpr:             unop expr 
+parexpr:            LPAREN expr RPAREN
 lst:                LBRACKET etuple* RBRACKET
-                    | LBRACKET etuple FOR ituple FROM expr (WHERE expr)? RBRACKET
+lstref:             lst (LBRACKET [expr] RBRACKET)+
+lstcon:             LBRACKET etuple FOR ituple FROM expr (WHERE expr)? RBRACKET
 etuple:             expr (COMMA expr)*
 ituple:             identifier (COMMA identifier)*
-lstref:             lst (LBRACKET [expr] RBRACKET)+
 function:           (builtin | complexid) LPAREN (expr (COMMA expr)*)* RPAREN
 builtin:            ROWS | MATCH | MATCHALL | PASS | DROP | REPLACE | INSERT | REMOVE 
 
@@ -160,7 +163,7 @@ NIN:                /not in/
 
 ROWS:               /rows/
 MATCH:              /match/
-MATCHALL:           /match/
+MATCHALL:           /matchall/
 PASS:               /pass/
 DROP:               /drop/
 REPLACE:            /replace/
@@ -177,95 +180,3 @@ DIRECTIVES = r'''
 #----------------------------------------------------------------------------------------------
 DAGR_GRAMMAR = RULES + TOKENS + DIRECTIVES
 
-#----------------------------------------------------------------------------------------------
-NOTUSED = r'''
-propertyname:       LBRACE (NONRBRACEST)+ RBRACE
-operatorname:       LBRACKET (NONRBRACKST)+ RBRACKET
-
-ordinal:            wholenum ORDINALSUFFIX
-                    | ordinalword
-ordinalword:        FIRST
-                    | SECOND
-                    | THIRD
-                    | FOURTH
-                    | FIFTH
-                    | SIXTH
-                    | SEVENTH
-                    | EIGHTH
-                    | NINTH
-                    | TENTH
-ALL:                /all( of the)?/
-ANY:                /any( of the)?/
-APPLIESTO:          /applies to/
-ARTICLE:            /(a)|(an)|(the)|(its)|(their)/
-ARULE:              /action rule/
-ASA:                /(as a)|(as an)/
-ATLEAST:            /at least/
-ATMOST:             /at most/
-BY:                 /by/
-COLON:              /:/
-CONNECT:            /connect/
-CONTEXT:            /context:/
-CREATE:             /create/
-DOCUMENT:           /document/
-EACH:               /(for )?each( of the)?/
-EIGHT:              /eight/
-EIGHTH:             /eighth/
-ELEMENTS:           /elements/
-EXACTLY:            /exactly/
-FIFTH:              /fifth/
-FIRST:              /first/
-FIVE:               /five/
-FOLLOWING:          /following/
-FOUR:               /four/
-FOURTH:             /fourth/
-FROM:               /from/
-HASHAVE:            /(has)|(have)|(is)|(are)/
-IFF:                /only if/
-IMPLIES:            /implies/
-INCOLLECTION:       /in the collection/
-ISKINDOF:           /((is)|(are)) a kind of/
-LET:                /let/
-MATCHES:            /match(es)?/
-MODEL:              /model/
-NEW:                /new/
-NINE:               /nine/
-NINTH:              /ninth/
-NO:                 /(no)|(none)/
-NONRBRACEST:        /[^\}\n\r]/
-NONRBRACKST:        /[^\]\n\r]/
-NOTMATCHES:         /does not match/
-NOTPRESENT:         /(is)|((are) not present)/
-NUMBEROF:           /number of/
-OF:                 /of/
-ONE:                /one/
-OPERATORS:          /operators/
-ORDINALSUFFIX:      /(st)|(nd)|(rd)|(th)/
-PRESENT:            /(is)|(are) present/
-REMOVE:             /(remove)|(clear)/
-REPLACE:            /replace/
-REPORT:             /report/
-REPRESENT:          /(represent)|(represents)/
-RULESET:            /rule set/
-SECOND:             /second/
-SET:                /set/
-SEVEN:              /seven/
-SEVENTH:            /seventh/
-SIX:                /six/
-SIXTH:              /sixth/
-SUMOF:              /sum of/
-TEN:                /ten/
-TENTH:              /tenth/
-THAT:               /that/
-THEREIS:            /there (is)|(are)/
-THIRD:              /third/
-THREE:              /three/
-TO:                 /to/
-TWO:                /two/
-UNIQUE:             /unique/
-USES:               /uses/
-USING:              /using/
-WITH:               /with/
-'''
-
-#----------------------------------------------------------------------------------------------

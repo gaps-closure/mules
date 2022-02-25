@@ -1,4 +1,12 @@
+#!/usr/bin/python3
+from   lark          import Lark, Tree
+from   lark.visitors import Transformer, Visitor, Discard
+from   lark.lexer    import Lexer, Token
+
 DAGR_BOILERPLATE='''#!/usr/bin/env python3
+from   lark          import Lark, Tree
+from   lark.visitors import Transformer, Visitor, Discard
+from   lark.lexer    import Lexer, Token
 import sys
 import zmq
 import xml.etree.ElementTree as     ET
@@ -117,7 +125,10 @@ def transpile_guard(q,x):
   s,n,t  = '','\n','  '
   s += n + 'def ' + q + '(data):' + n
   # XXX: process actual guard expression here
-  # print('pcondition', x.ltoks(x) if x is not None else x)
+  #print('pcondition', str(x) if x is not None else x)
+  #if x is not None:
+  #  for y in x.iter_subtrees_topdown():
+  #    print(y.data, [z.data if isinstance(z,Tree) else z.type for z in y.children])
   s += t + 'return True' + n
   return s
 
