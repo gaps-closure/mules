@@ -612,7 +612,7 @@ void GenEgress::genEgress(Message *message)
                string remote_u = remote;
                boost::to_upper(remote_u);
 
-               genfile << "#pragma cle begin TAG_REQUEST_ECHO_" << msg_name_u << endl;
+               genfile << "#pragma cle begin " << my_enclave_u << "_SHAREABLE" << endl;
            }
            genfile << TAB_1 << "int ret = 0;" << endl;
 
@@ -620,7 +620,7 @@ void GenEgress::genEgress(Message *message)
                string remote_u = remote;
                boost::to_upper(remote_u);
 
-               genfile << "#pragma cle end TAG_REQUEST_ECHO_" << msg_name_u << endl;
+               genfile << "#pragma cle end " << my_enclave_u << "_SHAREABLE" << endl;
            }
 
            genfile << TAB_1 << "return ret;" << endl
