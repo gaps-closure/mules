@@ -602,7 +602,7 @@ void GenEgress::genEgress(Message *message)
        genfile << "#pragma cle begin COERCE_EGRESS_" << msg_name_u << endl
                << "int egress_" + msg_name + "(char *jstr)" << endl
                << "{" << endl
-               << "#pragma cle ned COERCE_EGRESS_" << msg_name_u << endl;
+               << "#pragma cle end COERCE_EGRESS_" << msg_name_u << endl;
 
        if (message->isLocal()) {
            for (auto remote : remoteEnclaves) {
