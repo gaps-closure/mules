@@ -598,11 +598,14 @@ void GenEgress::genEgress(Message *message)
        string my_enclave_u = my_enclave;
        boost::to_upper(my_enclave_u);
 
-       genCoerce(my_enclave, msg_name_u);
-       genfile << "#pragma cle begin COERCE_EGRESS_" << msg_name_u << endl
-               << "int egress_" + msg_name + "(char *jstr)" << endl
-               << "{" << endl
-               << "#pragma cle end COERCE_EGRESS_" << msg_name_u << endl;
+       if (!message->isLocal()) {
+           genCoerce(my_enclave, msg_name_u);
+           genfile << "#pragma cle begin COERCE_EGRESS_" << msg_name_u << endl;
+       }
+       genfile << "int egress_" + msg_name + "(char *jstr)" << endl
+               << "{" << endl;
+       if (!message->isLocal()) 
+            genfile << "#pragma cle end COERCE_EGRESS_" << msg_name_u << endl;
 
        if (message->isLocal()) {
            for (auto remote : remoteEnclaves) {
@@ -660,7 +663,6 @@ void GenEgress::genEgress(Message *message)
        }
        genfile << endl
                << TAB_1 << ");" << endl;
-
 
        if (singleRemote) {
            genfile << TAB_1 << "if (fromRemote == 0) {" << endl;
