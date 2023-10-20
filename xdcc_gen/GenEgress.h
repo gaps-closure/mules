@@ -34,6 +34,7 @@ protected:
     void traverseObjEgress(Message *message, json j, vector<string> path);
 
     void genFlowToRemote(string msg_name, string remote);
+    void genCoerce(string &my_enclave, string &msg_name_u);
     void genEgress(Message *message);
 
     void traverseEcho(json &schemaJson, Message *message);

@@ -555,10 +555,31 @@ void GenEgress::genFlowToRemote(string msg_name, string remote)
     genfile << TAB_1 << "}" << endl;
 }
 
+void GenEgress::genCoerce(string &my_enclave, string &msg_name_u)
+{
+    string my_enclave_u = my_enclave;
+    boost::to_upper(my_enclave_u);
+
+    genfile << "#pragma cle def COERCE_EGRESS_" << msg_name_u << " {\\" << endl
+            << "  \"cdf\": [\\" << endl
+            << "    {\"remotelevel\": \"" << my_enclave << "\", \\" << endl
+            << "     \"direction\": \"bidirectional\", \\" << endl
+            << "     \"guarddirective\": { \"operation\": \"allow\"}, \\" << endl
+            << "     \"argtaints\": [[\"" << my_enclave_u << "_SHAREABLE\"]], \\" << endl
+            << "     \"codtaints\": [\"TAG_REQUEST_ECHO_" << msg_name_u << "\",\"TAG_RESPONSE_ECHO_" << msg_name_u << "\"], \\" << endl
+            << "     \"rettaints\": [\"" << my_enclave_u << "_SHAREABLE\"] } \\" << endl
+            << "     ], \\" << endl
+            << "   \"level\": \"" << my_enclave << "\"\\" << endl
+            << "  }" << endl;
+}
+
 void GenEgress::genEgress(Message *message)
 {
    try {
        string msg_name = message->getName();
+       string msg_name_u = msg_name;
+       boost::to_upper(msg_name_u);
+
        bool singleRemote = false;
        set<string> remotes;
 
@@ -573,20 +594,22 @@ void GenEgress::genEgress(Message *message)
        // if the message flows to only one remote enclave, then
        // there is no need to fan out (echo_*_common() and related are not generated
 
-       genfile << "int egress_" + msg_name + "(char *jstr)" << endl
-               << "{" << endl;
-
        string my_enclave = config.getEnclave();
-
        string my_enclave_u = my_enclave;
        boost::to_upper(my_enclave_u);
+
+       genCoerce(my_enclave, msg_name_u);
+       genfile << "#pragma cle begin COERCE_EGRESS_" << msg_name_u << endl
+               << "int egress_" + msg_name + "(char *jstr)" << endl
+               << "{" << endl
+               << "#pragma cle ned COERCE_EGRESS_" << msg_name_u << endl;
 
        if (message->isLocal()) {
            for (auto remote : remoteEnclaves) {
                string remote_u = remote;
                boost::to_upper(remote_u);
 
-               genfile << "#pragma cle begin " << my_enclave_u << "_SHAREABLE" << endl;
+               genfile << "#pragma cle begin TAG_REQUEST_ECHO_" << msg_name_u << endl;
            }
            genfile << TAB_1 << "int ret = 0;" << endl;
 
@@ -594,7 +617,7 @@ void GenEgress::genEgress(Message *message)
                string remote_u = remote;
                boost::to_upper(remote_u);
 
-               genfile << "#pragma cle end " << my_enclave_u << "_SHAREABLE" << endl;
+               genfile << "#pragma cle end TAG_REQUEST_ECHO_" << msg_name_u << endl;
            }
 
            genfile << TAB_1 << "return ret;" << endl
@@ -610,7 +633,7 @@ void GenEgress::genEgress(Message *message)
        if (singleRemote) {
            string theRemote;
            for (auto const remote : remotes) {
-               key = my_enclave_u + "_SHAREABLE";
+               key = "TAG_REQUEST_ECHO_" + msg_name_u; 
                boost::to_upper(key);
            }
            genfile << "#pragma cle begin " <<  key << endl;
