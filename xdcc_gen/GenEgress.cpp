@@ -639,15 +639,15 @@ void GenEgress::genEgress(Message *message)
                key = "TAG_REQUEST_ECHO_" + msg_name_u; 
                boost::to_upper(key);
            }
-           genfile << "#pragma cle begin " <<  key << endl;
+           //genfile << "#pragma cle begin " <<  key << endl;
        }
        for (std::vector<string>::iterator it = stmts.begin(); it != stmts.end(); ++it) {
            string stmt = *it;
            findAndReplaceAll(stmt, WCARD, "");
            genfile << TAB_1 << stmt << endl;
        }
-       if (singleRemote)
-           genfile << "#pragma cle end " <<  key << endl;
+       //if (singleRemote)
+	 //genfile << "#pragma cle end " <<  key << endl;
 
 
        genfile << endl
@@ -953,6 +953,9 @@ void GenEgress::annotations(const XdccFlow &xdccFlow)
             auto jsonObjects = json::array();
             jsonObjects.push_back(remote_u + "_SHAREABLE");
             combined["cdf"][0]["codtaints"] = jsonObjects;
+	    jsonObjects = json::array();
+	    jsonObjects.push_back("TAG_RESPONSE_ECHO_" + msg_name_u);
+	    combined["cdf"][0]["rettaints"] = jsonObjects;
             idx++;
 
             combined["cdf"][idx] = combined["cdf"][0];
